@@ -1,7 +1,7 @@
 ---
 name: 기능 개발 계획
 about: 새 기능 개발 계획을 정리합니다 (Jira 연동 가능)
-title: "[BE][Feature] "
+title: "[FE][Feature] "
 labels: feature
 assignees: 
   - 작성자_깃허브ID
