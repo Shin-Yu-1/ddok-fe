@@ -1,7 +1,7 @@
 ---
 name: 기획 회의 계획
 about: 새로운 기능 또는 서비스에 대한 기획 회의를 시작합니다. (Jira 연동 가능)
-title: "[BE][Planning] "
+title: "[FE][Planning] "
 labels: ["planning", "discussion"]
 assignees:
   - 작성자_깃허브ID
