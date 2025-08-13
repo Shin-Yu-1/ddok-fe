@@ -1,7 +1,7 @@
 ---
 name: 기능 수정 계획
 about: 기존 기능의 문제 해결을 위한 수정 계획을 정리합니다. (Jira 연동 가능)
-title: "[BE][Fix] "
+title: "[FE][Fix] "
 labels: ["bug", "fix"]
 assignees: 
   - 작성자_깃허브ID
