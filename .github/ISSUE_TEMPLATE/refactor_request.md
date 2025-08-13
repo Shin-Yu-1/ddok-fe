@@ -1,7 +1,7 @@
 ---
 name: 리팩터링 계획
 about: 기능 변경 없이 코드 품질 개선을 위한 리팩터링 계획을 정리합니다. (Jira 연동 가능)
-title: "[BE][Refactor] "
+title: "[FE][Refactor] "
 labels: ["refactor"]
 assignees: 
   - 작성자_깃허브ID
