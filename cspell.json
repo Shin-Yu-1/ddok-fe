@@ -22,7 +22,5 @@
     ".env.example",
     ".prettierignore"
   ],
-  "words": [
-    "DDOK"
-  ]
+  "words": ["DDOK", "kakao"]
 }
