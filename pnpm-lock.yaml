@@ -82,8 +82,8 @@ importers:
         specifier: ^16.3.0
         version: 16.3.0
       husky:
-        specifier: ^9.1.7
-        version: 9.1.7
+        specifier: ^8.0.3
+        version: 8.0.3
       lint-staged:
         specifier: ^16.1.5
         version: 16.1.5
@@ -1578,9 +1578,9 @@ packages:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
 
-  husky@9.1.7:
-    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
-    engines: {node: '>=18'}
+  husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
     hasBin: true
 
   ignore@5.3.2:
@@ -4074,7 +4074,7 @@ snapshots:
 
   html-tags@3.3.1: {}
 
-  husky@9.1.7: {}
+  husky@8.0.3: {}
 
   ignore@5.3.2: {}
 
