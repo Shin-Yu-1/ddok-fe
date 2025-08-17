@@ -68,7 +68,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={styles.defaultInputWrapper} style={inlineStyle}>
+      <div
+        className={`${styles.defaultInputWrapper} ${disabled ? styles.disabled : ''}`}
+        style={inlineStyle}
+      >
         {leftIcon && (
           <span className={styles.icon} style={inlineIconStyle}>
             {leftIcon}
