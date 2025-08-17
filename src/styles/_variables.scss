@@ -75,27 +75,3 @@ $fw-black: 900;
 $i-small: 14px;
 $i-medium: 16px;
 $i-large: 20px;
-
-/* MODAL VARIABLES */
-// Modal Variables (모달 변수들)
-// Modal Background
-$modal-overlay-bg: rgb(0 0 0 / 30%);
-$modal-content-bg: $white-3;
-
-// Modal Sizes
-$modal-width: 600px;
-$modal-padding: 15px 30px 20px;
-$modal-border-radius: 10px;
-
-// Modal Shadows
-$modal-shadow:
-  0 10px 25px rgb(0 0 0 / 15%),
-  0 20px 48px rgb(0 0 0 / 15%);
-
-// Modal Z-index
-$modal-z-index: 1000;
-$modal-overlay-z-index: 999;
-
-// Modal Animation
-$modal-transition-duration: 0.2s;
-$modal-transition-easing: ease-out;
