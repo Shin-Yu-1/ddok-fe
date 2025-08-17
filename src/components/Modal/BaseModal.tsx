@@ -1,6 +1,6 @@
 import styles from './BaseModal.module.scss';
-import x from '../../assets/icon/x.svg';
-import Button from '../Button/Button';
+import { X } from '@phosphor-icons/react';
+import Button from '@/components/Button/Button';
 
 import { forwardRef, useEffect } from 'react';
 
@@ -83,13 +83,13 @@ const BaseModal = forwardRef<HTMLDivElement, ModalProps>(
                   </h2>
                 )}
                 <Button
-                  backgroundColor="#ffffff"
+                  backgroundColor="var(--white-3)"
                   width={32}
                   height={32}
                   padding={'0px'}
                   onClick={() => onClose()}
                 >
-                  <img src={x} alt="" className={styles.icon} />
+                  <X size={24} weight="light" color="var(--black-1)" />
                 </Button>
               </div>
               {subtitle && (
