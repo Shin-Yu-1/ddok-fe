@@ -1,7 +1,7 @@
 @use './reset'; // 리셋 SCSS
 @use './fonts'; // 폰트 SCSS
 @use './mixins'; // 믹스인 SCSS
-@use './variables' as v; // 변수 SCSS (별칭 사용)
+@use './variables' as v; // 변수 SCSS
 
 body {
   font-family: v.$font-family-primary;
