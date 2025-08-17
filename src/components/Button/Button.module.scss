@@ -1,1 +1,32 @@
-@use '@/styles/variables' as *;
+@use '../../styles/variables' as *;
+
+.defaultButton {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: fit-content;
+  height: 45px;
+  padding: 5px 20px;
+  border: none;
+  border-radius: $r-xsamll;
+  font-family: $font-family-primary;
+  font-size: $fs-xsmall;
+  font-weight: $fw-semiBold;
+  color: $white-3;
+  background: $black-3;
+  cursor: pointer;
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    border: none;
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    color: $white-3;
+    background: $gray-2;
+  }
+}
