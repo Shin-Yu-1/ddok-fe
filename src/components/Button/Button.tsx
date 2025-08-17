@@ -10,7 +10,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   padding?: number | string;
   backgroundColor?: string;
   textColor?: string;
-  borderColor?: string;
+  border?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   isLoading?: boolean;
@@ -31,7 +31,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       padding,
       backgroundColor,
       textColor,
-      borderColor,
+      border,
 
       leftIcon,
       rightIcon,
@@ -51,7 +51,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...(padding ? { padding: toCssSize(padding) } : null),
       ...(backgroundColor ? { backgroundColor: backgroundColor } : null),
       ...(textColor ? { color: textColor } : null),
-      ...(borderColor ? { borderColor } : null),
+      ...(border ? ({ '--button-border': border } as React.CSSProperties) : null),
     };
 
     return (
