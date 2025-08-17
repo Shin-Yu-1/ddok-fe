@@ -1,0 +1,51 @@
+@use '@/styles/variables' as *;
+
+.overflowMenuWrapper {
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: max-content;
+  padding: 5px 10px;
+  border: 1px solid $white-1;
+  border-radius: $r-xxsmall;
+  background: $white-3;
+  box-shadow: 2px 2px rgb(0 0 0 / 10%);
+
+  .menuList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .itemWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 6px;
+    border-radius: $r-xxsmall;
+    font-size: $fs-xxsmall;
+    color: $black-4;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background-color: $white-1;
+    }
+
+    .icon {
+      width: $i-medium;
+      height: $i-medium;
+
+      img {
+        width: inherit;
+        height: inherit;
+      }
+    }
+
+    .name {
+      font-size: $fs-xxsmall;
+    }
+  }
+}
