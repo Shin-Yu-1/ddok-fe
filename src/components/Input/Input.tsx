@@ -12,8 +12,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   iconSize?: number | string;
   backgroundColor?: string;
   textColor?: string;
-  borderColor?: string;
-  focusBorderColor?: string;
+  border?: string;
+  focusBorder?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   error?: boolean;
@@ -36,8 +36,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       iconSize,
       backgroundColor,
       textColor,
-      borderColor,
-      focusBorderColor,
+      border,
+      focusBorder,
 
       leftIcon,
       rightIcon,
@@ -58,10 +58,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       ...(gap ? { gap: toCssSize(gap) } : null),
       ...(backgroundColor ? { backgroundColor: backgroundColor } : null),
       ...(textColor ? { color: textColor } : null),
-      ...(borderColor ? { borderColor } : null),
-      ...(focusBorderColor
-        ? ({ '--focus-border-color': focusBorderColor } as React.CSSProperties)
-        : null),
+      ...(border ? ({ '--base-border': border } as React.CSSProperties) : null),
+      ...(focusBorder ? ({ '--focus-border': focusBorder } as React.CSSProperties) : null),
       ...style,
     };
 
