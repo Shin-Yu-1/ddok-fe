@@ -48,10 +48,6 @@ $font-family-primary:
   BlinkMacSystemFont,
   sans-serif;
 
-:root {
-  --font-family-primary: #{$font-family-primary};
-}
-
 // FONT SIZE
 $fs-xxxsmall: 0.75rem; // 12px
 $fs-xxsmall: 0.875rem; // 14px
@@ -75,3 +71,74 @@ $fw-black: 900;
 $i-small: 14px;
 $i-medium: 16px;
 $i-large: 20px;
+
+/* CSS CUSTOM PROPERTIES */
+:root {
+  // LINE HEIGHT
+  --default-line-height: #{$default-line-height};
+
+  // COLOR VARIABLES - LOGO
+  --logo-yellow: #{$logo-yellow};
+  --logo-black: #{$logo-black};
+
+  // COLOR VARIABLES - BLACK
+  --black-1: #{$black-1};
+  --black-2: #{$black-2};
+  --black-3: #{$black-3};
+  --black-4: #{$black-4};
+
+  // COLOR VARIABLES - GRAY
+  --gray-1: #{$gray-1};
+  --gray-2: #{$gray-2};
+  --gray-3: #{$gray-3};
+  --gray-4: #{$gray-4};
+
+  // COLOR VARIABLES - WHITE
+  --white-1: #{$white-1};
+  --white-2: #{$white-2};
+  --white-3: #{$white-3};
+
+  // COLOR VARIABLES - OTHER COLORS
+  --yellow-1: #{$yellow-1};
+  --blue-1: #{$blue-1};
+  --red-1: #{$red-1};
+  --green-1: #{$green-1};
+
+  // RADIUS VARIABLES
+  --r-xxsmall: #{$r-xxsmall};
+  --r-xsmall: #{$r-xsmall};
+  --r-small: #{$r-small};
+  --r-medium: #{$r-medium};
+  --r-large: #{$r-large};
+  --r-xlarge: #{$r-xlarge};
+  --r-xxlarge: #{$r-xxlarge};
+  --r-xxxlarge: #{$r-xxxlarge};
+  --r-xxxxlarge: #{$r-xxxxlarge};
+
+  // FONT VARIABLES - FONT FAMILY
+  --font-family-primary: #{$font-family-primary};
+
+  // FONT VARIABLES - FONT SIZE
+  --fs-xxxsmall: #{$fs-xxxsmall};
+  --fs-xxsmall: #{$fs-xxsmall};
+  --fs-xsmall: #{$fs-xsmall};
+  --fs-small: #{$fs-small};
+  --fs-medium: #{$fs-medium};
+  --fs-large: #{$fs-large};
+  --fs-xlarge: #{$fs-xlarge};
+  --fs-xxlarge: #{$fs-xxlarge};
+  --fs-xxxlarge: #{$fs-xxxlarge};
+
+  // FONT VARIABLES - FONT WEIGHT
+  --fw-regular: #{$fw-regular};
+  --fw-medium: #{$fw-medium};
+  --fw-semibold: #{$fw-semibold};
+  --fw-bold: #{$fw-bold};
+  --fw-extrabold: #{$fw-extrabold};
+  --fw-black: #{$fw-black};
+
+  // ICON VARIABLES
+  --i-small: #{$i-small};
+  --i-medium: #{$i-medium};
+  --i-large: #{$i-large};
+}
