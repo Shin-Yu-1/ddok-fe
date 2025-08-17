@@ -63,9 +63,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={styles.defaultButton}
       >
         {leftIcon && <span className={styles.icon}>{leftIcon}</span>}
-        <span className={styles.label}>
-          {isLoading ? <span className={styles.spinner} aria-hidden /> : children}
-        </span>
+        <span className={styles.label}>{children}</span>
         {rightIcon && <span className={styles.icon}>{rightIcon}</span>}
       </button>
     );
