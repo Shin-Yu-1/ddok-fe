@@ -1,8 +1,10 @@
-import styles from './BaseModal.module.scss';
+import { forwardRef, useEffect } from 'react';
+
 import { X } from '@phosphor-icons/react';
+
 import Button from '@/components/Button/Button';
 
-import { forwardRef, useEffect } from 'react';
+import styles from './BaseModal.module.scss';
 
 interface ModalProps {
   isOpen: boolean;
