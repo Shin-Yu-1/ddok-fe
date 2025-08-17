@@ -6,7 +6,7 @@
   min-width: fit-content;
   height: 45px;
   padding: 5px 20px;
-  border: none;
+  border: var(--button-border, initial);
   border-radius: $r-xsamll;
   font-family: $font-family-primary;
   font-size: $fs-xsmall;
@@ -24,12 +24,8 @@
     align-items: center;
   }
 
-  &:hover {
-    border: none;
-    opacity: 0.9;
-  }
-
   &:disabled {
+    border: none;
     color: $white-3;
     background: $gray-2;
   }
