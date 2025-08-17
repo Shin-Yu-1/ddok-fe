@@ -2,3 +2,11 @@
 @use './variables'; // 변수 SCSS
 @use './fonts'; // 폰트 SCSS
 @use './mixins'; // 믹스인 SCSS
+
+body {
+  font-family: var(--font-family-primary);
+  font-size: 1rem;
+  font-weight: $fw-regular;
+  line-height: $default-line-height;
+  color: $black-1;
+}
