@@ -50,13 +50,13 @@
 // 서브 타이틀(h2)
 @mixin font-subtitle {
   font-size: $fs-xlarge;
-  font-weight: $fw-semi-bold;
+  font-weight: $fw-semibold;
 }
 
 // 작은 타이틀(h3)
 @mixin font-small-title {
   font-size: $fs-large;
-  font-weight: $fw-semi-bold;
+  font-weight: $fw-semibold;
 }
 
 // 일반 설명
