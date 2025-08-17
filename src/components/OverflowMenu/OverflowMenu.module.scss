@@ -14,6 +14,7 @@
 
   .menuList {
     margin: 0;
+    padding: 0;
     list-style: none;
   }
 
@@ -22,8 +23,7 @@
     flex-direction: row;
     align-items: center;
     gap: 10px;
-    height: 26px;
-    padding: 0 5px;
+    padding: 5px 6px;
     border-radius: $r-xxsamll;
     font-size: $fs-xxsmall;
     color: $black-4;
