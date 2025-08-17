@@ -1,0 +1,90 @@
+// 모바일 (스마트폰)
+@mixin mobile {
+  @media (width <= 767px) {
+    @content;
+  }
+}
+
+// 태블릿 (태블릿)
+@mixin tablet {
+  @media (width >= 768px) and (width <= 1279px) {
+    @content;
+  }
+}
+
+// 일반 데스크탑
+@mixin desktop {
+  @media (width >= 1280px) and (width <= 1919px) {
+    @content;
+  }
+}
+
+// 대형 데스크탑
+@mixin desktop-large {
+  @media (width >= 1920px) {
+    @content;
+  }
+}
+
+/*
+ * Font Mixins
+ * 딥다이렉트 팀이 함께 정의한 텍스트 중요도에 따른 폰트 스타일 믹스인
+ * 
+ * 사용법 예시
+ * .title {
+ *   @include font-title;
+ * }
+ */
+// 강조 타이틀
+@mixin font-emphasis {
+  font-size: $fs-xxxlarge;
+  font-weight: $fw-bold;
+}
+
+// 타이틀(h1)
+@mixin font-title {
+  font-size: $fs-xxlarge;
+  font-weight: $fw-bold;
+}
+
+// 서브 타이틀(h2)
+@mixin font-subtitle {
+  font-size: $fs-xlarge;
+  font-weight: $fw-semibold;
+}
+
+// 작은 타이틀(h3)
+@mixin font-small-title {
+  font-size: $fs-large;
+  font-weight: $fw-semibold;
+}
+
+// 일반 설명
+@mixin font-description {
+  font-size: $fs-medium;
+  font-weight: $fw-medium;
+}
+
+// 첨부 설명
+@mixin font-sub-description {
+  font-size: $fs-small;
+  font-weight: $fw-medium;
+}
+
+// 일반 텍스트
+@mixin font-text {
+  font-size: $fs-xsmall;
+  font-weight: $fw-regular;
+}
+
+// 작은 텍스트
+@mixin font-small-text {
+  font-size: $fs-xxsmall;
+  font-weight: $fw-regular;
+}
+
+// 더욱 작은 텍스트
+@mixin font-tiny-text {
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-regular;
+}
