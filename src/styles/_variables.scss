@@ -53,15 +53,15 @@ $font-family-primary:
 }
 
 // FONT SIZE
-$fs-xxxsmall: 12px;
-$fs-xxsmall: 14px;
-$fs-xsmall: 16px;
-$fs-small: 20px;
-$fs-medium: 24px;
-$fs-large: 28px;
-$fs-xlarge: 30px;
-$fs-xxlarge: 36px;
-$fs-xxxlarge: 44px;
+$fs-xxxsmall: 0.75rem; // 12px
+$fs-xxsmall: 0.875rem; // 14px
+$fs-xsmall: 1rem; // 16px
+$fs-small: 1.25rem; // 20px
+$fs-medium: 1.5rem; // 24px
+$fs-large: 1.75rem; // 28px
+$fs-xlarge: 1.875rem; // 30px
+$fs-xxlarge: 2.25rem; // 36px
+$fs-xxxlarge: 2.75rem; // 44px
 
 // FONT WEIGHT
 $fw-regular: 400;
