@@ -1,4 +1,4 @@
-@use '../../styles/variables' as *;
+@use '@/styles/variables' as *;
 
 .defaultButton {
   box-sizing: border-box;
@@ -10,7 +10,7 @@
   border-radius: $r-xsmall;
   font-family: $font-family-primary;
   font-size: $fs-xsmall;
-  font-weight: $fw-semiBold;
+  font-weight: $fw-semibold;
   color: $white-3;
   cursor: pointer;
 
