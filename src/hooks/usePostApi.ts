@@ -12,7 +12,11 @@ interface PostApiOptions {
  * const postUser = usePostApi<RESPONSE_TYPE, REQUEST_TYPE>({ url: '/POST_URL' });
  *
  * 요청: postUser.mutate(REQUEST_BODY_DATA);
- * 요청 및 응답: postUser.mutate(REQUEST_BODY_DATA, {onSuccess: SUCCESS_FUNCTION, onError: ERROR_FUNCTION});
+ * 요청 및 응답:
+ * postUser.mutate(REQUEST_BODY_DATA, {
+ *   onSuccess: SUCCESS_FUNCTION,
+ *   onError: ERROR_FUNCTION
+ * });
  */
 
 export const usePostApi = <TResponse, TBody = unknown>({ url, params }: PostApiOptions) => {
