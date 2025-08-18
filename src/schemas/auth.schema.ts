@@ -5,7 +5,7 @@ import { apiResponseSchema } from './api.schema';
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\-]{8,}$/; // eslint-disable-line no-useless-escape
 
-/* 공통 필드 스키마 */
+/* 스키마 */
 const emailSchema = z
   .string()
   .nonempty('이메일을 입력해주세요.')
@@ -46,11 +46,13 @@ export const UserDataSchema = z.object({
   },
 });
 
-/* REQUEST SCHEMAS */
+// 로그인 스키마
 export const SignInSchema = z.object({
   email: emailSchema,
   password: z.string().nonempty('비밀번호를 입력해주세요.'),
 });
+
+// 회원가입 스키마
 export const SingUpSchema = z.object({
   email: emailSchema,
   username: usernameSchema,
@@ -60,10 +62,12 @@ export const SingUpSchema = z.object({
   phoneCode: phoneCodeSchema,
 });
 
-/* RESPONSE SCHEMAS */
+// RESPONSE
 export const SignInResponseSchema = apiResponseSchema(UserDataSchema);
 
 /* TYPE */
+export type UserData = z.infer<typeof UserDataSchema>;
+
 // Request
 export type SignInRequest = z.infer<typeof SignInSchema>;
 export type SingUpRequest = z.infer<typeof SingUpSchema>;
