@@ -7,6 +7,7 @@ interface DeleteApiOptions {
 }
 
 /**
+ * TODO: 추후 제거 예정
  * 사용 예:
  * const deleteUser = useDeleteApi<RESPONSE_TYPE>({ url: '/DELETE_URL' });
  *
