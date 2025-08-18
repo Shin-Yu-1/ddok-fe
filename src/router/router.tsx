@@ -17,6 +17,7 @@ import CreateProjectPage from '@/pages/create/CreateProjectPage/CreateProjectPag
 import CreateStudyPage from '@/pages/create/CreateStudyPage/CreateStudyPage';
 import DetailProjectPage from '@/pages/detail/DetailProjectPage/DetailProjectPage';
 import DetailStudyPage from '@/pages/detail/DetailStudyPage/DetailStudyPage';
+import DevPage from '@/pages/Dev/DevPage';
 import EditMyInfoPage from '@/pages/edit/EditMyInfoPage/EditMyInfoPage';
 import EditProjectPage from '@/pages/edit/EditProjectPage/EditProjectPage';
 import EditStudyPage from '@/pages/edit/EditStudyPage/EditStudyPage';
@@ -37,8 +38,15 @@ export const router = createBrowserRouter([
     path: '/',
     element: <App />, // 글로벌 컴포넌트용
     children: [
+      // NOTE: 개발용 페이지. 추후 삭제 필요 (기존 코드에 영향 없음)
       {
         index: true,
+        element: <DevPage />,
+      },
+      {
+        //TODO: 추후 개발 완료 시 index:true로 변경 필요
+        // index: true,
+        path: '/intro',
         element: <IntroPage />,
       },
       {
