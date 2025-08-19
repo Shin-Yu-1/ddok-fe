@@ -70,7 +70,7 @@ export type UserData = z.infer<typeof UserDataSchema>;
 
 // Request
 export type SignInRequest = z.infer<typeof SignInSchema>;
-export type SingUpRequest = z.infer<typeof SingUpSchema>;
+export type SignUpRequest = z.infer<typeof SignUpSchema>;
 
 // Response
 export type SignInResponse = z.infer<typeof SignInResponseSchema>;
