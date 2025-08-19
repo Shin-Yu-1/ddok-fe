@@ -53,7 +53,7 @@ export const SignInSchema = z.object({
 });
 
 // 회원가입 스키마
-export const SingUpSchema = z.object({
+export const SignUpSchema = z.object({
   email: emailSchema,
   username: usernameSchema,
   password: passwordSchema,
