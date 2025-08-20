@@ -43,12 +43,13 @@
   }
 
   &:active {
+    border: 1px solid $yellow-1;
     background-color: $yellow-1;
   }
 
   &__selected {
     // 1과 1.5 차이가 있으니까 누를 때마다 꿀렁거려서 바꿔야 할 지 고민중
-    border: 1.5px solid $yellow-1;
+    border: 1px solid $yellow-1;
     font-weight: $fw-semibold;
 
     &:hover {
@@ -77,10 +78,6 @@
 
   &:hover {
     background-color: $gray-3;
-  }
-
-  &:active {
-    background-color: $yellow-1;
   }
 
   &__selected {
