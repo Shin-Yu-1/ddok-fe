@@ -20,6 +20,8 @@ const MapPage = () => {
   // 커스텀 오버레이에 전달할 마커의 좌표
   const [selectedPoint, setSelectedPoint] = useState<{ lat: number; lng: number } | null>(null);
 
+  // TODO: center 이동 / level 변경 / bounds 변경 이벤트들을 감지하여 서브 패널 리로드
+
   return (
     <div className={styles.container}>
       <div className={styles.map__header}>HEADER</div>
