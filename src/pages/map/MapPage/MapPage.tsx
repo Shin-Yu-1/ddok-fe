@@ -11,11 +11,13 @@ const MapPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
 
+  // 임시 마커 배열
   const [points] = useState<{ lat: number; lng: number }[]>([
     { lat: 37.5665, lng: 126.978 },
     { lat: 37.566, lng: 126.98 },
   ]);
 
+  // 선택된 마커의 좌표를 저장해 오버레이에 전달
   const [selectedPoint, setSelectedPoint] = useState<{ lat: number; lng: number } | null>(null);
 
   return (
@@ -23,6 +25,7 @@ const MapPage = () => {
       <div className={styles.map__header}>HEADER</div>
       <div className={styles.map__subHeader}>SUBHEADER</div>
       <div className={styles.map__content}>
+        {/* 서브 패널 토글을 위한 임시 사이드바 */}
         <div className={styles.map__sidebar}>
           <div
             className={styles.map__sidebarToggleBtn}
@@ -31,9 +34,14 @@ const MapPage = () => {
             {isMapSubPanelOpen ? 'CLOSE' : 'OPEN'}
           </div>
         </div>
+
         <div className={styles.map__container}>
+          {/* TODO: 초기 로드 위치를 사용자 위치로 설정해야 함 */}
           <Map id="map" className={styles.map} center={{ lat: 37.5665, lng: 126.978 }}>
+            {/* 컨트롤 */}
             <ZoomControl position="TOPRIGHT" />
+
+            {/* 마커 */}
             {points.map(point => (
               <MapMarker
                 key={`marker__${point.lat}-${point.lng}`}
@@ -44,8 +52,10 @@ const MapPage = () => {
                 }}
               ></MapMarker>
             ))}
+
+            {/* 오버레이 */}
             {isOverlayOpen && selectedPoint && (
-              <CustomOverlayMap position={selectedPoint} yAnchor={1.2}>
+              <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
                 <Overlay
                   onOverlayClose={() => setIsOverlayOpen(false)}
                   overlayType={OverlayType.project}
@@ -55,6 +65,8 @@ const MapPage = () => {
           </Map>
         </div>
       </div>
+
+      {/* 지도 서브 패널 */}
       {isMapSubPanelOpen && (
         <div className={styles.map__subPanelContainer}>
           <MapSubPanel isOpen={isMapSubPanelOpen} />
