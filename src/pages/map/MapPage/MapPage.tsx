@@ -17,7 +17,7 @@ const MapPage = () => {
     { lat: 37.566, lng: 126.98 },
   ]);
 
-  // 선택된 마커의 좌표를 저장해 오버레이에 전달
+  // 커스텀 오버레이에 전달할 마커의 좌표
   const [selectedPoint, setSelectedPoint] = useState<{ lat: number; lng: number } | null>(null);
 
   return (
