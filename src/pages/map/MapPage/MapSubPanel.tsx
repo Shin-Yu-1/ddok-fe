@@ -83,13 +83,7 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
       </div>
 
       {/* 목록 섹션 */}
-      <div className={styles.subPanel__list}>
-        <div className={styles.subPanel__list__item}>
-          <div className={styles.subPanel__list__thumbnail}></div>
-          <div className={styles.subPanel__list__title}>말하는감자에싹이나</div>
-          <div className={styles.subPanel__list__category}>플레이어</div>
-        </div>
-      </div>
+      <div className={styles.subPanel__list}>목록</div>
 
       {/* 서브 패널 상태 표시 (임시) */}
       <div className={styles.subPanel__openStatus}>현재 상태 : {isOpen ? 'OPENED' : 'CLOSED'}</div>
