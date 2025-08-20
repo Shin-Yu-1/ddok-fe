@@ -1,0 +1,12 @@
+@use '@/styles/variables' as *;
+
+.subPanel__container {
+  width: 363px;
+  padding: 10px 20px;
+}
+
+.subPanel__title {
+  margin-bottom: 10px;
+  font-size: $fs-small;
+  font-weight: $fw-semibold;
+}
