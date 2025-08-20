@@ -11,6 +11,7 @@ const Overlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => {
     <div className={styles.overlay__container}>
       <div className={styles.overlay__banner}>OverlayBanner</div>
       <div className={styles.overlay__content}>
+        {/* 프로젝트 오버레이 */}
         {overlayType === OverlayType.project && (
           <div className={styles.overlay__info}>
             <div>프로젝트</div>
@@ -23,20 +24,33 @@ const Overlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => {
             <div>희망 나이대</div>
           </div>
         )}
+
+        {/* 스터디 오버레이 */}
         {overlayType === OverlayType.study && (
           <div className={styles.overlay__info}>
             <div>스터디</div>
             <div>제목</div>
           </div>
         )}
+
+        {/* 플레이어 오버레이 */}
         {overlayType === OverlayType.player && (
           <div className={styles.overlay__info}>
             <div>플레이어</div>
-            <div>제목</div>
+            <div>이름</div>
+          </div>
+        )}
+
+        {/* 추천 장소 오버레이 */}
+        {overlayType === OverlayType.cafe && (
+          <div className={styles.overlay__info}>
+            <div>추천 장소</div>
+            <div>이름</div>
           </div>
         )}
       </div>
 
+      {/* 개발 편의를 위한 닫기 버튼(임시) */}
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
         개발용 닫기 버튼
       </div>

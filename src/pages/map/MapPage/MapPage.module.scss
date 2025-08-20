@@ -1,7 +1,8 @@
 @use '@/styles/variables' as *;
-@use '@/styles/mixins' as m;
 
-// TODO: mixin에서 반응형 가져오기
+// TODO: 반응형 mixin 가져오기
+// @use '@/styles/mixins' as m;
+
 // TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
   width: 100%;
