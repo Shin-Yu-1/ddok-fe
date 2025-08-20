@@ -1,11 +1,65 @@
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as m;
 
+// TODO: mixin에서 반응형 가져오기
 // TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
-  background-color: $blue-1;
+  width: 100%;
+  height: 100%;
 }
 
-.title {
-  @include m.font-title;
+.map__header {
+  width: 100%;
+  height: 56px;
+  line-height: 56px;
+  text-align: center;
+  background-color: $white-3;
+}
+
+.map__subHeader {
+  width: 100%;
+  height: 41px;
+  line-height: 41px;
+  text-align: center;
+  background-color: $white-1;
+}
+
+.map__content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: calc(100vh - 97px);
+}
+
+.map__sidebar {
+  width: 47px;
+  height: 100%;
+  line-height: 47px;
+  background-color: $gray-4;
+  text-orientation: upright;
+  writing-mode: vertical-rl;
+}
+
+.map__sidebarToggleBtn {
+  cursor: pointer;
+}
+
+.map__subPanelContainer {
+  position: absolute;
+  top: 97px;
+  left: 47px;
+  z-index: 100;
+  width: 363px;
+  height: calc(100% - 97px);
+  background-color: $white-3;
+}
+
+.map__container {
+  width: calc(100% - 47px);
+  height: 100%;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
 }
