@@ -129,6 +129,8 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+/* Form elements reset */
 button,
 input,
 optgroup,
@@ -141,7 +143,6 @@ textarea {
   font: inherit;
   vertical-align: baseline;
   background: transparent;
-  box-sizing: border-box;
 }
 
 button {
