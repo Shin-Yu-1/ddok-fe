@@ -2,10 +2,11 @@ import { useState } from 'react';
 
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
+import MapSubPanel from '../../../features/map/MapSubPanel';
+import Overlay from '../../../features/map/Overlay';
+import { OverlayType } from '../../../features/map/OverlayType';
+
 import styles from './MapPage.module.scss';
-import MapSubPanel from './MapSubPanel';
-import Overlay from './Overlay';
-import { OverlayType } from './OverlayType';
 
 const MapPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
