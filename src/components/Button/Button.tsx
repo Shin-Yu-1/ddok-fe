@@ -90,7 +90,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...(width ? { width: toCssSize(width) } : null),
       ...(height ? { height: toCssSize(height) } : null),
       ...(fontSize && !fontSizePreset ? { fontSize: toCssSize(fontSize) } : null),
-      ...(fontWeight && !fontWeightPreset ? { fontWeight: toCssSize(fontWeight) } : null),
+      ...(fontWeight && !fontWeightPreset ? { fontWeight: fontWeight } : null),
       ...(padding ? { padding: toCssSize(padding) } : null),
       ...(gap ? { gap: toCssSize(gap) } : null),
       ...(backgroundColor ? { backgroundColor: backgroundColor } : null),
