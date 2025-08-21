@@ -12,7 +12,7 @@ const Overlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => {
       <div className={styles.overlay__banner}>OverlayBanner</div>
       <div className={styles.overlay__content}>
         {/* 프로젝트 오버레이 */}
-        {overlayType === OverlayType.project && (
+        {overlayType === OverlayType.PROJECT && (
           <div className={styles.overlay__info}>
             <div>프로젝트</div>
             <div>딥 다이렉트 2</div>
@@ -26,7 +26,7 @@ const Overlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => {
         )}
 
         {/* 스터디 오버레이 */}
-        {overlayType === OverlayType.study && (
+        {overlayType === OverlayType.STUDY && (
           <div className={styles.overlay__info}>
             <div>스터디</div>
             <div>제목</div>
@@ -34,7 +34,7 @@ const Overlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => {
         )}
 
         {/* 플레이어 오버레이 */}
-        {overlayType === OverlayType.player && (
+        {overlayType === OverlayType.PLAYER && (
           <div className={styles.overlay__info}>
             <div>플레이어</div>
             <div>이름</div>
@@ -42,7 +42,7 @@ const Overlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => {
         )}
 
         {/* 추천 장소 오버레이 */}
-        {overlayType === OverlayType.cafe && (
+        {overlayType === OverlayType.CAFE && (
           <div className={styles.overlay__info}>
             <div>추천 장소</div>
             <div>이름</div>
