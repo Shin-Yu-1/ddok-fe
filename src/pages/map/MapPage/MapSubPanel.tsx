@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import Input from '@/components/Input/Input';
 
+import { MapItemFilter } from './MapItemFilter';
+import { MapItemStatusFilter } from './MapItemStatusFilter';
 import styles from './MapSubPanel.module.scss';
 
 interface MapSubPanelProps {
@@ -9,15 +11,28 @@ interface MapSubPanelProps {
 }
 
 const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
-  const [selectedFilter, setSelectedFilter] = useState<string>('전체');
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('전체');
+  const [selectedFilter, setSelectedFilter] = useState<MapItemFilter>(MapItemFilter.ALL);
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<MapItemStatusFilter>(
+    MapItemStatusFilter.ALL
+  );
 
-  const filterItems = ['전체', '프로젝트', '스터디', '플레이어', '추천 장소'];
-  const statusFilterItems = ['전체', '모집 중', '모집 완료'];
+  const filterItems: MapItemFilter[] = [
+    MapItemFilter.ALL,
+    MapItemFilter.PROJECT,
+    MapItemFilter.STUDY,
+    MapItemFilter.PLAYER,
+    MapItemFilter.CAFE,
+  ];
 
-  const handleFilterClick = (item: string) => {
+  const statusFilterItems = [
+    MapItemStatusFilter.ALL,
+    MapItemStatusFilter.RECRUITING,
+    MapItemStatusFilter.ONGOING,
+  ];
+
+  const handleFilterClick = (item: MapItemFilter) => {
     setSelectedFilter(item);
-    setSelectedStatusFilter('전체');
+    setSelectedStatusFilter(MapItemStatusFilter.ALL);
   };
 
   return (
@@ -61,7 +76,7 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
         <hr className={styles.subPanel__divider} />
 
         {/* 진행 상태 필터*/}
-        {selectedFilter === '프로젝트' || selectedFilter === '스터디' ? (
+        {selectedFilter === MapItemFilter.PROJECT || selectedFilter === MapItemFilter.STUDY ? (
           <div className={styles.subPanel__statusFilter}>
             {statusFilterItems.map(item => (
               <div
