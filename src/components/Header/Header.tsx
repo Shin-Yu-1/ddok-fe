@@ -36,13 +36,6 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
     },
     ref
   ) => {
-    const handleKeyDown = (callback?: () => void) => (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        callback?.();
-      }
-    };
-
     const renderRightSection = () => {
       switch (variant) {
         case 'logo-only':
@@ -85,18 +78,11 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 로그아웃
               </Button>
               {user && (
-                <div
-                  className={styles.userProfile}
-                  onClick={onProfileClick}
-                  onKeyDown={handleKeyDown(onProfileClick)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`${user?.nickname} 프로필`}
-                >
+                <div className={styles.userProfile} onClick={onProfileClick}>
                   <div className={styles.profileImage}>
                     <img src={user?.profileImage} alt={`${user?.nickname}의 프로필`} />
                   </div>
-                  <span className={styles.nickname}> {user?.nickname}</span>
+                  <span className={styles.nickname}>{user?.nickname}</span>
                 </div>
               )}
             </div>
@@ -113,14 +99,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
         className={[styles.header, className].filter(Boolean).join(' ')}
         role="banner"
       >
-        <div
-          className={styles.logoSection}
-          onClick={onLogoClick}
-          onKeyDown={handleKeyDown(onLogoClick)}
-          role="button"
-          tabIndex={0}
-          aria-label="홈으로 이동"
-        >
+        <div className={styles.logoSection} onClick={onLogoClick}>
           <img src={DdokLogo} alt="DDOK LOGO" className={styles.logo} />
         </div>
 
