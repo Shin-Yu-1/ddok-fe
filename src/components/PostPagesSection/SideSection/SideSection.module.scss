@@ -5,10 +5,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px 0;
   box-sizing: border-box;
   width: 100%;
-  padding: 25px 30px;
+  padding: 20px 30px;
   border: 0.7px solid $gray-3;
   border-radius: $r-xsmall;
   background-color: $white-3;
@@ -16,7 +15,7 @@
 
 .titleArea {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   height: fit-content;
@@ -29,23 +28,22 @@
   font-size: $fs-medium;
   font-weight: $fw-bold;
   white-space: normal;
-  overflow-wrap: break-word;
   color: $gray-1;
 }
 
-.titleAction {
+.content {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   gap: 0 5px;
-}
-
-.content {
   white-space: pre-line;
-  pointer-events: none;
-  user-select: none;
 
-  * {
-    cursor: default;
+  &.readonly {
+    pointer-events: none;
+    user-select: none;
+
+    * {
+      cursor: default;
+    }
   }
 }

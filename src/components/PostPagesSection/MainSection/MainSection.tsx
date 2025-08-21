@@ -1,20 +1,22 @@
 import clsx from 'clsx';
 
-import styles from './MainReadonlySection.module.scss';
+import styles from './MainSection.module.scss';
 
-interface MainReadonlySectionProps {
+interface MainSectionProps {
   title?: React.ReactNode;
   titleAction?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  readonly?: boolean;
 }
 
-const MainReadonlySection = ({
+const MainSection = ({
   title,
   titleAction,
   children,
   className,
-}: MainReadonlySectionProps) => {
+  readonly = false,
+}: MainSectionProps) => {
   return (
     <div className={clsx(styles.container, className)}>
       {(title || titleAction) && (
@@ -23,9 +25,9 @@ const MainReadonlySection = ({
           {titleAction && <div className={styles.titleAction}>{titleAction}</div>}
         </div>
       )}
-      <div className={styles.content}>{children}</div>
+      <div className={clsx(styles.content, readonly && styles.readonly)}>{children}</div>
     </div>
   );
 };
 
-export default MainReadonlySection;
+export default MainSection;
