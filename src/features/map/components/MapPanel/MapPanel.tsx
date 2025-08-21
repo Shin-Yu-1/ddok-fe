@@ -8,7 +8,7 @@ import MapSubPanelItem from '../MapSubPanelItem/MapSubPanelItem';
 
 import styles from './MapPanel.module.scss';
 
-interface MapSubPanelProps {
+interface MapPanelProps {
   isOpen: boolean;
 }
 
@@ -66,7 +66,7 @@ const mockData = [
   },
 ];
 
-const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
+const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
   );
@@ -94,14 +94,14 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
   };
 
   return (
-    <div className={styles.subPanel__container}>
+    <div className={styles.panel__container}>
       {/* 서브 패널 타이틀*/}
-      <div className={styles.subPanel__title}>지도 목록</div>
+      <div className={styles.panel__title}>지도 목록</div>
 
       {/* 검색 섹션*/}
-      <div className={styles.subPanel__searchSection}>
+      <div className={styles.panel__searchSection}>
         {/* 검색 바*/}
-        <div className={styles.subPanel__searchBar}>
+        <div className={styles.panel__searchBar}>
           <Input
             width="100%"
             height="40px"
@@ -111,18 +111,16 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
         </div>
 
         {/* 구분선 */}
-        <hr className={styles.subPanel__divider} />
+        <hr className={styles.panel__divider} />
 
         {/* 카테고리 필터*/}
-        <div className={styles.subPanel__categoryFilter}>
+        <div className={styles.panel__categoryFilter}>
           {/* TODO: 버튼 컴포넌트 가져오기 */}
           {filterItems.map(item => (
             <div
               key={item}
-              className={`${styles.subPanel__categoryFilter__item} ${
-                selectedCategoryFilter === item
-                  ? styles.subPanel__categoryFilter__item__selected
-                  : ''
+              className={`${styles.panel__categoryFilter__item} ${
+                selectedCategoryFilter === item ? styles.panel__categoryFilter__item__selected : ''
               }`}
               onClick={() => {
                 handleFilterClick(item);
@@ -134,21 +132,19 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
         </div>
 
         {/* 구분선 */}
-        <hr className={styles.subPanel__divider} />
+        <hr className={styles.panel__divider} />
 
         {/* 진행 상태 필터*/}
         {selectedCategoryFilter === MapItemFilter.PROJECT ||
         selectedCategoryFilter === MapItemFilter.STUDY ? (
           <>
-            <div className={styles.subPanel__statusFilter}>
+            <div className={styles.panel__statusFilter}>
               {/* TODO: 버튼 컴포넌트 가져오기 */}
               {statusFilterItems.map(item => (
                 <div
                   key={item}
-                  className={`${styles.subPanel__statusFilter__item} ${
-                    selectedStatusFilter === item
-                      ? styles.subPanel__statusFilter__item__selected
-                      : ''
+                  className={`${styles.panel__statusFilter__item} ${
+                    selectedStatusFilter === item ? styles.panel__statusFilter__item__selected : ''
                   }`}
                   onClick={() => {
                     setSelectedStatusFilter(item);
@@ -160,13 +156,13 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
             </div>
 
             {/* 구분선 */}
-            <hr className={styles.subPanel__divider} />
+            <hr className={styles.panel__divider} />
           </>
         ) : null}
       </div>
 
       {/* 목록 섹션 */}
-      <div className={styles.subPanel__list}>
+      <div className={styles.panel__list}>
         {mockData.map((item, index) => (
           <>
             <MapSubPanelItem
@@ -178,17 +174,17 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
               status={item.teamStatus}
               location={item.location}
             />
-            {index < mockData.length - 1 && <hr className={styles.subPanel__list__item__divider} />}
+            {index < mockData.length - 1 && <hr className={styles.panel__list__item__divider} />}
           </>
         ))}
       </div>
 
       {/* 서브 패널 상태 표시 (임시) */}
-      <div className={styles.subPanel__openStatus}>
+      <div className={styles.panel__openStatus}>
         서브 패널 상태 : {isOpen ? 'OPENED' : 'CLOSED'}
       </div>
     </div>
   );
 };
 
-export default MapSubPanel;
+export default MapPanel;

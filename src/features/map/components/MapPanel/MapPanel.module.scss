@@ -1,6 +1,6 @@
 @use '@/styles/variables' as *;
 
-.subPanel__container {
+.panel__container {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -10,25 +10,25 @@
   background-color: $white-3;
 }
 
-.subPanel__title {
+.panel__title {
   font-size: $fs-small;
   font-weight: $fw-semibold;
 }
 
-.subPanel__divider {
+.panel__divider {
   width: 100%;
   height: 1px;
   border: 0;
   background-color: $gray-1;
 }
 
-.subPanel__searchSection {
+.panel__searchSection {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.subPanel__categoryFilter {
+.panel__categoryFilter {
   display: flex;
   gap: 10px;
   flex-flow: row wrap;
@@ -61,7 +61,7 @@
   }
 }
 
-.subPanel__statusFilter {
+.panel__statusFilter {
   display: flex;
   gap: 10px;
   flex-flow: row wrap;
@@ -95,7 +95,7 @@
   }
 }
 
-.subPanel__list {
+.panel__list {
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -109,7 +109,7 @@
 }
 
 // TODO: 추후 삭제 예정
-.subPanel__openStatus {
+.panel__openStatus {
   position: absolute;
   bottom: 30px;
   font-size: $fs-xxxsmall;
