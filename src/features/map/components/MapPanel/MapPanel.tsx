@@ -4,7 +4,7 @@ import Input from '@/components/Input/Input';
 
 import { MapItemFilter } from '../../constants/MapItemCategoryFilter';
 import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter';
-import MapSubPanelItem from '../MapSubPanelItem/MapSubPanelItem';
+import MapPanelItem from '../MapPanelItem/MapPanelItem';
 
 import styles from './MapPanel.module.scss';
 
@@ -165,7 +165,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
       <div className={styles.panel__list}>
         {mockData.map((item, index) => (
           <>
-            <MapSubPanelItem
+            <MapPanelItem
               key={index}
               image={item.image}
               title={item.title}
