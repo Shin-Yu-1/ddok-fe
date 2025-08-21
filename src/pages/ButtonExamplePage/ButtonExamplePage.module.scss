@@ -1,15 +1,87 @@
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as m;
 
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
-  background-color: $blue-1;
+  padding: 20px;
+  background-color: $white-3;
 }
 
 .title {
   @include m.font-title;
+
+  margin-bottom: 30px;
+  color: $black-1;
 }
 
 .subtitle {
   @include m.font-subtitle;
+
+  color: $black-2;
+}
+
+.h3title {
+  @include m.font-description;
+
+  margin: 20px 0 10px;
+  color: $black-3;
+}
+
+// 우선순위 설명 박스
+.priorityInfo {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background-color: $white-2;
+
+  .orderedList {
+    margin: 15px 0;
+    padding-left: 20px;
+
+    li {
+      @include m.font-text;
+
+      margin: 8px 0;
+      line-height: $default-line-height;
+      color: $black-3;
+    }
+  }
+}
+
+// 가이드 박스
+.guideBox {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid $gray-4;
+  border-radius: $r-xxsmall;
+  background-color: $white-1;
+
+  .guideTitle {
+    @include m.font-sub-description;
+
+    margin: 0 0 10px;
+    color: $black-2;
+  }
+
+  .unorderedList {
+    margin: 0;
+    padding-left: 20px;
+
+    li {
+      @include m.font-text;
+
+      margin: 6px 0;
+      line-height: $default-line-height;
+      color: $black-4;
+
+      code {
+        padding: 2px 4px;
+        border-radius: $r-xxsmall;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        color: $black-1;
+        background-color: $gray-4;
+      }
+    }
+  }
 }
