@@ -60,7 +60,7 @@ const MapPage = () => {
               <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
                 <Overlay
                   onOverlayClose={() => setIsOverlayOpen(false)}
-                  overlayType={OverlayType.project}
+                  overlayType={OverlayType.PROJECT}
                 />
               </CustomOverlayMap>
             )}
