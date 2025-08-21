@@ -9,3 +9,7 @@
 .title {
   @include m.font-title;
 }
+
+.subtitle {
+  @include m.font-subtitle;
+}
