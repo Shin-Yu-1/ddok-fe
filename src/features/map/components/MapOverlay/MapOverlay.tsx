@@ -1,5 +1,6 @@
-import { OverlayType } from './constants/OverlayType';
-import styles from './Overlay.module.scss';
+import { OverlayType } from '../../constants/OverlayType';
+
+import styles from './MapOverlay.module.scss';
 
 interface OverlayProps {
   onOverlayClose: () => void;

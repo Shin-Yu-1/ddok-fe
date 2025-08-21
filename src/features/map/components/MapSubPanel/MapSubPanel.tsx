@@ -2,10 +2,11 @@ import { useState } from 'react';
 
 import Input from '@/components/Input/Input';
 
-import { MapItemFilter } from './constants/MapItemCategoryFilter';
-import { MapItemStatusFilter } from './constants/MapItemStatusFilter';
+import { MapItemFilter } from '../../constants/MapItemCategoryFilter';
+import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter';
+import MapSubPanelItem from '../MapSubPanelItem/MapSubPanelItem';
+
 import styles from './MapSubPanel.module.scss';
-import MapSubPanelItem from './MapSubPanelItem';
 
 interface MapSubPanelProps {
   isOpen: boolean;

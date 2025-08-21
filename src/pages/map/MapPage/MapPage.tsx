@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
+import Overlay from '@/features/map/components/MapOverlay/MapOverlay';
+import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { OverlayType } from '@/features/map/constants/OverlayType';
-import MapSubPanel from '@/features/map/MapSubPanel';
-import Overlay from '@/features/map/Overlay';
 
 import styles from './MapPage.module.scss';
 
