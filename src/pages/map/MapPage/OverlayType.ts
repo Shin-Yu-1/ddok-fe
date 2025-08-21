@@ -1,6 +1,6 @@
 export enum OverlayType {
-  project = 'project',
-  study = 'study',
-  player = 'player',
-  cafe = 'cafe',
+  PROJECT = 'project',
+  STUDY = 'study',
+  PLAYER = 'player',
+  CAFE = 'cafe',
 }
