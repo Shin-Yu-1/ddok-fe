@@ -27,6 +27,7 @@ const DevPage: React.FC = () => {
     { path: '/team/1', name: '팀 페이지 (예시 ID: 1)' },
     { path: '/team/1/setting', name: '팀 설정 (예시 ID: 1)' },
     { path: '/ranking', name: '랭킹' },
+    { path: '/button-example', name: '버튼 예시 페이지' },
   ];
 
   return (
