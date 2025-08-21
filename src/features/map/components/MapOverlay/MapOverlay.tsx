@@ -1,4 +1,4 @@
-import { OverlayType } from '../../constants/OverlayType';
+import { OverlayType } from '../../constants/MapOverlayType';
 
 import styles from './MapOverlay.module.scss';
 
