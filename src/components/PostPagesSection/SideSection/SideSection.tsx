@@ -4,7 +4,7 @@ import styles from './SideSection.module.scss';
 
 interface SideSectionProps {
   title?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   readonly?: boolean;
 }

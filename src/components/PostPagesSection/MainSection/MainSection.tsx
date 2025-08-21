@@ -5,7 +5,7 @@ import styles from './MainSection.module.scss';
 interface MainSectionProps {
   title?: React.ReactNode;
   titleAction?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   readonly?: boolean;
 }
