@@ -119,7 +119,9 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ isOpen }) => {
             <div
               key={item}
               className={`${styles.subPanel__categoryFilter__item} ${
-                selectedCategoryFilter === item ? styles.subPanel__filter__item__selected : ''
+                selectedCategoryFilter === item
+                  ? styles.subPanel__categoryFilter__item__selected
+                  : ''
               }`}
               onClick={() => {
                 handleFilterClick(item);
