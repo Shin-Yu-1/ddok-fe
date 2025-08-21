@@ -16,9 +16,9 @@ interface MapPanelItemProps {
 }
 
 const MapPanelItem: React.FC<MapPanelItemProps> = ({
-  nickname,
-  title,
   category,
+  title,
+  nickname,
   status,
   image,
 }) => {

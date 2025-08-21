@@ -96,7 +96,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
 
   return (
     <div className={styles.panel__container}>
-      {/* 서브 패널 타이틀*/}
+      {/* 패널 타이틀*/}
       <div className={styles.panel__title}>지도 목록</div>
 
       {/* 검색 섹션*/}
@@ -180,10 +180,8 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
         ))}
       </div>
 
-      {/* 서브 패널 상태 표시 (임시) */}
-      <div className={styles.panel__openStatus}>
-        서브 패널 상태 : {isOpen ? 'OPENED' : 'CLOSED'}
-      </div>
+      {/* 패널 상태 표시 (임시) */}
+      <div className={styles.panel__openStatus}>패널 상태 : {isOpen ? 'OPENED' : 'CLOSED'}</div>
     </div>
   );
 };
