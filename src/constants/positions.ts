@@ -1,7 +1,7 @@
 // 포지션 상수 정의
 export const POSITIONS = [
   { id: 1, name: '입문자' },
-  { id: 2, name: '풀스텍' },
+  { id: 2, name: '풀스택' },
   { id: 3, name: '프론트엔드' },
   { id: 4, name: '백엔드' },
   { id: 5, name: '디자이너' },
