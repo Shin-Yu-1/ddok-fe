@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
-import Overlay from '@/features/map/components/MapOverlay/MapOverlay';
+import MapOverlay from '@/features/map/components/MapOverlay/MapOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import { MapOverlayType } from '@/features/map/constants/MapOverlayType';
 
@@ -59,7 +59,7 @@ const MapPage = () => {
             {/* 오버레이 */}
             {isOverlayOpen && selectedPoint && (
               <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
-                <Overlay
+                <MapOverlay
                   onOverlayClose={() => setIsOverlayOpen(false)}
                   overlayType={MapOverlayType.PROJECT}
                 />
