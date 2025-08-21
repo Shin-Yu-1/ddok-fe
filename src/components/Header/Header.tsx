@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
 
+import clsx from 'clsx';
+
 import DdokLogo from '@/assets/images/DDOK/DDOK-Logo.svg';
 
 import Button from '../Button/Button';
@@ -46,7 +48,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
             <div className={styles.rightSection}>
               <Button
                 size="sm"
-                fontSizePreset="xsmall" //16
+                fontSizePreset="xsmall"
                 fontWeightPreset="regular"
                 className={styles.button}
                 onClick={onSignUp}
@@ -80,9 +82,9 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               {user && (
                 <div className={styles.userProfile} onClick={onProfileClick}>
                   <div className={styles.profileImage}>
-                    <img src={user?.profileImage} alt={`${user?.nickname}의 프로필`} />
+                    <img src={user.profileImage} alt={`${user.nickname}의 프로필`} />
                   </div>
-                  <span className={styles.nickname}>{user?.nickname}</span>
+                  <span className={styles.nickname}>{user.nickname}</span>
                 </div>
               )}
             </div>
@@ -94,11 +96,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
     };
 
     return (
-      <header
-        ref={ref}
-        className={[styles.header, className].filter(Boolean).join(' ')}
-        role="banner"
-      >
+      <header ref={ref} className={clsx(styles.header, className)} role="banner">
         <div className={styles.logoSection} onClick={onLogoClick}>
           <img src={DdokLogo} alt="DDOK LOGO" className={styles.logo} />
         </div>
