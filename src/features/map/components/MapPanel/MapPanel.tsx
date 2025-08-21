@@ -70,6 +70,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
   );
+
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<MapItemStatusFilter>(
     MapItemStatusFilter.ALL
   );
@@ -82,7 +83,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
     MapItemFilter.CAFE,
   ];
 
-  const statusFilterItems = [
+  const statusFilterItems: MapItemStatusFilter[] = [
     MapItemStatusFilter.ALL,
     MapItemStatusFilter.RECRUITING,
     MapItemStatusFilter.ONGOING,
