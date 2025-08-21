@@ -6,7 +6,7 @@ import styles from './Button.module.scss';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
-export type ButtonRadius = 'none' | 'xsm' | 'sm' | 'md' | 'lg' | 'full';
+export type ButtonRadius = 'none' | 'xxsm' | 'xsm' | 'sm' | 'md' | 'full';
 export type ButtonFontSize = 'xxxsmall' | 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
 export type ButtonFontWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 
@@ -82,8 +82,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         [styles.fullWidth]: fullWidth,
         [styles.disabled]: disabled,
         [styles.loading]: isLoading,
-        [styles.hasLeftIcon]: leftIcon,
-        [styles.hasRightIcon]: rightIcon,
       },
       className
     );
@@ -91,8 +89,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const inlineStyle: React.CSSProperties = {
       ...(width ? { width: toCssSize(width) } : null),
       ...(height ? { height: toCssSize(height) } : null),
-      ...(fontSize ? { fontSize: toCssSize(fontSize) } : null),
-      ...(fontWeight ? { fontWeight: toCssSize(fontWeight) } : null),
+      ...(fontSize && !fontSizePreset ? { fontSize: toCssSize(fontSize) } : null),
+      ...(fontWeight && !fontWeightPreset ? { fontWeight: toCssSize(fontWeight) } : null),
       ...(padding ? { padding: toCssSize(padding) } : null),
       ...(gap ? { gap: toCssSize(gap) } : null),
       ...(backgroundColor ? { backgroundColor: backgroundColor } : null),
