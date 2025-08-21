@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
 import Overlay from '@/features/map/components/MapOverlay/MapOverlay';
-import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
+import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import { MapOverlayType } from '@/features/map/constants/MapOverlayType';
 
 import styles from './MapPage.module.scss';
 
 const MapPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
+  const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
 
   // 임시 마커 배열
   const [points] = useState<{ lat: number; lng: number }[]>([
@@ -32,9 +32,9 @@ const MapPage = () => {
         <div className={styles.map__sidebar}>
           <div
             className={styles.map__sidebarToggleBtn}
-            onClick={() => setIsMapSubPanelOpen(!isMapSubPanelOpen)}
+            onClick={() => setIsMapPanelOpen(!isMapPanelOpen)}
           >
-            {isMapSubPanelOpen ? 'CLOSE' : 'OPEN'}
+            {isMapPanelOpen ? 'CLOSE' : 'OPEN'}
           </div>
         </div>
 
@@ -69,10 +69,10 @@ const MapPage = () => {
         </div>
       </div>
 
-      {/* 지도 서브 패널 */}
-      {isMapSubPanelOpen && (
-        <div className={styles.map__subPanelContainer}>
-          <MapSubPanel isOpen={isMapSubPanelOpen} />
+      {/* 지도 패널 */}
+      {isMapPanelOpen && (
+        <div className={styles.map__panelContainer}>
+          <MapPanel isOpen={isMapPanelOpen} />
         </div>
       )}
     </div>
