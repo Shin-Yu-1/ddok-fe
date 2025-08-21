@@ -1,5 +1,5 @@
+import { OverlayType } from './constants/OverlayType';
 import styles from './Overlay.module.scss';
-import { OverlayType } from './OverlayType';
 
 interface OverlayProps {
   onOverlayClose: () => void;

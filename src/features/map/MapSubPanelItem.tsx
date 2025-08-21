@@ -1,4 +1,4 @@
-import { MapItemStatusFilter } from './MapItemStatusFilter';
+import { MapItemStatusFilter } from './constants/MapItemStatusFilter';
 import styles from './MapSubPanelItem.module.scss';
 
 interface MapSubPanelItemProps {
