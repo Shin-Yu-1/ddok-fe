@@ -5,14 +5,22 @@
   flex-direction: column;
   gap: 20px;
   box-sizing: border-box;
-  width: 300px;
+  width: 100%;
+  height: 100%;
   padding: 20px;
+  border-right: 1px solid $gray-1;
   background-color: $white-3;
 }
 
+.panel__title {
+  font-size: $fs-small;
+  font-weight: $fw-semibold;
+}
+
+// TODO: 추후 삭제 예정
 .subPanel__openStatus {
   position: absolute;
-  bottom: 30px;
+  bottom: 10px;
   font-size: $fs-xxxsmall;
   color: $blue-1;
 }
