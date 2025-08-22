@@ -53,7 +53,7 @@ const CreateProjectPage = () => {
                   마크다운 작성 양식 들어갈 예정
                 </MainSection>
               </div>
-              <div className={styles.rightSections}>
+              <div className={styles.rightSection}>
                 <SideSection readonly={true} title={'진행 상태'}>
                   진행 상태 버튼 들어갈 예정
                 </SideSection>
