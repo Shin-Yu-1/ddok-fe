@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import Input from '@/components/Input/Input';
 
-import { MapItemFilter } from '../../constants/MapItemCategoryFilter';
-import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter';
+import { MapItemFilter } from '../../constants/MapItemCategoryFilter.enum';
+import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
 import MapPanelItem from '../MapPanelItem/MapPanelItem';
 
 import styles from './MapPanel.module.scss';
