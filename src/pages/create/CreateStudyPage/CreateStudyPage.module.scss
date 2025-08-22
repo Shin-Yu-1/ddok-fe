@@ -1,11 +1,9 @@
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as m;
-
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
-.container {
-  background-color: $blue-1;
-}
+@use '@/styles/postPagesLayout' as p;
 
 .title {
   @include m.font-title;
 }
+
+@include p.post-layout-base-styles;
