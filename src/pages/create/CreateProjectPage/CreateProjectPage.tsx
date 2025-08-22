@@ -9,7 +9,7 @@ const CreateProjectPage = () => {
   const navigate = useNavigate();
   const handleClick = () => {
     // TODO: 추후 API 연결 필요
-    navigate(`/detail/study/${id}`);
+    navigate(`/detail/project/${id}`);
   };
   return (
     <>
