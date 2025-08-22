@@ -95,6 +95,9 @@ const MapPage = () => {
       {isMapSubPanelOpen && (
         <div className={styles.map__subPanelContainer}>
           <MapSubPanel />
+          <div className={styles.subPanel__closeBtn} onClick={() => setIsMapSubPanelOpen(false)}>
+            {'<'}
+          </div>
         </div>
       )}
     </div>
