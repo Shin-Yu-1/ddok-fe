@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import DdokLogo from '@/assets/images/DDOK/DDOK-Logo.svg';
 import type { UserInfo } from '@/types/user';
 
-import Button from '../../../components/Button/Button';
+import Button from '@/components/Button/Button';
 import { useHeaderHandlers } from '../hooks/useHeaderHandlers';
 
 import styles from './Header.module.scss';
