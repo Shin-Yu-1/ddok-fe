@@ -104,7 +104,11 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
     };
 
     return (
-      <header ref={ref} className={clsx(styles.header, className)} role="banner">
+      <header
+        ref={ref}
+        className={clsx(styles.header, variant === 'logo-only' && styles.logoOnly, className)}
+        role="banner"
+      >
         <div className={styles.logoSection} onClick={handlers.onLogoClick}>
           <img src={DdokLogo} alt="DDOK LOGO" className={styles.logo} />
         </div>
