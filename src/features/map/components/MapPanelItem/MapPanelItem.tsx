@@ -1,4 +1,4 @@
-import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter';
+import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
 
 import styles from './MapPanelItem.module.scss';
 

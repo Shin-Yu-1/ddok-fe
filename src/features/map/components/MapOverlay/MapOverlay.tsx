@@ -1,4 +1,4 @@
-import { MapOverlayType } from '../../constants/MapOverlayType';
+import { MapOverlayType } from '../../constants/MapOverlayType.enum';
 
 import styles from './MapOverlay.module.scss';
 
