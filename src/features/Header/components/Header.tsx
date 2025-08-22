@@ -3,15 +3,11 @@ import { forwardRef } from 'react';
 import clsx from 'clsx';
 
 import DdokLogo from '@/assets/images/DDOK/DDOK-Logo.svg';
+import type { UserInfo } from '@/types/user';
 
-import Button from '../Button/Button';
+import Button from '../../../components/Button/Button';
 
 import styles from './Header.module.scss';
-
-export interface UserInfo {
-  profileImage: string;
-  nickname: string;
-}
 
 interface HeaderProps {
   variant?: 'logo-only' | 'guest' | 'user';
