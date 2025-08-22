@@ -9,7 +9,9 @@ import MapPanelItem from '../MapPanelItem/MapPanelItem';
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
-  isOpen: boolean;
+  isMapPanelOpen: boolean;
+  handleSubPanelToggle: () => void;
+  isMapSubPanelOpen?: boolean;
 }
 
 const mockData = [
@@ -66,7 +68,11 @@ const mockData = [
   },
 ];
 
-const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
+const MapPanel: React.FC<MapPanelProps> = ({
+  isMapPanelOpen,
+  handleSubPanelToggle,
+  isMapSubPanelOpen,
+}) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
   );
@@ -174,6 +180,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
               category={item.category}
               status={item.teamStatus}
               location={item.location}
+              handleSubPanelToggle={handleSubPanelToggle}
             />
             {index < mockData.length - 1 && <hr className={styles.panel__list__item__divider} />}
           </>
@@ -181,7 +188,14 @@ const MapPanel: React.FC<MapPanelProps> = ({ isOpen }) => {
       </div>
 
       {/* 패널 상태 표시 (임시) */}
-      <div className={styles.panel__openStatus}>패널 상태 : {isOpen ? 'OPENED' : 'CLOSED'}</div>
+      <div className={styles.panel__openStatus}>
+        패널 상태 : {isMapPanelOpen ? 'OPENED' : 'CLOSED'}
+      </div>
+
+      {/* 서브 패널 상태 표시 (임시) */}
+      <div className={styles.subPanel__openStatus}>
+        서브 패널 상태 : {isMapSubPanelOpen ? 'OPENED' : 'CLOSED'}
+      </div>
     </div>
   );
 };
