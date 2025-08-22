@@ -1,0 +1,16 @@
+.subPanel__container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  width: 300px;
+  padding: 20px;
+  background-color: $white-3;
+}
+
+.subPanel__openStatus {
+  position: absolute;
+  bottom: 30px;
+  font-size: $fs-xxxsmall;
+  color: $blue-1;
+}
