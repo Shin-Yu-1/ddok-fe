@@ -10,8 +10,8 @@ import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
   isMapPanelOpen: boolean;
-  handleSubPanelToggle: () => void;
   isMapSubPanelOpen?: boolean;
+  handleSubPanelToggle: () => void;
 }
 
 const mockData = [
