@@ -21,8 +21,15 @@ const MapPage = () => {
   ]);
 
   const handleMapPanelToggle = () => {
+    if (isMapPanelOpen) {
+      setIsMapSubPanelOpen(false);
+    }
     setIsMapPanelOpen(!isMapPanelOpen);
-    setIsMapSubPanelOpen(!isMapSubPanelOpen);
+  };
+
+  const handleSubPanelToggle = () => {
+    if (!isMapPanelOpen) return setIsMapSubPanelOpen(false);
+    setIsMapSubPanelOpen(prev => !prev);
   };
 
   // 커스텀 오버레이에 전달할 마커의 좌표
@@ -76,14 +83,18 @@ const MapPage = () => {
       {/* 지도 패널 */}
       {isMapPanelOpen && (
         <div className={styles.map__panelContainer}>
-          <MapPanel isOpen={isMapPanelOpen} />
+          <MapPanel
+            isMapPanelOpen={isMapPanelOpen}
+            handleSubPanelToggle={handleSubPanelToggle}
+            isMapSubPanelOpen={isMapSubPanelOpen}
+          />
         </div>
       )}
 
       {/* 지도 서브 패널 */}
       {isMapSubPanelOpen && (
         <div className={styles.map__subPanelContainer}>
-          <MapSubPanel isOpen={isMapSubPanelOpen} />
+          <MapSubPanel />
         </div>
       )}
     </div>
