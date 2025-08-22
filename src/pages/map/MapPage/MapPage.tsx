@@ -4,6 +4,7 @@ import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-
 
 import MapOverlay from '@/features/map/components/MapOverlay/MapOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
+import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { MapOverlayType } from '@/features/map/constants/MapOverlayType';
 
 import styles from './MapPage.module.scss';
@@ -11,12 +12,18 @@ import styles from './MapPage.module.scss';
 const MapPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
+  const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
 
   // 임시 마커 배열
   const [points] = useState<{ lat: number; lng: number }[]>([
     { lat: 37.5665, lng: 126.978 },
     { lat: 37.566, lng: 126.98 },
   ]);
+
+  const handleMapPanelToggle = () => {
+    setIsMapPanelOpen(!isMapPanelOpen);
+    setIsMapSubPanelOpen(!isMapSubPanelOpen);
+  };
 
   // 커스텀 오버레이에 전달할 마커의 좌표
   const [selectedPoint, setSelectedPoint] = useState<{ lat: number; lng: number } | null>(null);
@@ -30,10 +37,7 @@ const MapPage = () => {
       <div className={styles.map__content}>
         {/* 서브 패널 토글을 위한 임시 사이드바 */}
         <div className={styles.map__sidebar}>
-          <div
-            className={styles.map__sidebarToggleBtn}
-            onClick={() => setIsMapPanelOpen(!isMapPanelOpen)}
-          >
+          <div className={styles.map__sidebarToggleBtn} onClick={() => handleMapPanelToggle()}>
             {isMapPanelOpen ? 'CLOSE' : 'OPEN'}
           </div>
         </div>
@@ -73,6 +77,13 @@ const MapPage = () => {
       {isMapPanelOpen && (
         <div className={styles.map__panelContainer}>
           <MapPanel isOpen={isMapPanelOpen} />
+        </div>
+      )}
+
+      {/* 지도 서브 패널 */}
+      {isMapSubPanelOpen && (
+        <div className={styles.map__subPanelContainer}>
+          <MapSubPanel isOpen={isMapSubPanelOpen} />
         </div>
       )}
     </div>
