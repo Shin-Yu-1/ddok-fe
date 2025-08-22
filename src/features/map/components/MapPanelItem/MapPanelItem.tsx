@@ -13,6 +13,7 @@ interface MapPanelItemProps {
   };
   image: string;
   status?: string;
+  handleSubPanelToggle: () => void;
 }
 
 const MapPanelItem: React.FC<MapPanelItemProps> = ({
@@ -21,9 +22,10 @@ const MapPanelItem: React.FC<MapPanelItemProps> = ({
   nickname,
   status,
   image,
+  handleSubPanelToggle,
 }) => {
   return (
-    <div className={styles.panel__list__item}>
+    <div className={styles.panel__list__item} onClick={handleSubPanelToggle}>
       <div className={styles.panel__list__item__user}>
         <div className={styles.panel__list__item__avatar}>
           <img src={image} alt="Avatar" />
