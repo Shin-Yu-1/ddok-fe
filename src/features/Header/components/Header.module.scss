@@ -11,6 +11,10 @@
   padding: 0 25px;
   background-color: v.$white-3;
 
+  &.logoOnly {
+    border-bottom: 1px solid v.$gray-1;
+  }
+  
   @include m.mobile {
     height: 46px;
     padding: 0 15px;
