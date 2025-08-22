@@ -5,7 +5,7 @@ import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-
 import MapOverlay from '@/features/map/components/MapOverlay/MapOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
-import { MapOverlayType } from '@/features/map/constants/MapOverlayType';
+import { MapOverlayType } from '@/features/map/constants/MapOverlayType.enum';
 
 import styles from './MapPage.module.scss';
 
