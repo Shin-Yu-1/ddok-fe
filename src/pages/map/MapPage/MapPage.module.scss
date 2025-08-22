@@ -82,10 +82,11 @@
   border-radius: 0 10px 10px 0;
   line-height: 50px;
   text-align: center;
+  color: $gray-2;
   background-color: $white-3;
   cursor: pointer;
 
   &:hover {
-    background-color: $gray-3;
+    background-color: $white-1;
   }
 }
