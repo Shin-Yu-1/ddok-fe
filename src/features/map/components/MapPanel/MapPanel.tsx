@@ -14,7 +14,49 @@ interface MapPanelProps {
   handleSubPanelToggle: () => void;
 }
 
-const mockData = [
+interface Location {
+  latitude: number;
+  longitude: number;
+  address: string;
+}
+
+interface Project {
+  category: string;
+  projectId: number;
+  title: string;
+  location: Location;
+  teamStatus: string;
+  image: string;
+}
+
+interface Study {
+  category: string;
+  studyId: number;
+  title: string;
+  location: Location;
+  teamStatus: string;
+  image: string;
+}
+
+interface Player {
+  category: string;
+  userId: number;
+  nickname: string;
+  location: Location;
+  position: string;
+  isMine: boolean;
+  image: string;
+}
+
+interface Cafe {
+  category: string;
+  cafeId: number;
+  title: string;
+  location: Location;
+  image: string;
+}
+
+const mockData: (Project | Study | Player | Cafe)[] = [
   {
     category: 'project',
     projectId: 1,
@@ -51,7 +93,7 @@ const mockData = [
       address: '서울특별시 강남구 테헤란로',
     },
     position: '백엔드',
-    isMine: 'false',
+    isMine: false,
     image: '/src/assets/images/avatar.png',
   },
 
@@ -67,6 +109,22 @@ const mockData = [
     image: '/src/assets/images/avatar.png',
   },
 ];
+
+// TODO: 향후 각 아이템에 대한 고유 키 생성 로직 필요
+// export const getUniqueKey = (item: MapItem) => {
+//   switch (item.category) {
+//     case 'project':
+//       return `project-${item.projectId}`;
+//     case 'study':
+//       return `study-${item.studyId}`;
+//     case 'player':
+//       return `user-${item.userId}`;
+//     case 'cafe':
+//       return `cafe-${item.cafeId}`;
+//     default:
+//       return `unknown-${Math.random()}`;
+//   }
+// };
 
 const MapPanel: React.FC<MapPanelProps> = ({
   isMapPanelOpen,
@@ -171,9 +229,8 @@ const MapPanel: React.FC<MapPanelProps> = ({
       {/* 목록 섹션 */}
       <div className={styles.panel__list}>
         {mockData.map((item, index) => (
-          <>
+          <div key={index}>
             <MapPanelItem
-              key={index}
               image={item.image}
               title={item.title}
               nickname={item.nickname}
@@ -183,7 +240,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
               handleSubPanelToggle={handleSubPanelToggle}
             />
             {index < mockData.length - 1 && <hr className={styles.panel__list__item__divider} />}
-          </>
+          </div>
         ))}
       </div>
 
