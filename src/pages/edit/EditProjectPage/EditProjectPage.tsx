@@ -26,7 +26,7 @@ const EditProjectPage = () => {
             <div className={styles.nameSection}>팀명 컴포넌트 들어갈 예정</div>
             <div className={styles.detailInfoSection}>
               <div className={styles.leftSection}>왼쪽</div>
-              <div className={styles.rightSections}>오른쪽</div>
+              <div className={styles.rightSection}>오른쪽</div>
             </div>
           </div>
         </div>
