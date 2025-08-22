@@ -59,7 +59,6 @@
     padding: 3px 10px;
     border-radius: $r-xxsmall;
     font-size: $fs-xxxsmall;
-    background-color: $green-1;
 
     &__recruiting {
       font-weight: $fw-bold;
@@ -69,7 +68,6 @@
 
     &__ongoing {
       border: 1px solid $gray-1;
-      background-color: $yellow-1;
       background-color: $white-3;
     }
   }
