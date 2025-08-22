@@ -5,8 +5,10 @@
   flex-direction: column;
   gap: 20px;
   box-sizing: border-box;
-  width: 363px;
+  width: 100%;
+  height: 100%;
   padding: 20px;
+  border-right: 1px solid $gray-1;
   background-color: $white-3;
 }
 
@@ -111,7 +113,7 @@
 // TODO: 추후 삭제 예정
 .panel__openStatus {
   position: absolute;
-  bottom: 30px;
+  bottom: 10px;
   font-size: $fs-xxxsmall;
   color: $blue-1;
 }
