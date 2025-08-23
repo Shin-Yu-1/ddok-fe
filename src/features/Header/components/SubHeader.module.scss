@@ -45,6 +45,7 @@
   }
 
   &.active {
+    border: 1.5px solid v.$yellow-1;
     font-weight: v.$fw-bold;
   }
 }
