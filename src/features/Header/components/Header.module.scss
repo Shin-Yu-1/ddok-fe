@@ -14,7 +14,7 @@
   &.logoOnly {
     border-bottom: 1px solid v.$gray-1;
   }
-  
+
   @include m.mobile {
     height: 46px;
     padding: 0 15px;
