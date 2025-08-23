@@ -3,9 +3,9 @@ import { forwardRef } from 'react';
 import clsx from 'clsx';
 
 import DdokLogo from '@/assets/images/DDOK/DDOK-Logo.svg';
+import Button from '@/components/Button/Button';
 import type { UserInfo } from '@/types/user';
 
-import Button from '@/components/Button/Button';
 import { useHeaderHandlers } from '../hooks/useHeaderHandlers';
 
 import styles from './Header.module.scss';
