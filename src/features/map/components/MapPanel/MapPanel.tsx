@@ -232,10 +232,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
           <div key={index}>
             <MapPanelItem
               image={item.image}
-              title={item.title}
-              nickname={item.nickname}
+              //   title={item.title}
+              //   nickname={item.nickname}
               category={item.category}
-              status={item.teamStatus}
+              //   status={item.teamStatus}
               location={item.location}
               handleSubPanelToggle={handleSubPanelToggle}
             />
