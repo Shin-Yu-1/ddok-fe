@@ -1,0 +1,49 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.subHeader {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  padding: 0 40px;
+  border-bottom: 1px solid v.$black-4;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    height: 35px;
+    padding: 0 30px;
+  }
+
+  @include m.tablet {
+    padding: 0 35px;
+  }
+}
+
+.navContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @include m.mobile {
+    gap: 6px;
+  }
+
+  @include m.tablet {
+    gap: 8px;
+  }
+}
+
+.navButton {
+  border: 1px solid transparent;
+
+  &:hover:not(:disabled) {
+    font-weight: v.$fw-bold;
+    color: v.$black-4;
+  }
+
+  &.active {
+    font-weight: v.$fw-bold;
+  }
+}
