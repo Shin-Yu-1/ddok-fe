@@ -54,6 +54,14 @@
 
 // ===== 새로운 VARIANT 스타일 =====
 
+// 배경색이 없고, 커스텀만 하고 싶은 사람을 위해 추가 (그게 나야~
+.variant-none {
+  border-width: 1px;
+  border-color: transparent;
+  color: $black-4;
+  background-color: $white-3;
+}
+
 // Primary: gray-3 라인 + white-2 배경 + black-4 글자
 .variant-primary {
   border-width: 1px;

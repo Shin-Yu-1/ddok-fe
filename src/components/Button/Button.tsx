@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import styles from './Button.module.scss';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+export type ButtonVariant = 'none' | 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonRadius = 'none' | 'xxsm' | 'xsm' | 'sm' | 'md' | 'full'; // 0, 5px, 10px, 15px, 20px, 45px
 export type ButtonFontSize = 'xxxsmall' | 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large'; // 12px, 14px, 16px, 20px, 24px, 28px
@@ -53,7 +53,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       textColor,
       border,
 
-      variant = 'primary',
+      variant = 'none',
       size = 'md',
       radius = 'md',
       fontSizePreset,
