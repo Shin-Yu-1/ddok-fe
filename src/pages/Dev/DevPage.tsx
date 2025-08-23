@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
 
+import Header from '@/features/Header/components/Header';
+
 import styles from './DevPage.module.scss';
 
 const DevPage: React.FC = () => {
+  const isLoggedIn = true; // 또는 false
+  const user = {
+    nickname: '홍길동',
+    profileImage: '/src/assets/images/avatar.png',
+  };
+
   const routes: { path: string; name: string }[] = [
     { path: '/intro', name: '인트로 페이지(개발 완료 후 / 사용)' },
     { path: '/auth/signin', name: '로그인' },
@@ -31,27 +39,30 @@ const DevPage: React.FC = () => {
   ];
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>🚀 개발용 페이지 네비게이션</h1>
+    <>
+      <Header variant={isLoggedIn ? 'user' : 'guest'} user={isLoggedIn ? user : undefined} />
+      <div className={styles.container}>
+        <h1 className={styles.title}>🚀 개발용 페이지 네비게이션</h1>
 
-      <div className={styles.grid}>
-        {routes.map((route, index) => (
-          <Link key={index} to={route.path} className={styles.card}>
-            <div className={styles.cardTitle}>{route.name}</div>
-            <div className={styles.cardPath}>{route.path}</div>
-          </Link>
-        ))}
-      </div>
+        <div className={styles.grid}>
+          {routes.map((route, index) => (
+            <Link key={index} to={route.path} className={styles.card}>
+              <div className={styles.cardTitle}>{route.name}</div>
+              <div className={styles.cardPath}>{route.path}</div>
+            </Link>
+          ))}
+        </div>
 
-      <div className={styles.info}>
-        <h3 className={styles.infoTitle}>💡 사용법</h3>
-        <ul className={styles.infoList}>
-          <li>각 카드를 클릭하면 해당 페이지로 이동합니다</li>
-          <li>ID가 필요한 페이지들은 예시 ID(1)를 사용했습니다</li>
-          <li>개발 중 빠른 테스트를 위해 사용하세요</li>
-        </ul>
+        <div className={styles.info}>
+          <h3 className={styles.infoTitle}>💡 사용법</h3>
+          <ul className={styles.infoList}>
+            <li>각 카드를 클릭하면 해당 페이지로 이동합니다</li>
+            <li>ID가 필요한 페이지들은 예시 ID(1)를 사용했습니다</li>
+            <li>개발 중 빠른 테스트를 위해 사용하세요</li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
