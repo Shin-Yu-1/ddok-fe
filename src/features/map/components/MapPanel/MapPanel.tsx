@@ -4,6 +4,8 @@ import Input from '@/components/Input/Input';
 
 import { MapItemFilter } from '../../constants/MapItemCategoryFilter.enum';
 import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
+import type { MapItem } from '../../types';
+import { isProject, isStudy, isPlayer, isCafe } from '../../types';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
@@ -17,47 +19,7 @@ interface MapPanelProps {
   handleSubPanelToggle: () => void;
 }
 
-interface Location {
-  latitude: number;
-  longitude: number;
-  address: string;
-}
-
-interface Project {
-  category: string;
-  projectId: number;
-  title: string;
-  location: Location;
-  teamStatus: string;
-  bannerImageUrl: string;
-}
-
-interface Study {
-  category: string;
-  studyId: number;
-  title: string;
-  location: Location;
-  teamStatus: string;
-  bannerImageUrl: string;
-}
-
-interface Player {
-  category: string;
-  userId: number;
-  nickname: string;
-  location: Location;
-  profileImageUrl: string;
-}
-
-interface Cafe {
-  category: string;
-  cafeId: number;
-  title: string;
-  location: Location;
-  bannerImageUrl: string;
-}
-
-const panelMockData: (Project | Study | Player | Cafe)[] = [
+const panelMockData: MapItem[] = [
   {
     category: 'project',
     projectId: 1,
@@ -132,7 +94,7 @@ const panelMockData: (Project | Study | Player | Cafe)[] = [
 const MapPanel: React.FC<MapPanelProps> = ({
   isMapPanelOpen,
   isMapSubPanelOpen,
-  handleSubPanelToggle,
+  handleSubPanelToggle, // TODO: 실제 컴포넌트에서 사용할 때 활성화
 }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
@@ -160,15 +122,6 @@ const MapPanel: React.FC<MapPanelProps> = ({
     setSelectedCategoryFilter(item);
     setSelectedStatusFilter(MapItemStatusFilter.ALL);
   };
-
-  // 타입 가드 함수
-  const isProject = (item: Project | Study | Player | Cafe): item is Project =>
-    item.category === 'project';
-  const isStudy = (item: Project | Study | Player | Cafe): item is Study =>
-    item.category === 'study';
-  const isPlayer = (item: Project | Study | Player | Cafe): item is Player =>
-    item.category === 'player';
-  const isCafe = (item: Project | Study | Player | Cafe): item is Cafe => item.category === 'cafe';
 
   // 데이터 필터링 함수
   const filteredData = useMemo(() => {
@@ -220,18 +173,14 @@ const MapPanel: React.FC<MapPanelProps> = ({
   }, [selectedCategoryFilter, selectedStatusFilter]);
 
   // 타입별 컴포넌트 렌더링 함수
-  const renderMapItem = (item: Project | Study | Player | Cafe) => {
-    const commonProps = {
-      category: item.category,
-      location: item.location,
-    };
-
+  const renderMapItem = (item: MapItem) => {
     if (isProject(item)) {
       return (
         <MapPanelProjectItem
-          {...commonProps}
+          category={item.category}
           projectId={item.projectId}
           title={item.title}
+          location={item.location}
           teamStatus={item.teamStatus}
           bannerImageUrl={item.bannerImageUrl}
         />
@@ -241,9 +190,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
     if (isStudy(item)) {
       return (
         <MapPanelStudyItem
-          {...commonProps}
+          category={item.category}
           studyId={item.studyId}
           title={item.title}
+          location={item.location}
           teamStatus={item.teamStatus}
           bannerImageUrl={item.bannerImageUrl}
         />
@@ -253,9 +203,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
     if (isPlayer(item)) {
       return (
         <MapPanelPlayerItem
-          {...commonProps}
+          category={item.category}
           userId={item.userId}
           nickname={item.nickname}
+          location={item.location}
           profileImageUrl={item.profileImageUrl}
         />
       );
@@ -264,9 +215,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
     if (isCafe(item)) {
       return (
         <MapPanelCafeItem
-          {...commonProps}
+          category={item.category}
           cafeId={item.cafeId}
           title={item.title}
+          location={item.location}
           bannerImageUrl={item.bannerImageUrl}
           handleSubPanelToggle={handleSubPanelToggle}
         />
