@@ -1,4 +1,4 @@
-import styles from './MapPanelItem.module.scss';
+import styles from './MapPanelPlayerItem.module.scss';
 
 interface MapPanelPlayerItemProps {
   category: string;
