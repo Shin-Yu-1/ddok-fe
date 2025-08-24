@@ -1,0 +1,20 @@
+@use '@/styles/variables.scss' as *;
+
+.form {
+  width: 100%;
+}
+
+.loginBtn {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.kakaoLoginBtn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.kakaoIcon {
+  width: 20px;
+  height: 20px;
+}
