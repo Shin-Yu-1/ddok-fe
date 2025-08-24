@@ -296,7 +296,7 @@ export default function SignUpForm() {
         type="submit"
         className={styles.submitBtn}
         disabled={isButtonDisabled}
-        variant={emailVerified && codeVerified ? 'ghost' : 'secondary'}
+        variant={emailVerified && codeVerified ? 'secondary' : 'ghost'}
         radius="xsm"
         height="45px"
       >
