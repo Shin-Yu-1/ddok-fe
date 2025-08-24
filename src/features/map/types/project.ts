@@ -23,13 +23,3 @@ export interface ProjectInput {
     address: string;
   };
 }
-
-// 프로젝트 리스트 아이템 (요약 정보)
-export interface ProjectSummary {
-  projectId: number;
-  title: string;
-  teamStatus: TeamStatus;
-  location: {
-    address: string;
-  };
-}

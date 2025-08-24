@@ -21,12 +21,3 @@ export interface PlayerInput {
     address: string;
   };
 }
-
-// 플레이어 리스트 아이템 (요약 정보)
-export interface PlayerSummary {
-  userId: number;
-  nickname: string;
-  location: {
-    address: string;
-  };
-}

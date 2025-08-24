@@ -6,16 +6,16 @@
 export type { Location, MapItemCategory, TeamStatus, BaseMapItem } from './common';
 
 // 프로젝트 관련 타입들
-export type { Project, ProjectInput, ProjectSummary } from './project';
+export type { Project, ProjectInput } from './project';
 
 // 스터디 관련 타입들
-export type { Study, StudyInput, StudySummary } from './study';
+export type { Study, StudyInput } from './study';
 
 // 플레이어 관련 타입들
-export type { Player, PlayerInput, PlayerSummary } from './player';
+export type { Player, PlayerInput } from './player';
 
 // 카페 관련 타입들
-export type { Cafe, CafeInput, CafeSummary } from './cafe';
+export type { Cafe, CafeInput } from './cafe';
 
 // 다시 import해서 union type 생성
 import type { Cafe } from './cafe';

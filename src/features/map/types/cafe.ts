@@ -21,12 +21,3 @@ export interface CafeInput {
     address: string;
   };
 }
-
-// 카페 리스트 아이템 (요약 정보)
-export interface CafeSummary {
-  cafeId: number;
-  title: string;
-  location: {
-    address: string;
-  };
-}

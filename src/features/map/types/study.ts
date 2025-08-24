@@ -23,13 +23,3 @@ export interface StudyInput {
     address: string;
   };
 }
-
-// 스터디 리스트 아이템 (요약 정보)
-export interface StudySummary {
-  studyId: number;
-  title: string;
-  teamStatus: TeamStatus;
-  location: {
-    address: string;
-  };
-}
