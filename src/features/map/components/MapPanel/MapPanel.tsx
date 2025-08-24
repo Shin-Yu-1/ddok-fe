@@ -4,10 +4,10 @@ import Input from '@/components/Input/Input';
 
 import { MapItemFilter } from '../../constants/MapItemCategoryFilter.enum';
 import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
-import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem';
-import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem';
-import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem';
-import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem';
+import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
+import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
+import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
+import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyItem';
 
 import styles from './MapPanel.module.scss';
 
