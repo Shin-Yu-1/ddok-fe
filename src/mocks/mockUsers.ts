@@ -4,6 +4,7 @@ export interface MockUser {
   password: string;
   name: string;
   nickname: string;
+  phoneNumber: string;
 }
 
 export const mockUsers: MockUser[] = [
@@ -13,6 +14,7 @@ export const mockUsers: MockUser[] = [
     password: '123456',
     name: '테스트',
     nickname: '테스트 사용자',
+    phoneNumber: '01012345678',
   },
 ];
 
