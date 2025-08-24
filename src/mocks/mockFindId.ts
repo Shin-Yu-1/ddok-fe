@@ -56,14 +56,11 @@ export const mockFindId = async (findIdData: MockFindIdData): Promise<MockFindId
   );
 
   if (user) {
-    // 이메일의 일부를 마스킹 처리
-    const emailParts = user.email.split('@');
-    const maskedEmail = emailParts[0].substring(0, 3) + '***@' + emailParts[1];
-
+    // 전체 이메일을 반환 (마스킹 처리 제거)
     return {
       success: true,
       message: '가입된 이메일을 찾았습니다.',
-      email: maskedEmail,
+      email: user.email,
     };
   } else {
     return {
