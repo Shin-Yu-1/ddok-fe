@@ -92,6 +92,7 @@ export default function SignInForm() {
         className={styles.loginBtn}
         type="submit"
         disabled={isButtonDisabled}
+        height="45px"
       >
         {isLoading ? '로그인 중...' : '로그인'}
       </Button>
@@ -106,6 +107,7 @@ export default function SignInForm() {
         textColor="#000000"
         fullWidth
         leftIcon={<img src={kakaoIcon} alt="카카오" className={styles.kakaoIcon} />}
+        height="45px"
       >
         카카오 로그인
       </Button>
