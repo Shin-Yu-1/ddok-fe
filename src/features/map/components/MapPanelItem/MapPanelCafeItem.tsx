@@ -14,7 +14,7 @@ interface MapPanelCafeItemProps {
 }
 
 const MapPanelCafeItem: React.FC<MapPanelCafeItemProps> = ({
-  category,
+  //   category,
   //   cafeId,
   title,
   //   location: { latitude, longitude, address },
@@ -29,7 +29,7 @@ const MapPanelCafeItem: React.FC<MapPanelCafeItemProps> = ({
         </div>
         <div className={styles.panel__list__item__info}>
           <div className={styles.panel__list__item__title}>{title}</div>
-          <div className={styles.panel__list__item__category}>{category}</div>
+          <div className={styles.panel__list__item__category}>카페</div>
         </div>
       </div>
     </div>

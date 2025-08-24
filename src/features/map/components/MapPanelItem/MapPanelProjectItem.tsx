@@ -17,7 +17,7 @@ interface MapPanelProjectItemProps {
 }
 
 const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({
-  category,
+  //   category,
   //   projectId,
   title,
   //   location: { latitude, longitude, address },
@@ -33,7 +33,7 @@ const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({
         </div>
         <div className={styles.panel__list__item__info}>
           <div className={styles.panel__list__item__title}>{title}</div>
-          <div className={styles.panel__list__item__category}>{category}</div>
+          <div className={styles.panel__list__item__category}>프로젝트</div>
         </div>
       </div>
       {teamStatus &&

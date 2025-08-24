@@ -17,7 +17,7 @@ interface MapPanelStudyItemProps {
 }
 
 const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({
-  category,
+  //   category,
   //   studyId,
   title,
   //   location: { latitude, longitude, address },
@@ -33,7 +33,7 @@ const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({
         </div>
         <div className={styles.panel__list__item__info}>
           <div className={styles.panel__list__item__title}>{title}</div>
-          <div className={styles.panel__list__item__category}>{category}</div>
+          <div className={styles.panel__list__item__category}>스터디</div>
         </div>
       </div>
       {teamStatus &&

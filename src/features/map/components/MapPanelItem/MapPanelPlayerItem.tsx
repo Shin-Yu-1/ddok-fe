@@ -14,7 +14,7 @@ interface MapPanelPlayerItemProps {
 }
 
 const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({
-  category,
+  //   category,
   //   projectId,
   nickname,
   //   location: { latitude, longitude, address },
@@ -29,7 +29,7 @@ const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({
         </div>
         <div className={styles.panel__list__item__info}>
           <div className={styles.panel__list__item__title}>{nickname}</div>
-          <div className={styles.panel__list__item__category}>{category}</div>
+          <div className={styles.panel__list__item__category}>플레이어</div>
         </div>
       </div>
     </div>
