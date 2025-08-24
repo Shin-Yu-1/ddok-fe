@@ -13,6 +13,7 @@ import FindIdPage from '@/pages/auth/FindIdPage/FindIdPage';
 import FindPasswordPage from '@/pages/auth/FindPasswordPage/FindPasswordPage';
 import ResetPasswordPage from '@/pages/auth/ResetPasswordPage/ResetPasswordPage';
 import SignInPage from '@/pages/auth/SignInPage/SignInPage';
+import SignUpCompletePage from '@/pages/auth/SignUpCompletePage/SignUpCompletePage';
 import SignUpPage from '@/pages/auth/SignUpPage/SignUpPage';
 import ButtonExamplePage from '@/pages/ButtonExamplePage/ButtonExamplePage';
 import CreateProjectPage from '@/pages/create/CreateProjectPage/CreateProjectPage';
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
           {
             path: 'auth/SignUp',
             element: <SignUpPage />,
+          },
+          {
+            path: 'auth/SignUpComplete',
+            element: <SignUpCompletePage />,
           },
           {
             path: 'auth/FindId',
