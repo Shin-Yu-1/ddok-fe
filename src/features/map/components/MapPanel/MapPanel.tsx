@@ -15,16 +15,10 @@ import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyIt
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
-  isMapPanelOpen: boolean;
-  isMapSubPanelOpen?: boolean;
   handleSubPanelToggle: () => void;
 }
 
-const MapPanel: React.FC<MapPanelProps> = ({
-  isMapPanelOpen,
-  isMapSubPanelOpen,
-  handleSubPanelToggle, // TODO: 실제 컴포넌트에서 사용할 때 활성화
-}) => {
+const MapPanel: React.FC<MapPanelProps> = ({ handleSubPanelToggle }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
   );
@@ -234,16 +228,6 @@ const MapPanel: React.FC<MapPanelProps> = ({
             )}
           </div>
         ))}
-      </div>
-
-      {/* 패널 상태 표시 (임시) */}
-      <div className={styles.panel__openStatus}>
-        패널 상태 : {isMapPanelOpen ? 'OPENED' : 'CLOSED'}
-      </div>
-
-      {/* 서브 패널 상태 표시 (임시) */}
-      <div className={styles.subPanel__openStatus}>
-        서브 패널 상태 : {isMapSubPanelOpen ? 'OPENED' : 'CLOSED'}
       </div>
     </div>
   );

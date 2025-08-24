@@ -83,11 +83,7 @@ const MapPage = () => {
       {/* 지도 패널 */}
       {isMapPanelOpen && (
         <div className={styles.map__panelContainer}>
-          <MapPanel
-            isMapPanelOpen={isMapPanelOpen}
-            handleSubPanelToggle={handleSubPanelToggle}
-            isMapSubPanelOpen={isMapSubPanelOpen}
-          />
+          <MapPanel handleSubPanelToggle={handleSubPanelToggle} />
         </div>
       )}
 

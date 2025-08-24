@@ -109,19 +109,3 @@
     background-color: $gray-2;
   }
 }
-
-// TODO: 추후 삭제 예정
-.panel__openStatus {
-  position: absolute;
-  bottom: 30px;
-  font-size: $fs-xxxsmall;
-  color: $blue-1;
-}
-
-// TODO: 추후 삭제 예정
-.subPanel__openStatus {
-  position: absolute;
-  bottom: 10px;
-  font-size: $fs-xxxsmall;
-  color: $green-1;
-}
