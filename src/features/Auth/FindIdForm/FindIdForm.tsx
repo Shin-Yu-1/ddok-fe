@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
@@ -32,6 +33,7 @@ import styles from './FindIdForm.module.scss';
 // const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
 
 export default function FindIdForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -150,7 +152,8 @@ export default function FindIdForm() {
       const result = await mockFindId(findIdData);
 
       if (result.success && result.email) {
-        // setFoundEmail(result.email);
+        // 찾은 이메일과 함께 완료 페이지로 이동
+        navigate(`/auth/FindIdComplete?email=${encodeURIComponent(result.email)}`);
       }
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
