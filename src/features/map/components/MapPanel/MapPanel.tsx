@@ -4,7 +4,10 @@ import Input from '@/components/Input/Input';
 
 import { MapItemFilter } from '../../constants/MapItemCategoryFilter.enum';
 import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
-import MapPanelItem from '../MapPanelItem/MapPanelItem';
+import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem';
+import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem';
+import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem';
+import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem';
 
 import styles from './MapPanel.module.scss';
 
@@ -26,7 +29,7 @@ interface Project {
   title: string;
   location: Location;
   teamStatus: string;
-  image: string;
+  bannerImageUrl: string;
 }
 
 interface Study {
@@ -35,7 +38,7 @@ interface Study {
   title: string;
   location: Location;
   teamStatus: string;
-  image: string;
+  bannerImageUrl: string;
 }
 
 interface Player {
@@ -43,9 +46,7 @@ interface Player {
   userId: number;
   nickname: string;
   location: Location;
-  position: string;
-  isMine: boolean;
-  image: string;
+  profileImageUrl: string;
 }
 
 interface Cafe {
@@ -53,10 +54,10 @@ interface Cafe {
   cafeId: number;
   title: string;
   location: Location;
-  image: string;
+  bannerImageUrl: string;
 }
 
-const mockData: (Project | Study | Player | Cafe)[] = [
+const panelMockData: (Project | Study | Player | Cafe)[] = [
   {
     category: 'project',
     projectId: 1,
@@ -67,7 +68,7 @@ const mockData: (Project | Study | Player | Cafe)[] = [
       address: '서울특별시 강남구 테헤란로',
     },
     teamStatus: 'RECRUITING',
-    image: '/src/assets/images/avatar.png',
+    bannerImageUrl: '/src/assets/images/avatar.png',
   },
 
   {
@@ -80,7 +81,7 @@ const mockData: (Project | Study | Player | Cafe)[] = [
       address: '서울특별시 강남구 테헤란로',
     },
     teamStatus: 'ONGOING',
-    image: '/src/assets/images/avatar.png',
+    bannerImageUrl: '/src/assets/images/avatar.png',
   },
 
   {
@@ -92,9 +93,7 @@ const mockData: (Project | Study | Player | Cafe)[] = [
       longitude: 126.978,
       address: '서울특별시 강남구 테헤란로',
     },
-    position: '백엔드',
-    isMine: false,
-    image: '/src/assets/images/avatar.png',
+    profileImageUrl: '/src/assets/images/avatar.png',
   },
 
   {
@@ -106,25 +105,9 @@ const mockData: (Project | Study | Player | Cafe)[] = [
       longitude: 126.978,
       address: '서울특별시 강남구 테헤란로',
     },
-    image: '/src/assets/images/avatar.png',
+    bannerImageUrl: '/src/assets/images/avatar.png',
   },
 ];
-
-// TODO: 향후 각 아이템에 대한 고유 키 생성 로직 필요
-// export const getUniqueKey = (item: MapItem) => {
-//   switch (item.category) {
-//     case 'project':
-//       return `project-${item.projectId}`;
-//     case 'study':
-//       return `study-${item.studyId}`;
-//     case 'player':
-//       return `user-${item.userId}`;
-//     case 'cafe':
-//       return `cafe-${item.cafeId}`;
-//     default:
-//       return `unknown-${Math.random()}`;
-//   }
-// };
 
 const MapPanel: React.FC<MapPanelProps> = ({
   isMapPanelOpen,
@@ -156,6 +139,72 @@ const MapPanel: React.FC<MapPanelProps> = ({
   const handleFilterClick = (item: MapItemFilter) => {
     setSelectedCategoryFilter(item);
     setSelectedStatusFilter(MapItemStatusFilter.ALL);
+  };
+
+  // 타입 가드 함수
+  const isProject = (item: Project | Study | Player | Cafe): item is Project =>
+    item.category === 'project';
+  const isStudy = (item: Project | Study | Player | Cafe): item is Study =>
+    item.category === 'study';
+  const isPlayer = (item: Project | Study | Player | Cafe): item is Player =>
+    item.category === 'player';
+  const isCafe = (item: Project | Study | Player | Cafe): item is Cafe => item.category === 'cafe';
+
+  // 타입별 컴포넌트 렌더링 함수
+  const renderMapItem = (item: Project | Study | Player | Cafe) => {
+    const commonProps = {
+      category: item.category,
+      location: item.location,
+      handleSubPanelToggle,
+    };
+
+    if (isProject(item)) {
+      return (
+        <MapPanelProjectItem
+          {...commonProps}
+          projectId={item.projectId}
+          title={item.title}
+          teamStatus={item.teamStatus}
+          bannerImageUrl={item.bannerImageUrl}
+        />
+      );
+    }
+
+    if (isStudy(item)) {
+      return (
+        <MapPanelStudyItem
+          {...commonProps}
+          studyId={item.studyId}
+          title={item.title}
+          teamStatus={item.teamStatus}
+          bannerImageUrl={item.bannerImageUrl}
+        />
+      );
+    }
+
+    if (isPlayer(item)) {
+      return (
+        <MapPanelPlayerItem
+          {...commonProps}
+          userId={item.userId}
+          nickname={item.nickname}
+          profileImageUrl={item.profileImageUrl}
+        />
+      );
+    }
+
+    if (isCafe(item)) {
+      return (
+        <MapPanelCafeItem
+          {...commonProps}
+          cafeId={item.cafeId}
+          title={item.title}
+          bannerImageUrl={item.bannerImageUrl}
+        />
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -228,18 +277,12 @@ const MapPanel: React.FC<MapPanelProps> = ({
 
       {/* 목록 섹션 */}
       <div className={styles.panel__list}>
-        {mockData.map((item, index) => (
+        {panelMockData.map((item, index) => (
           <div key={index}>
-            <MapPanelItem
-              image={item.image}
-              //   title={item.title}
-              //   nickname={item.nickname}
-              category={item.category}
-              //   status={item.teamStatus}
-              location={item.location}
-              handleSubPanelToggle={handleSubPanelToggle}
-            />
-            {index < mockData.length - 1 && <hr className={styles.panel__list__item__divider} />}
+            {renderMapItem(item)}
+            {index < panelMockData.length - 1 && (
+              <hr className={styles.panel__list__item__divider} />
+            )}
           </div>
         ))}
       </div>
