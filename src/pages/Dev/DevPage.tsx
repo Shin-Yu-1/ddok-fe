@@ -16,6 +16,7 @@ const DevPage: React.FC = () => {
     { path: '/auth/signin', name: '로그인' },
     { path: '/auth/SignUp', name: '회원가입' },
     { path: '/auth/FindId', name: '아이디 찾기' },
+    { path: '/auth/FindIdComplete', name: '아이디 찾기 완료' },
     { path: '/auth/FindPassword', name: '비밀번호 찾기' },
     { path: '/auth/ResetPassword', name: '비밀번호 재설정' },
     { path: '/personalization', name: '개인화' },

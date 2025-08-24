@@ -8,6 +8,7 @@ import PostLayout from '@/layouts/PostLayout/PostLayout';
 import ProfileLayout from '@/layouts/ProfileLayout/ProfileLayout';
 import SearchLayout from '@/layouts/SearchLayout/SearchLayout';
 import TeamLayout from '@/layouts/TeamLayout/TeamLayout';
+import FindIdCompletePage from '@/pages/auth/FindIdCompletePage/FindIdCompletePage';
 import FindIdPage from '@/pages/auth/FindIdPage/FindIdPage';
 import FindPasswordPage from '@/pages/auth/FindPasswordPage/FindPasswordPage';
 import ResetPasswordPage from '@/pages/auth/ResetPasswordPage/ResetPasswordPage';
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
           {
             path: 'auth/FindId',
             element: <FindIdPage />,
+          },
+          {
+            path: 'auth/FindIdComplete',
+            element: <FindIdCompletePage />,
           },
           {
             path: 'auth/FindPassword',
