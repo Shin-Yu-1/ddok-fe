@@ -15,6 +15,7 @@ const DevPage: React.FC = () => {
     { path: '/intro', name: '인트로 페이지(개발 완료 후 / 사용)' },
     { path: '/auth/signin', name: '로그인' },
     { path: '/auth/SignUp', name: '회원가입' },
+    { path: '/auth/SignUpComplete', name: '회원가입 완료' },
     { path: '/auth/FindId', name: '아이디 찾기' },
     { path: '/auth/FindIdComplete', name: '아이디 찾기 완료' },
     { path: '/auth/FindPassword', name: '비밀번호 찾기' },
