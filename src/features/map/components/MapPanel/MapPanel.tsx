@@ -155,7 +155,6 @@ const MapPanel: React.FC<MapPanelProps> = ({
     const commonProps = {
       category: item.category,
       location: item.location,
-      handleSubPanelToggle,
     };
 
     if (isProject(item)) {
@@ -200,6 +199,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
           cafeId={item.cafeId}
           title={item.title}
           bannerImageUrl={item.bannerImageUrl}
+          handleSubPanelToggle={handleSubPanelToggle}
         />
       );
     }
