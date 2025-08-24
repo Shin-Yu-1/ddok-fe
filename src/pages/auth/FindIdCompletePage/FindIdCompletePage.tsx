@@ -27,6 +27,7 @@ export default function FindIdCompletePage() {
         type="button"
         onClick={() => navigate('/auth/signin')}
         radius="xsm"
+        height="45px"
       >
         로그인으로
       </Button>
