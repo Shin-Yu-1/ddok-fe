@@ -203,8 +203,8 @@ export default function SignUpForm() {
       const result = await mockSignUp(signUpData);
 
       if (result.success) {
-        // 회원가입 성공 시 로그인 페이지로 이동
-        navigate('/auth/signin');
+        // 회원가입 성공 시 회원가입 완료 페이지로 이동
+        navigate('/auth/SignUpComplete');
       } else {
         setError(result.message);
       }
