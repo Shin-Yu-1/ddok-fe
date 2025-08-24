@@ -2,30 +2,34 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
-import {
-  useFindPassword,
-  useSendPhoneCodeForFindPassword,
-  useVerifyPhoneCodeForFindPassword,
-} from '@/hooks/auth/useFindPassword';
 import { findPasswordSchema, type FindPasswordFormValues } from '@/schemas/auth.schema';
-import type {
-  FindPasswordURL,
-  PhoneSendCodeURL,
-  PhoneVerifyCodeURL,
-} from '@/types/apiEndpoints.types';
+
+// API 연결 부분 주석 처리
+// import {
+//   useFindPassword,
+//   useSendPhoneCodeForFindPassword,
+//   useVerifyPhoneCodeForFindPassword,
+// } from '@/hooks/auth/useFindPassword';
+// import type {
+//   FindPasswordURL,
+//   PhoneSendCodeURL,
+//   PhoneVerifyCodeURL,
+// } from '@/types/apiEndpoints.types';
 
 import styles from './FindPasswordForm.module.scss';
 
-// URL들 정의
-const findPasswordURL: FindPasswordURL = '/api/auth/password/verify-user';
-const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
-const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
+// URL들 정의 (주석 처리)
+// const findPasswordURL: FindPasswordURL = '/api/auth/password/verify-user';
+// const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
+// const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
 
 export default function FindPasswordForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -40,35 +44,38 @@ export default function FindPasswordForm() {
   const [codeSent, setCodeSent] = useState(false);
   const [codeVerified, setCodeVerified] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [isLoading, setIsLoading] = useState({
+    phone: false,
+    verify: false,
+    submit: false,
+  });
 
   // 폼 데이터 감시
   const username = watch('username');
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
 
-  // URL을 파라미터로 전달하는 훅들 사용
-  const findPasswordMutation = useFindPassword(findPasswordURL);
-
-  const sendPhoneCodeMutation = useSendPhoneCodeForFindPassword(phoneSendCodeURL, {
-    onSuccess: () => {
-      setCodeSent(true);
-      startTimer();
-    },
-    onError: error => {
-      console.error('인증번호 발송 실패:', error);
-    },
-  });
-
-  const verifyPhoneCodeMutation = useVerifyPhoneCodeForFindPassword(phoneVerifyCodeURL, {
-    onSuccess: data => {
-      if (data.data.verified) {
-        setCodeVerified(true);
-      }
-    },
-    onError: () => {
-      console.error('인증번호 확인에 실패했습니다.');
-    },
-  });
+  // API 훅들 주석 처리
+  // const findPasswordMutation = useFindPassword(findPasswordURL);
+  // const sendPhoneCodeMutation = useSendPhoneCodeForFindPassword(phoneSendCodeURL, {
+  //   onSuccess: () => {
+  //     setCodeSent(true);
+  //     startTimer();
+  //   },
+  //   onError: error => {
+  //     console.error('인증번호 발송 실패:', error);
+  //   },
+  // });
+  // const verifyPhoneCodeMutation = useVerifyPhoneCodeForFindPassword(phoneVerifyCodeURL, {
+  //   onSuccess: data => {
+  //     if (data.data.verified) {
+  //       setCodeVerified(true);
+  //     }
+  //   },
+  //   onError: () => {
+  //     console.error('인증번호 확인에 실패했습니다.');
+  //   },
+  // });
 
   // 타이머 로직
   const startTimer = () => {
@@ -85,55 +92,90 @@ export default function FindPasswordForm() {
   };
 
   // 인증번호 발송
-  const handleSendPhoneCode = () => {
+  const handleSendPhoneCode = async () => {
     if (!phone || !username) {
       return;
     }
 
-    const cleanPhoneNumber = phone.replace(/-/g, '');
-    const requestData = {
-      phoneNumber: cleanPhoneNumber,
-      username: username.trim(),
-    };
+    setIsLoading(prev => ({ ...prev, phone: true }));
 
-    console.log('비밀번호 찾기 - 인증번호 발송 요청 데이터:', requestData);
-    sendPhoneCodeMutation.mutate(requestData);
+    try {
+      // 목 데이터로 처리
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      console.log('비밀번호 찾기 - 인증번호 발송 성공 (목 데이터)');
+      setCodeSent(true);
+      startTimer();
+    } catch (error) {
+      console.error('인증번호 발송 실패:', error);
+    } finally {
+      setIsLoading(prev => ({ ...prev, phone: false }));
+    }
   };
 
   // 인증번호 확인
-  const handleVerifyPhoneCode = () => {
+  const handleVerifyPhoneCode = async () => {
     if (!phoneCode || !phone) {
       return;
     }
 
-    const cleanPhoneNumber = phone.replace(/-/g, '');
-    const requestData = {
-      phoneNumber: cleanPhoneNumber,
-      phoneCode: phoneCode.trim(),
-    };
+    setIsLoading(prev => ({ ...prev, verify: true }));
 
-    console.log('비밀번호 찾기 - 인증번호 확인 요청 데이터:', requestData);
-    verifyPhoneCodeMutation.mutate(requestData);
+    try {
+      // 목 데이터로 처리 (123456 또는 000000을 올바른 인증번호로 처리)
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+      const verified = phoneCode === '123456' || phoneCode === '000000';
+
+      if (verified) {
+        setCodeVerified(true);
+        console.log('휴대폰 인증 완료 (목 데이터)');
+      } else {
+        console.error('인증번호가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      console.error('인증번호 확인에 실패했습니다:', error);
+    } finally {
+      setIsLoading(prev => ({ ...prev, verify: false }));
+    }
   };
 
-  // 폼 제출 - 사용자 검증 API 호출
-  const onSubmit = (data: FindPasswordFormValues) => {
+  // 폼 제출 - 사용자 검증 목 데이터 처리
+  const onSubmit = async (data: FindPasswordFormValues) => {
     if (!codeVerified) {
       return;
     }
 
-    const verifyUserData = {
-      username: data.username,
-      email: data.email,
-      phoneNumber: data.phoneNumber.replace(/-/g, ''), // 하이픈 제거
-      phoneCode: data.phoneCode,
-    };
+    setIsLoading(prev => ({ ...prev, submit: true }));
 
-    console.log('사용자 검증 요청 데이터:', verifyUserData);
-    findPasswordMutation.mutate(verifyUserData);
+    try {
+      // 목 데이터로 처리
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      console.log('사용자 검증 요청 데이터 (목 데이터):', {
+        username: data.username,
+        email: data.email,
+        phoneNumber: data.phoneNumber.replace(/-/g, ''),
+        phoneCode: data.phoneCode,
+      });
+
+      // 목 reauthToken 생성
+      const mockReauthToken = 'mock_reauth_token_' + Date.now();
+
+      // localStorage에 reauthToken 저장
+      localStorage.setItem('reauthToken', mockReauthToken);
+      console.log('목 reauthToken 저장 완료:', '***' + mockReauthToken.slice(-4));
+
+      // ResetPasswordPage로 이동
+      navigate('/auth/ResetPassword');
+    } catch (error) {
+      console.error('사용자 검증 실패:', error);
+    } finally {
+      setIsLoading(prev => ({ ...prev, submit: false }));
+    }
   };
 
-  const isSubmitting = findPasswordMutation.isPending;
+  const isSubmitting = isLoading.submit;
   const isButtonDisabled = isSubmitting || !codeVerified;
 
   return (
@@ -157,16 +199,12 @@ export default function FindPasswordForm() {
           <Button
             type="button"
             onClick={handleSendPhoneCode}
-            disabled={!phone || !username || timer > 0 || sendPhoneCodeMutation.isPending}
+            disabled={!phone || !username || timer > 0 || isLoading.phone}
             variant={codeSent ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
           >
-            {sendPhoneCodeMutation.isPending
-              ? '발송 중...'
-              : timer > 0
-                ? `0:${timer}`
-                : '인증번호 발송'}
+            {isLoading.phone ? '발송 중...' : timer > 0 ? `0:${timer}` : '인증번호 발송'}
           </Button>
         </div>
       </FormField>
@@ -177,16 +215,12 @@ export default function FindPasswordForm() {
           <Button
             type="button"
             onClick={handleVerifyPhoneCode}
-            disabled={!phoneCode || codeVerified || verifyPhoneCodeMutation.isPending}
+            disabled={!phoneCode || codeVerified || isLoading.verify}
             variant={codeVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
           >
-            {verifyPhoneCodeMutation.isPending
-              ? '확인 중...'
-              : codeVerified
-                ? '인증 완료'
-                : '인증하기'}
+            {isLoading.verify ? '확인 중...' : codeVerified ? '인증 완료' : '인증하기'}
           </Button>
         </div>
       </FormField>
