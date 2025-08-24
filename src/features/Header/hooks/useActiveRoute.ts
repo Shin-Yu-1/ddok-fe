@@ -8,7 +8,7 @@ export const useActiveRoute = () => {
     project: pathname.includes('/project'),
     study: pathname.includes('/study'),
     player: pathname === '/search/player',
-    ranking: pathname === 'ranking',
+    ranking: pathname === '/ranking',
   };
 
   return activeStates;
