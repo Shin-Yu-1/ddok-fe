@@ -11,15 +11,3 @@ export interface Study extends BaseMapItem {
   teamStatus: TeamStatus;
   bannerImageUrl: string;
 }
-
-// 스터디 생성/수정 시 사용할 입력 타입
-export interface StudyInput {
-  title: string;
-  teamStatus: TeamStatus;
-  bannerImageUrl: string;
-  location: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  };
-}

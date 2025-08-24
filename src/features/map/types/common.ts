@@ -15,7 +15,7 @@ export type MapItemCategory = 'project' | 'study' | 'player' | 'cafe';
 // 팀 상태 타입 (프로젝트, 스터디에서 사용)
 export type TeamStatus = 'RECRUITING' | 'ONGOING';
 
-// 지도 아이템 기본 인터페이스
+// 지도 아이템 기본 인터페이스(공통 데이터만 포함)
 export interface BaseMapItem {
   category: MapItemCategory;
   location: Location;
