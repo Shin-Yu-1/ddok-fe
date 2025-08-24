@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import Input from '@/components/Input/Input';
 
@@ -70,7 +70,18 @@ const panelMockData: (Project | Study | Player | Cafe)[] = [
     teamStatus: 'RECRUITING',
     bannerImageUrl: '/src/assets/images/avatar.png',
   },
-
+  {
+    category: 'project',
+    projectId: 2,
+    title: '똑똑 프로젝트',
+    location: {
+      latitude: 37.5665,
+      longitude: 126.978,
+      address: '서울특별시 강남구 테헤란로',
+    },
+    teamStatus: 'ONGOING',
+    bannerImageUrl: '/src/assets/images/avatar.png',
+  },
   {
     category: 'study',
     studyId: 1,
@@ -83,7 +94,6 @@ const panelMockData: (Project | Study | Player | Cafe)[] = [
     teamStatus: 'ONGOING',
     bannerImageUrl: '/src/assets/images/avatar.png',
   },
-
   {
     category: 'player',
     userId: 1,
@@ -95,7 +105,6 @@ const panelMockData: (Project | Study | Player | Cafe)[] = [
     },
     profileImageUrl: '/src/assets/images/avatar.png',
   },
-
   {
     category: 'cafe',
     cafeId: 1,
@@ -107,12 +116,23 @@ const panelMockData: (Project | Study | Player | Cafe)[] = [
     },
     bannerImageUrl: '/src/assets/images/avatar.png',
   },
+  {
+    category: 'cafe',
+    cafeId: 2,
+    title: '똑똑 카페',
+    location: {
+      latitude: 37.5665,
+      longitude: 126.978,
+      address: '서울특별시 강남구 테헤란로',
+    },
+    bannerImageUrl: '/src/assets/images/avatar.png',
+  },
 ];
 
 const MapPanel: React.FC<MapPanelProps> = ({
   isMapPanelOpen,
-  handleSubPanelToggle,
   isMapSubPanelOpen,
+  handleSubPanelToggle,
 }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
@@ -149,6 +169,55 @@ const MapPanel: React.FC<MapPanelProps> = ({
   const isPlayer = (item: Project | Study | Player | Cafe): item is Player =>
     item.category === 'player';
   const isCafe = (item: Project | Study | Player | Cafe): item is Cafe => item.category === 'cafe';
+
+  // 데이터 필터링 함수
+  const filteredData = useMemo(() => {
+    let filtered = panelMockData;
+
+    // 1. 카테고리 필터링
+    if (selectedCategoryFilter !== MapItemFilter.ALL) {
+      filtered = filtered.filter(item => {
+        switch (selectedCategoryFilter) {
+          case MapItemFilter.PROJECT:
+            return item.category === 'project';
+          case MapItemFilter.STUDY:
+            return item.category === 'study';
+          case MapItemFilter.PLAYER:
+            return item.category === 'player';
+          case MapItemFilter.CAFE:
+            return item.category === 'cafe';
+          default:
+            return true;
+        }
+      });
+    }
+
+    // 2. 모집 상태 필터링(프로젝트와 스터디만 적용)
+    if (
+      selectedStatusFilter !== MapItemStatusFilter.ALL &&
+      (selectedCategoryFilter === MapItemFilter.PROJECT ||
+        selectedCategoryFilter === MapItemFilter.STUDY ||
+        selectedCategoryFilter === MapItemFilter.ALL)
+    ) {
+      filtered = filtered.filter(item => {
+        // teamStatus가 있는 project와 study의 경우에만 모집 상태 필터링
+        if (isProject(item) || isStudy(item)) {
+          switch (selectedStatusFilter) {
+            case MapItemStatusFilter.RECRUITING:
+              return item.teamStatus === 'RECRUITING';
+            case MapItemStatusFilter.ONGOING:
+              return item.teamStatus === 'ONGOING';
+            default:
+              return true;
+          }
+        }
+        // player, cafe는 teamStatus가 없으므로 상태 필터링 시 포함
+        return selectedCategoryFilter === MapItemFilter.ALL ? true : false;
+      });
+    }
+
+    return filtered;
+  }, [selectedCategoryFilter, selectedStatusFilter]);
 
   // 타입별 컴포넌트 렌더링 함수
   const renderMapItem = (item: Project | Study | Player | Cafe) => {
@@ -229,7 +298,6 @@ const MapPanel: React.FC<MapPanelProps> = ({
 
         {/* 카테고리 필터*/}
         <div className={styles.panel__categoryFilter}>
-          {/* TODO: 버튼 컴포넌트 가져오기 */}
           {filterItems.map(item => (
             <div
               key={item}
@@ -277,10 +345,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
 
       {/* 목록 섹션 */}
       <div className={styles.panel__list}>
-        {panelMockData.map((item, index) => (
+        {filteredData.map((item, index) => (
           <div key={index}>
             {renderMapItem(item)}
-            {index < panelMockData.length - 1 && (
+            {index < filteredData.length - 1 && (
               <hr className={styles.panel__list__item__divider} />
             )}
           </div>
