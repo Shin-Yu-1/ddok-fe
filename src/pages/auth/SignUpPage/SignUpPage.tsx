@@ -13,7 +13,7 @@ export default function SignUpPage() {
       <SignUpForm />
 
       <div className={styles.links}>
-        <Link to="/auth/signin" className={`${styles.link}`}>
+        <Link to="/auth/signin" className={`${styles.link} ${styles.linkWarning}`}>
           이미 계정이 있습니다! <span>로그인 하러 가기</span>
         </Link>
       </div>
