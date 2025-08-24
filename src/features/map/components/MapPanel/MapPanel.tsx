@@ -4,6 +4,7 @@ import Input from '@/components/Input/Input';
 
 import { MapItemFilter } from '../../constants/MapItemCategoryFilter.enum';
 import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
+import { panelMockData } from '../../mocks/panelMockData';
 import type { MapItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
@@ -18,78 +19,6 @@ interface MapPanelProps {
   isMapSubPanelOpen?: boolean;
   handleSubPanelToggle: () => void;
 }
-
-const panelMockData: MapItem[] = [
-  {
-    category: 'project',
-    projectId: 1,
-    title: '구지라지 프로젝트',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    teamStatus: 'RECRUITING',
-    bannerImageUrl: '/src/assets/images/avatar.png',
-  },
-  {
-    category: 'project',
-    projectId: 2,
-    title: '똑똑 프로젝트',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    teamStatus: 'ONGOING',
-    bannerImageUrl: '/src/assets/images/avatar.png',
-  },
-  {
-    category: 'study',
-    studyId: 1,
-    title: '구지라지 스터디',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    teamStatus: 'ONGOING',
-    bannerImageUrl: '/src/assets/images/avatar.png',
-  },
-  {
-    category: 'player',
-    userId: 1,
-    nickname: '똑똑한 백엔드',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    profileImageUrl: '/src/assets/images/avatar.png',
-  },
-  {
-    category: 'cafe',
-    cafeId: 1,
-    title: '구지라지 카페',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    bannerImageUrl: '/src/assets/images/avatar.png',
-  },
-  {
-    category: 'cafe',
-    cafeId: 2,
-    title: '똑똑 카페',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    bannerImageUrl: '/src/assets/images/avatar.png',
-  },
-];
 
 const MapPanel: React.FC<MapPanelProps> = ({
   isMapPanelOpen,
