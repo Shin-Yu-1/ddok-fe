@@ -11,7 +11,7 @@ export const mockUsers: MockUser[] = [
   {
     id: 1,
     email: 'test@test.com',
-    password: '123456',
+    password: 'Test1234!',
     name: '테스트',
     nickname: '테스트 사용자',
     phoneNumber: '01012345678',
