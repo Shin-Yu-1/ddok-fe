@@ -4,14 +4,16 @@ import type { BaseMapItem } from './common';
  * 카페 관련 타입 정의
  */
 
+export interface CafeReviewTag {
+  tagName: string;
+  tagCount: number;
+}
+
 export interface CafeReview {
   cafeId: number;
   title: string;
   reviewCount: number;
-  cafeReviewTag: {
-    tagName: string;
-    tagCount: number;
-  }[];
+  cafeReviewTag: CafeReviewTag[];
   totalRating: number;
 }
 
