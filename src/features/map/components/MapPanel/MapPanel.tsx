@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 
 import Input from '@/components/Input/Input';
 
-import { MapItemFilter } from '../../constants/MapItemCategoryFilter.enum';
+import { MapItemCategoryFilter } from '../../constants/MapItemCategoryFilter.enum';
 import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
 import { panelMockData } from '../../mocks/panelMockData';
 import type { MapItem } from '../../types';
@@ -19,20 +19,20 @@ interface MapPanelProps {
 }
 
 const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
-    MapItemFilter.ALL
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemCategoryFilter>(
+    MapItemCategoryFilter.ALL
   );
 
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<MapItemStatusFilter>(
     MapItemStatusFilter.ALL
   );
 
-  const filterItems: MapItemFilter[] = [
-    MapItemFilter.ALL,
-    MapItemFilter.PROJECT,
-    MapItemFilter.STUDY,
-    MapItemFilter.PLAYER,
-    MapItemFilter.CAFE,
+  const categoryFilterItems: MapItemCategoryFilter[] = [
+    MapItemCategoryFilter.ALL,
+    MapItemCategoryFilter.PROJECT,
+    MapItemCategoryFilter.STUDY,
+    MapItemCategoryFilter.PLAYER,
+    MapItemCategoryFilter.CAFE,
   ];
 
   const statusFilterItems: MapItemStatusFilter[] = [
@@ -41,7 +41,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     MapItemStatusFilter.ONGOING,
   ];
 
-  const handleFilterClick = (item: MapItemFilter) => {
+  const handleFilterClick = (item: MapItemCategoryFilter) => {
     setSelectedCategoryFilter(item);
     setSelectedStatusFilter(MapItemStatusFilter.ALL);
   };
@@ -51,16 +51,16 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     let filtered = panelMockData;
 
     // 1. 카테고리 필터링
-    if (selectedCategoryFilter !== MapItemFilter.ALL) {
+    if (selectedCategoryFilter !== MapItemCategoryFilter.ALL) {
       filtered = filtered.filter(item => {
         switch (selectedCategoryFilter) {
-          case MapItemFilter.PROJECT:
+          case MapItemCategoryFilter.PROJECT:
             return item.category === 'project';
-          case MapItemFilter.STUDY:
+          case MapItemCategoryFilter.STUDY:
             return item.category === 'study';
-          case MapItemFilter.PLAYER:
+          case MapItemCategoryFilter.PLAYER:
             return item.category === 'player';
-          case MapItemFilter.CAFE:
+          case MapItemCategoryFilter.CAFE:
             return item.category === 'cafe';
           default:
             return true;
@@ -71,9 +71,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     // 2. 모집 상태 필터링(프로젝트와 스터디만 적용)
     if (
       selectedStatusFilter !== MapItemStatusFilter.ALL &&
-      (selectedCategoryFilter === MapItemFilter.PROJECT ||
-        selectedCategoryFilter === MapItemFilter.STUDY ||
-        selectedCategoryFilter === MapItemFilter.ALL)
+      (selectedCategoryFilter === MapItemCategoryFilter.PROJECT ||
+        selectedCategoryFilter === MapItemCategoryFilter.STUDY ||
+        selectedCategoryFilter === MapItemCategoryFilter.ALL)
     ) {
       filtered = filtered.filter(item => {
         // teamStatus가 있는 project와 study의 경우에만 모집 상태 필터링
@@ -88,7 +88,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
           }
         }
         // player, cafe는 teamStatus가 없으므로 상태 필터링 시 포함
-        return selectedCategoryFilter === MapItemFilter.ALL ? true : false;
+        return selectedCategoryFilter === MapItemCategoryFilter.ALL ? true : false;
       });
     }
 
@@ -176,7 +176,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
 
         {/* 카테고리 필터*/}
         <div className={styles.panel__categoryFilter}>
-          {filterItems.map(item => (
+          {categoryFilterItems.map(item => (
             <div
               key={item}
               className={`${styles.panel__categoryFilter__item} ${
@@ -195,8 +195,8 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
         <hr className={styles.panel__divider} />
 
         {/* 진행 상태 필터*/}
-        {selectedCategoryFilter === MapItemFilter.PROJECT ||
-        selectedCategoryFilter === MapItemFilter.STUDY ? (
+        {selectedCategoryFilter === MapItemCategoryFilter.PROJECT ||
+        selectedCategoryFilter === MapItemCategoryFilter.STUDY ? (
           <>
             <div className={styles.panel__statusFilter}>
               {/* TODO: 버튼 컴포넌트 가져오기 */}
