@@ -27,7 +27,7 @@ export default function ResetPasswordPage() {
 
     if (!token) {
       console.error('localStorage에 reauthToken이 없습니다!');
-      navigate('/auth/FindPassword');
+      navigate('/auth/findpassword');
       return;
     }
 

@@ -12,10 +12,10 @@ export default function FindIdPage() {
       <FindIdForm />
 
       <div className={styles.links}>
-        <Link to="/find-password" className={styles.link}>
+        <Link to="/auth/findpassword" className={styles.link}>
           비밀번호가 기억이 나지 않습니다..
         </Link>
-        <Link to="/sign-in" className={`${styles.link} ${styles.linkWarning}`}>
+        <Link to="/auth/signin" className={`${styles.link} ${styles.linkWarning}`}>
           <span>아이디가 기억 나는거 같아요!</span>
         </Link>
       </div>

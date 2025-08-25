@@ -167,7 +167,7 @@ export default function FindPasswordForm() {
       console.log('목 reauthToken 저장 완료:', '***' + mockReauthToken.slice(-4));
 
       // ResetPasswordPage로 이동
-      navigate('/auth/ResetPassword');
+      navigate('/auth/resetpassword');
     } catch (error) {
       console.error('사용자 검증 실패:', error);
     } finally {

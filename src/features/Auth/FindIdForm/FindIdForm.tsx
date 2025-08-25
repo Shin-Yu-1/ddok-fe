@@ -153,7 +153,7 @@ export default function FindIdForm() {
 
       if (result.success && result.email) {
         // 찾은 이메일과 함께 완료 페이지로 이동
-        navigate(`/auth/FindIdComplete?email=${encodeURIComponent(result.email)}`);
+        navigate(`/auth/findidcomplete?email=${encodeURIComponent(result.email)}`);
       }
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));

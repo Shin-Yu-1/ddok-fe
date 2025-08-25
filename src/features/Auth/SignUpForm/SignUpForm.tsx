@@ -204,7 +204,7 @@ export default function SignUpForm() {
 
       if (result.success) {
         // 회원가입 성공 시 회원가입 완료 페이지로 이동
-        navigate('/auth/SignUpComplete');
+        navigate('/auth/signupcomplete');
       } else {
         setError(result.message);
       }

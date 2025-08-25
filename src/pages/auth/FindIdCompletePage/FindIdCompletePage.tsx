@@ -11,7 +11,7 @@ export default function FindIdCompletePage() {
 
   // 이메일이 없으면 FindId 페이지로 리다이렉트
   if (!email) {
-    navigate('/auth/FindId');
+    navigate('/auth/findid');
     return null;
   }
 

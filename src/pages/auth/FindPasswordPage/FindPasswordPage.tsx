@@ -13,10 +13,10 @@ export default function FindPasswordPage() {
       <FindPasswordForm />
 
       <div className={styles.links}>
-        <Link to="/find-id" className={styles.link}>
+        <Link to="/auth/findid" className={styles.link}>
           이메일이 기억이 나지 않습니다..
         </Link>
-        <Link to="/sign-in" className={`${styles.link} ${styles.linkWarning}`}>
+        <Link to="/auth/signin" className={`${styles.link} ${styles.linkWarning}`}>
           <span>비밀번호가 기억 나는거 같아요!</span>
         </Link>
       </div>
