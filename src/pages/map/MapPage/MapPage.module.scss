@@ -95,6 +95,7 @@
 .map__reloadBtn {
   position: absolute;
   top: 120px;
-  right: calc(50% - 70px);
-  z-index: 1000;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
 }
