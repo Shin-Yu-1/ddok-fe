@@ -9,7 +9,7 @@ export interface CafeReviewTag {
   tagCount: number;
 }
 
-export interface CafeReview {
+export interface CafeStat {
   cafeId: number;
   title: string;
   reviewCount: number;
