@@ -60,27 +60,27 @@ export const router = createBrowserRouter([
             element: <SignInPage />,
           },
           {
-            path: 'auth/SignUp',
+            path: 'auth/signup',
             element: <SignUpPage />,
           },
           {
-            path: 'auth/SignUpComplete',
+            path: 'auth/signupcomplete',
             element: <SignUpCompletePage />,
           },
           {
-            path: 'auth/FindId',
+            path: 'auth/findid',
             element: <FindIdPage />,
           },
           {
-            path: 'auth/FindIdComplete',
+            path: 'auth/findidcomplete',
             element: <FindIdCompletePage />,
           },
           {
-            path: 'auth/FindPassword',
+            path: 'auth/findpassword',
             element: <FindPasswordPage />,
           },
           {
-            path: 'auth/ResetPassword',
+            path: 'auth/resetpassword',
             element: <ResetPasswordPage />,
           },
         ],
