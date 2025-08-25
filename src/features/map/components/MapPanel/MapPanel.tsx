@@ -15,10 +15,10 @@ import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyIt
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
-  handleSubPanelToggle: () => void;
+  handleItemClick: (itemType: 'project' | 'study' | 'player' | 'cafe', itemId?: number) => void;
 }
 
-const MapPanel: React.FC<MapPanelProps> = ({ handleSubPanelToggle }) => {
+const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemFilter>(
     MapItemFilter.ALL
   );
@@ -106,6 +106,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleSubPanelToggle }) => {
           location={item.location}
           teamStatus={item.teamStatus}
           bannerImageUrl={item.bannerImageUrl}
+          onItemClick={() => handleItemClick('project', item.projectId)}
         />
       );
     }
@@ -119,6 +120,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleSubPanelToggle }) => {
           location={item.location}
           teamStatus={item.teamStatus}
           bannerImageUrl={item.bannerImageUrl}
+          onItemClick={() => handleItemClick('study', item.studyId)}
         />
       );
     }
@@ -131,6 +133,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleSubPanelToggle }) => {
           nickname={item.nickname}
           location={item.location}
           profileImageUrl={item.profileImageUrl}
+          onItemClick={() => handleItemClick('player', item.userId)}
         />
       );
     }
@@ -143,7 +146,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleSubPanelToggle }) => {
           title={item.title}
           location={item.location}
           bannerImageUrl={item.bannerImageUrl}
-          handleSubPanelToggle={handleSubPanelToggle}
+          onItemClick={() => handleItemClick('cafe', item.cafeId)}
         />
       );
     }
