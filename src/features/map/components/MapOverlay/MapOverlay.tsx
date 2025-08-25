@@ -1,10 +1,8 @@
-import { MapOverlayType } from '../../constants/MapOverlayType.enum';
-
 import styles from './MapOverlay.module.scss';
 
 interface OverlayProps {
   onOverlayClose: () => void;
-  overlayType: MapOverlayType;
+  overlayType: string;
 
   //   category: string;
   //   title: string;
@@ -52,7 +50,7 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
       <div className={styles.overlay__banner}>BANNER</div>
       <div className={styles.overlay__content}>
         {/* 프로젝트 오버레이 */}
-        {overlayType === MapOverlayType.PROJECT && (
+        {overlayType === 'PROJECT' && (
           <div className={styles.overlay__info}>
             <div className={styles.overlay__info__core}>
               <div className={styles.overlay__info__core__category}>프로젝트</div>
@@ -88,7 +86,7 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
         )}
 
         {/* 스터디 오버레이 */}
-        {overlayType === MapOverlayType.STUDY && (
+        {overlayType === 'STUDY' && (
           <div className={styles.overlay__info}>
             <div>스터디</div>
             <div>제목</div>
@@ -96,7 +94,7 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
         )}
 
         {/* 플레이어 오버레이 */}
-        {overlayType === MapOverlayType.PLAYER && (
+        {overlayType === 'PLAYER' && (
           <div className={styles.overlay__info}>
             <div>플레이어</div>
             <div>이름</div>
@@ -104,7 +102,7 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
         )}
 
         {/* 추천 장소 오버레이 */}
-        {overlayType === MapOverlayType.CAFE && (
+        {overlayType === 'CAFE' && (
           <div className={styles.overlay__info}>
             <div>추천 장소</div>
             <div>이름</div>
