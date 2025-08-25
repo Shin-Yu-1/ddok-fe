@@ -1,6 +1,6 @@
-import type { CafeReview } from '../types/cafe';
+import type { CafeStat } from '../types/cafe';
 
-export const reviewMockData: CafeReview[] = [
+export const statMockData: CafeStat[] = [
   {
     cafeId: 1,
     title: '구지라지 카페',
