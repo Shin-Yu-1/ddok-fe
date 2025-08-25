@@ -25,4 +25,16 @@ export const statMockData: CafeStat[] = [
     ],
     totalRating: 3.9,
   },
+  {
+    cafeId: 2,
+    title: '새로운 카페',
+    reviewCount: 1,
+    cafeReviewTag: [
+      {
+        tagName: '분위기가 좋아요',
+        tagCount: 32,
+      },
+    ],
+    totalRating: 5,
+  },
 ];
