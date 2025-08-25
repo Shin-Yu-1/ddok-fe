@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
+import Button from '@/components/Button/Button';
 import MapOverlay from '@/features/map/components/MapOverlay/MapOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
@@ -82,6 +83,7 @@ const MapPage = () => {
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
   const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
+  const [isMapChanged, setIsMapChanged] = useState(false);
 
   const handleMapPanelToggle = () => {
     if (isMapPanelOpen) {
@@ -135,7 +137,12 @@ const MapPage = () => {
 
         <div className={styles.map__container}>
           {/* TODO: 초기 로드 위치를 사용자 위치로 설정해야 함 */}
-          <Map id="map" className={styles.map} center={{ lat: 37.5665, lng: 126.978 }}>
+          <Map
+            id="map"
+            className={styles.map}
+            center={{ lat: 37.5665, lng: 126.978 }}
+            onTileLoaded={() => setIsMapChanged(true)}
+          >
             {/* 컨트롤 */}
             <ZoomControl position="TOPRIGHT" />
 
@@ -167,6 +174,21 @@ const MapPage = () => {
           </Map>
         </div>
       </div>
+
+      {/* 지도 리로드 버튼 */}
+      {isMapChanged && (
+        <Button
+          className={styles.map__reloadBtn}
+          fontSize="var(--fs-xxxsmall)"
+          backgroundColor="var(--blue-1)"
+          width="fit-content"
+          height="fit-content"
+          textColor="var(--white-1)"
+          onClick={() => setIsMapChanged(false)}
+        >
+          현 지도에서 검색
+        </Button>
+      )}
 
       {/* 지도 패널 */}
       {isMapPanelOpen && (
