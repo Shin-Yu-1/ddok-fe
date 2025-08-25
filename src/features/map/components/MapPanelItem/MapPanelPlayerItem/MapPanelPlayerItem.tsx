@@ -10,6 +10,7 @@ interface MapPanelPlayerItemProps {
     address: string;
   };
   profileImageUrl: string;
+  onItemClick: () => void;
 }
 
 const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({
@@ -18,9 +19,10 @@ const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({
   nickname,
   //   location: { latitude, longitude, address },
   profileImageUrl,
+  onItemClick,
 }) => {
   return (
-    <div className={styles.panel__list__item}>
+    <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>
         <div className={styles.panel__list__item__img}>
           <img src={profileImageUrl} alt="Profile" />

@@ -10,7 +10,7 @@ interface MapPanelCafeItemProps {
     address: string;
   };
   bannerImageUrl: string;
-  handleSubPanelToggle: () => void;
+  onItemClick: () => void;
 }
 
 const MapPanelCafeItem: React.FC<MapPanelCafeItemProps> = ({
@@ -19,10 +19,10 @@ const MapPanelCafeItem: React.FC<MapPanelCafeItemProps> = ({
   title,
   //   location: { latitude, longitude, address },
   bannerImageUrl,
-  handleSubPanelToggle,
+  onItemClick,
 }) => {
   return (
-    <div className={styles.panel__list__item} onClick={handleSubPanelToggle}>
+    <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>
         <div className={styles.panel__list__item__img}>
           <img src={bannerImageUrl} alt="Banner" />

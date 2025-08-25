@@ -13,6 +13,7 @@ interface MapPanelStudyItemProps {
   };
   teamStatus: string;
   bannerImageUrl: string;
+  onItemClick: () => void;
 }
 
 const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({
@@ -22,9 +23,10 @@ const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({
   //   location: { latitude, longitude, address },
   teamStatus,
   bannerImageUrl,
+  onItemClick,
 }) => {
   return (
-    <div className={styles.panel__list__item}>
+    <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>
         <div className={styles.panel__list__item__img}>
           <img src={bannerImageUrl} alt="Banner" />
