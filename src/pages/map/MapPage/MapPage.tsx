@@ -13,6 +13,7 @@ const MapPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
   const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
+  const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
 
   // 임시 마커 배열
   const [points] = useState<{ lat: number; lng: number }[]>([
@@ -23,13 +24,30 @@ const MapPage = () => {
   const handleMapPanelToggle = () => {
     if (isMapPanelOpen) {
       setIsMapSubPanelOpen(false);
+      setSelectedCafeId(null);
     }
     setIsMapPanelOpen(!isMapPanelOpen);
   };
 
-  const handleSubPanelToggle = () => {
-    if (!isMapPanelOpen) return setIsMapSubPanelOpen(false);
-    setIsMapSubPanelOpen(prev => !prev);
+  const handleItemClick = (itemType: 'project' | 'study' | 'player' | 'cafe', itemId?: number) => {
+    if (!isMapPanelOpen) return;
+
+    if (itemType === 'cafe' && itemId !== undefined) {
+      // 카페 아이템 클릭 시
+      if (selectedCafeId === itemId && isMapSubPanelOpen) {
+        // 같은 카페를 다시 클릭했고 서브패널이 열려있으면 닫기
+        setIsMapSubPanelOpen(false);
+        setSelectedCafeId(null);
+      } else {
+        // 다른 카페를 클릭했거나 처음 클릭하면 해당 카페 데이터로 서브패널 열기
+        setSelectedCafeId(itemId);
+        setIsMapSubPanelOpen(true);
+      }
+    } else {
+      // project, study, player 클릭 시 서브패널 닫기
+      setIsMapSubPanelOpen(false);
+      setSelectedCafeId(null);
+    }
   };
 
   // 커스텀 오버레이에 전달할 마커의 좌표
@@ -42,7 +60,7 @@ const MapPage = () => {
       <div className={styles.map__header}>HEADER</div>
       <div className={styles.map__subHeader}>SUBHEADER</div>
       <div className={styles.map__content}>
-        {/* 서브 패널 토글을 위한 임시 사이드바 */}
+        {/* 패널 토글을 위한 임시 사이드바 */}
         <div className={styles.map__sidebar}>
           <div className={styles.map__sidebarToggleBtn} onClick={() => handleMapPanelToggle()}>
             {isMapPanelOpen ? 'CLOSE' : 'OPEN'}
@@ -83,15 +101,21 @@ const MapPage = () => {
       {/* 지도 패널 */}
       {isMapPanelOpen && (
         <div className={styles.map__panelContainer}>
-          <MapPanel handleSubPanelToggle={handleSubPanelToggle} />
+          <MapPanel handleItemClick={handleItemClick} />
         </div>
       )}
 
       {/* 지도 서브 패널 */}
-      {isMapSubPanelOpen && (
+      {isMapSubPanelOpen && selectedCafeId && (
         <div className={styles.map__subPanelContainer}>
-          <MapSubPanel />
-          <div className={styles.subPanel__closeBtn} onClick={() => setIsMapSubPanelOpen(false)}>
+          <MapSubPanel cafeId={selectedCafeId} />
+          <div
+            className={styles.subPanel__closeBtn}
+            onClick={() => {
+              setIsMapSubPanelOpen(false);
+              setSelectedCafeId(null);
+            }}
+          >
             {'<'}
           </div>
         </div>
