@@ -8,12 +8,10 @@ export interface CafeReview {
   cafeId: number;
   title: string;
   reviewCount: number;
-  cafeReviewTag: [
-    {
-      tagName: string;
-      tagCount: number;
-    },
-  ];
+  cafeReviewTag: {
+    tagName: string;
+    tagCount: number;
+  }[];
   totalRating: number;
 }
 
