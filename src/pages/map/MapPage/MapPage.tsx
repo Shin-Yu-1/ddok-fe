@@ -5,23 +5,83 @@ import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-
 import MapOverlay from '@/features/map/components/MapOverlay/MapOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
-import { MapOverlayType } from '@/features/map/constants/MapOverlayType.enum';
 
 import styles from './MapPage.module.scss';
+
+const mapMockData = [
+  {
+    category: 'project',
+    projectId: 1,
+    title: '구지라지 프로젝트',
+    location: {
+      latitude: 37.567,
+      longitude: 126.978,
+      address: '서울특별시 강남구 테헤란로…',
+    },
+    teamStatus: 'RECRUITING',
+  },
+  {
+    category: 'project',
+    projectId: 2,
+    title: '똑똑 프로젝트',
+    location: {
+      latitude: 37.566,
+      longitude: 126.977,
+      address: '서울특별시 강남구 테헤란로',
+    },
+    teamStatus: 'ONGOING',
+  },
+  {
+    category: 'study',
+    studyId: 1,
+    title: '구지라지 스터디',
+    location: {
+      latitude: 37.565,
+      longitude: 126.978,
+      address: '서울특별시 강남구 테헤란로…',
+    },
+    teamStatus: 'ONGOING',
+  },
+  {
+    category: 'study',
+    studyId: 2,
+    title: '똑똑 스터디',
+    location: {
+      latitude: 37.566,
+      longitude: 126.98,
+      address: '서울특별시 강남구 테헤란로',
+    },
+    teamStatus: 'ONGOING',
+  },
+  {
+    category: 'player',
+    userId: 1,
+    nickname: '똑똑한 백엔드',
+    location: {
+      latitude: 37.565,
+      longitude: 126.977,
+      address: '서울특별시 강남구 테헤란로…',
+    },
+    position: '백엔드',
+    isMine: false,
+  },
+  {
+    category: 'cafe',
+    cafeId: 1,
+    title: '구지라지 카페',
+    location: {
+      latitude: 37.564,
+      longitude: 126.976,
+      address: '서울특별시 강남구 테헤란로…',
+    },
+  },
+];
 
 const MapPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
   const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
-
-  // 임시 마커 배열
-  const [points] = useState<{ lat: number; lng: number }[]>([
-    { lat: 37.5665, lng: 126.978 },
-    { lat: 37.566, lng: 126.98 },
-    { lat: 37.565, lng: 126.977 },
-    { lat: 37.564, lng: 126.976 },
-  ]);
 
   const handleMapPanelToggle = () => {
     if (isMapPanelOpen) {
@@ -52,8 +112,12 @@ const MapPage = () => {
     }
   };
 
-  // 커스텀 오버레이에 전달할 마커의 좌표
-  const [selectedPoint, setSelectedPoint] = useState<{ lat: number; lng: number } | null>(null);
+  // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
+  const [selectedPoint, setSelectedPoint] = useState<{
+    lat: number;
+    lng: number;
+    type: string;
+  } | null>(null);
 
   // TODO: center 이동 / level 변경 / bounds 변경 이벤트들을 감지하여 서브 패널 리로드
 
@@ -76,13 +140,17 @@ const MapPage = () => {
             <ZoomControl position="TOPRIGHT" />
 
             {/* 마커 */}
-            {points.map(point => (
+            {mapMockData.map(m => (
               <MapMarker
-                key={`marker__${point.lat}-${point.lng}`}
-                position={point}
+                key={`marker__${m.location.latitude}-${m.location.longitude}`}
+                position={{ lat: m.location.latitude, lng: m.location.longitude }}
                 onClick={() => {
                   setIsOverlayOpen(true);
-                  setSelectedPoint(point);
+                  setSelectedPoint({
+                    lat: m.location.latitude,
+                    lng: m.location.longitude,
+                    type: m.category,
+                  });
                 }}
               ></MapMarker>
             ))}
@@ -92,7 +160,7 @@ const MapPage = () => {
               <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
                 <MapOverlay
                   onOverlayClose={() => setIsOverlayOpen(false)}
-                  overlayType={MapOverlayType.PROJECT}
+                  overlayType={selectedPoint.type}
                 />
               </CustomOverlayMap>
             )}
