@@ -83,4 +83,15 @@ export const panelMockData: MapItem[] = [
     },
     bannerImageUrl: '/src/assets/images/avatar.png',
   },
+  {
+    category: 'cafe',
+    cafeId: 2,
+    title: '새로운 카페',
+    location: {
+      latitude: 37.5665,
+      longitude: 126.978,
+      address: '서울특별시 강남구 테헤란로',
+    },
+    bannerImageUrl: '/src/assets/images/avatar.png',
+  },
 ];
