@@ -69,34 +69,12 @@ export const panelMockData: MapItem[] = [
     },
     profileImageUrl: '/src/assets/images/avatar.png',
   },
-  {
-    category: 'player',
-    userId: 2,
-    nickname: '멋진 프론트엔드',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    profileImageUrl: '/src/assets/images/avatar.png',
-  },
 
   // 카페 데이터
   {
     category: 'cafe',
     cafeId: 1,
     title: '구지라지 카페',
-    location: {
-      latitude: 37.5665,
-      longitude: 126.978,
-      address: '서울특별시 강남구 테헤란로',
-    },
-    bannerImageUrl: '/src/assets/images/avatar.png',
-  },
-  {
-    category: 'cafe',
-    cafeId: 2,
-    title: '똑똑 카페',
     location: {
       latitude: 37.5665,
       longitude: 126.978,
