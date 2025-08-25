@@ -2,7 +2,7 @@
  * 서브 패널에서 사용할 리뷰 목 데이터
  */
 
-const reviewsMockData = {
+export const reviewsMockData = {
   cafeId: 1,
   title: '구지라지 카페',
   pagination: {
@@ -50,5 +50,3 @@ const reviewsMockData = {
     },
   ],
 };
-
-export default reviewsMockData;
