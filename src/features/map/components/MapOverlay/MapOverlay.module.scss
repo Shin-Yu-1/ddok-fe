@@ -5,6 +5,7 @@
   height: fit-content;
   border-radius: $r-small;
   overflow: hidden;
+  color: $black-4;
   background-color: $white-3;
 }
 
@@ -61,7 +62,7 @@
     }
 
     &__title {
-      font-size: $fs-small;
+      font-size: $fs-xsmall;
       font-weight: $fw-medium;
     }
 
