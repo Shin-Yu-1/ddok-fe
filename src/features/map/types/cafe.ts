@@ -17,6 +17,29 @@ export interface CafeStat {
   totalRating: number;
 }
 
+export interface CafeReview {
+  userId: number;
+  nickname: string;
+  profileImageUrl: string;
+  rating: number;
+  cafeReviewTag: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// TODO: Response는 추후 별도의 파일로 분리 예정
+export interface CafeReviewResponse {
+  cafeId: number;
+  title: string;
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  cafeReviews: CafeReview[];
+}
+
 export interface Cafe extends BaseMapItem {
   category: 'cafe';
   cafeId: number;
