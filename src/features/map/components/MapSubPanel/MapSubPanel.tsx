@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import Button from '@/components/Button/Button';
 
 import { reviewsMockData } from '../../mocks/reviewsMockData';
@@ -5,11 +7,21 @@ import { statMockData } from '../../mocks/statMockData';
 
 import styles from './MapSubPanel.module.scss';
 
-const statData = statMockData[0];
-const reviewList = reviewsMockData.cafeReviews;
-console.log(reviewList);
+interface MapSubPanelProps {
+  cafeId: number;
+}
 
-const MapSubPanel = () => {
+const MapSubPanel: React.FC<MapSubPanelProps> = ({ cafeId }) => {
+  // TODO: cafeId에 따라 해당하는 데이터 불러와야 함(현재는 mock data로 고정)
+  const statData = useMemo(() => {
+    console.log('Selected cafe ID:', cafeId);
+    return statMockData[cafeId - 1];
+  }, [cafeId]);
+
+  const reviewList = useMemo(() => {
+    return reviewsMockData.cafeReviews;
+  }, []);
+
   return (
     <div className={styles.subPanel__container}>
       {/* 서브 패널 헤더*/}
