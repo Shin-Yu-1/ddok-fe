@@ -31,10 +31,10 @@ export const statMockData: CafeStat[] = [
     reviewCount: 1,
     cafeReviewTag: [
       {
-        tagName: '분위기가 좋아요',
-        tagCount: 32,
+        tagName: '별로에요',
+        tagCount: 1,
       },
     ],
-    totalRating: 5,
+    totalRating: 1.3,
   },
 ];
