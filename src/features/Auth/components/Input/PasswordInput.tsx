@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from 'react';
 
-import { Eye, EyeClosed } from '@phosphor-icons/react';
+import { EyeIcon, EyeClosedIcon } from '@phosphor-icons/react';
 
 import Input from '@/features/Auth/components/Input/Input';
 
@@ -28,7 +28,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({ ...pro
           }}
           aria-label={isVisible ? '비밀번호 숨기기' : '비밀번호 보기'}
         >
-          {isVisible ? <Eye size={20} /> : <EyeClosed size={20} />}
+          {isVisible ? <EyeIcon size={20} /> : <EyeClosedIcon size={20} />}
         </button>
       }
       {...props}
