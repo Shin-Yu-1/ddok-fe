@@ -50,12 +50,12 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
       <div className={styles.overlay__banner}>BANNER</div>
       <div className={styles.overlay__content}>
         {/* 프로젝트 오버레이 */}
-        {overlayType === 'PROJECT' && (
+        {overlayType === 'project' && (
           <div className={styles.overlay__info}>
             <div className={styles.overlay__info__core}>
               <div className={styles.overlay__info__core__category}>프로젝트</div>
               <div className={styles.overlay__info__core__header}>
-                <div className={styles.overlay__info__core__title}>딥 다이렉트 2</div>
+                <div className={styles.overlay__info__core__title}>딥 다이렉트 프로젝트</div>
                 <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
               </div>
               <div className={styles.overlay__info__core__address}>서울 마포구</div>
@@ -86,26 +86,101 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
         )}
 
         {/* 스터디 오버레이 */}
-        {overlayType === 'STUDY' && (
+        {overlayType === 'study' && (
           <div className={styles.overlay__info}>
-            <div>스터디</div>
-            <div>제목</div>
+            <div className={styles.overlay__info__core}>
+              <div className={styles.overlay__info__core__category}>스터디</div>
+              <div className={styles.overlay__info__core__header}>
+                <div className={styles.overlay__info__core__title}>딥 다이렉트 스터디</div>
+                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+              </div>
+              <div className={styles.overlay__info__core__address}>서울 마포구</div>
+            </div>
+            <div className={styles.overlay__info__details}>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>스터디 유형</div>
+                <div className={styles.overlay__info__details__item__value}>취업/면접</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>모집 인원</div>
+                <div className={styles.overlay__info__details__item__value}>4명</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>예상 기간</div>
+                <div className={styles.overlay__info__details__item__value}>3개월</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>시작 예정일</div>
+                <div className={styles.overlay__info__details__item__value}>25.09.15</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>희망 나이대</div>
+                <div className={styles.overlay__info__details__item__value}>20~40대</div>
+              </div>
+            </div>
           </div>
         )}
 
         {/* 플레이어 오버레이 */}
-        {overlayType === 'PLAYER' && (
+        {overlayType === 'player' && (
           <div className={styles.overlay__info}>
-            <div>플레이어</div>
-            <div>이름</div>
+            <div className={styles.overlay__info__core}>
+              <div className={styles.overlay__info__core__category}>플레이어</div>
+              <div className={styles.overlay__info__core__header}>
+                <div className={styles.overlay__info__core__title}>똑똑한 플레이어</div>
+                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+              </div>
+              {/* TODO: 배지 표시 */}
+              <div className={styles.overlay__info__core__address}>서울 마포구</div>
+            </div>
+            <div className={styles.overlay__info__details}>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>대표 포지션</div>
+                <div className={styles.overlay__info__details__item__value}>풀스택</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>주 활동 지역</div>
+                <div className={styles.overlay__info__details__item__value}>서울 마포구</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>진행 중 프로젝트</div>
+                <div className={styles.overlay__info__details__item__value}>
+                  딥 다이렉트 프로젝트
+                </div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>진행 중 스터디</div>
+                <div className={styles.overlay__info__details__item__value}>딥 다이렉트 스터디</div>
+              </div>
+            </div>
           </div>
         )}
 
         {/* 추천 장소 오버레이 */}
-        {overlayType === 'CAFE' && (
+        {overlayType === 'cafe' && (
           <div className={styles.overlay__info}>
-            <div>추천 장소</div>
-            <div>이름</div>
+            <div className={styles.overlay__info__core}>
+              <div className={styles.overlay__info__core__category}>추천 장소</div>
+              <div className={styles.overlay__info__core__header}>
+                <div className={styles.overlay__info__core__title}>분위기 좋은 카페</div>
+                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+              </div>
+              <div className={styles.overlay__info__core__address}>서울 마포구</div>
+            </div>
+            <div className={styles.overlay__info__details}>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>평점</div>
+                <div className={styles.overlay__info__details__item__value}>3.8</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>별점</div>
+                <div className={styles.overlay__info__details__item__value}>4개</div>
+              </div>
+              <div className={styles.overlay__info__details__item}>
+                <div className={styles.overlay__info__details__item__label}>후기 수</div>
+                <div className={styles.overlay__info__details__item__value}>193</div>
+              </div>
+            </div>
           </div>
         )}
       </div>
