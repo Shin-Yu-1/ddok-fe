@@ -1,19 +1,28 @@
 import { MagicWand } from '@phosphor-icons/react';
+import { RadioGroup } from 'radix-ui';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
+import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
 
 import styles from './CreateProjectPage.module.scss';
 
 const CreateProjectPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { formData, updateMode } = useCreateProjectForm();
+
   const handleClick = () => {
     // TODO: 추후 API 연결 필요
     navigate(`/detail/project/${id}`);
   };
+
+  const handleModeChange = (value: string) => {
+    updateMode(value as 'ONLINE' | 'OFFLINE');
+  };
+
   return (
     <>
       <h1 className={styles.title}>CreateProjectPage</h1>
@@ -27,7 +36,13 @@ const CreateProjectPage = () => {
               </Button>
             </div>
             <div className={styles.nameSection}>
-              <MainSection title={'프로젝트 제목'}>추후 input 바 들어갈 예정</MainSection>
+              <MainSection title={'프로젝트 제목'}>
+                <input
+                  type="text"
+                  placeholder="프로젝트 제목을 입력해주세요"
+                  className={styles.titleInput}
+                />
+              </MainSection>
             </div>
             <div className={styles.detailInfoSection}>
               <div className={styles.leftSection}>
@@ -45,7 +60,7 @@ const CreateProjectPage = () => {
                           weight="light"
                           color="var(--white-3)"
                           className="aiIcon"
-                        ></MagicWand>
+                        />
                       </button>
                     </>
                   }
@@ -60,8 +75,34 @@ const CreateProjectPage = () => {
                 <SideSection title={'모집 인원'}>모집 인원 드롭 추가 예정</SideSection>
                 <SideSection title={'시작 예정일'}>날짜 선택 섹션 추가 예정</SideSection>
                 <SideSection title={'예상 기간'}>날짜 선택 섹션 추가 예정</SideSection>
-                <MainSection title={'모임 형태'}>모임 형태 선택 섹션</MainSection>
-                <SideSection title={'지역'}>지역 선택 기능 추가 예정</SideSection>
+                <MainSection title={'모임 형태'}>
+                  <RadioGroup.Root
+                    className={styles.radioRoot}
+                    value={formData.mode}
+                    onValueChange={handleModeChange}
+                  >
+                    <div className={styles.radioItemGroup}>
+                      <RadioGroup.Item className={styles.radioItem} value="ONLINE" id="r1">
+                        <RadioGroup.Indicator className={styles.radioIndicator} />
+                      </RadioGroup.Item>
+                      <label className={styles.radioLabel} htmlFor="r1">
+                        온라인
+                      </label>
+                    </div>
+                    <div className={styles.radioItemGroup}>
+                      <RadioGroup.Item className={styles.radioItem} value="OFFLINE" id="r2">
+                        <RadioGroup.Indicator className={styles.radioIndicator} />
+                      </RadioGroup.Item>
+                      <label className={styles.radioLabel} htmlFor="r2">
+                        오프라인
+                      </label>
+                    </div>
+                  </RadioGroup.Root>
+                </MainSection>
+                {/* 조건부 렌더링: 오프라인일 때만 지역 섹션 표시 */}
+                {formData.mode === 'OFFLINE' && (
+                  <SideSection title={'지역'}>지역 선택 기능 추가 예정</SideSection>
+                )}
                 <MainSection title={'희망 나이대'}>희망 나이대 선택 섹션</MainSection>
               </div>
             </div>
