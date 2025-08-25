@@ -19,6 +19,8 @@ const MapPage = () => {
   const [points] = useState<{ lat: number; lng: number }[]>([
     { lat: 37.5665, lng: 126.978 },
     { lat: 37.566, lng: 126.98 },
+    { lat: 37.565, lng: 126.977 },
+    { lat: 37.564, lng: 126.976 },
   ]);
 
   const handleMapPanelToggle = () => {
