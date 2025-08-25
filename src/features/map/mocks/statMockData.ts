@@ -1,5 +1,9 @@
 import type { CafeStat } from '../types/cafe';
 
+/**
+ * 서브 패널에서 사용할 통계 목 데이터
+ */
+
 export const statMockData: CafeStat[] = [
   {
     cafeId: 1,
