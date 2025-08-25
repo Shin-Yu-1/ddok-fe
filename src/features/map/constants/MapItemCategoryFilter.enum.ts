@@ -1,3 +1,7 @@
+/**
+ * 지도 아이템 카테고리 필터
+ */
+
 export enum MapItemFilter {
   ALL = '전체',
   PROJECT = '프로젝트',
