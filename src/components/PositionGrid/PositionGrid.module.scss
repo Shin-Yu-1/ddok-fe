@@ -1,0 +1,25 @@
+@use '@/styles/variables' as *;
+
+.optionGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  --selected-bg-color: #{$yellow-1};
+  --selected-text-color: #{$white-3};
+  --selected-border-color: #{$yellow-1};
+  --selected-font-weight: #{$fw-bold};
+  --unselected-bg-color: #{$white-2};
+  --unselected-text-color: #{$black-4};
+  --unselected-border-color: #{$gray-3};
+  --unselected-font-weight: #{$fw-regular};
+
+  // 호버 시 선택된 상태와 동일한 스타일 적용
+  button:hover:not(:disabled) {
+    border: 1px solid var(--selected-border-color) !important;
+    font-weight: var(--selected-font-weight) !important;
+    color: var(--selected-text-color) !important;
+    background-color: var(--selected-bg-color) !important;
+  }
+}
