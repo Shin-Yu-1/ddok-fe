@@ -1,0 +1,19 @@
+@use '@/styles/variables' as *;
+
+.section {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  margin-bottom: 1rem;
+  font-size: $fs-large;
+  font-weight: $fw-bold;
+  color: $black-1;
+}
+
+.sectionSubtitle {
+  margin-bottom: 1.5rem;
+  font-size: $fs-xsmall;
+  font-weight: $fw-regular;
+  color: $black-1;
+}
