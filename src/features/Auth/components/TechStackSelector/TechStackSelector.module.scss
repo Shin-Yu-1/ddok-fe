@@ -42,9 +42,8 @@
 .techButton {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
   height: 34px;
-  padding: 0.5rem 1rem;
   border: 1px solid var(--gray-2);
   font-size: $fs-xsmall;
   font-weight: $fw-regular;
@@ -53,9 +52,12 @@
 }
 
 .techName {
+  flex: 1;
+  text-align: left;
   color: $black-1;
 }
 
 .icon {
+  margin-left: 0.5rem;
   color: $gray-2;
 }
