@@ -1,6 +1,5 @@
 import { MapItemStatusFilter } from '../../../constants/MapItemStatusFilter.enum';
-
-import styles from './MapPanelStudyItem.module.scss';
+import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelStudyItemProps {
   category: string;
