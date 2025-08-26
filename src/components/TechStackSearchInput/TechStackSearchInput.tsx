@@ -27,6 +27,8 @@ const TechStackSearchInput = ({
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
       handleSearch();
     }
   };
