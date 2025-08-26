@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
+import SelectedTechStacks from '@/components/SelectedTechStacks/SelectedTechStacks';
 import TechStackSearchInput from '@/components/TechStackSearchInput/TechStackSearchInput';
-import SelectedTechStacks from '@/features/Auth/components/SelectedTechStacks/SelectedTechStacks';
-import TechStackSearchResults from '@/features/Auth/components/TechStackSearchResults/TechStackSearchResults';
+import TechStackSearchResults from '@/components/TechStackSearchResults/TechStackSearchResults';
 
 import styles from './TechStackSelector.module.scss';
 
