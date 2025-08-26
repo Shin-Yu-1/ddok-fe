@@ -14,7 +14,6 @@ const PersonalizationForm = () => {
   const [selectedMainPosition, setSelectedMainPosition] = useState<number | null>(null);
   const [selectedInterestPositions, setSelectedInterestPositions] = useState<number[]>([]);
   const [selectedTechStack, setSelectedTechStack] = useState<number[]>([]);
-  const [techSearch, setTechSearch] = useState<string>('');
   const [locationSearch, setLocationSearch] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [selectedPersonality, setSelectedPersonality] = useState<number[]>([]);
@@ -114,8 +113,6 @@ const PersonalizationForm = () => {
         <div className={styles.contentInner}>
           <TechStackSelector
             selectedTechStack={selectedTechStack}
-            techSearch={techSearch}
-            onTechSearchChange={setTechSearch}
             onTechStackToggle={handleTechStackToggle}
           />
         </div>
