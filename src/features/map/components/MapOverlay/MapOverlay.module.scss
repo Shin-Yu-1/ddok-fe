@@ -69,12 +69,16 @@
       font-size: $fs-xxxsmall;
 
       &__label {
-        width: 50%;
+        flex: 0 0 50%;
         font-weight: $fw-bold;
       }
 
       &__value {
-        width: 50%;
+        flex: 1 1 50%;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
