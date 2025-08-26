@@ -45,8 +45,8 @@ const Sidebar = () => {
 
   return (
     <>
-      <aside>
-        <div>
+      <aside className={styles.sidebar} role="complementary">
+        <div className={styles.buttonContainer}>
           {buttons.map(button => (
             <button key={button.id} type="button" className={styles.sidebarButton}>
               <span className={styles.icon}>{button.icon}</span>

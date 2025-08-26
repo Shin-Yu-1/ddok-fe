@@ -1,2 +1,64 @@
 @use '@/styles/variables' as v;
 @use '@/styles/mixins' as m;
+
+.sidebar {
+  position: fixed;
+  top: 96px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: 47px;
+  height: 100%;
+  border-right: 0.5px solid v.$black-4;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    top: 81px;
+    width: 37px;
+  }
+
+  @include m.tablet {
+    width: 42px;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 0;
+
+  @include m.mobile {
+    gap: 6px;
+    padding: 6px 0;
+  }
+}
+
+.sidebarButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-xxsmall;
+  color: v.$black-4;
+  background-color: v.$white-1;
+
+  &:hover {
+    border: 2px solid v.$yellow-1;
+  }
+
+  &:active {
+    background-color: v.$yellow-1;
+  }
+}
+
+.icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
