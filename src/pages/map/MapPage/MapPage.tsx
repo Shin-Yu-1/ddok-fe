@@ -3,10 +3,18 @@ import { useState } from 'react';
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
 import Button from '@/components/Button/Button';
-import MapOverlay from '@/features/map/components/MapOverlay/MapOverlay';
+import MapCafeOverlay from '@/features/map/components/MapOverlay/MapCafeOverlay/MapCafeOverlay';
+import MapPlayerOverlay from '@/features/map/components/MapOverlay/MapPlayerOverlay/MapPlayerOverlay';
+import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOverlay/MapProjectOverlay';
+import MapStudyOverlay from '@/features/map/components/MapOverlay/MapStudyOverlay/MapStudyOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { mapMockData } from '@/features/map/mocks/mapMockData';
+import { overlayMockData } from '@/features/map/mocks/overlayMockData';
+import type { CafeOverlayData } from '@/features/map/types/cafe';
+import type { PlayerOverlayData } from '@/features/map/types/player';
+import type { ProjectOverlayData } from '@/features/map/types/project';
+import type { StudyOverlayData } from '@/features/map/types/study';
 
 import styles from './MapPage.module.scss';
 
@@ -97,10 +105,43 @@ const MapPage = () => {
             {/* 오버레이 */}
             {isOverlayOpen && selectedPoint && (
               <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
-                <MapOverlay
-                  onOverlayClose={() => setIsOverlayOpen(false)}
-                  overlayType={selectedPoint.type as 'project' | 'study' | 'player' | 'cafe'}
-                />
+                {(() => {
+                  const overlayData = overlayMockData.find(
+                    data => data.category === selectedPoint.type
+                  );
+                  if (!overlayData) return null;
+
+                  const commonProps = {
+                    onOverlayClose: () => setIsOverlayOpen(false),
+                  };
+
+                  switch (selectedPoint.type) {
+                    case 'project':
+                      return (
+                        <MapProjectOverlay
+                          {...commonProps}
+                          project={overlayData as ProjectOverlayData}
+                        />
+                      );
+                    case 'study':
+                      return (
+                        <MapStudyOverlay {...commonProps} study={overlayData as StudyOverlayData} />
+                      );
+                    case 'player':
+                      return (
+                        <MapPlayerOverlay
+                          {...commonProps}
+                          player={overlayData as PlayerOverlayData}
+                        />
+                      );
+                    case 'cafe':
+                      return (
+                        <MapCafeOverlay {...commonProps} cafe={overlayData as CafeOverlayData} />
+                      );
+                    default:
+                      return null;
+                  }
+                })()}
               </CustomOverlayMap>
             )}
           </Map>
