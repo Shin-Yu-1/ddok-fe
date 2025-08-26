@@ -11,3 +11,21 @@ export interface Project extends BaseMapItem {
   teamStatus: TeamStatus;
   bannerImageUrl: string;
 }
+
+export interface ProjectOverlay {
+  category: string;
+  projectId: number;
+  title: string;
+  bannerImageUrl: string;
+  teamStatus: string;
+  positions: string[];
+  capacity: number;
+  mode: string;
+  address: string;
+  preferredAges: {
+    ageMin: number;
+    ageMax: number;
+  };
+  expectedMonth: number;
+  startDate: string;
+}

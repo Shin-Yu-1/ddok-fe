@@ -10,3 +10,32 @@ export interface Player extends BaseMapItem {
   nickname: string;
   profileImageUrl: string;
 }
+
+export interface PlayerOverlay {
+  category: string;
+  userId: number;
+  nickname: string;
+  profileImageUrl: string;
+  mainBadge: {
+    type: string;
+    tier: string;
+  };
+  abandonBadge: {
+    isGranted: boolean;
+    count: number;
+  };
+  mainPosition: string;
+  address: string;
+  latestProject: {
+    id: number;
+    title: string;
+    teamStatus: string;
+  };
+  latestStudy: {
+    id: number;
+    title: string;
+    teamStatus: string;
+  };
+  temperature: number;
+  isMine: boolean;
+}

@@ -46,3 +46,13 @@ export interface Cafe extends BaseMapItem {
   title: string;
   bannerImageUrl: string;
 }
+
+export interface CafeOverlay {
+  category: string;
+  cafeId: number;
+  title: string;
+  bannerImageUrl: string;
+  rating: number;
+  reviewCount: number;
+  address: string;
+}

@@ -11,3 +11,21 @@ export interface Study extends BaseMapItem {
   teamStatus: TeamStatus;
   bannerImageUrl: string;
 }
+
+export interface StudyOverlay {
+  category: string;
+  studyId: number;
+  title: string;
+  bannerImageUrl: string;
+  teamStatus: string;
+  studyType: string;
+  capacity: number;
+  mode: string;
+  address: string;
+  preferredAges: {
+    ageMin: number;
+    ageMax: number;
+  };
+  expectedMonth: number;
+  startDate: string;
+}
