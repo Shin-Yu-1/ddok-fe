@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import Button from '@/components/Button/Button';
 import ActiveTimeSelector from '@/features/Auth/components/ActiveTimeSelector/ActiveTimeSelector';
-import BirthDateInput from '@/features/Auth/components/BirthDateInput';
+import BirthDateInput from '@/features/Auth/components/BirthDateInput/BirthDateInput';
 import LocationSelector from '@/features/Auth/components/LocationSelector/LocationSelector';
 import PersonalitySelector from '@/features/Auth/components/PersonalitySelector/PersonalitySelector';
 import PositionSelector from '@/features/Auth/components/PositionSelector/PositionSelector';
