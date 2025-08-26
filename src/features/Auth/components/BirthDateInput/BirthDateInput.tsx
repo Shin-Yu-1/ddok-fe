@@ -1,4 +1,4 @@
-import Input from '@/components/Input/Input';
+import DateInput from '@/components/DateInput/DateInput';
 
 import styles from './BirthDateInput.module.scss';
 
@@ -19,25 +19,18 @@ const BirthDateInput = ({
   max,
   min,
 }: BirthDateInputProps) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onBirthDateChange(e.target.value);
-  };
-
   return (
     <div className={styles.section}>
       <h2 className={styles.sectionTitle}>
         {title}
         {required && <span style={{ color: 'var(--red-1)', marginLeft: '4px' }}>*</span>}
       </h2>
-      <Input
-        type="date"
+      <DateInput
         value={birthDate}
-        onChange={handleChange}
+        onChange={onBirthDateChange}
         required={required}
         max={max}
         min={min}
-        border="1px solid #e9ecef"
-        focusBorder="1px solid #ffc107"
       />
     </div>
   );
