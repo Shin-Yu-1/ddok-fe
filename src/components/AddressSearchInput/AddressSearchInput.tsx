@@ -78,6 +78,7 @@ const AddressSearchInput = ({
           {
             '--placeholder-color': 'var(--gray-2)',
             cursor: 'pointer',
+            marginBottom: '1.5rem',
           } as React.CSSProperties
         }
         rightIcon={
