@@ -1,3 +1,5 @@
+import Input from '@/components/Input/Input';
+
 import styles from './BirthDateInput.module.scss';
 
 interface BirthDateInputProps {
@@ -27,15 +29,15 @@ const BirthDateInput = ({
         {title}
         {required && <span style={{ color: 'var(--red-1)', marginLeft: '4px' }}>*</span>}
       </h2>
-      <input
+      <Input
         type="date"
         value={birthDate}
         onChange={handleChange}
-        className={styles.dateInput}
         required={required}
         max={max}
         min={min}
-        aria-label={title}
+        border="1px solid #e9ecef"
+        focusBorder="1px solid #ffc107"
       />
     </div>
   );
