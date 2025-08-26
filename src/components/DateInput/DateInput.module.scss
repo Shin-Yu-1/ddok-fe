@@ -1,0 +1,25 @@
+@use '@/styles/variables' as *;
+
+.dateInputWrapper {
+  position: relative;
+
+  /* Chrome, Safari, Edge, Opera에서 기본 달력 아이콘 숨기기 */
+  input[type='date']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* Firefox에서 기본 달력 아이콘 숨기기 */
+  input[type='date'] {
+    appearance: textfield;
+    appearance: textfield;
+  }
+
+  input[type='date']::-moz-calendar-picker-indicator {
+    display: none;
+  }
+}
