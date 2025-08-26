@@ -46,21 +46,6 @@
       justify-content: space-between;
     }
 
-    &__detailBtn {
-      width: fit-content;
-      padding: 3px 10px;
-      border-radius: $r-xxsmall;
-      font-size: 9px;
-      color: $white-3;
-      background-color: $gray-1;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $black-3;
-        transition: background-color 0.3s ease;
-      }
-    }
-
     &__title {
       font-size: $fs-xsmall;
       font-weight: $fw-medium;
