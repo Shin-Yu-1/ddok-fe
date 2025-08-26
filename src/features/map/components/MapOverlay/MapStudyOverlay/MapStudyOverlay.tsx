@@ -1,4 +1,5 @@
 import Button from '@/components/Button/Button';
+import type { StudyOverlayData } from '@/features/map/types/study';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -7,40 +8,11 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface StudyOverlayProps {
-  category: string;
-  studyId: number;
-  title: string;
-  bannerImageUrl: string;
-  teamStatus: string;
-  studyType: string;
-  capacity: number;
-  mode: string;
-  address: string;
-  preferredAges: {
-    ageMin: number;
-    ageMax: number;
-  };
-  expectedMonth: number;
-  startDate: string;
-
+  study: StudyOverlayData;
   onOverlayClose: () => void;
 }
 
-const MapStudyOverlay: React.FC<StudyOverlayProps> = ({
-  //   category,
-  //   studyId,
-  title,
-  //   bannerImageUrl,
-  //   teamStatus,
-  studyType,
-  capacity,
-  //   mode,
-  address,
-  preferredAges: { ageMin, ageMax },
-  expectedMonth,
-  startDate,
-  onOverlayClose,
-}) => {
+const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ study, onOverlayClose }) => {
   return (
     <div className={styles.overlay__container}>
       <div className={styles.overlay__banner}>BANNER</div>
@@ -49,7 +21,7 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({
           <div className={styles.overlay__info__core}>
             <div className={styles.overlay__info__core__category}>스터디</div>
             <div className={styles.overlay__info__core__header}>
-              <div className={styles.overlay__info__core__title}>{title}</div>
+              <div className={styles.overlay__info__core__title}>{study.title}</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
                 fontSize="9px"
@@ -64,29 +36,31 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({
                 상세보기
               </Button>
             </div>
-            <div className={styles.overlay__info__core__address}>{address}</div>
+            <div className={styles.overlay__info__core__address}>{study.address}</div>
           </div>
           <div className={styles.overlay__info__details}>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>스터디 유형</div>
-              <div className={styles.overlay__info__details__item__value}>{studyType}</div>
+              <div className={styles.overlay__info__details__item__value}>{study.studyType}</div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>모집 인원</div>
-              <div className={styles.overlay__info__details__item__value}>{capacity}명</div>
+              <div className={styles.overlay__info__details__item__value}>{study.capacity}명</div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>예상 기간</div>
-              <div className={styles.overlay__info__details__item__value}>{expectedMonth}개월</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {study.expectedMonth}개월
+              </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>시작 예정일</div>
-              <div className={styles.overlay__info__details__item__value}>{startDate}</div>
+              <div className={styles.overlay__info__details__item__value}>{study.startDate}</div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>희망 나이대</div>
               <div className={styles.overlay__info__details__item__value}>
-                {ageMin}-{ageMax}대
+                {study.preferredAges.ageMin}-{study.preferredAges.ageMax}대
               </div>
             </div>
           </div>

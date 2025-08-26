@@ -1,4 +1,5 @@
 import Button from '@/components/Button/Button';
+import type { PlayerOverlayData } from '@/features/map/types/player';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -7,59 +8,11 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface PlayerOverlayProps {
-  category: string;
-  userId: number;
-  nickname: string;
-  profileImageUrl: string;
-  mainBadge: {
-    type: string;
-    tier: string;
-  };
-  abandonBadge: {
-    isGranted: boolean;
-    count: number;
-  };
-  mainPosition: string;
-  address: string;
-  latestProject: {
-    id: number;
-    title: string;
-    teamStatus: string;
-  };
-  latestStudy: {
-    id: number;
-    title: string;
-    teamStatus: string;
-  };
-  temperature: number;
-  isMine: boolean;
-
+  player: PlayerOverlayData;
   onOverlayClose: () => void;
 }
 
-const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({
-  //   category,
-  //   userId,
-  nickname,
-  //   profileImageUrl,
-  //   mainBadge: { type, tier },
-  //   abandonBadge: { isGranted, count },
-  mainPosition,
-  address,
-  latestProject: {
-    // id: projectId,
-    title: projectTitle,
-    // teamStatus: projectStatus
-  },
-  latestStudy: {
-    // id: studyId,
-    title: studyTitle,
-    // teamStatus: studyStatus
-  },
-  //   temperature,
-  //   isMine,
-  onOverlayClose,
-}) => {
+const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ player, onOverlayClose }) => {
   return (
     <div className={styles.overlay__container}>
       <div className={styles.overlay__banner}>BANNER</div>
@@ -68,7 +21,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({
           <div className={styles.overlay__info__core}>
             <div className={styles.overlay__info__core__category}>플레이어</div>
             <div className={styles.overlay__info__core__header}>
-              <div className={styles.overlay__info__core__title}>{nickname}</div>
+              <div className={styles.overlay__info__core__title}>{player.nickname}</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
                 fontSize="9px"
@@ -89,19 +42,25 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({
           <div className={styles.overlay__info__details}>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>대표 포지션</div>
-              <div className={styles.overlay__info__details__item__value}>{mainPosition}</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {player.mainPosition}
+              </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>주 활동 지역</div>
-              <div className={styles.overlay__info__details__item__value}>{address}</div>
+              <div className={styles.overlay__info__details__item__value}>{player.address}</div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>진행 중 프로젝트</div>
-              <div className={styles.overlay__info__details__item__value}>{projectTitle}</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {player.latestProject.title}
+              </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>진행 중 스터디</div>
-              <div className={styles.overlay__info__details__item__value}>{studyTitle}</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {player.latestStudy.title}
+              </div>
             </div>
           </div>
         </div>

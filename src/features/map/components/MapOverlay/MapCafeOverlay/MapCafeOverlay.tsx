@@ -1,4 +1,5 @@
 import Button from '@/components/Button/Button';
+import type { CafeOverlayData } from '@/features/map/types/cafe';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -7,27 +8,11 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface CafeOverlayProps {
-  category: string;
-  cafeId: number;
-  title: string;
-  bannerImageUrl: string;
-  rating: number;
-  reviewCount: number;
-  address: string;
-
+  cafe: CafeOverlayData;
   onOverlayClose: () => void;
 }
 
-const MapCafeOverlay: React.FC<CafeOverlayProps> = ({
-  //   category,
-  //   cafeId,
-  title,
-  //   bannerImageUrl,
-  rating,
-  reviewCount,
-  address,
-  onOverlayClose,
-}) => {
+const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ cafe, onOverlayClose }) => {
   return (
     <div className={styles.overlay__container}>
       <div className={styles.overlay__banner}>BANNER</div>
@@ -36,7 +21,7 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({
           <div className={styles.overlay__info__core}>
             <div className={styles.overlay__info__core__category}>추천 장소</div>
             <div className={styles.overlay__info__core__header}>
-              <div className={styles.overlay__info__core__title}>{title}</div>
+              <div className={styles.overlay__info__core__title}>{cafe.title}</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
                 fontSize="9px"
@@ -51,20 +36,20 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({
                 상세보기
               </Button>
             </div>
-            <div className={styles.overlay__info__core__address}>{address}</div>
+            <div className={styles.overlay__info__core__address}>{cafe.address}</div>
           </div>
           <div className={styles.overlay__info__details}>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>평점</div>
-              <div className={styles.overlay__info__details__item__value}>{rating}</div>
+              <div className={styles.overlay__info__details__item__value}>{cafe.rating}</div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>별점</div>
-              <div className={styles.overlay__info__details__item__value}>{reviewCount}</div>
+              <div className={styles.overlay__info__details__item__value}>{cafe.reviewCount}</div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>후기 수</div>
-              <div className={styles.overlay__info__details__item__value}>{reviewCount}개</div>
+              <div className={styles.overlay__info__details__item__value}>{cafe.reviewCount}개</div>
             </div>
           </div>
         </div>
