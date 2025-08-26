@@ -6,20 +6,22 @@ import {
 } from '@phosphor-icons/react';
 import { useLocation } from 'react-router-dom';
 
+import type { SectionType, ButtonConfig } from '../types/sidebar';
+
 import styles from './Sidebar.module.scss';
 
 const Sidebar = () => {
   const location = useLocation();
   const isMapPage = location.pathname.startsWith('/map');
 
-  const baseButtons = [
+  const baseButtons: ButtonConfig[] = [
     {
-      id: 'Mailbox',
+      id: 'notification',
       label: '수신함',
       icon: <MailboxIcon size={21} weight="light" />,
     },
     {
-      id: 'Chat',
+      id: 'chat',
       label: '채팅',
       icon: <ChatsCircleIcon size={21} weight="light" />,
     },
@@ -30,12 +32,12 @@ const Sidebar = () => {
     },
   ];
 
-  const buttons = [
+  const buttons: ButtonConfig[] = [
     ...baseButtons,
     ...(isMapPage
       ? [
           {
-            id: 'map',
+            id: 'map' as SectionType,
             label: '지도',
             icon: <MapTrifoldIcon size={21} weight="light" />,
           },
