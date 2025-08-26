@@ -3,7 +3,6 @@
 .dateInputWrapper {
   position: relative;
 
-  /* Chrome, Safari, Edge, Opera에서 기본 달력 아이콘 숨기기 */
   input[type='date']::-webkit-calendar-picker-indicator {
     position: absolute;
     right: 0;
@@ -13,10 +12,19 @@
     cursor: pointer;
   }
 
-  /* Firefox에서 기본 달력 아이콘 숨기기 */
   input[type='date'] {
+    cursor: text !important;
     appearance: textfield;
     appearance: textfield;
+
+    &:focus {
+      cursor: text !important;
+    }
+
+    &::placeholder {
+      color: var(--gray-2);
+      opacity: 1;
+    }
   }
 
   input[type='date']::-moz-calendar-picker-indicator {

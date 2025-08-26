@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import { CalendarDotIcon } from '@phosphor-icons/react';
 
@@ -24,46 +24,102 @@ const DateInput = ({
   placeholder,
 }: DateInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const hiddenDateInputRef = useRef<HTMLInputElement>(null);
+  const [displayValue, setDisplayValue] = useState(value || '');
+
+  useEffect(() => {
+    setDisplayValue(value || '');
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
+    const inputValue = e.target.value;
+    setDisplayValue(inputValue);
+
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (dateRegex.test(inputValue) || inputValue === '') {
+      onChange(inputValue);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = [
+      'Backspace',
+      'Delete',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Home',
+      'End',
+      '-',
+    ];
+
+    if (allowedKeys.includes(e.key) || (e.key >= '0' && e.key <= '9') || e.ctrlKey || e.metaKey) {
+      return;
+    }
+
+    e.preventDefault();
   };
 
   const handleCalendarClick = () => {
-    if (inputRef.current) {
-      if (
-        'showPicker' in inputRef.current &&
-        typeof (inputRef.current as HTMLInputElement & { showPicker?: () => void }).showPicker ===
-          'function'
-      ) {
-        (inputRef.current as HTMLInputElement & { showPicker: () => void }).showPicker();
-      } else {
-        inputRef.current.focus();
-        inputRef.current.click();
+    if (hiddenDateInputRef.current) {
+      hiddenDateInputRef.current.focus();
+      hiddenDateInputRef.current.click();
+
+      const input = hiddenDateInputRef.current as HTMLInputElement & { showPicker?: () => void };
+      if ('showPicker' in input && typeof input.showPicker === 'function') {
+        try {
+          input.showPicker();
+        } catch {
+          console.log('showPicker not supported or failed');
+        }
       }
     }
   };
 
+  const handleHiddenDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = e.target.value;
+    setDisplayValue(selectedDate);
+    onChange(selectedDate);
+  };
+
   return (
     <div className={styles.dateInputWrapper}>
-      <Input
-        ref={inputRef}
+      <input
+        ref={hiddenDateInputRef}
         type="date"
         value={value}
-        onChange={handleChange}
-        required={required}
+        onChange={handleHiddenDateChange}
         max={max}
         min={min}
+        style={{
+          position: 'absolute',
+          opacity: 0,
+          width: 0,
+          height: 0,
+          pointerEvents: 'none',
+        }}
+        tabIndex={-1}
+      />
+
+      <Input
+        ref={inputRef}
+        type="text"
+        value={displayValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        required={required}
         width="100%"
         height="40px"
-        placeholder={placeholder}
+        placeholder={placeholder || 'YYYY-MM-DD'}
         fontSize="var(--fs-xxsmall)"
         border="1px solid var(--gray-3)"
         focusBorder="1px solid var(--gray-3)"
         style={
           {
             '--placeholder-color': 'var(--gray-2)',
-            cursor: 'pointer',
+            cursor: 'text',
             marginBottom: '1.5rem',
           } as React.CSSProperties
         }
