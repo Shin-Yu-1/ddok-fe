@@ -1,5 +1,5 @@
+// eslint-disable-next-line import/order
 import PositionGrid from '@/components/PositionGrid/PositionGrid';
-
 import styles from './PositionSelector.module.scss';
 
 interface PositionSelectorProps {
