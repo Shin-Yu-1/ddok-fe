@@ -11,7 +11,7 @@ export interface Player extends BaseMapItem {
   profileImageUrl: string;
 }
 
-export interface PlayerOverlayType {
+export interface PlayerOverlayData {
   category: string;
   userId: number;
   nickname: string;

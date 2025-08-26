@@ -12,7 +12,7 @@ export interface Project extends BaseMapItem {
   bannerImageUrl: string;
 }
 
-export interface ProjectOverlayType {
+export interface ProjectOverlayData {
   category: string;
   projectId: number;
   title: string;
