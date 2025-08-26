@@ -64,7 +64,8 @@ const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSe
                   onKeyDown={handleButtonKeyDown}
                   className={`${styles.techButton}`}
                 >
-                  {tech.name} +
+                  <span className={styles.techName}>{tech.name}</span>
+                  <span className={styles.icon}>+</span>
                 </Button>
               ))}
             </div>
@@ -90,7 +91,8 @@ const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSe
                 onClick={() => handleTechStackRemove(tech.id)}
                 className={`${styles.techButton}`}
               >
-                {tech.name} ✕
+                <span className={styles.techName}>{tech.name}</span>
+                <span className={styles.icon}>✕</span>
               </Button>
             ))}
           </div>
