@@ -100,10 +100,8 @@
 
 .panel__list {
   display: flex;
-
-  // 페이지네이션 구현 시 사라질 수 있음
-  flex: 1;
-  flex-direction: column;
+  flex: 1; // 페이지네이션 구현 시 사라질 수 있음
+  flex-direction: column; // 페이지네이션 구현 시 사라질 수 있음
   gap: 0;
   overflow-y: auto;
 
