@@ -10,34 +10,3 @@
   font-weight: $fw-bold;
   color: $black-1;
 }
-
-.timeDisplay {
-  margin-bottom: 1rem;
-  font-size: $fs-medium;
-  font-weight: $fw-regular;
-  text-align: center;
-  color: $black-1;
-}
-
-.hourInput {
-  width: 30px;
-  border: none;
-  outline: none;
-  font-size: $fs-medium;
-  font-weight: $fw-regular;
-  text-align: center;
-  text-decoration: underline;
-  color: $black-1;
-  background: transparent;
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    margin: 0;
-    appearance: none;
-  }
-
-  &[type='number'] {
-    appearance: textfield;
-    appearance: textfield;
-  }
-}
