@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
 
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+
 import Input from '@/components/Input/Input';
 
 import { MapItemCategoryFilter } from '../../constants/MapItemCategoryFilter.enum';
@@ -168,6 +170,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
             height="40px"
             border="1px solid var(--gray-2)"
             focusBorder="1px solid var(--gray-2)"
+            iconSize="20px"
+            leftIcon={<MagnifyingGlassIcon />}
+            fontSize="var(--fs-xxsmall)"
           />
         </div>
 
