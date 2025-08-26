@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
 import Button from '@/components/Button/Button';
-import ActiveTimeSelector from '@/pages/personalization/PersonalizationPage/components/ActiveTimeSelector';
-import BirthDateInput from '@/pages/personalization/PersonalizationPage/components/BirthDateInput';
-import LocationSelector from '@/pages/personalization/PersonalizationPage/components/LocationSelector';
-import PersonalitySelector from '@/pages/personalization/PersonalizationPage/components/PersonalitySelector';
-import PositionSelector from '@/pages/personalization/PersonalizationPage/components/PositionSelector';
-import TechStackSelector from '@/pages/personalization/PersonalizationPage/components/TechStackSelector';
+import ActiveTimeSelector from '@/features/Auth/components/ActiveTimeSelector/ActiveTimeSelector';
+import BirthDateInput from '@/features/Auth/components/BirthDateInput';
+import LocationSelector from '@/features/Auth/components/LocationSelector/LocationSelector';
+import PersonalitySelector from '@/features/Auth/components/PersonalitySelector/PersonalitySelector';
+import PositionSelector from '@/features/Auth/components/PositionSelector/PositionSelector';
+import TechStackSelector from '@/features/Auth/components/TechStackSelector/TechStackSelector';
 
 import styles from './PersonalizationForm.module.scss';
 
