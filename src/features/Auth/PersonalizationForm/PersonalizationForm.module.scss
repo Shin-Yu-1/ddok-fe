@@ -1,0 +1,152 @@
+@use '@/styles/variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem;
+  border: 0.7px solid $gray-3;
+  border-radius: 10px;
+  background-color: $white-3;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  margin-bottom: 0.5rem;
+  font-size: $fs-large;
+  font-weight: $fw-bold;
+  color: $black-1;
+}
+
+.sectionSubtitle {
+  margin-bottom: 1.5rem;
+  font-size: $fs-xsmall;
+  color: $black-1;
+}
+
+.optionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.optionButton {
+  padding: 0.75rem 1rem;
+  font-size: $fs-xsmall;
+  font-weight: $fw-medium;
+}
+
+.searchWrapper {
+  margin-bottom: 1.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  height: 48px;
+  padding: 0 1rem;
+  border: 1px solid $gray-3;
+  border-radius: 10px;
+  font-size: $fs-small;
+  background-color: $white-3;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: $blue-1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($blue-1, 0.1);
+  }
+
+  &::placeholder {
+    color: $gray-2;
+  }
+}
+
+.techStackContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.techButton {
+  padding: 0.5rem 1rem;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  white-space: nowrap;
+}
+
+.personalityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.personalityButton {
+  padding: 0.75rem 1rem;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  text-align: center;
+}
+
+.dateInput {
+  width: 100%;
+  max-width: 300px;
+  height: 48px;
+  padding: 0 1rem;
+  border: 1px solid $gray-3;
+  border-radius: 10px;
+  font-size: $fs-small;
+  background-color: $white-3;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: $blue-1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($blue-1, 0.1);
+  }
+}
+
+.timeInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 300px;
+}
+
+.timeInput {
+  flex: 1;
+  height: 48px;
+  padding: 0 1rem;
+  border: 1px solid $gray-3;
+  border-radius: 10px;
+  font-size: $fs-small;
+  text-align: center;
+  background-color: $white-3;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    border-color: $blue-1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($blue-1, 0.1);
+  }
+}
+
+.timeSeparator {
+  font-size: $fs-medium;
+  font-weight: $fw-bold;
+  color: $gray-1;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-bottom: 1rem;
+}
