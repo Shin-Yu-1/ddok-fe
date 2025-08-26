@@ -100,8 +100,12 @@
 
 .panel__list {
   display: flex;
+
+  // 페이지네이션 구현 시 사라질 수 있음
+  flex: 1;
   flex-direction: column;
   gap: 0;
+  overflow-y: auto;
 
   &__item__divider {
     width: 100%;
