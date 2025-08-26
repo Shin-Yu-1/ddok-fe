@@ -1,6 +1,8 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 
 import { CalendarDotIcon } from '@phosphor-icons/react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import Input from '@/components/Input/Input';
 
@@ -23,12 +25,21 @@ const DateInput = ({
   min,
   placeholder,
 }: DateInputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const hiddenDateInputRef = useRef<HTMLInputElement>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [displayValue, setDisplayValue] = useState(value || '');
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   useEffect(() => {
-    setDisplayValue(value || '');
+    if (value) {
+      const date = new Date(value);
+      if (!isNaN(date.getTime())) {
+        setSelectedDate(date);
+        setDisplayValue(value);
+      }
+    } else {
+      setSelectedDate(null);
+      setDisplayValue('');
+    }
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,9 +47,33 @@ const DateInput = ({
     setDisplayValue(inputValue);
 
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (dateRegex.test(inputValue) || inputValue === '') {
-      onChange(inputValue);
+    if (dateRegex.test(inputValue)) {
+      const date = new Date(inputValue);
+      if (!isNaN(date.getTime())) {
+        setSelectedDate(date);
+        onChange(inputValue);
+      }
+    } else if (inputValue === '') {
+      setSelectedDate(null);
+      onChange('');
     }
+  };
+
+  const handleDatePickerChange = (date: Date | null) => {
+    setSelectedDate(date);
+    if (date) {
+      const dateString = date.toISOString().split('T')[0];
+      setDisplayValue(dateString);
+      onChange(dateString);
+    } else {
+      setDisplayValue('');
+      onChange('');
+    }
+    setIsDatePickerOpen(false);
+  };
+
+  const handleCalendarClick = () => {
+    setIsDatePickerOpen(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -62,85 +97,75 @@ const DateInput = ({
     e.preventDefault();
   };
 
-  const handleCalendarClick = () => {
-    if (hiddenDateInputRef.current) {
-      hiddenDateInputRef.current.focus();
-      hiddenDateInputRef.current.click();
+  const CustomInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+    (props, ref) => {
+      // DatePicker props를 무시하고 우리가 원하는 값 사용
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { value: _, onChange: __, ...restProps } = props;
 
-      const input = hiddenDateInputRef.current as HTMLInputElement & { showPicker?: () => void };
-      if ('showPicker' in input && typeof input.showPicker === 'function') {
-        try {
-          input.showPicker();
-        } catch {
-          console.log('showPicker not supported or failed');
-        }
-      }
+      return (
+        <Input
+          ref={ref}
+          type="text"
+          value={displayValue}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          required={required}
+          width="100%"
+          height="40px"
+          placeholder={placeholder || 'YYYY-MM-DD'}
+          fontSize="var(--fs-xxsmall)"
+          border="1px solid var(--gray-3)"
+          focusBorder="1px solid var(--gray-3)"
+          style={
+            {
+              '--placeholder-color': 'var(--gray-2)',
+              cursor: 'text',
+              marginBottom: '1.5rem',
+            } as React.CSSProperties
+          }
+          iconSize={24}
+          rightIcon={
+            <button
+              type="button"
+              onClick={handleCalendarClick}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 0,
+              }}
+            >
+              <CalendarDotIcon width={24} height={24} color="var(--black-1)" />
+            </button>
+          }
+          {...restProps}
+        />
+      );
     }
-  };
-
-  const handleHiddenDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = e.target.value;
-    setDisplayValue(selectedDate);
-    onChange(selectedDate);
-  };
+  );
 
   return (
     <div className={styles.dateInputWrapper}>
-      <input
-        ref={hiddenDateInputRef}
-        type="date"
-        value={value}
-        onChange={handleHiddenDateChange}
-        max={max}
-        min={min}
-        style={{
-          position: 'absolute',
-          opacity: 0,
-          width: 0,
-          height: 0,
-          pointerEvents: 'none',
-        }}
-        tabIndex={-1}
-      />
-
-      <Input
-        ref={inputRef}
-        type="text"
-        value={displayValue}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        required={required}
-        width="100%"
-        height="40px"
-        placeholder={placeholder || 'YYYY-MM-DD'}
-        fontSize="var(--fs-xxsmall)"
-        border="1px solid var(--gray-3)"
-        focusBorder="1px solid var(--gray-3)"
-        style={
-          {
-            '--placeholder-color': 'var(--gray-2)',
-            cursor: 'text',
-            marginBottom: '1.5rem',
-          } as React.CSSProperties
-        }
-        iconSize={24}
-        rightIcon={
-          <button
-            type="button"
-            onClick={handleCalendarClick}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 0,
-            }}
-          >
-            <CalendarDotIcon width={24} height={24} color="var(--black-1)" />
-          </button>
-        }
+      <DatePicker
+        selected={selectedDate}
+        onChange={handleDatePickerChange}
+        customInput={<CustomInput />}
+        open={isDatePickerOpen}
+        onClickOutside={() => setIsDatePickerOpen(false)}
+        dateFormat="yyyy-MM-dd"
+        minDate={min ? new Date(min) : undefined}
+        maxDate={max ? new Date(max) : undefined}
+        showPopperArrow={false}
+        popperClassName={styles.datePicker}
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+        yearDropdownItemNumber={15}
+        scrollableYearDropdown
       />
     </div>
   );
