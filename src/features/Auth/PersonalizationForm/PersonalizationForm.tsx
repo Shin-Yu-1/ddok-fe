@@ -156,7 +156,7 @@ const PersonalizationForm = () => {
         type="submit"
         className={styles.submitBtn}
         disabled={!isFormValid || isSubmitting}
-        variant={isFormValid ? 'primary' : 'outline'}
+        variant={isFormValid ? 'secondary' : 'ghost'}
         radius="xsm"
         height="62px"
       >
