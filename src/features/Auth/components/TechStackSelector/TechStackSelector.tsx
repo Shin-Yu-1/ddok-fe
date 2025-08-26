@@ -57,12 +57,12 @@ const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSe
               {searchedTechStacks.map(tech => (
                 <Button
                   key={`search-${tech.id}`}
-                  variant="outline"
-                  radius="sm"
+                  variant="primary"
+                  radius="xxsm"
                   size="sm"
                   onClick={() => handleTechStackSelect(tech.id)}
                   onKeyDown={handleButtonKeyDown}
-                  className={`${styles.techButton} ${styles.selectableButton}`}
+                  className={`${styles.techButton}`}
                 >
                   {tech.name} +
                 </Button>
@@ -85,10 +85,10 @@ const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSe
               <Button
                 key={`selected-${tech.id}`}
                 variant="primary"
-                radius="sm"
+                radius="xxsm"
                 size="sm"
                 onClick={() => handleTechStackRemove(tech.id)}
-                className={`${styles.techButton} ${styles.selectedButton}`}
+                className={`${styles.techButton}`}
               >
                 {tech.name} ✕
               </Button>

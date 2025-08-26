@@ -40,26 +40,11 @@
 }
 
 .techButton {
+  height: 34px;
   padding: 0.5rem 1rem;
-  font-size: $fs-xxsmall;
-  font-weight: $fw-medium;
+  border: 1px solid var(--gray-2);
+  font-size: $fs-xsmall;
+  font-weight: $fw-regular;
   white-space: nowrap;
-  transition: all 0.2s ease-in-out;
-}
-
-.selectableButton {
-  &:hover {
-    border-color: $yellow-1;
-    color: $black-1;
-    background-color: $yellow-1;
-    transform: translateY(-1px);
-  }
-}
-
-.selectedButton {
-  &:hover {
-    border-color: $red-1;
-    color: $white-3;
-    background-color: $red-1;
-  }
+  background-color: $white-3;
 }
