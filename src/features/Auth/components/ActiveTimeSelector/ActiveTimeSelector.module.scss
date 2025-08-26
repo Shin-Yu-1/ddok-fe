@@ -11,23 +11,33 @@
   color: $black-1;
 }
 
-.timeInputContainer {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.timeInput {
-  padding: 0.75rem 1rem;
-  border: 1px solid $gray-3;
-  border-radius: 8px;
-  font-size: $fs-small;
-  color: $black-1;
-  background-color: $white-1;
-}
-
-.timeSeparator {
+.timeDisplay {
+  margin-bottom: 1rem;
   font-size: $fs-medium;
-  font-weight: $fw-medium;
-  color: $black-2;
+  font-weight: $fw-regular;
+  text-align: center;
+  color: $black-1;
+}
+
+.hourInput {
+  width: 30px;
+  border: none;
+  outline: none;
+  font-size: $fs-medium;
+  font-weight: $fw-regular;
+  text-align: center;
+  text-decoration: underline;
+  color: $black-1;
+  background: transparent;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    margin: 0;
+    appearance: none;
+  }
+
+  &[type='number'] {
+    appearance: textfield;
+    appearance: textfield;
+  }
 }
