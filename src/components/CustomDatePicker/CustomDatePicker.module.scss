@@ -1,0 +1,169 @@
+@use '@/styles/variables' as *;
+
+/* react-datepicker 커스텀 스타일 */
+.datePicker {
+  .react-datepicker {
+    border: 1px solid var(--gray-3);
+    border-radius: $r-xsmall;
+    font-family: $font-family-primary;
+    font-size: var(--fs-xxsmall);
+    box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+
+    .react-datepicker__header {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--gray-3);
+      border-radius: $r-xsmall $r-xsmall 0 0;
+      background-color: var(--white-3);
+
+      .react-datepicker__current-month {
+        margin-bottom: 0.5rem;
+        font-weight: $fw-bold;
+        color: var(--black-1);
+      }
+
+      /* 월/년도 드롭다운 컨테이너 */
+      .react-datepicker__month-dropdown-container,
+      .react-datepicker__year-dropdown-container {
+        display: inline-block;
+        margin: 0 0.25rem;
+      }
+
+      /* 월/년도 드롭다운 버튼 */
+      .react-datepicker__month-read-view,
+      .react-datepicker__year-read-view {
+        padding: 0.25rem 0.5rem;
+        border: 1px solid var(--gray-3);
+        border-radius: $r-xxsmall;
+        font-size: var(--fs-xxsmall);
+        font-weight: $fw-medium;
+        color: var(--black-1);
+        background-color: var(--white-3);
+        cursor: pointer;
+
+        &:hover {
+          border-color: var(--gray-2);
+          background-color: var(--gray-4);
+        }
+
+        .react-datepicker__month-read-view--down-arrow,
+        .react-datepicker__year-read-view--down-arrow {
+          margin-left: 0.5rem;
+          border-top-color: var(--gray-1);
+        }
+      }
+
+      /* 드롭다운 메뉴 */
+      .react-datepicker__month-dropdown,
+      .react-datepicker__year-dropdown {
+        position: absolute;
+        z-index: 1000;
+        max-height: 200px;
+        border: 1px solid var(--gray-3);
+        border-radius: $r-xxsmall;
+        overflow-y: auto;
+        background-color: var(--white-3);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+
+        .react-datepicker__month-option,
+        .react-datepicker__year-option {
+          padding: 0.5rem 1rem;
+          font-size: var(--fs-xxsmall);
+          color: var(--black-1);
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--gray-4);
+          }
+
+          &--selected {
+            font-weight: $fw-bold;
+            color: var(--black-1);
+            background-color: var(--yellow-1);
+
+            &:hover {
+              background-color: var(--yellow-1);
+            }
+          }
+        }
+      }
+    }
+
+    .react-datepicker__day-names {
+      margin-bottom: 0.25rem;
+
+      .react-datepicker__day-name {
+        width: 2rem;
+        font-weight: $fw-medium;
+        line-height: 2rem;
+        color: var(--gray-1);
+      }
+    }
+
+    .react-datepicker__month {
+      padding: 0.5rem;
+
+      .react-datepicker__day {
+        width: 2rem;
+        height: 2rem;
+        border-radius: $r-xxsmall;
+        line-height: 2rem;
+        color: var(--black-1);
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--gray-4);
+        }
+
+        &--selected {
+          font-weight: $fw-bold;
+          color: var(--black-1);
+          background-color: var(--yellow-1);
+
+          &:hover {
+            background-color: var(--yellow-1);
+          }
+        }
+
+        &--keyboard-selected {
+          color: var(--black-1);
+          background-color: var(--yellow-2);
+        }
+
+        &--outside-month {
+          color: var(--gray-2);
+        }
+
+        &--disabled {
+          color: var(--gray-3);
+          cursor: not-allowed;
+
+          &:hover {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+
+    .react-datepicker__navigation {
+      top: 0.75rem;
+
+      &--previous {
+        left: 0.75rem;
+      }
+
+      &--next {
+        right: 0.75rem;
+      }
+
+      .react-datepicker__navigation-icon {
+        &::before {
+          border-color: var(--gray-1);
+        }
+      }
+
+      &:hover .react-datepicker__navigation-icon::before {
+        border-color: var(--black-1);
+      }
+    }
+  }
+}
