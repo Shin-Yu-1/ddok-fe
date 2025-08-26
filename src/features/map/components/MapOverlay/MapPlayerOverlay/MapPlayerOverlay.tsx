@@ -15,7 +15,7 @@ interface PlayerOverlayProps {
 const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ player, onOverlayClose }) => {
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>BANNER</div>
+      <div className={styles.overlay__banner}>PLAYER</div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>

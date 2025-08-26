@@ -15,7 +15,7 @@ interface StudyOverlayProps {
 const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ study, onOverlayClose }) => {
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>BANNER</div>
+      <div className={styles.overlay__banner}>STUDY</div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
