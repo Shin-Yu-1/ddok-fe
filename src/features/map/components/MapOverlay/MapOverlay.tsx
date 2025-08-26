@@ -1,3 +1,5 @@
+import Button from '@/components/Button/Button';
+
 import styles from './MapOverlay.module.scss';
 
 interface OverlayProps {
@@ -56,7 +58,19 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
               <div className={styles.overlay__info__core__category}>프로젝트</div>
               <div className={styles.overlay__info__core__header}>
                 <div className={styles.overlay__info__core__title}>딥 다이렉트 프로젝트</div>
-                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+                <Button
+                  className={styles.overlay__info__core__detailBtn}
+                  fontSize="9px"
+                  width="fit-content"
+                  height="18px"
+                  backgroundColor="var(--gray-1)"
+                  textColor="var(--white-3)"
+                  fontWeight="var(--font-weight-regular)"
+                  radius="xxsm"
+                  padding="4px 10px"
+                >
+                  상세보기
+                </Button>
               </div>
               <div className={styles.overlay__info__core__address}>서울 마포구</div>
             </div>
@@ -92,7 +106,19 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
               <div className={styles.overlay__info__core__category}>스터디</div>
               <div className={styles.overlay__info__core__header}>
                 <div className={styles.overlay__info__core__title}>딥 다이렉트 스터디</div>
-                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+                <Button
+                  className={styles.overlay__info__core__detailBtn}
+                  fontSize="9px"
+                  width="fit-content"
+                  height="18px"
+                  backgroundColor="var(--gray-1)"
+                  textColor="var(--white-3)"
+                  fontWeight="var(--font-weight-regular)"
+                  radius="xxsm"
+                  padding="4px 10px"
+                >
+                  상세보기
+                </Button>
               </div>
               <div className={styles.overlay__info__core__address}>서울 마포구</div>
             </div>
@@ -128,7 +154,19 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
               <div className={styles.overlay__info__core__category}>플레이어</div>
               <div className={styles.overlay__info__core__header}>
                 <div className={styles.overlay__info__core__title}>똑똑한 플레이어</div>
-                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+                <Button
+                  className={styles.overlay__info__core__detailBtn}
+                  fontSize="9px"
+                  width="fit-content"
+                  height="18px"
+                  backgroundColor="var(--gray-1)"
+                  textColor="var(--white-3)"
+                  fontWeight="var(--font-weight-regular)"
+                  radius="xxsm"
+                  padding="4px 10px"
+                >
+                  상세보기
+                </Button>
               </div>
               {/* TODO: 배지 표시 */}
               <div className={styles.overlay__info__core__address}>서울 마포구</div>
@@ -163,7 +201,19 @@ const MapOverlay: React.FC<OverlayProps> = ({ onOverlayClose, overlayType }) => 
               <div className={styles.overlay__info__core__category}>추천 장소</div>
               <div className={styles.overlay__info__core__header}>
                 <div className={styles.overlay__info__core__title}>분위기 좋은 카페</div>
-                <div className={styles.overlay__info__core__detailBtn}>상세보기</div>
+                <Button
+                  className={styles.overlay__info__core__detailBtn}
+                  fontSize="9px"
+                  width="fit-content"
+                  height="18px"
+                  backgroundColor="var(--gray-1)"
+                  textColor="var(--white-3)"
+                  fontWeight="var(--font-weight-regular)"
+                  radius="xxsm"
+                  padding="4px 10px"
+                >
+                  상세보기
+                </Button>
               </div>
               <div className={styles.overlay__info__core__address}>서울 마포구</div>
             </div>
