@@ -1,6 +1,5 @@
 import PositionGrid from '@/components/PositionGrid/PositionGrid';
-
-import styles from './PositionSelector.module.scss';
+import styles from '@/features/Auth/components/PositionSelector/PositionSelector.module.scss';
 
 interface PositionSelectorProps {
   selectedMainPosition: number | null;
