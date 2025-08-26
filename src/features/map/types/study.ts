@@ -4,6 +4,7 @@ import type { BaseMapItem, TeamStatus } from './common';
  * 스터디 관련 타입 정의
  */
 
+/** 패널의 스터디 아이템 정보 */
 export interface Study extends BaseMapItem {
   category: 'study';
   studyId: number;
@@ -12,6 +13,7 @@ export interface Study extends BaseMapItem {
   bannerImageUrl: string;
 }
 
+/** 스터디 오버레이 정보 */
 export interface StudyOverlayData {
   category: string;
   studyId: number;

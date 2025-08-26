@@ -4,6 +4,7 @@ import type { BaseMapItem } from './common';
  * 플레이어 관련 타입 정의
  */
 
+/** 패널의 플레이어 아이템 정보 */
 export interface Player extends BaseMapItem {
   category: 'player';
   userId: number;
@@ -11,6 +12,7 @@ export interface Player extends BaseMapItem {
   profileImageUrl: string;
 }
 
+/** 플레이어 오버레이 정보 */
 export interface PlayerOverlayData {
   category: string;
   userId: number;

@@ -4,6 +4,7 @@ import type { BaseMapItem, TeamStatus } from './common';
  * 프로젝트 관련 타입 정의
  */
 
+/** 패널의 프로젝트 아이템 정보 */
 export interface Project extends BaseMapItem {
   category: 'project';
   projectId: number;
@@ -12,6 +13,7 @@ export interface Project extends BaseMapItem {
   bannerImageUrl: string;
 }
 
+/** 프로젝트 오버레이 정보 */
 export interface ProjectOverlayData {
   category: string;
   projectId: number;

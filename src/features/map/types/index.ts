@@ -23,10 +23,10 @@ import type { Player, PlayerOverlayData } from './player';
 import type { Project, ProjectOverlayData } from './project';
 import type { Study, StudyOverlayData } from './study';
 
-// 통합 타입들
+/** 패널 아이템 통합 타입 */
 export type MapItem = Project | Study | Player | Cafe;
 
-// 오버레이 타입들
+/** 오버레이 통합 타입 */
 export type MapOverlayData =
   | ProjectOverlayData
   | StudyOverlayData
@@ -35,9 +35,6 @@ export type MapOverlayData =
 
 // 타입 가드 함수들
 export const isProject = (item: MapItem): item is Project => item.category === 'project';
-
 export const isStudy = (item: MapItem): item is Study => item.category === 'study';
-
 export const isPlayer = (item: MapItem): item is Player => item.category === 'player';
-
 export const isCafe = (item: MapItem): item is Cafe => item.category === 'cafe';
