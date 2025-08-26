@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
-import './Input.scss';
+
+import styles from './Input.module.scss';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   variant?: 'default' | 'password';
@@ -11,10 +12,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
 
     return (
-      <div className={`input-container ${className}`}>
-        <div className={`input-wrapper ${variant === 'password' ? 'input-wrapper--password' : ''}`}>
-          <input ref={ref} id={inputId} className="input" {...props} />
-          {icon && <div className="input-icon">{icon}</div>}
+      <div className={`${styles.inputContainer} ${className}`}>
+        <div className={`${styles.inputWrapper} ${variant === 'password' ? styles.password : ''}`}>
+          <input ref={ref} id={inputId} className={styles.input} {...props} />
+          {icon && <div className={styles.inputIcon}>{icon}</div>}
         </div>
       </div>
     );
