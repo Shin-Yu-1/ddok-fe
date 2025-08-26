@@ -12,7 +12,7 @@ export interface Study extends BaseMapItem {
   bannerImageUrl: string;
 }
 
-export interface StudyOverlay {
+export interface StudyOverlayType {
   category: string;
   studyId: number;
   title: string;

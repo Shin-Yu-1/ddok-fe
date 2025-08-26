@@ -18,16 +18,20 @@ export type { Player } from './player';
 export type { Cafe } from './cafe';
 
 // 다시 import해서 union type 생성
-import type { Cafe, CafeOverlay } from './cafe';
-import type { Player, PlayerOverlay } from './player';
-import type { Project, ProjectOverlay } from './project';
-import type { Study, StudyOverlay } from './study';
+import type { Cafe, CafeOverlayType } from './cafe';
+import type { Player, PlayerOverlayType } from './player';
+import type { Project, ProjectOverlayType } from './project';
+import type { Study, StudyOverlayType } from './study';
 
 // 통합 타입들
 export type MapItem = Project | Study | Player | Cafe;
 
 // 오버레이 타입들
-export type MapOverlayType = ProjectOverlay | StudyOverlay | PlayerOverlay | CafeOverlay;
+export type MapOverlayType =
+  | ProjectOverlayType
+  | StudyOverlayType
+  | PlayerOverlayType
+  | CafeOverlayType;
 
 // 타입 가드 함수들
 export const isProject = (item: MapItem): item is Project => item.category === 'project';
