@@ -1,52 +1,101 @@
+import { useState } from 'react';
+
 import Button from '@/components/Button/Button';
+import TechStackSearchInput from '@/components/TechStackSearchInput/TechStackSearchInput';
 import { TECH_STACKS } from '@/constants/techStacks';
 
 import styles from './TechStackSelector.module.scss';
 
 interface TechStackSelectorProps {
   selectedTechStack: number[];
-  techSearch: string;
-  onTechSearchChange: (value: string) => void;
   onTechStackToggle: (techId: number) => void;
 }
 
-const TechStackSelector = ({
-  selectedTechStack,
-  techSearch,
-  onTechSearchChange,
-  onTechStackToggle,
-}: TechStackSelectorProps) => {
-  // 검색된 기술 스택 필터링
-  const filteredTechStacks = techSearch.trim()
-    ? TECH_STACKS.filter(tech => tech.name.toLowerCase().includes(techSearch.toLowerCase()))
+const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSelectorProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // 선택된 기술 스택들 가져오기
+  const selectedTechStacks = TECH_STACKS.filter(tech => selectedTechStack.includes(tech.id));
+
+  // 검색된 기술 스택 필터링 (선택되지 않은 것들만)
+  const searchedTechStacks = searchTerm.trim()
+    ? TECH_STACKS.filter(tech => {
+        const matchesSearch = tech.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const notSelected = !selectedTechStack.includes(tech.id);
+        return matchesSearch && notSelected;
+      })
     : [];
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  };
+
+  const handleTechStackSelect = (techId: number) => {
+    onTechStackToggle(techId);
+  };
+
+  const handleTechStackRemove = (techId: number) => {
+    onTechStackToggle(techId);
+  };
+
+  const handleButtonKeyDown = (e: React.KeyboardEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   return (
     <div className={styles.section}>
       <h2 className={styles.sectionTitle}>당신의 기술 스택을 선택해주세요</h2>
-      <div className={styles.searchWrapper}>
-        <input
-          type="text"
-          placeholder="기술 검색하기"
-          value={techSearch}
-          onChange={e => onTechSearchChange(e.target.value)}
-          className={styles.searchInput}
-        />
-      </div>
-      <div className={styles.techStackContainer}>
-        {filteredTechStacks.map(tech => (
-          <Button
-            key={tech.id}
-            variant={selectedTechStack.includes(tech.id) ? 'primary' : 'outline'}
-            radius="sm"
-            size="sm"
-            onClick={() => onTechStackToggle(tech.id)}
-            className={styles.techButton}
-          >
-            {tech.name}
-          </Button>
-        ))}
-      </div>
+      <TechStackSearchInput onSearch={handleSearch} placeholder="기술 검색하기" />
+
+      {/* 검색어가 있을 때만 검색 결과 표시 */}
+      {searchTerm.trim() && (
+        <div className={styles.searchSection}>
+          <p className={styles.sectionSubtitle}>'{searchTerm}' 검색 결과</p>
+          {searchedTechStacks.length > 0 ? (
+            <div className={styles.techStackContainer}>
+              {searchedTechStacks.map(tech => (
+                <Button
+                  key={`search-${tech.id}`}
+                  variant="outline"
+                  radius="sm"
+                  size="sm"
+                  onClick={() => handleTechStackSelect(tech.id)}
+                  onKeyDown={handleButtonKeyDown}
+                  className={`${styles.techButton} ${styles.selectableButton}`}
+                >
+                  {tech.name} +
+                </Button>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.noResults}>
+              <p>검색 결과가 없습니다.</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 선택된 기술 스택들 */}
+      {selectedTechStacks.length > 0 && (
+        <div className={styles.selectedSection}>
+          <p className={styles.sectionSubtitle}>선택된 기술 스택</p>
+          <div className={styles.techStackContainer}>
+            {selectedTechStacks.map(tech => (
+              <Button
+                key={`selected-${tech.id}`}
+                variant="primary"
+                radius="sm"
+                size="sm"
+                onClick={() => handleTechStackRemove(tech.id)}
+                className={`${styles.techButton} ${styles.selectedButton}`}
+              >
+                {tech.name} ✕
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
