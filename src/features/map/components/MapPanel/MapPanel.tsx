@@ -170,9 +170,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
             height="40px"
             border="1px solid var(--gray-2)"
             focusBorder="1px solid var(--gray-2)"
-            iconSize="20px"
-            leftIcon={<MagnifyingGlassIcon />}
             fontSize="var(--fs-xxsmall)"
+            iconSize="var(--i-large)"
+            leftIcon={<MagnifyingGlassIcon size={'var(--i-large)'} weight="light" />}
           />
         </div>
 
