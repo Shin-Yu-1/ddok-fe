@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
 import ActiveTimeSelector from '@/features/Auth/components/ActiveTimeSelector/ActiveTimeSelector';
 import BirthDateInput from '@/features/Auth/components/BirthDateInput/BirthDateInput';
@@ -11,6 +13,7 @@ import TechStackSelector from '@/features/Auth/components/TechStackSelector/Tech
 import styles from './PersonalizationForm.module.scss';
 
 const PersonalizationForm = () => {
+  const navigate = useNavigate();
   const [selectedMainPosition, setSelectedMainPosition] = useState<number | null>(null);
   const [selectedInterestPositions, setSelectedInterestPositions] = useState<number[]>([]);
   const [selectedTechStack, setSelectedTechStack] = useState<number[]>([]);
@@ -86,9 +89,10 @@ const PersonalizationForm = () => {
       });
 
       // TODO: API 호출 로직 추가
-      await new Promise(resolve => setTimeout(resolve, 2000)); // 임시 딜레이
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 딜레이
 
-      // 성공 시 다음 페이지로 이동 등의 로직
+      // 성공 시 map 페이지로 이동
+      navigate('/map');
     } catch (error) {
       console.error('개인화 설정 실패:', error);
     } finally {
