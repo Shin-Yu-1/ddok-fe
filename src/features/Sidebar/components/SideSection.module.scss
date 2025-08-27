@@ -1,0 +1,65 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.sideSection {
+  position: fixed;
+  top: 96px;
+  left: 47.5px;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  width: 363px;
+  height: 100%;
+  border-right: 1.5px solid v.$gray-1;
+  background-color: v.$white-3;
+  animation: slide-in-left 0.25s ease-out;
+
+  @include m.mobile {
+    top: 81px;
+    left: 37.5px;
+    width: 353px;
+  }
+
+  @include m.tablet {
+    left: 42.5px;
+    width: 358px;
+  }
+}
+
+.header {
+  display: flex;
+  flex-shrink: 0;
+  padding: 8px 14px;
+
+  @include m.mobile {
+    padding: 4px 10px;
+  }
+}
+
+.title {
+  font-size: v.$fs-xsmall;
+  font-weight: v.$fw-semibold;
+  color: v.$black-4;
+
+  @include m.mobile {
+    font-size: v.$fs-xxsmall;
+  }
+}
+
+.body {
+  flex: 1;
+  padding: 0;
+  overflow: hidden auto;
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%); // 좌측에서 시작
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0); // 중앙으로 이동
+  }
+}
