@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor, { commands } from '@uiw/react-md-editor';
 
 import styles from './MarkdownEditor.module.scss';
 
@@ -12,6 +12,7 @@ interface MarkdownEditorProps {
   mode?: 'editor' | 'viewer';
   className?: string;
   defaultValue?: string;
+  maxLength?: number;
 }
 
 const MarkdownEditor = ({
@@ -22,6 +23,7 @@ const MarkdownEditor = ({
   mode = 'editor',
   className,
   defaultValue = '값을 입력해주세요',
+  maxLength = 2000,
 }: MarkdownEditorProps) => {
   const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
 
@@ -30,13 +32,49 @@ const MarkdownEditor = ({
 
   const handleChange = (val?: string) => {
     if (onChange) {
-      onChange(val || '');
+      const newValue = val || '';
+      // 글자 수 제한 확인
+      if (newValue.length <= maxLength) {
+        onChange(newValue);
+      }
     }
   };
 
   const handleTabClick = (tab: 'write' | 'preview') => {
     setActiveTab(tab);
   };
+
+  // 테이블 명령어를 제외한 명령어들만 필터링
+  const filteredCommands = [
+    commands.bold,
+    commands.italic,
+    commands.strikethrough,
+    commands.hr,
+    commands.group(
+      [
+        commands.title1,
+        commands.title2,
+        commands.title3,
+        commands.title4,
+        commands.title5,
+        commands.title6,
+      ],
+      {
+        name: 'title',
+        groupName: 'title',
+        buttonProps: { 'aria-label': 'Insert title' },
+      }
+    ),
+    commands.divider,
+    commands.link,
+    commands.quote,
+    commands.code,
+    commands.codeBlock,
+    commands.image,
+    commands.unorderedListCommand,
+    commands.orderedListCommand,
+    commands.checkedListCommand,
+  ];
 
   // Viewer 모드일 때는 탭 없이 preview만 표시
   if (mode === 'viewer') {
@@ -83,8 +121,10 @@ const MarkdownEditor = ({
         hideToolbar={activeTab === 'preview'}
         visibleDragbar={false}
         data-color-mode="light"
+        commands={filteredCommands}
         textareaProps={{
           placeholder,
+          maxLength,
           style: {
             fontSize: '14px',
             lineHeight: '1.6',
@@ -93,6 +133,21 @@ const MarkdownEditor = ({
         }}
         className={styles.mdEditor}
       />
+
+      {/* 글자 수 카운터 */}
+      <div className={styles.characterCount}>
+        <span
+          className={
+            currentValue.length >= maxLength
+              ? styles.maxReached
+              : currentValue.length >= maxLength * 0.9
+                ? styles.warning
+                : ''
+          }
+        >
+          {currentValue.length.toLocaleString()}/{maxLength.toLocaleString()}
+        </span>
+      </div>
     </div>
   );
 };
