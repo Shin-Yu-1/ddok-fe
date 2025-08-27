@@ -9,6 +9,7 @@
   height: 100%;
   padding: 20px;
   border-right: 1px solid $gray-1;
+  color: $black-4;
   background-color: $white-3;
 }
 
@@ -99,8 +100,10 @@
 
 .panel__list {
   display: flex;
-  flex-direction: column;
+  flex: 1; // 페이지네이션 구현 시 사라질 수 있음
+  flex-direction: column; // 페이지네이션 구현 시 사라질 수 있음
   gap: 0;
+  overflow-y: auto;
 
   &__item__divider {
     width: 100%;
@@ -108,20 +111,4 @@
     border: 0;
     background-color: $gray-2;
   }
-}
-
-// TODO: 추후 삭제 예정
-.panel__openStatus {
-  position: absolute;
-  bottom: 30px;
-  font-size: $fs-xxxsmall;
-  color: $blue-1;
-}
-
-// TODO: 추후 삭제 예정
-.subPanel__openStatus {
-  position: absolute;
-  bottom: 10px;
-  font-size: $fs-xxxsmall;
-  color: $green-1;
 }
