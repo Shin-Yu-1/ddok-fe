@@ -3,13 +3,58 @@ import { useState, useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { createProject } from '@/api/project';
-import type { CreateProjectFormData, ProjectMode, Location, PreferredAges } from '@/types/project';
+import { api } from '@/api/api';
+import type { CreateProjectData, ProjectMode, Location, PreferredAges } from '@/types/project';
 import { initialFormData } from '@/types/project';
 
+interface CreateProjectResponse {
+  success: boolean;
+  data: {
+    id: number;
+    bannerImageUrl?: string;
+  };
+}
+
 export const useCreateProjectForm = () => {
-  const [formData, setFormData] = useState<CreateProjectFormData>(initialFormData);
+  const [formData, setFormData] = useState<CreateProjectData>(initialFormData);
   const navigate = useNavigate();
+
+  // 프로젝트 생성 API 함수
+  const createProject = async (data: CreateProjectData): Promise<CreateProjectResponse> => {
+    // FormData 객체 생성 (파일 업로드를 위해)
+    const formDataToSend = new FormData();
+
+    // 배너 이미지가 있으면 추가, 없으면 null로 처리
+    if (data.bannerImage) {
+      formDataToSend.append('bannerImage', data.bannerImage);
+    }
+
+    // 나머지 데이터는 JSON으로 추가 (null 값도 포함)
+    const requestData = {
+      title: data.title,
+      expectedStart: data.expectedStart,
+      expectedMonth: data.expectedMonth,
+      mode: data.mode,
+      location: data.location,
+      preferredAges: data.preferredAges,
+      capacity: data.capacity,
+      traits: data.traits,
+      positions: data.positions,
+      leaderPosition: data.leaderPosition,
+      detail: data.detail,
+      bannerImage: data.bannerImage,
+    };
+
+    formDataToSend.append('data', JSON.stringify(requestData));
+
+    const response = await api.post<CreateProjectResponse>('/api/projects', formDataToSend, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  };
 
   // 프로젝트 생성 뮤테이션
   const createProjectMutation = useMutation({
