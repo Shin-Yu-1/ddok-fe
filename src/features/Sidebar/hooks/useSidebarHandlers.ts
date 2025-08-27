@@ -24,6 +24,7 @@ export const useSidebarHandlers = () => {
   };
 
   const handleSubButtonClick = (subSectionId: SubSectionType) => {
+    setActiveSection('chat');
     setActiveSubSection(subSectionId);
   };
 

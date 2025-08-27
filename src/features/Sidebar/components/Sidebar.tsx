@@ -115,17 +115,20 @@ const Sidebar = () => {
   };
 
   const renderSubButtons = (subButtons: SubButtonConfig[]) => {
-    return subButtons.map(subButton => (
-      <button
-        key={subButton.id}
-        type="button"
-        className={`${styles.subButton} ${activeSubSection === subButton.id ? styles.active : ''}`}
-        onClick={() => handleSubButtonClick(subButton.id)}
-        aria-label={subButton.label}
-        aria-pressed={activeSubSection === subButton.id}
-      >
-        <span className={styles.subIcon}>{subButton.icon}</span>
-      </button>
+    return subButtons.map((subButton, index) => (
+      <div key={subButton.id}>
+        <button
+          type="button"
+          className={`${styles.subButton} ${activeSubSection === subButton.id ? styles.active : ''}`}
+          onClick={() => handleSubButtonClick(subButton.id)}
+          aria-label={subButton.label}
+          aria-pressed={activeSubSection === subButton.id}
+        >
+          <span className={styles.subIcon}>{subButton.icon}</span>
+        </button>
+        {/* 서브 버튼 사이 구분선 */}
+        {index < subButtons.length - 1 && <div className={styles.subDivider} />}
+      </div>
     ));
   };
 
@@ -133,25 +136,34 @@ const Sidebar = () => {
     <>
       <aside className={styles.sidebar} role="complementary">
         <div className={styles.buttonContainer}>
-          {buttons.map(button => (
-            <div key={button.id} className={styles.buttonGroup}>
-              <button
-                type="button"
-                className={`${styles.sidebarButton} ${
-                  activeSection === button.id ? styles.active : ''
-                } ${expandedButton === button.id ? styles.expanded : ''}`}
-                onClick={() => handleButtonClick(button.id)}
-                aria-label={button.label}
-                aria-pressed={activeSection === button.id}
-                aria-expanded={button.hasSubmenu ? expandedButton === button.id : undefined}
+          {buttons.map((button, index) => (
+            <div key={button.id}>
+              <div
+                className={`${styles.buttonGroup} ${
+                  expandedButton === button.id ? styles.expanded : ''
+                }`}
               >
-                <span className={styles.icon}>{button.icon}</span>
-              </button>
+                <button
+                  type="button"
+                  className={`${styles.sidebarButton} ${
+                    activeSection === button.id ? styles.active : ''
+                  } ${expandedButton === button.id ? styles.expanded : ''}`}
+                  onClick={() => handleButtonClick(button.id)}
+                  aria-label={button.label}
+                  aria-pressed={activeSection === button.id}
+                  aria-expanded={button.hasSubmenu ? expandedButton === button.id : undefined}
+                >
+                  <span className={styles.icon}>{button.icon}</span>
+                </button>
 
-              {/* 하위 버튼들 (드롭다운) */}
-              {button.hasSubmenu && expandedButton === button.id && button.subButtons && (
-                <div className={styles.submenu}>{renderSubButtons(button.subButtons)}</div>
-              )}
+                {/* 하위 버튼들 (드롭다운) */}
+                {button.hasSubmenu && expandedButton === button.id && button.subButtons && (
+                  <div className={styles.submenu}>{renderSubButtons(button.subButtons)}</div>
+                )}
+              </div>
+
+              {/* 버튼 그룹 사이 구분선 */}
+              {index < buttons.length - 1 && <div className={styles.groupDivider} />}
             </div>
           ))}
         </div>
