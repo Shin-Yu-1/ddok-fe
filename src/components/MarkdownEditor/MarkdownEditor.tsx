@@ -11,7 +11,6 @@ interface MarkdownEditorProps {
   height?: number;
   mode?: 'editor' | 'viewer';
   className?: string;
-  defaultValue?: string;
   maxLength?: number;
 }
 
@@ -22,13 +21,12 @@ const MarkdownEditor = ({
   height = 500,
   mode = 'editor',
   className,
-  defaultValue = '값을 입력해주세요',
   maxLength = 2000,
 }: MarkdownEditorProps) => {
   const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
 
-  // value가 제공되지 않으면 defaultValue 사용
-  const currentValue = value ?? defaultValue;
+  // value가 제공되지 않으면 빈 문자열 사용
+  const currentValue = value ?? '';
 
   const handleChange = (val?: string) => {
     if (onChange) {
@@ -83,11 +81,10 @@ const MarkdownEditor = ({
         <MDEditor
           value={currentValue}
           height={height}
-          preview="preview" // preview 고정
-          hideToolbar={true} // 툴바 숨김
+          preview="preview"
+          hideToolbar={true}
           visibleDragbar={false}
           data-color-mode="light"
-          className={styles.mdEditor}
         />
       </div>
     );
@@ -125,13 +122,7 @@ const MarkdownEditor = ({
         textareaProps={{
           placeholder,
           maxLength,
-          style: {
-            fontSize: '14px',
-            lineHeight: '1.6',
-            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-          },
         }}
-        className={styles.mdEditor}
       />
 
       {/* 글자 수 카운터 */}
