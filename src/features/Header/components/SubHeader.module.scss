@@ -2,6 +2,8 @@
 @use '@/styles/mixins' as m;
 
 .subHeader {
+  position: fixed;
+  top: 56px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -12,6 +14,7 @@
   background-color: v.$white-3;
 
   @include m.mobile {
+    top: 46px;
     height: 35px;
     padding: 0 30px;
   }
