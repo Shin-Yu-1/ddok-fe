@@ -21,6 +21,7 @@ export interface SidebarState {
   activeSubSection: SubSectionType | null;
   setActiveSection: (section: SectionType | null) => void;
   toggleSection: (section: SectionType) => void;
+  setExpandedButton: (button: SectionType | null) => void;
   toggleButtonExpansion: (button: SectionType) => void;
   setActiveSubSection: (subSection: SubSectionType | null) => void;
 }

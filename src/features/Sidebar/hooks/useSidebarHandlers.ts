@@ -9,14 +9,22 @@ export const useSidebarHandlers = () => {
     toggleSection,
     expandedButton,
     activeSubSection,
+    setExpandedButton,
     toggleButtonExpansion,
     setActiveSubSection,
   } = useSidebarState();
 
   const handleButtonClick = (sectionId: SectionType) => {
     if (sectionId === 'chat') {
-      // 채팅 버튼 → 드롭다운 열기 (섹션은 안 염)
-      toggleButtonExpansion(sectionId);
+      if (activeSection === 'chat') {
+        // 채팅 섹션이 이미 열려있으면 모든 것 닫기
+        setActiveSection(null);
+        setExpandedButton(null);
+        setActiveSubSection(null);
+      } else {
+        // 채팅 섹션이 닫혀있으면 드롭다운만 열기
+        toggleButtonExpansion(sectionId);
+      }
     } else {
       // 다른 버튼들은 기존 동작
       toggleSection(sectionId);

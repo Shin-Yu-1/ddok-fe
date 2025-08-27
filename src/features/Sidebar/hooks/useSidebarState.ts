@@ -33,6 +33,10 @@ export const useSidebarState = create<SidebarState>()(
         }
       },
 
+      setExpandedButton: (button: SectionType | null) => {
+        set({ expandedButton: button });
+      },
+
       // 버튼 확장 토글 (채팅 버튼의 드롭다운)
       toggleButtonExpansion: (button: SectionType) => {
         const currentExpanded = get().expandedButton;
