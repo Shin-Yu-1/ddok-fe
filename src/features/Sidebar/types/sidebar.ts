@@ -1,4 +1,4 @@
-export type SectionType = 'notification' | 'chat' | 'friend' | 'map';
+export type SectionType = 'notification' | 'chat' | 'map';
 export type SubSectionType = 'personal-chat' | 'group-chat';
 
 export interface SubButtonConfig {

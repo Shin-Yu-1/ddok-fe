@@ -1,7 +1,6 @@
 import {
   MailboxIcon,
   ChatsCircleIcon,
-  AddressBookIcon,
   MapTrifoldIcon,
   UserIcon,
   UsersIcon,
@@ -57,11 +56,6 @@ const Sidebar = () => {
       hasSubmenu: true,
       subButtons: chatSubButtons,
     },
-    {
-      id: 'friend',
-      label: '친구',
-      icon: <AddressBookIcon size={21} weight="light" />,
-    },
   ];
 
   const buttons = baseButtons;
@@ -95,12 +89,6 @@ const Sidebar = () => {
           </SideSection>
         );
       }
-      case 'friend':
-        return (
-          <SideSection title="친구" {...sectionProps}>
-            <div>친구임다</div>
-          </SideSection>
-        );
       case 'map':
         return (
           <SideSection title="지도" {...sectionProps}>
