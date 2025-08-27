@@ -14,7 +14,7 @@ import { useSidebarState } from '../hooks/useSidebarState';
 import type { SectionType, ButtonConfig, SubButtonConfig } from '../types/sidebar';
 
 import styles from './Sidebar.module.scss';
-import SideSection from './SideSection';
+import SidePanel from './SidePanel';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -79,9 +79,9 @@ const Sidebar = () => {
     switch (activeSection) {
       case 'notification':
         return (
-          <SideSection title="수신함" {...sectionProps}>
+          <SidePanel title="수신함" {...sectionProps}>
             <div>수신함 입니닷</div>
-          </SideSection>
+          </SidePanel>
         );
       case 'chat': {
         let chatTitle = '채팅';
@@ -92,16 +92,16 @@ const Sidebar = () => {
         }
 
         return (
-          <SideSection title={chatTitle} {...sectionProps}>
+          <SidePanel title={chatTitle} {...sectionProps}>
             <div>채팅입니닷</div>
-          </SideSection>
+          </SidePanel>
         );
       }
       case 'map':
         return (
-          <SideSection title="지도" {...sectionProps}>
+          <SidePanel title="지도" {...sectionProps}>
             <div>지도임다</div>
-          </SideSection>
+          </SidePanel>
         );
       default:
         return null;

@@ -26,7 +26,7 @@ export interface SidebarState {
   setActiveSubSection: (subSection: SubSectionType | null) => void;
 }
 
-export interface SideSectionProps {
+export interface SidePanelProps {
   title: string;
   isOpen: boolean;
   onClose: () => void;
