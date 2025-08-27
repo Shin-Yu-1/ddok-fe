@@ -54,6 +54,11 @@
   &:active {
     background-color: v.$yellow-1;
   }
+
+  &.active {
+    border: 2px solid v.$yellow-1;
+    background-color: v.$yellow-1;
+  }
 }
 
 .icon {
