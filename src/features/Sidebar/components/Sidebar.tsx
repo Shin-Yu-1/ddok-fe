@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import {
   MailboxIcon,
   ChatsCircleIcon,
@@ -18,8 +20,14 @@ const Sidebar = () => {
   const location = useLocation();
   const isMapPage = location.pathname.startsWith('/map');
 
-  const { activeSection, expandedButton, activeSubSection } = useSidebarState();
+  const { activeSection, expandedButton, activeSubSection, setActiveSection } = useSidebarState();
   const { handleButtonClick, handleSubButtonClick } = useSidebarHandlers();
+
+  useEffect(() => {
+    if (!isMapPage && activeSection === 'map') {
+      setActiveSection(null);
+    }
+  }, [isMapPage, activeSection, setActiveSection]);
 
   const chatSubButtons: SubButtonConfig[] = [
     {
