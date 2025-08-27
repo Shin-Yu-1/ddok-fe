@@ -1,8 +1,8 @@
 import { MagicWand } from '@phosphor-icons/react';
 import { RadioGroup } from 'radix-ui';
-import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
+import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
@@ -10,17 +10,30 @@ import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
 import styles from './CreateProjectPage.module.scss';
 
 const CreateProjectPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { formData, updateMode } = useCreateProjectForm();
-
-  const handleClick = () => {
-    // TODO: 추후 API 연결 필요
-    navigate(`/detail/project/${id}`);
-  };
+  const { formData, updateTitle, updateMode, updateDetail, handleSubmit, isValid } =
+    useCreateProjectForm();
 
   const handleModeChange = (value: string) => {
     updateMode(value as 'ONLINE' | 'OFFLINE');
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateTitle(e.target.value);
+  };
+
+  const handleDetailChange = (value: string) => {
+    updateDetail(value);
+  };
+
+  // 모집 공고 등록하기 버튼 클릭 시
+  const handleSubmitClick = () => {
+    console.log('=== 모집 공고 등록 데이터 ===');
+    console.log(JSON.stringify(formData, null, 2));
+    console.log('=== 유효성 검사 결과 ===');
+    console.log('isValid:', isValid);
+
+    // 실제 API 호출 (성공 시 자동으로 상세 페이지 이동)
+    handleSubmit();
   };
 
   return (
@@ -31,7 +44,7 @@ const CreateProjectPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
-              <Button variant="secondary" radius="xsm" onClick={handleClick}>
+              <Button variant="secondary" radius="xsm" onClick={handleSubmitClick}>
                 모집 공고 등록하기
               </Button>
             </div>
@@ -41,6 +54,8 @@ const CreateProjectPage = () => {
                   type="text"
                   placeholder="프로젝트 제목을 입력해주세요"
                   className={styles.titleInput}
+                  value={formData.title}
+                  onChange={handleTitleChange}
                 />
               </MainSection>
             </div>
@@ -65,7 +80,11 @@ const CreateProjectPage = () => {
                     </>
                   }
                 >
-                  마크다운 작성 양식 들어갈 예정
+                  <MarkdownEditor
+                    value={formData.detail}
+                    onChange={handleDetailChange}
+                    mode="editor"
+                  />
                 </MainSection>
               </div>
               <div className={styles.rightSection}>
