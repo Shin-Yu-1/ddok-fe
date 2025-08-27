@@ -41,6 +41,15 @@ const Sidebar = () => {
       label: '수신함',
       icon: <MailboxIcon size={21} weight="light" />,
     },
+    ...(isMapPage
+      ? [
+          {
+            id: 'map' as SectionType,
+            label: '지도',
+            icon: <MapTrifoldIcon size={21} weight="light" />,
+          },
+        ]
+      : []),
     {
       id: 'chat',
       label: '채팅',
@@ -55,18 +64,7 @@ const Sidebar = () => {
     },
   ];
 
-  const buttons: ButtonConfig[] = [
-    ...baseButtons,
-    ...(isMapPage
-      ? [
-          {
-            id: 'map' as SectionType,
-            label: '지도',
-            icon: <MapTrifoldIcon size={21} weight="light" />,
-          },
-        ]
-      : []),
-  ];
+  const buttons = baseButtons;
 
   const renderActiveSection = () => {
     if (!activeSection) return null;
