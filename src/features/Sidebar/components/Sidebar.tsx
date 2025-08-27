@@ -3,12 +3,14 @@ import {
   ChatsCircleIcon,
   AddressBookIcon,
   MapTrifoldIcon,
+  UserIcon,
+  UsersIcon,
 } from '@phosphor-icons/react';
 import { useLocation } from 'react-router-dom';
 
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
 import { useSidebarState } from '../hooks/useSidebarState';
-import type { SectionType, ButtonConfig } from '../types/sidebar';
+import type { SectionType, ButtonConfig, SubButtonConfig } from '../types/sidebar';
 
 import styles from './Sidebar.module.scss';
 import SideSection from './SideSection';
@@ -17,8 +19,21 @@ const Sidebar = () => {
   const location = useLocation();
   const isMapPage = location.pathname.startsWith('/map');
 
-  const { activeSection } = useSidebarState();
-  const { handleButtonClick } = useSidebarHandlers();
+  const { activeSection, expandedButton, activeSubSection } = useSidebarState();
+  const { handleButtonClick, handleSubButtonClick } = useSidebarHandlers();
+
+  const chatSubButtons: SubButtonConfig[] = [
+    {
+      id: 'personal-chat',
+      label: '1:1 채팅',
+      icon: <UserIcon size={11} weight="regular" />,
+    },
+    {
+      id: 'group-chat',
+      label: '팀 채팅',
+      icon: <UsersIcon size={11} weight="regular" />,
+    },
+  ];
 
   const baseButtons: ButtonConfig[] = [
     {
@@ -30,6 +45,8 @@ const Sidebar = () => {
       id: 'chat',
       label: '채팅',
       icon: <ChatsCircleIcon size={21} weight="light" />,
+      hasSubmenu: true,
+      subButtons: chatSubButtons,
     },
     {
       id: 'friend',
@@ -66,12 +83,20 @@ const Sidebar = () => {
             <div>수신함 입니닷</div>
           </SideSection>
         );
-      case 'chat':
+      case 'chat': {
+        let chatTitle = '채팅';
+        if (activeSubSection === 'personal-chat') {
+          chatTitle = '1:1 채팅';
+        } else if (activeSubSection === 'group-chat') {
+          chatTitle = '팀 채팅';
+        }
+
         return (
-          <SideSection title="채팅" {...sectionProps}>
+          <SideSection title={chatTitle} {...sectionProps}>
             <div>채팅입니닷</div>
           </SideSection>
         );
+      }
       case 'friend':
         return (
           <SideSection title="친구" {...sectionProps}>
@@ -89,23 +114,45 @@ const Sidebar = () => {
     }
   };
 
+  const renderSubButtons = (subButtons: SubButtonConfig[]) => {
+    return subButtons.map(subButton => (
+      <button
+        key={subButton.id}
+        type="button"
+        className={`${styles.subButton} ${activeSubSection === subButton.id ? styles.active : ''}`}
+        onClick={() => handleSubButtonClick(subButton.id)}
+        aria-label={subButton.label}
+        aria-pressed={activeSubSection === subButton.id}
+      >
+        <span className={styles.subIcon}>{subButton.icon}</span>
+      </button>
+    ));
+  };
+
   return (
     <>
       <aside className={styles.sidebar} role="complementary">
         <div className={styles.buttonContainer}>
           {buttons.map(button => (
-            <button
-              key={button.id}
-              type="button"
-              className={`${styles.sidebarButton} ${
-                activeSection === button.id ? styles.active : ''
-              }`}
-              onClick={() => handleButtonClick(button.id)}
-              aria-label={button.label}
-              aria-pressed={activeSection === button.id}
-            >
-              <span className={styles.icon}>{button.icon}</span>
-            </button>
+            <div key={button.id} className={styles.buttonGroup}>
+              <button
+                type="button"
+                className={`${styles.sidebarButton} ${
+                  activeSection === button.id ? styles.active : ''
+                } ${expandedButton === button.id ? styles.expanded : ''}`}
+                onClick={() => handleButtonClick(button.id)}
+                aria-label={button.label}
+                aria-pressed={activeSection === button.id}
+                aria-expanded={button.hasSubmenu ? expandedButton === button.id : undefined}
+              >
+                <span className={styles.icon}>{button.icon}</span>
+              </button>
+
+              {/* 하위 버튼들 (드롭다운) */}
+              {button.hasSubmenu && expandedButton === button.id && button.subButtons && (
+                <div className={styles.submenu}>{renderSubButtons(button.subButtons)}</div>
+              )}
+            </div>
           ))}
         </div>
       </aside>

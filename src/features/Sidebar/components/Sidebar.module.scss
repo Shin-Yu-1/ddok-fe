@@ -7,6 +7,7 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 47px;
   height: 100%;
   border-right: 0.5px solid v.$black-4;
@@ -35,6 +36,12 @@
   }
 }
 
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .sidebarButton {
   display: flex;
   flex-direction: column;
@@ -59,6 +66,12 @@
     border: 2px solid v.$yellow-1;
     background-color: v.$yellow-1;
   }
+
+  &.expanded {
+    border: 2px solid v.$black-4;
+    color: v.$yellow-1;
+    background-color: v.$black-4;
+  }
 }
 
 .icon {
@@ -66,4 +79,53 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+  box-sizing: border-box;
+  width: 29px;
+  padding: 8px 0;
+  border: 2px solid v.$black-4;
+  border-radius: v.$r-xsmall;
+  overflow: hidden;
+  background-color: v.$gray-4;
+  animation: slide-down 0.2s ease-out;
+}
+
+.subButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border: none;
+  color: v.$gray-1;
+  background-color: v.$white-1;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:active {
+    background-color: v.$gray-3;
+  }
+
+  &.active {
+    color: v.$black-4;
+    background-color: v.$yellow-1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 200px;
+    opacity: 1;
+  }
 }
