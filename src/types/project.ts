@@ -1,4 +1,5 @@
 // 프로젝트 모집글 관련 페이지들에서 사용되는 타입 모음 파일입니다.
+import { PROJECT_DETAIL_TEMPLATE } from '@/constants/projectTemplates';
 
 // 나이대 범위
 export interface PreferredAges {
@@ -36,13 +37,13 @@ export const initialFormData: CreateProjectData = {
   title: '',
   expectedStart: '',
   expectedMonth: 1,
-  mode: 'ONLINE',
+  mode: 'OFFLINE',
   location: null,
   preferredAges: null,
   capacity: 2,
   traits: [],
   positions: [],
   leaderPosition: '',
-  detail: '',
+  detail: PROJECT_DETAIL_TEMPLATE,
   bannerImage: null,
 };
