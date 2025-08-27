@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import Button from '@/components/Button/Button';
 import { USER_TRAITS } from '@/constants/userTraits';
 
@@ -27,21 +29,12 @@ const PersonalityGrid = ({
           <Button
             key={keyPrefix ? `${keyPrefix}-${trait.id}` : trait.id}
             type="button"
-            variant="none"
+            variant="primary"
             radius="md"
             size="sm"
             fontSizePreset="xsmall"
-            backgroundColor={isSelected ? 'var(--selected-bg-color)' : 'var(--unselected-bg-color)'}
-            textColor={isSelected ? 'var(--selected-text-color)' : 'var(--unselected-text-color)'}
-            border={
-              isSelected
-                ? '2px solid var(--selected-border-color)'
-                : '1px solid var(--unselected-border-color)'
-            }
-            fontWeight={
-              isSelected ? 'var(--selected-font-weight)' : 'var(--unselected-font-weight)'
-            }
-            padding="0.75rem 1rem"
+            fontWeightPreset="regular"
+            className={clsx(styles.personalityButton, isSelected && styles.selected)}
             onClick={handleClick}
           >
             {trait.name}
