@@ -36,7 +36,6 @@ const Sidebar = () => {
   }, [isMapPage, activeSection, setActiveSection]);
 
   useEffect(() => {
-    console.log(activeSubSection);
     closeRoom();
   }, [activeSubSection]);
 
