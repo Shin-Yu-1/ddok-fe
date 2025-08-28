@@ -9,12 +9,18 @@ import LocationSelector from '@/features/Auth/components/LocationSelector/Locati
 import PersonalitySelector from '@/features/Auth/components/PersonalitySelector/PersonalitySelector';
 import PositionSelector from '@/features/Auth/components/PositionSelector/PositionSelector';
 import TechStackSelector from '@/features/Auth/components/TechStackSelector/TechStackSelector';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from './PersonalizationForm.module.scss';
 
 const PersonalizationForm = () => {
   const navigate = useNavigate();
+  const { updatePreference, user } = useAuthStore();
   const [selectedMainPosition, setSelectedMainPosition] = useState<number | null>(null);
+
+  // 디버깅을 위한 로그
+  console.log('PersonalizationForm - 현재 사용자:', user);
+  console.log('PersonalizationForm - isPreference:', user?.isPreference);
   const [selectedInterestPositions, setSelectedInterestPositions] = useState<number[]>([]);
   const [selectedTechStack, setSelectedTechStack] = useState<number[]>([]);
   const [locationSearch, setLocationSearch] = useState<string>('');
@@ -91,8 +97,13 @@ const PersonalizationForm = () => {
       // TODO: API 호출 로직 추가
       await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 딜레이
 
-      // 성공 시 map 페이지로 이동
-      navigate('/map');
+      // 개인화 설정 완료 상태 먼저 업데이트
+      updatePreference(true);
+
+      // 상태 업데이트 후 약간의 딜레이를 주고 navigate
+      setTimeout(() => {
+        navigate('/map', { replace: true });
+      }, 100);
     } catch (error) {
       console.error('개인화 설정 실패:', error);
     } finally {
