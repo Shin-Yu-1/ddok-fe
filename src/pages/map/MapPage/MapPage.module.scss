@@ -15,7 +15,7 @@
   height: calc(100vh - 97px);
 
   @include m.tablet {
-    height: calc(100vh - 96px);
+    height: calc(100vh - 97px);
   }
 
   @include m.mobile {
@@ -26,7 +26,7 @@
 .map__panelContainer {
   position: absolute;
   top: 96px;
-  left: 48px;
+  left: 47.5px;
   z-index: 100;
   width: 363px;
   height: calc(100% - 96px);
@@ -34,7 +34,7 @@
 
   @include m.tablet {
     top: 96px;
-    left: 43px;
+    left: 42.5px;
     height: calc(100% - 96px);
   }
 
@@ -48,7 +48,7 @@
 .map__subPanelContainer {
   position: absolute;
   top: 96px;
-  left: 411px;
+  left: 410.5px;
   z-index: 1000;
   width: 300px;
   height: calc(100% - 96px);
@@ -56,13 +56,13 @@
 
   @include m.tablet {
     top: 96px;
-    left: 406px;
+    left: 405.5px;
     height: calc(100% - 96px);
   }
 
   @include m.mobile {
     top: 81px;
-    left: 401px;
+    left: 400.5px;
     height: calc(100% - 81px);
   }
 }
