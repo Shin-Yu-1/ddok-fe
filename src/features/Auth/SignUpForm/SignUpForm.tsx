@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -59,11 +59,22 @@ export default function SignUpForm() {
     submit: false,
   });
 
+  // 이전 이메일 값 추적을 위한 ref
+  const prevEmailRef = useRef<string>('');
+
   // 폼 데이터 감시
   const email = watch('email');
   const username = watch('username');
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
+
+  // 이메일이 변경되면 중복확인 상태 초기화
+  useEffect(() => {
+    if (prevEmailRef.current && prevEmailRef.current !== email && emailVerified) {
+      setEmailVerified(false);
+    }
+    prevEmailRef.current = email;
+  }, [email, emailVerified]);
 
   // API 훅들 주석 처리
   // const signUpMutation = useSignUp(signUpURL);
@@ -239,11 +250,21 @@ export default function SignUpForm() {
 
       <FormField label="이메일" htmlFor="email" required error={errors.email?.message}>
         <div className={styles.fieldWithButton}>
-          <Input id="email" {...register('email')} placeholder="user@goorm.com" />
+          <Input
+            id="email"
+            {...register('email')}
+            placeholder="user@goorm.com"
+            disabled={emailVerified}
+          />
           <Button
             type="button"
             onClick={handleCheckEmail}
-            disabled={!email || emailVerified || isLoading.email || !!errors.email}
+            disabled={
+              !email ||
+              emailVerified ||
+              isLoading.email ||
+              (!!errors.email && errors.email.type !== 'manual')
+            }
             variant={emailVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
@@ -286,8 +307,8 @@ export default function SignUpForm() {
               !username ||
               timer > 0 ||
               isLoading.phone ||
-              !!errors.phoneNumber ||
-              !!errors.username
+              (!!errors.phoneNumber && errors.phoneNumber.type !== 'manual') ||
+              (!!errors.username && errors.username.type !== 'manual')
             }
             variant={codeSent ? 'ghost' : 'secondary'}
             radius="xsm"
@@ -304,7 +325,12 @@ export default function SignUpForm() {
           <Button
             type="button"
             onClick={handleVerifyPhoneCode}
-            disabled={!phoneCode || codeVerified || isLoading.verify || !!errors.phoneCode}
+            disabled={
+              !phoneCode ||
+              codeVerified ||
+              isLoading.verify ||
+              (!!errors.phoneCode && errors.phoneCode.type !== 'manual')
+            }
             variant={codeVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
