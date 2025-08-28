@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { MagnifyingGlassIcon, DotsThreeOutlineVerticalIcon } from '@phosphor-icons/react';
 
@@ -15,19 +15,18 @@ interface ChatProps {
   roomType: ChatRoomType;
 }
 
-type paginationType = {
+type Pagination = {
   page: number;
   size: number;
 };
 
 const ChatList = ({ roomType }: ChatProps) => {
-  const [search, setSearch] = useState<string>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [pagination, setPagination] = useState<paginationType>({
-    page: 0,
-    size: 10,
-  });
+  const [search, setSearch] = useState('');
+  const [pagination, setPagination] = useState<Pagination>({ page: 0, size: 13 });
   const [chats, setChats] = useState<ChatListItem[] | null>(null);
+
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const lastLoadedPageRef = useRef<number>(-1);
 
   const {
     data: chatRoomResponse,
@@ -38,15 +37,45 @@ const ChatList = ({ roomType }: ChatProps) => {
     params: { ...(search && { search }), ...pagination },
   });
 
+  const isLastPage =
+    (chatRoomResponse?.data?.pagination?.currentPage ?? 0) >=
+    (chatRoomResponse?.data?.pagination?.totalPages ?? 1) - 1;
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      entries => {
+        const first = entries[0];
+        if (first.isIntersecting && !isLoading && !isLastPage) {
+          setPagination(prev => ({ ...prev, page: prev.page + 1 }));
+        }
+      },
+      { root: null, rootMargin: '200px 0px', threshold: 0 }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [isLoading, isLastPage]);
+
   useEffect(() => {
     setChats(null);
     setSearch('');
+    setPagination(prev => ({ ...prev, page: 0 }));
+    lastLoadedPageRef.current = -1;
   }, [roomType]);
 
   useEffect(() => {
-    if (chatRoomResponse?.data?.chats) {
-      setChats(chatRoomResponse.data.chats);
-    }
+    const res = chatRoomResponse?.data;
+    if (!res) return;
+
+    const { chats: newChats, pagination: p } = res;
+    if (!newChats) return;
+    if (p.currentPage === lastLoadedPageRef.current) return;
+
+    setChats(prev => (p.currentPage === 0 ? newChats : [...(prev ?? []), ...newChats]));
+    lastLoadedPageRef.current = p.currentPage;
   }, [chatRoomResponse]);
 
   return (
@@ -56,9 +85,7 @@ const ChatList = ({ roomType }: ChatProps) => {
           type="text"
           placeholder="채팅방 검색"
           value={search}
-          onChange={e => {
-            setSearch(e.target.value);
-          }}
+          onChange={e => setSearch(e.target.value)}
           border="1px solid var(--gray-2)"
           focusBorder="1px solid var(--gray-2)"
           leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
@@ -79,13 +106,11 @@ const ChatList = ({ roomType }: ChatProps) => {
                 className={styles.profileImage}
                 src={
                   'otherUser' in chat
-                    ? (chat.otherUser.profileImage ?? '')
-                    : (chat.owner.profileImage ?? '')
+                    ? chat.otherUser.profileImage || undefined
+                    : chat.owner.profileImage || undefined
                 }
-                alt=""
               />
-
-              <span className={styles.chatName}>
+              <span className={styles.chatName} role="button">
                 {'otherUser' in chat ? chat.otherUser.nickname : (chat.name ?? chat.owner.nickname)}
               </span>
             </div>
@@ -95,6 +120,8 @@ const ChatList = ({ roomType }: ChatProps) => {
             </Button>
           </div>
         ))}
+
+      <div ref={sentinelRef} style={{ height: 1 }} />
     </div>
   );
 };
