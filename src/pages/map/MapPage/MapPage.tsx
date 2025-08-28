@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
 
@@ -15,6 +15,8 @@ import type { CafeOverlayData } from '@/features/map/types/cafe';
 import type { PlayerOverlayData } from '@/features/map/types/player';
 import type { ProjectOverlayData } from '@/features/map/types/project';
 import type { StudyOverlayData } from '@/features/map/types/study';
+import Sidebar from '@/features/Sidebar/components/Sidebar';
+import { useSidebarHandlers } from '@/features/Sidebar/hooks/useSidebarHandlers';
 
 import styles from './MapPage.module.scss';
 
@@ -25,13 +27,20 @@ const MapPage = () => {
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
   const [isMapChanged, setIsMapChanged] = useState(false);
 
-  const handleMapPanelToggle = () => {
-    if (isMapPanelOpen) {
-      setIsMapSubPanelOpen(false);
-      setSelectedCafeId(null);
+  const { isSectionOpen } = useSidebarHandlers();
+
+  // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
+  useEffect(() => {
+    const mapSectionOpen = isSectionOpen('map');
+    if (mapSectionOpen !== isMapPanelOpen) {
+      setIsMapPanelOpen(mapSectionOpen);
+      if (!mapSectionOpen) {
+        // 패널이 닫히면 서브패널도 닫기
+        setIsMapSubPanelOpen(false);
+        setSelectedCafeId(null);
+      }
     }
-    setIsMapPanelOpen(!isMapPanelOpen);
-  };
+  }, [isSectionOpen, isMapPanelOpen]);
 
   const handleItemClick = (itemType: 'project' | 'study' | 'player' | 'cafe', itemId?: number) => {
     if (!isMapPanelOpen) return;
@@ -65,14 +74,10 @@ const MapPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.map__content}>
-        {/* 패널 토글을 위한 임시 사이드바 */}
-        <div className={styles.map__sidebar}>
-          <div className={styles.map__sidebarToggleBtn} onClick={() => handleMapPanelToggle()}>
-            {isMapPanelOpen ? 'CLOSE' : 'OPEN'}
-          </div>
-        </div>
+      {/* Sidebar 컴포넌트 추가 */}
+      <Sidebar />
 
+      <div className={styles.map__content}>
         <div className={styles.map__container}>
           {/* TODO: 초기 로드 위치를 사용자 위치로 설정해야 함 */}
           <Map
