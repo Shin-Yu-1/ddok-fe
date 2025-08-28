@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import { signIn, getErrorMessage } from '@/api/auth';
 import kakaoIcon from '@/assets/icons/kakao-icon.svg';
@@ -29,8 +28,7 @@ export default function SignInForm() {
     mode: 'onChange',
   });
 
-  const navigate = useNavigate();
-  const { isLoggedIn, setLoggedIn } = useAuthStore();
+  const { setLoggedIn } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const email = watch('email');
@@ -44,6 +42,9 @@ export default function SignInForm() {
       const result = await signIn(data);
 
       if (result.accessToken && result.user) {
+        console.log('SignInForm - API 응답:', result);
+        console.log('SignInForm - isPreference:', result.user.isPreference);
+
         // 로그인 성공 - authStore에 사용자 정보 설정
         setLoggedIn(
           {
@@ -52,9 +53,13 @@ export default function SignInForm() {
             email: result.user.email,
             nickname: result.user.nickname || '',
             profileImageUrl: result.user.profileImageUrl || '',
+            isPreference: result.user.isPreference, // 개인화 설정 완료 여부 저장
           },
           result.accessToken
         );
+
+        // 리다이렉트는 SignInPage의 useEffect에서 처리됨
+        console.log('SignInForm - authStore 업데이트 완료, 리다이렉트는 SignInPage에서 처리');
       }
     } catch (apiError) {
       setError('root', {
@@ -66,9 +71,10 @@ export default function SignInForm() {
     }
   };
 
-  useEffect(() => {
-    if (isLoggedIn) navigate('/map');
-  }, [isLoggedIn, navigate]);
+  // 기존 useEffect는 제거하거나 수정
+  // useEffect(() => {
+  //   if (isLoggedIn) navigate('/map');
+  // }, [isLoggedIn, navigate]);
 
   const hasErrors = Object.keys(errors).some(
     key => key !== 'root' && errors[key as keyof typeof errors]

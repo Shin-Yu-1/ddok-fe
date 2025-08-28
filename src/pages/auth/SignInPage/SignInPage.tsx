@@ -9,11 +9,18 @@ import styles from './SignInPage.module.scss';
 
 export default function SignInPage() {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuthStore();
+  const { isLoggedIn, user } = useAuthStore();
 
   useEffect(() => {
-    if (isLoggedIn) navigate('/map');
-  }, [isLoggedIn, navigate]);
+    if (isLoggedIn && user) {
+      // 개인화 설정 완료 여부에 따라 리다이렉트
+      if (!user.isPreference) {
+        navigate('/personalization', { replace: true });
+      } else {
+        navigate('/map', { replace: true });
+      }
+    }
+  }, [isLoggedIn, user, navigate]);
 
   return (
     <div className={styles.inner}>
