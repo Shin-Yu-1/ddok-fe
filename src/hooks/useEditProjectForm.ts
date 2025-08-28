@@ -175,7 +175,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     setFormData(prev => (prev ? { ...prev, detail } : null));
   }, []);
 
-  const updateTeamStatus = useCallback((teamStatus: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED') => {
+  const updateTeamStatus = useCallback((teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED') => {
     setFormData(prev => (prev ? { ...prev, teamStatus } : null));
   }, []);
 

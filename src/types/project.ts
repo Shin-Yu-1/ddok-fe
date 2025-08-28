@@ -35,7 +35,7 @@ export interface CreateProjectData {
 
 // 프로젝트 수정 데이터 (수정 API용)
 export interface UpdateProjectData extends CreateProjectData {
-  teamStatus: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED';
+  teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
   bannerImageUrl?: string; // 기존 이미지 URL
 }
 
@@ -49,7 +49,7 @@ export interface CreateProjectResponse {
     nickname: string;
     leaderPosition: string;
     title: string;
-    teamStatus: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED';
+    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
     expectedStart: string;
     expectedMonth: number;
     mode: string;
@@ -69,7 +69,7 @@ export interface EditProjectResponse {
   message: string;
   data: {
     title: string;
-    teamStatus: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED';
+    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
     bannerImageUrl: string;
     traits: string[];
     capacity: number;
