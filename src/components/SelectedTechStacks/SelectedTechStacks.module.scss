@@ -1,0 +1,44 @@
+@use '@/styles/variables' as *;
+
+.selectedSection {
+  margin-top: 1.5rem;
+}
+
+.sectionSubtitle {
+  margin-bottom: 1rem;
+  font-size: $fs-xsmall;
+  font-weight: $fw-regular;
+  color: $black-1;
+}
+
+.techStackContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.techButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 80px;
+  height: 34px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-2);
+  font-size: $fs-xsmall;
+  font-weight: $fw-regular;
+  white-space: nowrap;
+  background-color: $white-3;
+}
+
+.techName {
+  flex: 1;
+  text-align: left;
+  color: $black-1;
+}
+
+.icon {
+  margin-left: 1.5rem;
+  color: $gray-2;
+}
