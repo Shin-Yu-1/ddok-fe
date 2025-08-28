@@ -243,7 +243,7 @@ export default function SignUpForm() {
           <Button
             type="button"
             onClick={handleCheckEmail}
-            disabled={!email || emailVerified || isLoading.email}
+            disabled={!email || emailVerified || isLoading.email || !!errors.email}
             variant={emailVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
@@ -281,7 +281,14 @@ export default function SignUpForm() {
           <Button
             type="button"
             onClick={handleSendPhoneCode}
-            disabled={!phone || !username || timer > 0 || isLoading.phone}
+            disabled={
+              !phone ||
+              !username ||
+              timer > 0 ||
+              isLoading.phone ||
+              !!errors.phoneNumber ||
+              !!errors.username
+            }
             variant={codeSent ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
@@ -297,7 +304,7 @@ export default function SignUpForm() {
           <Button
             type="button"
             onClick={handleVerifyPhoneCode}
-            disabled={!phoneCode || codeVerified || isLoading.verify}
+            disabled={!phoneCode || codeVerified || isLoading.verify || !!errors.phoneCode}
             variant={codeVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
