@@ -4,6 +4,16 @@
   width: 100%;
 }
 
+.errorMessage {
+  margin-bottom: 1rem;
+  padding: 8px;
+  border: 1px solid rgba($red-1, 0.3);
+  border-radius: 4px;
+  font-size: $fs-xxsmall;
+  color: $red-1;
+  background-color: rgba($red-1, 0.1);
+}
+
 .loginBtn {
   width: 100%;
 }

@@ -4,28 +4,25 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { signIn, getErrorMessage } from '@/api/auth';
 import kakaoIcon from '@/assets/icons/kakao-icon.svg';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
-import { mockLogin } from '@/mocks/mockAuth';
 import { signInSchema } from '@/schemas/auth.schema';
 import type { SignInFormValues } from '@/schemas/auth.schema';
 import { useAuthStore } from '@/stores/authStore';
 
 import styles from './SignInForm.module.scss';
 
-// 목 로그인 사용을 위해 실제 API 훅은 주석처리
-// import useSignIn from '@/hooks/auth/useSignIn';
-// import type { SignInURL } from '@/types/apiEndpoints.types';
-// const signInURL: SignInURL = '/api/auth/signin';
-
 export default function SignInForm() {
   const {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -41,36 +38,42 @@ export default function SignInForm() {
 
   const onSubmit = async (data: SignInFormValues) => {
     setIsLoading(true);
+    clearErrors('root');
 
     try {
-      const result = await mockLogin(data.email, data.password);
+      const result = await signIn(data);
 
-      if (result.success && result.user && result.token) {
-        // 목 로그인 성공 - authStore에 사용자 정보 설정
+      if (result.accessToken && result.user) {
+        // 로그인 성공 - authStore에 사용자 정보 설정
         setLoggedIn(
           {
             id: result.user.id,
-            username: result.user.name,
+            username: result.user.username,
             email: result.user.email,
-            nickname: result.user.nickname,
-            profileImageUrl: '',
+            nickname: result.user.nickname || '',
+            profileImageUrl: result.user.profileImageUrl || '',
           },
-          result.token
+          result.accessToken
         );
       }
-    } catch {
-      // setError('로그인 중 오류가 발생했습니다.');
+    } catch (apiError) {
+      setError('root', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(false);
     }
-    // signInMutation.mutate(data);
   };
 
   useEffect(() => {
     if (isLoggedIn) navigate('/map');
   }, [isLoggedIn, navigate]);
 
-  const isButtonDisabled = isLoading || !email || !password;
+  const hasErrors = Object.keys(errors).some(
+    key => key !== 'root' && errors[key as keyof typeof errors]
+  );
+  const isButtonDisabled = isLoading || !email || !password || hasErrors;
 
   const handleKakaoLogin = () => {
     // 카카오 로그인 구현
@@ -78,6 +81,7 @@ export default function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      {errors.root && <div className={styles.errorMessage}>{errors.root.message}</div>}
       <FormField label="이메일" htmlFor="email" required error={errors.email?.message}>
         <Input id="email" placeholder="user@goorm.com" {...register('email')} />
       </FormField>
