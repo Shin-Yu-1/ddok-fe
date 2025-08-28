@@ -66,9 +66,13 @@ export const chatListResponseDataSchema = z.object({
   pagination: paginationSchema,
   chats: z.array(chatListItemSchema),
 });
+export const chatMessageListResponseDataSchema = z.object({
+  pagination: paginationSchema,
+  messages: z.array(chatMessageSchema),
+});
 
 /* Final API Schema */
 export const ChatListApiResponseSchema = apiResponseSchema(chatListResponseDataSchema);
 export type ChatListApiResponse = z.infer<typeof ChatListApiResponseSchema>;
-export const ChatMessageApiResponseSchema = apiResponseSchema(chatMessageSchema);
+export const ChatMessageApiResponseSchema = apiResponseSchema(chatMessageListResponseDataSchema);
 export type ChatMessageApiResponse = z.infer<typeof ChatMessageApiResponseSchema>;
