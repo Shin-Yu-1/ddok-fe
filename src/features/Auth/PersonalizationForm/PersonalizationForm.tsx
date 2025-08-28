@@ -22,7 +22,7 @@ const PersonalizationForm = () => {
   console.log('PersonalizationForm - 현재 사용자:', user);
   console.log('PersonalizationForm - isPreference:', user?.isPreference);
   const [selectedInterestPositions, setSelectedInterestPositions] = useState<number[]>([]);
-  const [selectedTechStack, setSelectedTechStack] = useState<number[]>([]);
+  const [selectedTechStack, setSelectedTechStack] = useState<string[]>([]);
   const [locationSearch, setLocationSearch] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [selectedPersonality, setSelectedPersonality] = useState<number[]>([]);
@@ -60,9 +60,9 @@ const PersonalizationForm = () => {
     activeHours.start &&
     activeHours.end;
 
-  const handleTechStackToggle = (techId: number) => {
+  const handleTechStackToggle = (techName: string) => {
     setSelectedTechStack(prev =>
-      prev.includes(techId) ? prev.filter(t => t !== techId) : [...prev, techId]
+      prev.includes(techName) ? prev.filter(t => t !== techName) : [...prev, techName]
     );
   };
 
