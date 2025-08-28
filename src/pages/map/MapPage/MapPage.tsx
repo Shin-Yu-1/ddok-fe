@@ -65,8 +65,6 @@ const MapPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.map__header}>HEADER</div>
-      <div className={styles.map__subHeader}>SUBHEADER</div>
       <div className={styles.map__content}>
         {/* 패널 토글을 위한 임시 사이드바 */}
         <div className={styles.map__sidebar}>
