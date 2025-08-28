@@ -9,7 +9,7 @@ import {
 } from '@phosphor-icons/react';
 import { useLocation } from 'react-router-dom';
 
-import ChatList from '@/features/Chat/component/ChatList';
+import ChatList from '@/features/Chat/components/ChatList';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
 
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
