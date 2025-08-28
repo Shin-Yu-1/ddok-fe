@@ -14,24 +14,6 @@ import type { SignUpFormValues } from '@/schemas/auth.schema';
 
 import styles from './SignUpForm.module.scss';
 
-// API 연결 부분 주석 처리
-// import type {
-//   SignUpURL,
-//   EmailCheckURL,
-//   PhoneSendCodeURL,
-//   PhoneVerifyCodeURL,
-// } from '@/types/apiEndpoints.types';
-// import {
-//   useSignUp,
-//   useCheckEmail,
-//   useSendPhoneCode,
-//   useVerifyPhoneCode,
-// } from '@/hooks/auth/useSignUp';
-// const signUpURL: SignUpURL = '/api/auth/signup';
-// const emailCheckURL: EmailCheckURL = '/api/auth/email/check';
-// const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
-// const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
-
 export default function SignUpForm() {
   const {
     register,
@@ -75,32 +57,6 @@ export default function SignUpForm() {
     }
     prevEmailRef.current = email;
   }, [email, emailVerified]);
-
-  // API 훅들 주석 처리
-  // const signUpMutation = useSignUp(signUpURL);
-  // const checkEmailMutation = useCheckEmail(emailCheckURL, {
-  //   onSuccess: data => {
-  //     if (data.data.isAvailable) {
-  //       setEmailVerified(true);
-  //     }
-  //   },
-  // });
-  // const sendPhoneCodeMutation = useSendPhoneCode(phoneSendCodeURL, {
-  //   onSuccess: () => {
-  //     setCodeSent(true);
-  //     startTimer();
-  //   },
-  //   onError: error => {
-  //     console.error('인증번호 발송 실패:', error);
-  //   },
-  // });
-  // const verifyPhoneCodeMutation = useVerifyPhoneCode(phoneVerifyCodeURL, {
-  //   onSuccess: data => {
-  //     if (data.data.verified) {
-  //       setCodeVerified(true);
-  //     }
-  //   },
-  // });
 
   // 타이머 로직
   const startTimer = () => {
