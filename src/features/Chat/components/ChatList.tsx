@@ -4,10 +4,10 @@ import { MagnifyingGlassIcon, DotsThreeOutlineVerticalIcon } from '@phosphor-ico
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
+import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
 import { useGetApi } from '@/hooks/useGetApi';
 import type { ChatListApiResponse, ChatListItem } from '@/schemas/chat.schema';
-
-import ChatRoomType from '../enums/ChatRoomType.enum';
+import { useChatUiStore } from '@/stores/chatUiStore';
 
 import styles from './ChatList.module.scss';
 
@@ -24,6 +24,7 @@ const ChatList = ({ roomType }: ChatProps) => {
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: 13 });
   const [chats, setChats] = useState<ChatListItem[] | null>(null);
+  const { openRoom } = useChatUiStore();
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastLoadedPageRef = useRef<number>(-1);
@@ -78,6 +79,10 @@ const ChatList = ({ roomType }: ChatProps) => {
     lastLoadedPageRef.current = p.currentPage;
   }, [chatRoomResponse]);
 
+  const handleOpenRoom = (roomId: number) => {
+    openRoom(roomId);
+  };
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.searchBox}>
@@ -110,7 +115,11 @@ const ChatList = ({ roomType }: ChatProps) => {
                     : chat.owner.profileImage || undefined
                 }
               />
-              <span className={styles.chatName} role="button">
+              <span
+                className={styles.chatName}
+                role="button"
+                onClick={() => handleOpenRoom(chat.roomId)}
+              >
                 {'otherUser' in chat ? chat.otherUser.nickname : (chat.name ?? chat.owner.nickname)}
               </span>
             </div>
