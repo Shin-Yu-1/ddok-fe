@@ -10,7 +10,9 @@ import {
 import { useLocation } from 'react-router-dom';
 
 import ChatList from '@/features/Chat/components/ChatList';
+import ChatRoom from '@/features/Chat/components/ChatRoom';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import { useChatUiStore } from '@/stores/chatUiStore';
 
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
 import { useSidebarState } from '../hooks/useSidebarState';
@@ -25,12 +27,18 @@ const Sidebar = () => {
 
   const { activeSection, expandedButton, activeSubSection, setActiveSection } = useSidebarState();
   const { handleButtonClick, handleSubButtonClick } = useSidebarHandlers();
+  const { selectedRoomId, closeRoom } = useChatUiStore();
 
   useEffect(() => {
     if (!isMapPage && activeSection === 'map') {
       setActiveSection(null);
     }
   }, [isMapPage, activeSection, setActiveSection]);
+
+  useEffect(() => {
+    console.log(activeSubSection);
+    closeRoom();
+  }, [activeSubSection]);
 
   const chatSubButtons: SubButtonConfig[] = [
     {
@@ -88,20 +96,27 @@ const Sidebar = () => {
         );
       case 'chat': {
         let chatTitle = '채팅';
+        if (selectedRoomId == null) {
+          if (activeSubSection === 'personal-chat') {
+            chatTitle = '1:1 채팅';
+          } else if (activeSubSection === 'group-chat') {
+            chatTitle = '팀 채팅';
+          }
 
-        if (activeSubSection === 'personal-chat') {
-          chatTitle = '1:1 채팅';
-        } else if (activeSubSection === 'group-chat') {
-          chatTitle = '팀 채팅';
+          return (
+            <SidePanel title={chatTitle} {...sectionProps}>
+              <ChatList
+                roomType={chatTitle === '팀 채팅' ? ChatRoomType.GROUP : ChatRoomType.PRIVATE}
+              />
+            </SidePanel>
+          );
+        } else {
+          return (
+            <SidePanel {...sectionProps}>
+              <ChatRoom roomId={selectedRoomId} />
+            </SidePanel>
+          );
         }
-
-        return (
-          <SidePanel title={chatTitle} {...sectionProps}>
-            <ChatList
-              roomType={chatTitle === '팀 채팅' ? ChatRoomType.GROUP : ChatRoomType.PRIVATE}
-            />
-          </SidePanel>
-        );
       }
       case 'map':
         return (
