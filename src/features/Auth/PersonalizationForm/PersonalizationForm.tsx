@@ -2,7 +2,10 @@ import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
+import { submitPersonalization, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
+import { POSITIONS } from '@/constants/positions';
+import { USER_TRAITS } from '@/constants/userTraits';
 import ActiveTimeSelector from '@/features/Auth/components/ActiveTimeSelector/ActiveTimeSelector';
 import BirthDateInput from '@/features/Auth/components/BirthDateInput/BirthDateInput';
 import LocationSelector from '@/features/Auth/components/LocationSelector/LocationSelector';
@@ -84,18 +87,35 @@ const PersonalizationForm = () => {
     setIsSubmitting(true);
 
     try {
-      console.log('개인화 설정 완료:', {
-        mainPosition: selectedMainPosition,
-        interestPositions: selectedInterestPositions,
-        techStack: selectedTechStack,
-        location: selectedLocation,
-        personality: selectedPersonality,
-        birthDate,
-        activeHours,
+      // ID를 이름으로 변환하는 헬퍼 함수들
+      const getPositionName = (id: number) => POSITIONS.find(p => p.id === id)?.name || '';
+      const getTraitName = (id: number) => USER_TRAITS.find(t => t.id === id)?.name || '';
+
+      // 활동 시간을 API 형식으로 변환 (HH:MM -> HH)
+      const formatActiveHours = (hours: { start: string; end: string }) => ({
+        start: hours.start.split(':')[0], // "09:00" -> "09"
+        end: hours.end.split(':')[0], // "18:00" -> "18"
       });
 
-      // TODO: API 호출 로직 추가
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 임시 딜레이
+      // API 요청 데이터 구성
+      const personalizationData = {
+        mainPosition: selectedMainPosition ? getPositionName(selectedMainPosition) : '',
+        subPosition: selectedInterestPositions.map(getPositionName).filter(Boolean),
+        techStacks: selectedTechStack,
+        location: {
+          latitude: 37.5665, // 임시 서울 좌표
+          longitude: 126.978,
+          address: selectedLocation || '서울특별시',
+        },
+        traits: selectedPersonality.map(getTraitName).filter(Boolean),
+        birthDate,
+        activeHours: formatActiveHours(activeHours),
+      };
+
+      console.log('개인화 설정 API 요청:', personalizationData);
+
+      // 실제 API 호출
+      await submitPersonalization(personalizationData);
 
       // 개인화 설정 완료 상태 먼저 업데이트
       updatePreference(true);
@@ -106,6 +126,9 @@ const PersonalizationForm = () => {
       }, 100);
     } catch (error) {
       console.error('개인화 설정 실패:', error);
+      // 에러 메시지 처리
+      const errorMessage = getErrorMessage(error);
+      alert(`개인화 설정에 실패했습니다: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
