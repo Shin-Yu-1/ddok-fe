@@ -242,7 +242,10 @@ export default function SignUpForm() {
   };
 
   const isSubmitting = isLoading.submit;
-  const isButtonDisabled = isSubmitting || !emailVerified || !codeVerified;
+  const hasErrors = Object.keys(errors).some(
+    key => key !== 'root' && errors[key as keyof typeof errors]
+  );
+  const isButtonDisabled = isSubmitting || !emailVerified || !codeVerified || hasErrors;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
