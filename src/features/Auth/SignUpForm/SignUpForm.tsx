@@ -37,6 +37,8 @@ export default function SignUpForm() {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -56,7 +58,6 @@ export default function SignUpForm() {
     verify: false,
     submit: false,
   });
-  const [error, setError] = useState<string | null>(null);
 
   // 폼 데이터 감시
   const email = watch('email');
@@ -111,7 +112,7 @@ export default function SignUpForm() {
     }
 
     setIsLoading(prev => ({ ...prev, email: true }));
-    setError(null);
+    clearErrors('email');
 
     try {
       const result = await checkEmail(email.trim());
@@ -119,7 +120,10 @@ export default function SignUpForm() {
         setEmailVerified(true);
       }
     } catch (apiError) {
-      setError(getErrorMessage(apiError));
+      setError('email', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, email: false }));
     }
@@ -132,7 +136,7 @@ export default function SignUpForm() {
     }
 
     setIsLoading(prev => ({ ...prev, phone: true }));
-    setError(null);
+    clearErrors('phoneNumber');
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
@@ -143,7 +147,10 @@ export default function SignUpForm() {
         startTimer();
       }
     } catch (apiError) {
-      setError(getErrorMessage(apiError));
+      setError('phoneNumber', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -156,7 +163,7 @@ export default function SignUpForm() {
     }
 
     setIsLoading(prev => ({ ...prev, verify: true }));
-    setError(null);
+    clearErrors('phoneCode');
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
@@ -165,10 +172,16 @@ export default function SignUpForm() {
       if (result.verified) {
         setCodeVerified(true);
       } else {
-        setError('인증번호가 일치하지 않습니다.');
+        setError('phoneCode', {
+          type: 'manual',
+          message: '인증번호가 일치하지 않습니다.',
+        });
       }
     } catch (apiError) {
-      setError(getErrorMessage(apiError));
+      setError('phoneCode', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
@@ -177,17 +190,23 @@ export default function SignUpForm() {
   // 폼 제출
   const onSubmit = async (data: SignUpFormValues) => {
     if (!emailVerified) {
-      setError('이메일 중복 확인을 완료해주세요.');
+      setError('email', {
+        type: 'manual',
+        message: '이메일 중복 확인을 완료해주세요.',
+      });
       return;
     }
 
     if (!codeVerified) {
-      setError('휴대폰 인증을 완료해주세요.');
+      setError('phoneCode', {
+        type: 'manual',
+        message: '휴대폰 인증을 완료해주세요.',
+      });
       return;
     }
 
     setIsLoading(prev => ({ ...prev, submit: true }));
-    setError(null);
+    clearErrors('root');
 
     try {
       const signUpData = {
@@ -202,7 +221,10 @@ export default function SignUpForm() {
         navigate('/auth/signupcomplete');
       }
     } catch (apiError) {
-      setError(getErrorMessage(apiError));
+      setError('root', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
@@ -213,7 +235,7 @@ export default function SignUpForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      {error && <div className={styles.errorMessage}>{error}</div>}
+      {errors.root && <div className={styles.errorMessage}>{errors.root.message}</div>}
 
       <FormField label="이메일" htmlFor="email" required error={errors.email?.message}>
         <div className={styles.fieldWithButton}>
