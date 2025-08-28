@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon, DotsThreeOutlineVerticalIcon } from '@phosphor-ico
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
 import type { ChatListApiResponse, ChatListItem } from '@/schemas/chat.schema';
 import { useChatUiStore } from '@/stores/chatUiStore';
@@ -14,11 +15,6 @@ import styles from './ChatList.module.scss';
 interface ChatProps {
   roomType: ChatRoomType;
 }
-
-type Pagination = {
-  page: number;
-  size: number;
-};
 
 const ChatList = ({ roomType }: ChatProps) => {
   const [search, setSearch] = useState('');
