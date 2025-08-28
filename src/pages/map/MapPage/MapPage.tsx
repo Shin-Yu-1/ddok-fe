@@ -70,11 +70,8 @@ const MapPage = () => {
     type: string;
   } | null>(null);
 
-  // TODO: center 이동 / level 변경 / bounds 변경 이벤트들을 감지하여 서브 패널 리로드
-
   return (
     <div className={styles.container}>
-      {/* Sidebar 컴포넌트 추가 */}
       <Sidebar />
 
       <div className={styles.map__content}>
@@ -84,7 +81,9 @@ const MapPage = () => {
             id="map"
             className={styles.map}
             center={{ lat: 37.5665, lng: 126.978 }}
-            onTileLoaded={() => setIsMapChanged(true)}
+            onTileLoaded={() => {
+              setIsMapChanged(true);
+            }}
           >
             {/* 컨트롤 */}
             <ZoomControl position="TOPRIGHT" />
