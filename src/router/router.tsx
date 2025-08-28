@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '@/App';
+import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout';
 import MapLayout from '@/layouts/MapLayout/MapLayout';
 import PersonalizationLayout from '@/layouts/PersonalizationLayout/PersonalizationLayout';
@@ -181,7 +182,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'ranking',
-        element: <RankingPage />,
+        element: (
+          <ProtectedRoute requirePreference={true}>
+            <RankingPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'button-example',
