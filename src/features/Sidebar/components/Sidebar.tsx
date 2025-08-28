@@ -9,6 +9,9 @@ import {
 } from '@phosphor-icons/react';
 import { useLocation } from 'react-router-dom';
 
+import ChatList from '@/features/Chat/component/ChatList';
+import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
 import { useSidebarState } from '../hooks/useSidebarState';
 import type { SectionType, ButtonConfig, SubButtonConfig } from '../types/sidebar';
@@ -85,6 +88,7 @@ const Sidebar = () => {
         );
       case 'chat': {
         let chatTitle = '채팅';
+
         if (activeSubSection === 'personal-chat') {
           chatTitle = '1:1 채팅';
         } else if (activeSubSection === 'group-chat') {
@@ -93,7 +97,9 @@ const Sidebar = () => {
 
         return (
           <SidePanel title={chatTitle} {...sectionProps}>
-            <div>채팅입니닷</div>
+            <ChatList
+              roomType={chatTitle === '팀 채팅' ? ChatRoomType.GROUP : ChatRoomType.PRIVATE}
+            />
           </SidePanel>
         );
       }
