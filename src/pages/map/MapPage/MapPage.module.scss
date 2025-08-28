@@ -1,25 +1,8 @@
 @use '@/styles/variables' as *;
 
-// TODO: 레이아웃 잡은 뒤 수정 필요할 수 있음
 .container {
   width: 100%;
   height: 100%;
-}
-
-.map__header {
-  width: 100%;
-  height: 56px;
-  line-height: 56px;
-  text-align: center;
-  background-color: $white-3;
-}
-
-.map__subHeader {
-  width: 100%;
-  height: 41px;
-  line-height: 41px;
-  text-align: center;
-  background-color: $white-1;
 }
 
 .map__content {
