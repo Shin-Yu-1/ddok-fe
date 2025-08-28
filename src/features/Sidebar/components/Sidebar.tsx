@@ -27,7 +27,7 @@ const Sidebar = () => {
 
   const { activeSection, expandedButton, activeSubSection, setActiveSection } = useSidebarState();
   const { handleButtonClick, handleSubButtonClick } = useSidebarHandlers();
-  const { selectedRoomId, closeRoom } = useChatUiStore();
+  const { selectedRoom, closeRoom } = useChatUiStore();
 
   useEffect(() => {
     if (!isMapPage && activeSection === 'map') {
@@ -96,7 +96,7 @@ const Sidebar = () => {
         );
       case 'chat': {
         let chatTitle = '채팅';
-        if (selectedRoomId == null) {
+        if (selectedRoom == null) {
           if (activeSubSection === 'personal-chat') {
             chatTitle = '1:1 채팅';
           } else if (activeSubSection === 'group-chat') {
@@ -113,7 +113,7 @@ const Sidebar = () => {
         } else {
           return (
             <SidePanel {...sectionProps}>
-              <ChatRoom roomId={selectedRoomId} />
+              <ChatRoom chat={selectedRoom} />
             </SidePanel>
           );
         }

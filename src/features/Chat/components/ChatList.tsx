@@ -75,8 +75,8 @@ const ChatList = ({ roomType }: ChatProps) => {
     lastLoadedPageRef.current = p.currentPage;
   }, [chatRoomResponse]);
 
-  const handleOpenRoom = (roomId: number) => {
-    openRoom(roomId);
+  const handleOpenRoom = (chat: ChatListItem) => {
+    openRoom(chat);
   };
 
   return (
@@ -111,11 +111,7 @@ const ChatList = ({ roomType }: ChatProps) => {
                     : chat.owner.profileImage || undefined
                 }
               />
-              <span
-                className={styles.chatName}
-                role="button"
-                onClick={() => handleOpenRoom(chat.roomId)}
-              >
+              <span className={styles.chatName} role="button" onClick={() => handleOpenRoom(chat)}>
                 {'otherUser' in chat ? chat.otherUser.nickname : (chat.name ?? chat.owner.nickname)}
               </span>
             </div>
