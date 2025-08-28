@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 
+import type { ChatListItem } from '@/schemas/chat.schema';
+
 interface ChatUiState {
-  selectedRoomId: number | null;
-  openRoom: (id: number) => void;
+  selectedRoom: ChatListItem | null;
+  openRoom: (chat: ChatListItem) => void;
   closeRoom: () => void;
 
   // 리스트 스크롤 복원용 (선택)
@@ -11,9 +13,9 @@ interface ChatUiState {
 }
 
 export const useChatUiStore = create<ChatUiState>(set => ({
-  selectedRoomId: null,
-  openRoom: id => set({ selectedRoomId: id }),
-  closeRoom: () => set({ selectedRoomId: null }),
+  selectedRoom: null,
+  openRoom: chat => set({ selectedRoom: chat }),
+  closeRoom: () => set({ selectedRoom: null }),
   listScrollTop: 0,
   setListScrollTop: v => set({ listScrollTop: v }),
 }));
