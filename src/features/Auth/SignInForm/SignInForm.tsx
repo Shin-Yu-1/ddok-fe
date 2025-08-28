@@ -87,12 +87,16 @@ export default function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      {errors.root && <div className={styles.errorMessage}>{errors.root.message}</div>}
       <FormField label="이메일" htmlFor="email" required error={errors.email?.message}>
         <Input id="email" placeholder="user@goorm.com" {...register('email')} />
       </FormField>
 
-      <FormField label="비밀번호" htmlFor="password" required error={errors.password?.message}>
+      <FormField
+        label="비밀번호"
+        htmlFor="password"
+        required
+        error={errors.password?.message || errors.root?.message}
+      >
         <PasswordInput id="password" placeholder="********" {...register('password')} />
       </FormField>
 
