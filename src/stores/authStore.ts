@@ -8,6 +8,7 @@ export interface UserInfo {
   email: string;
   nickname: string;
   profileImageUrl: string;
+  isPreference?: boolean; // 개인화 설정 완료 여부 추가
 }
 
 export interface SignInUser {
@@ -18,6 +19,7 @@ export interface SignInUser {
     email: string;
     nickname: string;
     profileImageUrl: string;
+    isPreference?: boolean; // 개인화 설정 완료 여부 추가
   };
 }
 
@@ -50,6 +52,7 @@ interface AuthState {
   setLoggedIn: (user: UserInfo, accessToken: string) => void;
   setLoggedOut: () => void;
   setAuthSocialLogin: (data: SignInUser) => void;
+  updatePreference: (isPreference: boolean) => void; // 개인화 설정 완료 상태 업데이트
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -98,6 +101,22 @@ export const useAuthStore = create<AuthState>()(
           isLoggedIn: false,
           user: null,
         });
+      },
+
+      // 개인화 설정 완료 상태 업데이트
+      updatePreference: (isPreference: boolean) => {
+        const state = get();
+        if (state.user) {
+          const updatedUser = { ...state.user, isPreference };
+
+          // 세션스토리지 업데이트
+          sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+          // 상태 업데이트
+          set({
+            user: updatedUser,
+          });
+        }
       },
     }),
     {

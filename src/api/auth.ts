@@ -1,0 +1,197 @@
+import axios from 'axios';
+
+import api from './api';
+
+// 공개 API용 클라이언트 (인증 불필요)
+const publicApi = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+// API 응답 공통 타입
+interface ApiResponseDto<T = unknown> {
+  status: number;
+  message: string;
+  data: T;
+}
+
+// 회원가입 요청 타입
+interface SignUpRequest {
+  email: string;
+  username: string;
+  password: string;
+  passwordCheck: string;
+  phoneNumber: string;
+  phoneCode: string;
+}
+
+// 회원가입 응답 타입
+interface SignUpResponse {
+  id: number;
+  username: string;
+}
+
+// 이메일 중복 확인 응답 타입
+interface EmailCheckResponse {
+  isAvailable: boolean;
+}
+
+// 휴대폰 인증 코드 발송 응답 타입
+interface PhoneVerificationResponse {
+  expiresIn: number;
+}
+
+// 휴대폰 인증 코드 확인 응답 타입
+interface PhoneVerifyCodeResponse {
+  verified: boolean;
+}
+
+// 로그인 요청 타입
+interface SignInRequest {
+  email: string;
+  password: string;
+}
+
+// 로그인 응답 타입
+interface SignInResponse {
+  accessToken: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    nickname?: string | null;
+    profileImageUrl?: string | null;
+    isPreference: boolean;
+    location: unknown;
+    mainPosition: unknown;
+  };
+}
+
+// 기술 스택 검색 응답 타입
+interface TechStackSearchResponse {
+  techStacks: string[]; // 실제 API는 문자열 배열을 반환
+}
+
+// 개인화 설정 요청 타입
+interface PersonalizationRequest {
+  mainPosition: string;
+  subPosition: string[];
+  techStacks: string[];
+  location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
+  traits: string[];
+  birthDate: string;
+  activeHours: {
+    start: string;
+    end: string;
+  };
+}
+
+// 개인화 설정 응답 타입
+interface PersonalizationResponse {
+  success: boolean;
+  message: string;
+}
+
+// 이메일 중복 확인
+export const checkEmail = async (email: string): Promise<EmailCheckResponse> => {
+  const response = await publicApi.post<ApiResponseDto<EmailCheckResponse>>(
+    '/api/auth/email/check',
+    {
+      email,
+    }
+  );
+  return response.data.data;
+};
+
+// 휴대폰 인증 코드 발송
+export const sendPhoneCode = async (
+  phoneNumber: string,
+  username: string
+): Promise<PhoneVerificationResponse> => {
+  const response = await publicApi.post<ApiResponseDto<PhoneVerificationResponse>>(
+    '/api/auth/phone/send-code',
+    {
+      phoneNumber,
+      username,
+      authType: 'SIGN_UP',
+    }
+  );
+  return response.data.data;
+};
+
+// 휴대폰 인증 코드 확인
+export const verifyPhoneCode = async (
+  phoneNumber: string,
+  phoneCode: string
+): Promise<PhoneVerifyCodeResponse> => {
+  const response = await publicApi.post<ApiResponseDto<PhoneVerifyCodeResponse>>(
+    '/api/auth/phone/verify-code',
+    {
+      phoneNumber,
+      phoneCode,
+    }
+  );
+  return response.data.data;
+};
+
+// 회원가입
+export const signUp = async (signUpData: SignUpRequest): Promise<SignUpResponse> => {
+  const response = await publicApi.post<ApiResponseDto<SignUpResponse>>(
+    '/api/auth/signup',
+    signUpData
+  );
+  return response.data.data;
+};
+
+// 로그인
+export const signIn = async (signInData: SignInRequest): Promise<SignInResponse> => {
+  const response = await publicApi.post<ApiResponseDto<SignInResponse>>(
+    '/api/auth/signin',
+    signInData
+  );
+  return response.data.data;
+};
+
+// 기술 스택 검색
+export const searchTechStacks = async (keyword?: string): Promise<string[]> => {
+  const url = keyword
+    ? `/api/auth/stacks?keyword=${encodeURIComponent(keyword)}`
+    : '/api/auth/stacks';
+  const response = await api.get<ApiResponseDto<TechStackSearchResponse>>(url);
+  return response.data.data.techStacks;
+};
+
+// 개인화 설정 제출
+export const submitPersonalization = async (
+  personalizationData: PersonalizationRequest
+): Promise<PersonalizationResponse> => {
+  const response = await api.post<ApiResponseDto<PersonalizationResponse>>(
+    '/api/auth/preferences',
+    personalizationData
+  );
+  return response.data.data;
+};
+
+// API 에러 처리를 위한 유틸리티 함수
+export const getErrorMessage = (error: unknown): string => {
+  if (error && typeof error === 'object') {
+    const errorObj = error as Record<string, unknown>;
+    if (errorObj.response && typeof errorObj.response === 'object') {
+      const response = errorObj.response as Record<string, unknown>;
+      if (response.data && typeof response.data === 'object') {
+        const data = response.data as Record<string, unknown>;
+        if (typeof data.message === 'string') {
+          return data.message;
+        }
+      }
+    }
+    if (typeof errorObj.message === 'string') {
+      return errorObj.message;
+    }
+  }
+  return '알 수 없는 오류가 발생했습니다.';
+};

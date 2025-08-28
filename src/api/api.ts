@@ -59,14 +59,35 @@ const tokenUtils = {
 api.interceptors.request.use(config => {
   const token = tokenUtils.getToken();
 
+  console.log('API 요청:', {
+    url: config.url,
+    method: config.method,
+    hasToken: !!token,
+    tokenPrefix: token ? token.substring(0, 20) + '...' : 'null',
+  });
+
   if (token) config.headers.Authorization = `Bearer ${token}`;
 
   return config;
 });
 
 api.interceptors.response.use(
-  res => res,
+  res => {
+    console.log('API 응답 성공:', {
+      url: res.config.url,
+      status: res.status,
+      data: res.data,
+    });
+    return res;
+  },
   async error => {
+    console.error('API 응답 에러:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      message: error.response?.data?.message,
+      data: error.response?.data,
+    });
+
     const originalRequest = error.config;
     const req = originalRequest as typeof originalRequest & { _retry?: boolean };
 
