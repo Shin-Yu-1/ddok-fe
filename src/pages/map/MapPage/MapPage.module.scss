@@ -1,52 +1,74 @@
 @use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
 
 .container {
+  display: flex;
   width: 100%;
   height: 100%;
 }
 
 .map__content {
   display: flex;
-  flex-direction: row;
+  flex: 1;
+  flex-direction: column;
   width: 100%;
   height: calc(100vh - 97px);
-}
 
-.map__sidebar {
-  width: 47px;
-  height: 100%;
-  line-height: 47px;
-  background-color: $gray-4;
-  text-orientation: upright;
-  writing-mode: vertical-rl;
-}
+  @include m.tablet {
+    height: calc(100vh - 96px);
+  }
 
-.map__sidebarToggleBtn {
-  cursor: pointer;
+  @include m.mobile {
+    height: calc(100vh - 81px);
+  }
 }
 
 .map__panelContainer {
   position: absolute;
-  top: 97px;
-  left: 47px;
+  top: 96px;
+  left: 48px;
   z-index: 100;
   width: 363px;
-  height: calc(100% - 97px);
+  height: calc(100% - 96px);
   background-color: $white-3;
+
+  @include m.tablet {
+    top: 96px;
+    left: 43px;
+    height: calc(100% - 96px);
+  }
+
+  @include m.mobile {
+    top: 81px;
+    left: 37.5px;
+    height: calc(100% - 81px);
+  }
 }
 
 .map__subPanelContainer {
   position: absolute;
-  top: 97px;
-  left: 410px;
+  top: 96px;
+  left: 411px;
   z-index: 1000;
   width: 300px;
-  height: calc(100% - 97px);
+  height: calc(100% - 96px);
   background-color: $white-3;
+
+  @include m.tablet {
+    top: 96px;
+    left: 406px;
+    height: calc(100% - 96px);
+  }
+
+  @include m.mobile {
+    top: 81px;
+    left: 401px;
+    height: calc(100% - 81px);
+  }
 }
 
 .map__container {
-  width: calc(100% - 47px);
+  width: 100%;
   height: 100%;
 }
 
