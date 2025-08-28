@@ -27,7 +27,7 @@
     height: 53px;
     padding: 0 20px;
 
-    &:not(:last-child) {
+    &:not(:nth-last-child(1 of .chatItem)) {
       border-bottom: 1px solid $gray-2;
     }
 
