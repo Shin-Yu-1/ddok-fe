@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import ContentType from '@/features/Chat/enums/ContentType.enum';
 import Role from '@/features/Chat/enums/Role.enum';
 import { apiResponseSchema } from '@/schemas/api.schema';
 
@@ -41,6 +42,18 @@ export const teamChatListItemSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const chatMessageSchema = z.object({
+  contentText: z.string(),
+  contentType: z.nativeEnum(ContentType),
+  createdAt: z.string(),
+  fileUrl: z.string().nullable(),
+  messageId: z.number(),
+  roomId: z.number(),
+  senderId: z.number(),
+  senderNickname: z.string(),
+});
+export type ChatMessage = z.infer<typeof chatMessageSchema>;
+
 /* Discriminated Union for items */
 export const chatListItemSchema = z.discriminatedUnion('roomType', [
   privateChatListItemSchema,
@@ -57,3 +70,5 @@ export const chatListResponseDataSchema = z.object({
 /* Final API Schema */
 export const ChatListApiResponseSchema = apiResponseSchema(chatListResponseDataSchema);
 export type ChatListApiResponse = z.infer<typeof ChatListApiResponseSchema>;
+export const ChatMessageApiResponseSchema = apiResponseSchema(chatMessageSchema);
+export type ChatMessageApiResponse = z.infer<typeof ChatMessageApiResponseSchema>;
