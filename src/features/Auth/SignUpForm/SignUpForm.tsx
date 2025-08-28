@@ -4,16 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { checkEmail, sendPhoneCode, verifyPhoneCode, signUp, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
-import {
-  mockCheckEmail,
-  mockSendPhoneCode,
-  mockVerifyPhoneCode,
-  mockSignUp,
-} from '@/mocks/mockSignUp';
 import { signUpSchema } from '@/schemas/auth.schema';
 import type { SignUpFormValues } from '@/schemas/auth.schema';
 
@@ -119,12 +114,12 @@ export default function SignUpForm() {
     setError(null);
 
     try {
-      const result = await mockCheckEmail(email.trim());
-      if (result.success && result.isAvailable) {
+      const result = await checkEmail(email.trim());
+      if (result.isAvailable) {
         setEmailVerified(true);
       }
-    } catch {
-      setError('이메일 중복 확인에 실패했습니다.');
+    } catch (apiError) {
+      setError(getErrorMessage(apiError));
     } finally {
       setIsLoading(prev => ({ ...prev, email: false }));
     }
@@ -141,14 +136,14 @@ export default function SignUpForm() {
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
-      const result = await mockSendPhoneCode(cleanPhoneNumber, username.trim());
+      const result = await sendPhoneCode(cleanPhoneNumber, username.trim());
 
-      if (result.success) {
+      if (result.expiresIn) {
         setCodeSent(true);
         startTimer();
       }
-    } catch {
-      setError('인증번호 발송에 실패했습니다.');
+    } catch (apiError) {
+      setError(getErrorMessage(apiError));
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -165,15 +160,15 @@ export default function SignUpForm() {
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
-      const result = await mockVerifyPhoneCode(cleanPhoneNumber, phoneCode.trim());
+      const result = await verifyPhoneCode(cleanPhoneNumber, phoneCode.trim());
 
-      if (result.success && result.verified) {
+      if (result.verified) {
         setCodeVerified(true);
       } else {
-        setError(result.message);
+        setError('인증번호가 일치하지 않습니다.');
       }
-    } catch {
-      setError('인증번호 확인에 실패했습니다.');
+    } catch (apiError) {
+      setError(getErrorMessage(apiError));
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
@@ -200,16 +195,14 @@ export default function SignUpForm() {
         phoneNumber: data.phoneNumber.replace(/-/g, ''), // 하이픈 제거
       };
 
-      const result = await mockSignUp(signUpData);
+      const result = await signUp(signUpData);
 
-      if (result.success) {
+      if (result.id) {
         // 회원가입 성공 시 회원가입 완료 페이지로 이동
         navigate('/auth/signupcomplete');
-      } else {
-        setError(result.message);
       }
-    } catch {
-      setError('회원가입에 실패했습니다. 다시 시도해주세요.');
+    } catch (apiError) {
+      setError(getErrorMessage(apiError));
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
