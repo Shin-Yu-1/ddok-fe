@@ -5,13 +5,22 @@ import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
+import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
 
 import styles from './CreateProjectPage.module.scss';
 
 const CreateProjectPage = () => {
-  const { formData, updateTitle, updateMode, updateDetail, handleSubmit, isValid } =
-    useCreateProjectForm();
+  const {
+    formData,
+    updateTitle,
+    updateMode,
+    updateDetail,
+    updatePositions,
+    updateLeaderPosition,
+    handleSubmit,
+    isValid,
+  } = useCreateProjectForm();
 
   const handleModeChange = (value: string) => {
     updateMode(value as 'ONLINE' | 'OFFLINE');
@@ -23,6 +32,31 @@ const CreateProjectPage = () => {
 
   const handleDetailChange = (value: string) => {
     updateDetail(value);
+  };
+
+  // 포지션 관련 핸들러들
+  const handleAddPosition = (position: string) => {
+    const newPositions = [...formData.positions, position];
+    updatePositions(newPositions);
+  };
+
+  const handleRemovePosition = (position: string) => {
+    const newPositions = formData.positions.filter(p => p !== position);
+    updatePositions(newPositions);
+
+    // 삭제된 포지션이 리더 포지션이었다면 리더 포지션도 초기화
+    if (formData.leaderPosition === position) {
+      updateLeaderPosition('');
+    }
+  };
+
+  const handleLeaderPositionChange = (position: string) => {
+    // 이미 선택된 포지션이면 선택 취소
+    if (formData.leaderPosition === position) {
+      updateLeaderPosition('');
+    } else {
+      updateLeaderPosition(position);
+    }
   };
 
   // 모집 공고 등록하기 버튼 클릭 시
@@ -61,7 +95,15 @@ const CreateProjectPage = () => {
             </div>
             <div className={styles.detailInfoSection}>
               <div className={styles.leftSection}>
-                <MainSection title={'모집 현황'}>모집 현황 테이블 들어갈 예정</MainSection>
+                <MainSection title={'모집 현황'}>
+                  <CreateRecruitmentTable
+                    positions={formData.positions}
+                    leaderPosition={formData.leaderPosition}
+                    onAddPosition={handleAddPosition}
+                    onRemovePosition={handleRemovePosition}
+                    onLeaderPositionChange={handleLeaderPositionChange}
+                  />
+                </MainSection>
                 <MainSection title={'이런 분을 찾습니다!'}>
                   성향 입력 컴포넌트 들어갈 예정
                 </MainSection>
