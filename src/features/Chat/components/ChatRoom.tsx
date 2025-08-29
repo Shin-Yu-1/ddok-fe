@@ -119,9 +119,9 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           ))}
         </div>
 
-        {/* 입력창(아래 고정) */}
+        {/* 입력창 */}
         <div className={styles.inputBar}>
-          <input className={styles.input} type="text" />
+          <textarea className={styles.chatInputField} name="" id="" disabled={!!search}></textarea>
         </div>
       </main>
     </div>
