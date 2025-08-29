@@ -32,6 +32,10 @@
     font-family: inherit;
     font-size: inherit;
 
+    &::placeholder {
+      color: var(--placeholder-color, #{$gray-2});
+    }
+
     &:focus {
       outline: none;
     }

@@ -1,0 +1,15 @@
+@use '@/styles/variables' as *;
+
+.timeDisplay {
+  margin-bottom: 1rem;
+  font-size: $fs-medium;
+  font-weight: $fw-regular;
+  text-align: center;
+  color: $black-1;
+}
+
+.separator {
+  font-size: $fs-medium;
+  font-weight: $fw-medium;
+  color: $black-2;
+}
