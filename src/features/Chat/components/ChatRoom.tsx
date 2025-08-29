@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { ArrowUUpLeftIcon, UserIcon } from '@phosphor-icons/react';
+import { ArrowUUpLeftIcon, UserIcon, MagicWandIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
@@ -121,6 +121,16 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
         {/* 입력창 */}
         <div className={styles.inputBar}>
+          <Button
+            padding={'0px'}
+            width={30}
+            height={30}
+            radius={'xxsm'}
+            backgroundColor={'var(--yellow-1)'}
+          >
+            <MagicWandIcon className={styles.aiButtonIcon} />
+          </Button>
+
           <textarea className={styles.chatInputField} name="" id="" disabled={!!search}></textarea>
         </div>
       </main>
