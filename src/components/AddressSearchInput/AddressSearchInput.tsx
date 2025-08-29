@@ -12,6 +12,13 @@ declare global {
           addressType: string;
           bname: string;
           buildingName: string;
+          roadAddress?: string;
+          jibunAddress?: string;
+          sido?: string;
+          sigungu?: string;
+          roadname?: string;
+          x?: string; // 경도 (longitude)
+          y?: string; // 위도 (latitude)
         }) => void;
         onclose?: () => void;
         width?: string | number;
@@ -26,7 +33,7 @@ declare global {
 interface AddressSearchInputProps {
   value: string;
   onChange: (value: string) => void;
-  onSelect?: (address: string) => void;
+  onSelect?: (address: string, coordinates?: { latitude: number; longitude: number }) => void;
   placeholder?: string;
   className?: string;
 }
@@ -45,8 +52,18 @@ const AddressSearchInput = ({
         oncomplete: function (data) {
           const fullAddress = data.address;
           onChange(fullAddress);
+
+          // 좌표 정보가 있다면 함께 전달
           if (onSelect) {
-            onSelect(fullAddress);
+            const coordinates =
+              data.x && data.y
+                ? {
+                    latitude: parseFloat(data.y),
+                    longitude: parseFloat(data.x),
+                  }
+                : undefined;
+
+            onSelect(fullAddress, coordinates);
           }
         },
         onclose: function () {},

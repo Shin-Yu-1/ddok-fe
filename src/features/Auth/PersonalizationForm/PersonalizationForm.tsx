@@ -28,6 +28,10 @@ const PersonalizationForm = () => {
   const [selectedTechStack, setSelectedTechStack] = useState<string[]>([]);
   const [locationSearch, setLocationSearch] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [selectedCoordinates, setSelectedCoordinates] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const [selectedPersonality, setSelectedPersonality] = useState<number[]>([]);
   const [birthDate, setBirthDate] = useState<string>('');
   const [activeHours, setActiveHours] = useState<{ start: string; end: string }>({
@@ -80,6 +84,17 @@ const PersonalizationForm = () => {
     });
   };
 
+  // 주소와 좌표를 함께 처리하는 핸들러
+  const handleLocationSelect = (
+    address: string,
+    coordinates?: { latitude: number; longitude: number }
+  ) => {
+    setSelectedLocation(address);
+    if (coordinates) {
+      setSelectedCoordinates(coordinates);
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!isFormValid) return;
@@ -103,9 +118,10 @@ const PersonalizationForm = () => {
         subPosition: selectedInterestPositions.map(getPositionName).filter(Boolean),
         techStacks: selectedTechStack,
         location: {
-          latitude: 37.5665, // 임시 서울 좌표
-          longitude: 126.978,
-          address: selectedLocation || '서울특별시',
+          // 실제 좌표 사용 (다음 주소검색 API에서 받은 값 또는 기본값)
+          latitude: selectedCoordinates?.latitude || 37.5665, // 서울 기본 좌표
+          longitude: selectedCoordinates?.longitude || 126.978,
+          address: selectedLocation || '위치 미설정',
         },
         traits: selectedPersonality.map(getTraitName).filter(Boolean),
         birthDate,
@@ -174,7 +190,7 @@ const PersonalizationForm = () => {
           <LocationSelector
             locationSearch={locationSearch}
             onLocationSearchChange={setLocationSearch}
-            onLocationSelect={setSelectedLocation}
+            onLocationSelect={handleLocationSelect}
           />
         </div>
       </div>
