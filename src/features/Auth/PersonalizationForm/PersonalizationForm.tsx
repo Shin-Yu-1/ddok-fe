@@ -89,9 +89,14 @@ const PersonalizationForm = () => {
     address: string,
     coordinates?: { latitude: number; longitude: number }
   ) => {
+    console.log('주소 선택됨:', address);
+    console.log('좌표 정보:', coordinates);
     setSelectedLocation(address);
     if (coordinates) {
       setSelectedCoordinates(coordinates);
+      console.log('좌표 state 업데이트됨:', coordinates);
+    } else {
+      console.log('좌표 정보가 없어 기본값 사용 예정');
     }
   };
 
@@ -118,7 +123,7 @@ const PersonalizationForm = () => {
         subPosition: selectedInterestPositions.map(getPositionName).filter(Boolean),
         techStacks: selectedTechStack,
         location: {
-          // 실제 좌표 사용 (다음 주소검색 API에서 받은 값 또는 기본값)
+          // 실제 좌표 사용 (카카오 지오코더 API에서 받은 값 또는 기본값)
           latitude: selectedCoordinates?.latitude || 37.5665, // 서울 기본 좌표
           longitude: selectedCoordinates?.longitude || 126.978,
           address: selectedLocation || '위치 미설정',
@@ -128,6 +133,12 @@ const PersonalizationForm = () => {
         activeHours: formatActiveHours(activeHours),
       };
 
+      console.log('=== API 요청 전 좌표 확인 ===');
+      console.log('selectedCoordinates:', selectedCoordinates);
+      console.log('사용될 좌표:', {
+        latitude: selectedCoordinates?.latitude || 37.5665,
+        longitude: selectedCoordinates?.longitude || 126.978,
+      });
       console.log('개인화 설정 API 요청:', personalizationData);
 
       // 실제 API 호출
