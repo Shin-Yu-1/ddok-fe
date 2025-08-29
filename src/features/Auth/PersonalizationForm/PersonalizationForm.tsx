@@ -40,6 +40,9 @@ const PersonalizationForm = () => {
   // 대표 포지션 선택 핸들러
   const handleMainPositionSelect = (positionId: number) => {
     setSelectedMainPosition(positionId);
+
+    // 대표 포지션으로 선택된 항목이 관심 포지션에 있다면 제거
+    setSelectedInterestPositions(prev => prev.filter(id => id !== positionId));
   };
 
   // 관심 포지션 토글 핸들러 (최대 2개)
