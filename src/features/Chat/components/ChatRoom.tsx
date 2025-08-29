@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ArrowUUpLeftIcon, UserIcon } from '@phosphor-icons/react';
 
@@ -50,6 +50,8 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     container.addEventListener('scroll', handleScroll);
     return () => container.removeEventListener('scroll', handleScroll);
   }, [isFetching, hasMore]);
+
+  const displayMessages = useMemo(() => [...messages].reverse(), [messages]);
 
   const handleScroll = () => {
     const container = messagesRef.current;
@@ -109,7 +111,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           </div>
 
           {/* 메시지 목록 */}
-          {messages.map(msg => (
+          {displayMessages.map(msg => (
             <div className={styles.message} key={msg.messageId}>
               <strong className={styles.sender}>{msg.senderNickname}</strong>
               <span className={styles.text}>: {msg.contentText}</span>
