@@ -123,7 +123,6 @@
   margin-left: 4px;
 }
 
-/* 하단 입력바: 고정(메시지만 스크롤되니 static이면 충분) */
 .inputBar {
   flex-shrink: 0;
   padding: 10px 12px;
@@ -134,6 +133,7 @@
   height: 101px;
   padding: 7px 19px;
   border-radius: $r-xsmall;
+  overflow: hidden;
   outline: none;
   color: $gray-1;
   background: $gray-4;
