@@ -18,7 +18,7 @@ import styles from './PersonalizationForm.module.scss';
 
 const PersonalizationForm = () => {
   const navigate = useNavigate();
-  const { updatePreference, user } = useAuthStore();
+  const { updateUserInfo, user } = useAuthStore();
   const [selectedMainPosition, setSelectedMainPosition] = useState<number | null>(null);
 
   // 디버깅을 위한 로그
@@ -115,10 +115,22 @@ const PersonalizationForm = () => {
       console.log('개인화 설정 API 요청:', personalizationData);
 
       // 실제 API 호출
-      await submitPersonalization(personalizationData);
+      const response = await submitPersonalization(personalizationData);
 
-      // 개인화 설정 완료 상태 먼저 업데이트
-      updatePreference(true);
+      console.log('개인화 설정 API 응답:', response);
+
+      // 서버에서 받은 사용자 정보 중 로그인 응답 항목들만 업데이트
+      updateUserInfo({
+        // 로그인 응답에 포함된 항목들만 업데이트
+        id: response.id,
+        username: response.username,
+        email: response.email,
+        nickname: response.nickname,
+        profileImageUrl: response.profileImageUrl,
+        mainPosition: response.mainPosition,
+        isPreference: true, // 개인화 설정 완료로 표시
+        // preferences 데이터는 저장하지 않음
+      });
 
       // 상태 업데이트 후 약간의 딜레이를 주고 navigate
       setTimeout(() => {

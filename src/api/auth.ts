@@ -92,8 +92,28 @@ interface PersonalizationRequest {
 
 // 개인화 설정 응답 타입
 interface PersonalizationResponse {
-  success: boolean;
-  message: string;
+  id: number;
+  username: string;
+  email: string;
+  nickname?: string;
+  profileImageUrl?: string;
+  mainPosition?: string;
+  preferences?: {
+    mainPosition: string;
+    subPosition: string[];
+    techStacks: string[];
+    location: {
+      latitude: number;
+      longitude: number;
+      address: string;
+    };
+    traits: string[];
+    birthDate: string;
+    activeHours: {
+      start: string;
+      end: string;
+    };
+  };
 }
 
 // 이메일 중복 확인
