@@ -112,7 +112,7 @@ const Sidebar = () => {
         } else {
           return (
             <SidePanel {...sectionProps}>
-              <ChatRoom chat={selectedRoom} />
+              <ChatRoom chat={selectedRoom} onBack={closeRoom} />
             </SidePanel>
           );
         }
