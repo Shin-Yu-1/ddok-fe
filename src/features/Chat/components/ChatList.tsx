@@ -112,7 +112,11 @@ const ChatList = ({ roomType }: ChatProps) => {
                 }
               />
               <span className={styles.chatName} role="button" onClick={() => handleOpenRoom(chat)}>
-                {'otherUser' in chat ? chat.otherUser.nickname : (chat.name ?? chat.owner.nickname)}
+                {'otherUser' in chat
+                  ? `${chat.otherUser.nickname}${
+                      chat.otherUser.temperature != null ? ` (${chat.otherUser.temperature}°C)` : ''
+                    }`
+                  : (chat.name ?? chat.owner.nickname)}
               </span>
             </div>
 
