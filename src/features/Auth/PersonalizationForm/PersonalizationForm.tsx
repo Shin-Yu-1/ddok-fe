@@ -128,6 +128,7 @@ const PersonalizationForm = () => {
         nickname: response.nickname,
         profileImageUrl: response.profileImageUrl,
         mainPosition: response.mainPosition,
+        location: response.preferences?.location || null, // preferences에서 location 객체 추출
         isPreference: true, // 개인화 설정 완료로 표시
         // preferences 데이터는 저장하지 않음
       });

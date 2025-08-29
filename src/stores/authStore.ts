@@ -10,7 +10,11 @@ export interface UserInfo {
   profileImageUrl?: string | null;
   isPreference?: boolean;
   mainPosition?: string | null;
-  location?: string | null;
+  location?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  } | null;
 }
 
 export interface SignInUser {
@@ -23,7 +27,11 @@ export interface SignInUser {
     profileImageUrl?: string | null;
     isPreference?: boolean;
     mainPosition?: string | null;
-    location?: string | null;
+    location?: {
+      latitude: number;
+      longitude: number;
+      address: string;
+    } | null;
   };
 }
 
