@@ -23,6 +23,7 @@ export const privateChatListItemSchema = z.object({
     id: z.number(),
     nickname: z.string(),
     profileImage: z.string().nullable(),
+    temperature: z.number(),
   }),
   updatedAt: z.string(),
 });
