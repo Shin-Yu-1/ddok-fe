@@ -67,11 +67,6 @@ export default function SignInForm() {
     }
   };
 
-  // 기존 useEffect는 제거하거나 수정
-  // useEffect(() => {
-  //   if (isLoggedIn) navigate('/map');
-  // }, [isLoggedIn, navigate]);
-
   const hasErrors = Object.keys(errors).some(
     key => key !== 'root' && errors[key as keyof typeof errors]
   );

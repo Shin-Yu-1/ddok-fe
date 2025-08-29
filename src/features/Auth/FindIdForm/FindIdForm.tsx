@@ -59,25 +59,6 @@ export default function FindIdForm() {
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
 
-  // API 훅들 주석 처리
-  // const findIdMutation = useFindId(findIdURL);
-  // const sendPhoneCodeMutation = useSendPhoneCodeForFindId(phoneSendCodeURL, {
-  //   onSuccess: () => {
-  //     setCodeSent(true);
-  //     startTimer();
-  //   },
-  //   onError: error => {
-  //     console.error('인증번호 발송 실패:', error);
-  //   },
-  // });
-  // const verifyPhoneCodeMutation = useVerifyPhoneCodeForFindId(phoneVerifyCodeURL, {
-  //   onSuccess: data => {
-  //     if (data.data.verified) {
-  //       setCodeVerified(true);
-  //     }
-  //   },
-  // });
-
   // 타이머 로직
   const startTimer = () => {
     setTimer(59);
