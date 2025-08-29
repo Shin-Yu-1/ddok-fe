@@ -55,6 +55,15 @@ export const chatMessageSchema = z.object({
 });
 export type ChatMessage = z.infer<typeof chatMessageSchema>;
 
+export const ChatRoomMemberSchema = z.object({
+  userId: z.number(),
+  nickname: z.string(),
+  profileImage: z.string(),
+  role: z.string(),
+  joinedAt: z.string(),
+});
+export type ChatRoomMember = z.infer<typeof ChatRoomMemberSchema>;
+
 /* Discriminated Union for items */
 export const chatListItemSchema = z.discriminatedUnion('roomType', [
   privateChatListItemSchema,
@@ -71,9 +80,15 @@ export const chatMessageListResponseDataSchema = z.object({
   pagination: paginationSchema,
   messages: z.array(chatMessageSchema),
 });
+export const chatMemberListResponseDataSchema = z.object({
+  totalCount: z.number(),
+  members: z.array(ChatRoomMemberSchema),
+});
 
 /* Final API Schema */
 export const ChatListApiResponseSchema = apiResponseSchema(chatListResponseDataSchema);
 export type ChatListApiResponse = z.infer<typeof ChatListApiResponseSchema>;
 export const ChatMessageApiResponseSchema = apiResponseSchema(chatMessageListResponseDataSchema);
 export type ChatMessageApiResponse = z.infer<typeof ChatMessageApiResponseSchema>;
+export const ChatRoomMemberApiResponseSchema = apiResponseSchema(chatMemberListResponseDataSchema);
+export type ChatRoomMemberApiResponse = z.infer<typeof ChatRoomMemberApiResponseSchema>;
