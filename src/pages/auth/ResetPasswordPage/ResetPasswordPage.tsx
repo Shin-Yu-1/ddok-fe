@@ -14,25 +14,19 @@ import styles from './ResetPasswordPage.module.scss';
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [reauthToken, setReauthToken] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // localStorage에서 reauthToken 가져오기
   useEffect(() => {
-    console.log('ResetPasswordPage 마운트됨');
-
-    // localStorage 전체 내용 확인
-    console.log('localStorage 전체 내용:', { ...localStorage });
-
+    // localStorage에서 reauthToken 확인
     const token = localStorage.getItem('reauthToken');
-    console.log('localStorage에서 가져온 reauthToken:', token ? '***' + token.slice(-4) : 'null');
 
-    if (!token) {
-      console.error('localStorage에 reauthToken이 없습니다!');
+    if (token) {
+      setReauthToken(token);
+    } else {
       navigate('/auth/findpassword');
       return;
     }
-
-    setReauthToken(token);
-    console.log('reauthToken 상태 설정 완료');
   }, [navigate]);
 
   const {
@@ -51,34 +45,29 @@ export default function ResetPasswordPage() {
   const passwordCheck = watch('passwordCheck');
 
   // 폼 제출
-  const onSubmit = async (data: ChangePasswordFormValues) => {
-    console.log('비밀번호 변경 폼 제출');
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = async (_data: ChangePasswordFormValues) => {
     if (!reauthToken) {
-      console.error('인증 토큰이 없습니다. 처음부터 다시 시도해주세요.');
+      setError('인증 토큰이 없습니다. 다시 시도해주세요.');
       return;
     }
 
     setIsSubmitting(true);
+    setError(null);
 
     try {
-      // 목 데이터로 처리 (실제로는 API 호출)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 목 데이터로 처리
+      await new Promise(resolve => setTimeout(resolve, 1200));
 
-      console.log('비밀번호 변경 성공 (목 데이터)', {
-        newPassword: data.newPassword,
-        passwordCheck: data.passwordCheck,
-        reauthToken: '***' + reauthToken.slice(-4),
-      });
-
-      // 성공 시 localStorage에서 토큰 제거
+      // localStorage에서 reauthToken 제거
       localStorage.removeItem('reauthToken');
-      console.log('localStorage에서 reauthToken 제거 완료');
 
       // 로그인 페이지로 이동
-      navigate('/auth/signin');
-    } catch (error) {
-      console.error('비밀번호 재설정에 실패했습니다:', error);
+      navigate('/auth/signin', {
+        state: { message: '비밀번호가 성공적으로 변경되었습니다.' },
+      });
+    } catch {
+      setError('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsSubmitting(false);
     }
@@ -91,9 +80,6 @@ export default function ResetPasswordPage() {
     return (
       <div className={styles.container}>
         <div>토큰을 확인하는 중...</div>
-        <div style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
-          개발자 도구 콘솔을 확인해주세요.
-        </div>
       </div>
     );
   }
@@ -102,6 +88,10 @@ export default function ResetPasswordPage() {
     <div className={styles.inner}>
       <h1 className={styles.title}>새 비밀번호 설정</h1>
       <p className={styles.text}>새로운 비밀번호를 입력하고 계정을 보호하세요!</p>
+
+      {error && (
+        <div style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <FormField

@@ -9,24 +9,7 @@ import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
 import { findPasswordSchema, type FindPasswordFormValues } from '@/schemas/auth.schema';
 
-// API 연결 부분 주석 처리
-// import {
-//   useFindPassword,
-//   useSendPhoneCodeForFindPassword,
-//   useVerifyPhoneCodeForFindPassword,
-// } from '@/hooks/auth/useFindPassword';
-// import type {
-//   FindPasswordURL,
-//   PhoneSendCodeURL,
-//   PhoneVerifyCodeURL,
-// } from '@/types/apiEndpoints.types';
-
 import styles from './FindPasswordForm.module.scss';
-
-// URL들 정의 (주석 처리)
-// const findPasswordURL: FindPasswordURL = '/api/auth/password/verify-user';
-// const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
-// const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
 
 export default function FindPasswordForm() {
   const navigate = useNavigate();
@@ -55,28 +38,6 @@ export default function FindPasswordForm() {
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
 
-  // API 훅들 주석 처리
-  // const findPasswordMutation = useFindPassword(findPasswordURL);
-  // const sendPhoneCodeMutation = useSendPhoneCodeForFindPassword(phoneSendCodeURL, {
-  //   onSuccess: () => {
-  //     setCodeSent(true);
-  //     startTimer();
-  //   },
-  //   onError: error => {
-  //     console.error('인증번호 발송 실패:', error);
-  //   },
-  // });
-  // const verifyPhoneCodeMutation = useVerifyPhoneCodeForFindPassword(phoneVerifyCodeURL, {
-  //   onSuccess: data => {
-  //     if (data.data.verified) {
-  //       setCodeVerified(true);
-  //     }
-  //   },
-  //   onError: () => {
-  //     console.error('인증번호 확인에 실패했습니다.');
-  //   },
-  // });
-
   // 타이머 로직
   const startTimer = () => {
     setTimer(59);
@@ -103,11 +64,10 @@ export default function FindPasswordForm() {
       // 목 데이터로 처리
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      console.log('비밀번호 찾기 - 인증번호 발송 성공 (목 데이터)');
       setCodeSent(true);
       startTimer();
-    } catch (error) {
-      console.error('인증번호 발송 실패:', error);
+    } catch {
+      // 인증번호 발송 실패 처리
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -129,19 +89,19 @@ export default function FindPasswordForm() {
 
       if (verified) {
         setCodeVerified(true);
-        console.log('휴대폰 인증 완료 (목 데이터)');
       } else {
-        console.error('인증번호가 올바르지 않습니다.');
+        // 인증번호가 올바르지 않은 경우 처리
       }
-    } catch (error) {
-      console.error('인증번호 확인에 실패했습니다:', error);
+    } catch {
+      // 인증번호 확인 실패 처리
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
   };
 
   // 폼 제출 - 사용자 검증 목 데이터 처리
-  const onSubmit = async (data: FindPasswordFormValues) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = async (_data: FindPasswordFormValues) => {
     if (!codeVerified) {
       return;
     }
@@ -152,24 +112,16 @@ export default function FindPasswordForm() {
       // 목 데이터로 처리
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      console.log('사용자 검증 요청 데이터 (목 데이터):', {
-        username: data.username,
-        email: data.email,
-        phoneNumber: data.phoneNumber.replace(/-/g, ''),
-        phoneCode: data.phoneCode,
-      });
-
       // 목 reauthToken 생성
       const mockReauthToken = 'mock_reauth_token_' + Date.now();
 
       // localStorage에 reauthToken 저장
       localStorage.setItem('reauthToken', mockReauthToken);
-      console.log('목 reauthToken 저장 완료:', '***' + mockReauthToken.slice(-4));
 
       // ResetPasswordPage로 이동
       navigate('/auth/resetpassword');
-    } catch (error) {
-      console.error('사용자 검증 실패:', error);
+    } catch {
+      // 사용자 검증 실패 처리
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
