@@ -42,9 +42,6 @@ export default function SignInForm() {
       const result = await signIn(data);
 
       if (result.accessToken && result.user) {
-        console.log('SignInForm - API 응답:', result);
-        console.log('SignInForm - isPreference:', result.user.isPreference);
-
         // 로그인 성공 - authStore에 사용자 정보 설정
         setLoggedIn(
           {
@@ -59,7 +56,6 @@ export default function SignInForm() {
         );
 
         // 리다이렉트는 SignInPage의 useEffect에서 처리됨
-        console.log('SignInForm - authStore 업데이트 완료, 리다이렉트는 SignInPage에서 처리');
       }
     } catch (apiError) {
       setError('root', {

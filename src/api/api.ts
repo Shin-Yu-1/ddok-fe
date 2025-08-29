@@ -59,13 +59,6 @@ const tokenUtils = {
 api.interceptors.request.use(config => {
   const token = tokenUtils.getToken();
 
-  console.log('API 요청:', {
-    url: config.url,
-    method: config.method,
-    hasToken: !!token,
-    tokenPrefix: token ? token.substring(0, 20) + '...' : 'null',
-  });
-
   if (token) config.headers.Authorization = `Bearer ${token}`;
 
   return config;
@@ -73,11 +66,6 @@ api.interceptors.request.use(config => {
 
 api.interceptors.response.use(
   res => {
-    console.log('API 응답 성공:', {
-      url: res.config.url,
-      status: res.status,
-      data: res.data,
-    });
     return res;
   },
   async error => {

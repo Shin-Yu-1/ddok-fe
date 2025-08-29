@@ -88,7 +88,6 @@ const AddressSearchInput = ({
   ): Promise<{ latitude: number; longitude: number } | null> => {
     return new Promise(resolve => {
       if (!window.kakao?.maps?.services) {
-        console.warn('카카오 Maps API가 로드되지 않았습니다.');
         resolve(null);
         return;
       }
@@ -101,10 +100,8 @@ const AddressSearchInput = ({
             latitude: parseFloat(result[0].y),
             longitude: parseFloat(result[0].x),
           };
-          console.log('지오코더로 찾은 좌표:', coords);
           resolve(coords);
         } else {
-          console.warn('주소로 좌표를 찾을 수 없습니다:', address);
           resolve(null);
         }
       });
@@ -128,10 +125,8 @@ const AddressSearchInput = ({
                 latitude: parseFloat(data.y),
                 longitude: parseFloat(data.x),
               };
-              console.log('Postcode API에서 좌표 획득:', coordinates);
             } else {
               // Postcode API에서 좌표가 없으면 지오코더 API 사용
-              console.log('Postcode API에 좌표 없음, 지오코더 API 사용');
               const geocoderResult = await getCoordinatesFromAddress(fullAddress);
               if (geocoderResult) {
                 coordinates = geocoderResult;

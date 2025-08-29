@@ -18,12 +18,9 @@ import styles from './PersonalizationForm.module.scss';
 
 const PersonalizationForm = () => {
   const navigate = useNavigate();
-  const { updateUserInfo, user } = useAuthStore();
+  const { updateUserInfo } = useAuthStore();
   const [selectedMainPosition, setSelectedMainPosition] = useState<number | null>(null);
 
-  // 디버깅을 위한 로그
-  console.log('PersonalizationForm - 현재 사용자:', user);
-  console.log('PersonalizationForm - isPreference:', user?.isPreference);
   const [selectedInterestPositions, setSelectedInterestPositions] = useState<number[]>([]);
   const [selectedTechStack, setSelectedTechStack] = useState<string[]>([]);
   const [locationSearch, setLocationSearch] = useState<string>('');
@@ -89,14 +86,9 @@ const PersonalizationForm = () => {
     address: string,
     coordinates?: { latitude: number; longitude: number }
   ) => {
-    console.log('주소 선택됨:', address);
-    console.log('좌표 정보:', coordinates);
     setSelectedLocation(address);
     if (coordinates) {
       setSelectedCoordinates(coordinates);
-      console.log('좌표 state 업데이트됨:', coordinates);
-    } else {
-      console.log('좌표 정보가 없어 기본값 사용 예정');
     }
   };
 
@@ -133,18 +125,8 @@ const PersonalizationForm = () => {
         activeHours: formatActiveHours(activeHours),
       };
 
-      console.log('=== API 요청 전 좌표 확인 ===');
-      console.log('selectedCoordinates:', selectedCoordinates);
-      console.log('사용될 좌표:', {
-        latitude: selectedCoordinates?.latitude || 37.5665,
-        longitude: selectedCoordinates?.longitude || 126.978,
-      });
-      console.log('개인화 설정 API 요청:', personalizationData);
-
       // 실제 API 호출
       const response = await submitPersonalization(personalizationData);
-
-      console.log('개인화 설정 API 응답:', response);
 
       // 서버에서 받은 사용자 정보 중 로그인 응답 항목들만 업데이트
       updateUserInfo({
