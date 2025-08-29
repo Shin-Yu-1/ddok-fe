@@ -1,16 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { ArrowUUpLeftIcon, UserIcon } from '@phosphor-icons/react';
+
+import Button from '@/components/Button/Button';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
 import type { ChatMessageApiResponse, ChatListItem, ChatMessage } from '@/schemas/chat.schema';
+
+import ChatRoomType from '../enums/ChatRoomType.enum';
 
 import styles from './ChatRoom.module.scss';
 
 interface ChatRoomProps {
   chat: ChatListItem;
+  onBack: () => void;
 }
 
-const ChatRoom = ({ chat }: ChatRoomProps) => {
+const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: 10 });
@@ -59,25 +65,64 @@ const ChatRoom = ({ chat }: ChatRoomProps) => {
   };
 
   return (
-    <>
-      <header>
-        {'otherUser' in chat ? chat.otherUser.nickname : (chat.name ?? chat.owner.nickname)}
+    <div className={styles.container}>
+      {/* Header: 고정, 불투명 */}
+      <header className={styles.chatRoomHeader}>
+        <span className={styles.title}>
+          {chat.roomType === ChatRoomType.PRIVATE ? '1:1 채팅' : '팀 채팅'}
+        </span>
+
+        <Button onClick={onBack} size="sm" padding={'0px'}>
+          <ArrowUUpLeftIcon className={styles.headerIcon} />
+        </Button>
       </header>
-      <main>
-        <div className={styles.contentsWrapper} ref={messagesRef}>
+
+      <main className={styles.chatRoomMain}>
+        <div className={styles.messages} ref={messagesRef}>
+          <div className={styles.subHeader}>
+            <div className={styles.subHeaderMeta}>
+              <img
+                className={styles.profileImage}
+                src={
+                  'otherUser' in chat
+                    ? chat.otherUser.profileImage || undefined
+                    : chat.owner.profileImage || undefined
+                }
+                alt=""
+              />
+              <div className={styles.subHeaderTitle}>
+                <h3 className={styles.roomName}>
+                  {'otherUser' in chat
+                    ? chat.otherUser.nickname
+                    : (chat.name ?? chat.owner.nickname)}
+                </h3>
+              </div>
+            </div>
+
+            <Button
+              leftIcon={<UserIcon className={styles.icon} />}
+              fontSize="xxsmall"
+              padding="0px"
+            >
+              {'otherUser' in chat ? 2 : chat.memberCount}명
+            </Button>
+          </div>
+
+          {/* 메시지 목록 */}
           {messages.map(msg => (
-            <div key={msg.messageId}>
-              <strong>{msg.senderNickname}</strong>: {msg.contentText}
+            <div className={styles.message} key={msg.messageId}>
+              <strong className={styles.sender}>{msg.senderNickname}</strong>
+              <span className={styles.text}>: {msg.contentText}</span>
             </div>
           ))}
         </div>
-        <div className={styles.inputWrapper}>
-          <input type="text" />
+
+        {/* 입력창(아래 고정) */}
+        <div className={styles.inputBar}>
+          <input className={styles.input} type="text" />
         </div>
       </main>
-
-      <span>{chat.roomId} CHAT ROOM</span>
-    </>
+    </div>
   );
 };
 
