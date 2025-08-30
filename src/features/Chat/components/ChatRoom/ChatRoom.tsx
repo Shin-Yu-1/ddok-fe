@@ -133,7 +133,6 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   }, [chatMemberResponse?.data?.members]);
 
   const itemsToRender = useMemo<RenderItem[]>(() => {
-    // messages는 오름차순(과거 → 최신)이라 가정(현재 로직이 그렇게 유지함)
     const out: RenderItem[] = [];
     let prevDay: string | null = null;
 
@@ -204,13 +203,11 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     const incomingAsc = toAsc(fetched);
 
     if (p.currentPage === 0) {
-      // 첫 페이지 로드 시에는 항상 하단으로 스크롤
       appendUniqueAsc(incomingAsc);
       requestAnimationFrame(() => {
         scrollToBottom();
       });
     } else {
-      // 이전 메시지 로드 시에는 스크롤 위치 보존
       prependWithScrollPreserve(incomingAsc);
     }
 
@@ -258,7 +255,6 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
         sendMessage(input);
         e.currentTarget.value = '';
 
-        // 메시지 전송 후 하단으로 스크롤 (사용자가 메시지를 보낸 경우)
         requestAnimationFrame(() => {
           scrollToBottom();
         });
