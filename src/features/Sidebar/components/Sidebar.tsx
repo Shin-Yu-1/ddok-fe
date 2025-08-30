@@ -9,8 +9,8 @@ import {
 } from '@phosphor-icons/react';
 import { useLocation } from 'react-router-dom';
 
-import ChatList from '@/features/Chat/components/ChatList';
-import ChatRoom from '@/features/Chat/components/ChatRoom';
+import ChatList from '@/features/Chat/components/ChatList/ChatList';
+import ChatRoom from '@/features/Chat/components/ChatRoom/ChatRoom';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
 import { useChatUiStore } from '@/stores/chatUiStore';
 
