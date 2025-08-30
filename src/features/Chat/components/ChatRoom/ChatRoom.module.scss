@@ -148,3 +148,11 @@
   background: $gray-4;
   resize: none;
 }
+
+.overflowWrapper {
+  position: fixed;
+  top: 55px;
+  right: 0;
+  z-index: 100;
+  width: 200px;
+}

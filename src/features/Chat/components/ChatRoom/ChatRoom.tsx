@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
 import Button from '@/components/Button/Button';
+import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
@@ -47,6 +48,15 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const { user } = useAuthStore();
+  const [isMemberMenuOpen, setIsMemberMenuOpen] = useState(false);
+  const [menuPos, setMenuPos] = useState<{
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
+  }>({});
+  const anchorRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   const messagesRef = useRef<HTMLDivElement>(null);
   const seenIdsRef = useRef<Set<number>>(new Set()); // 중복 메시지 방지
@@ -77,6 +87,14 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    seenIdsRef.current.clear();
+    setMessages([]);
+    setHasMore(true);
+    setIsFetching(false);
+    setPagination({ page: 0, size: 5 });
+  }, [chat.roomId]);
+
   // 방 구독 (웹소켓)
   useEffect(() => {
     if (!websocket.isConnected) return;
@@ -86,17 +104,16 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
       onMessage: msg => {
         try {
           const incoming = JSON.parse(msg.body) as ChatMessage;
-          // 중복 방지
+
           if (seenIdsRef.current.has(incoming.messageId)) return;
+
           seenIdsRef.current.add(incoming.messageId);
 
-          // 스크롤 위치 확인
           const c = messagesRef.current;
           const wasAtBottom = c ? isNearBottom(c) : true;
 
           setMessages(prev => [...prev, incoming]);
 
-          // 하단에 있었다면 하단 유지
           if (wasAtBottom) {
             requestAnimationFrame(() => {
               requestAnimationFrame(() => {
@@ -107,7 +124,6 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
               });
             });
           }
-          // 하단에 있지 않았다면 현재 위치 유지
         } catch (e) {
           console.error('소켓 메시지 파싱 실패:', e);
         }
@@ -120,12 +136,22 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   }, [websocket.isConnected, websocket, chat.roomId]);
 
   useEffect(() => {
-    seenIdsRef.current.clear();
-    setMessages([]);
-    setHasMore(true);
-    setIsFetching(false);
-    setPagination({ page: 0, size: 5 });
-  }, [chat.roomId]);
+    const onDown = (e: MouseEvent) => {
+      if (!isMemberMenuOpen) return;
+      const inAnchor = anchorRef.current?.contains(e.target as Node);
+      const inMenu = menuRef.current?.contains(e.target as Node);
+      if (!inAnchor && !inMenu) setIsMemberMenuOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMemberMenuOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [isMemberMenuOpen]);
 
   const memberByUserId = useMemo(() => {
     const members = chatMemberResponse?.data?.members ?? [];
@@ -146,6 +172,16 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     }
     return out;
   }, [messages]);
+
+  const memberMenuItems = useMemo(
+    () =>
+      Array.from(memberByUserId.values()).map(m => ({
+        name: m.nickname,
+        onClick: () => setIsMemberMenuOpen(false), // TODO: 멤버 클릭 시 동작
+      })),
+    [memberByUserId]
+  );
+  console.log(memberMenuItems, isMemberMenuOpen);
 
   const toAsc = (arr: ChatMessage[]) =>
     [...arr].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
@@ -270,8 +306,27 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     });
   };
 
+  const openMemberMenu = () => {
+    console.log('openMemberMenu');
+    const el = anchorRef.current;
+
+    if (!el) return;
+
+    const r = el.getBoundingClientRect();
+    setMenuPos({ top: r.bottom + window.scrollY, left: r.left + window.scrollX + 10 });
+    console.log(r, r.bottom + window.scrollY + 6, r.left + window.scrollX);
+
+    setIsMemberMenuOpen(true);
+  };
+
   return (
     <div className={styles.container}>
+      {isMemberMenuOpen && (
+        <div className={styles.overflowWrapper} ref={menuRef} style={menuPos}>
+          <OverflowMenu menuItems={memberMenuItems} />
+        </div>
+      )}
+
       <header className={styles.chatRoomHeader}>
         <span className={styles.title}>
           {chat.roomType === ChatRoomType.PRIVATE ? '1:1 채팅' : '팀 채팅'}
@@ -289,9 +344,8 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
               <img
                 className={styles.profileImage}
                 src={
-                  'otherUser' in chat
-                    ? chat.otherUser.profileImage || undefined
-                    : chat.owner.profileImage || undefined
+                  ('otherUser' in chat ? chat.otherUser.profileImage : chat.owner.profileImage) ||
+                  ''
                 }
                 alt=""
               />
@@ -303,15 +357,17 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
                 </h3>
               </div>
             </div>
-
-            <Button
-              leftIcon={<UserIcon className={styles.icon} />}
-              fontSize="xxsmall"
-              padding="0px"
-              backgroundColor={'none'}
-            >
-              {'otherUser' in chat ? 2 : chat.memberCount}명
-            </Button>
+            <div ref={anchorRef}>
+              <Button
+                leftIcon={<UserIcon className={styles.icon} />}
+                fontSize="xxsmall"
+                padding="0px"
+                backgroundColor={'none'}
+                onClick={openMemberMenu}
+              >
+                {'otherUser' in chat ? 2 : chat.memberCount}명
+              </Button>
+            </div>
           </div>
 
           <div className={styles.messageListWrapper}>
