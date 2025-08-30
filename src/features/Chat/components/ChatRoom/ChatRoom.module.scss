@@ -23,7 +23,6 @@
   color: $white-3;
 }
 
-/* 상단 헤더: 불투명 + 스크롤 고정 */
 .chatRoomHeader {
   position: sticky;
   top: 0;
@@ -44,7 +43,6 @@
   }
 }
 
-/* 본문: 메시지 스크롤 + 하단 입력창 */
 .chatRoomMain {
   display: flex;
   flex: 1 1 auto;
@@ -52,7 +50,6 @@
   min-height: 0;
 }
 
-/* 메시지 스크롤 컨테이너 */
 .messages {
   display: flex;
   flex: 1 1 auto;
@@ -62,7 +59,6 @@
   overflow: auto;
 }
 
-/* SubHeader: 높이 78px, 블러 + 반투명 배경, 스크롤 시 상단 고정 */
 .subHeader {
   position: sticky;
   top: 0;
