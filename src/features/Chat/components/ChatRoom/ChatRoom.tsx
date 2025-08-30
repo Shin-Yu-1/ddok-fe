@@ -181,7 +181,6 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
       })),
     [memberByUserId]
   );
-  console.log(memberMenuItems, isMemberMenuOpen);
 
   const toAsc = (arr: ChatMessage[]) =>
     [...arr].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
@@ -307,14 +306,12 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   };
 
   const openMemberMenu = () => {
-    console.log('openMemberMenu');
     const el = anchorRef.current;
 
     if (!el) return;
 
     const r = el.getBoundingClientRect();
     setMenuPos({ top: r.bottom + window.scrollY, left: r.left + window.scrollX + 10 });
-    console.log(r, r.bottom + window.scrollY + 6, r.left + window.scrollX);
 
     setIsMemberMenuOpen(true);
   };
