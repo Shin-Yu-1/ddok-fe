@@ -46,6 +46,7 @@ const ChatList = ({ roomType }: ChatProps) => {
     data: chatRoomResponse,
     isLoading,
     isError,
+    refetch,
   } = useGetApi<ChatListApiResponse>({
     url: `/api/chats/${roomType === ChatRoomType.PRIVATE ? 'private' : 'team'}`,
     params: { ...(search && { search }), ...pagination },
@@ -85,12 +86,21 @@ const ChatList = ({ roomType }: ChatProps) => {
     if (!res) return;
 
     const { chats: newChats, pagination: p } = res;
+
     if (!newChats) return;
+
+    if (search) {
+      setChats(newChats);
+      lastLoadedPageRef.current = p.currentPage;
+
+      return;
+    }
+
     if (p.currentPage === lastLoadedPageRef.current) return;
 
     setChats(prev => (p.currentPage === 0 ? newChats : [...(prev ?? []), ...newChats]));
     lastLoadedPageRef.current = p.currentPage;
-  }, [chatRoomResponse]);
+  }, [chatRoomResponse, search]);
 
   const handleOpenRoom = (chat: ChatListItem) => {
     openRoom(chat);
@@ -201,14 +211,23 @@ const ChatList = ({ roomType }: ChatProps) => {
     return items;
   }, [menuFor]);
 
+  const onSearchInputHandler: React.KeyboardEventHandler<HTMLInputElement> = e => {
+    if (e.key !== 'Enter') return;
+
+    e.preventDefault();
+
+    const raw = e.currentTarget.value;
+    setSearch(raw.trim());
+    refetch();
+  };
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.searchBox}>
         <Input
           type="text"
           placeholder="채팅방 검색"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
+          onKeyUp={onSearchInputHandler}
           border="1px solid var(--gray-2)"
           focusBorder="1px solid var(--gray-2)"
           leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
@@ -252,6 +271,12 @@ const ChatList = ({ roomType }: ChatProps) => {
             )}
           </div>
         ))}
+
+      {!isLoading && chats?.length === 0 && (
+        <div className={styles.chatItem}>
+          <span>채팅방이 없습니다.</span>
+        </div>
+      )}
 
       <div ref={sentinelRef} style={{ height: 1 }} />
     </div>
