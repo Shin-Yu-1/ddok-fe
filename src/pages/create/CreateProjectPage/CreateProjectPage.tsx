@@ -1,6 +1,7 @@
 import { MagicWand } from '@phosphor-icons/react';
 import { RadioGroup } from 'radix-ui';
 
+import AgeRangeSelector from '@/components/AgeRangeSelector/AgeRangeSelector';
 import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
@@ -19,6 +20,7 @@ const CreateProjectPage = () => {
     updatePositions,
     updateLeaderPosition,
     handleSubmit,
+    updatePreferredAges,
     isValid,
   } = useCreateProjectForm();
 
@@ -61,12 +63,68 @@ const CreateProjectPage = () => {
 
   // 모집 공고 등록하기 버튼 클릭 시
   const handleSubmitClick = () => {
-    console.log('=== 모집 공고 등록 데이터 ===');
+    console.log('=== 현재 폼 데이터 ===');
     console.log(JSON.stringify(formData, null, 2));
-    console.log('=== 유효성 검사 결과 ===');
-    console.log('isValid:', isValid);
 
-    // 실제 API 호출 (성공 시 자동으로 상세 페이지 이동)
+    // 실제 API로 전송될 데이터 구조
+    console.log('=== 실제 API로 전송될 데이터 ===');
+
+    // 1. 배너 이미지 정보
+    if (formData.bannerImage) {
+      console.log('배너 이미지:', {
+        name: formData.bannerImage.name,
+        size: formData.bannerImage.size,
+        type: formData.bannerImage.type,
+      });
+    } else {
+      console.log('배너 이미지: 없음 (기본 이미지 사용)');
+    }
+
+    // 2. JSON 요청 데이터 (FormData의 'request' 부분)
+    const requestData = {
+      title: formData.title,
+      expectedStart: formData.expectedStart,
+      expectedMonth: formData.expectedMonth,
+      mode: formData.mode,
+      location: formData.mode === 'OFFLINE' ? formData.location : null,
+      preferredAges: formData.preferredAges,
+      capacity: formData.capacity,
+      traits: formData.traits,
+      positions: formData.positions,
+      leaderPosition: formData.leaderPosition,
+      detail: formData.detail,
+    };
+
+    console.log('JSON 요청 데이터:');
+    console.log(JSON.stringify(requestData, null, 2));
+
+    // 3. FormData 시뮬레이션
+    console.log('=== FormData 시뮬레이션 ===');
+    console.log('FormData 구조:');
+    if (formData.bannerImage) {
+      console.log('- bannerImage: [File Object]', formData.bannerImage.name);
+    }
+    console.log('- request: [Blob]', JSON.stringify(requestData));
+
+    // 4. 실제 전송될 HTTP 요청 정보
+    console.log('=== HTTP 요청 정보 ===');
+    console.log('Method: POST');
+    console.log('URL: /api/projects');
+    console.log('Content-Type: multipart/form-data');
+    console.log('Headers: { Authorization: Bearer [token] }');
+
+    // 유효성 검사 실패 시 실제 API 호출 하지 않음
+    if (!isValid) {
+      console.warn('⚠️ 유효성 검사 실패로 인해 실제 API 호출을 건너뜁니다.');
+      return;
+    }
+
+    console.log('✅ 유효성 검사 통과 - 실제 API를 호출한다면 여기서 호출됩니다.');
+
+    // 실제 API 호출은 주석 처리 (개발 중에는 실행하지 않음)
+    // handleSubmit();
+
+    // 실제 API 호출하고 싶으시면 위 주석을 해제하고 아래 주석을 추가하세요:
     handleSubmit();
   };
 
@@ -164,7 +222,9 @@ const CreateProjectPage = () => {
                 {formData.mode === 'OFFLINE' && (
                   <SideSection title={'지역'}>지역 선택 기능 추가 예정</SideSection>
                 )}
-                <MainSection title={'희망 나이대'}>희망 나이대 선택 섹션</MainSection>
+                <MainSection title={'희망 나이대'}>
+                  <AgeRangeSelector value={formData.preferredAges} onChange={updatePreferredAges} />
+                </MainSection>
               </div>
             </div>
           </div>
