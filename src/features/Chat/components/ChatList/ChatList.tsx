@@ -1,9 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { MagnifyingGlassIcon, DotsThreeOutlineVerticalIcon } from '@phosphor-icons/react';
+import {
+  ArrowSquareOutIcon,
+  MagnifyingGlassIcon,
+  DotsThreeOutlineVerticalIcon,
+  PushPinSimpleIcon,
+  PushPinSimpleSlashIcon,
+  SignOutIcon,
+} from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
+import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
@@ -21,9 +29,18 @@ const ChatList = ({ roomType }: ChatProps) => {
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: 13 });
   const [chats, setChats] = useState<ChatListItem[] | null>(null);
   const { openRoom } = useChatUiStore();
-
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastLoadedPageRef = useRef<number>(-1);
+  const [menuFor, setMenuFor] = useState<ChatListItem | null>(null);
+  const [menuPos, setMenuPos] = useState<{
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
+  }>({});
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuAnchorRef = useRef<HTMLElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const {
     data: chatRoomResponse,
@@ -79,6 +96,111 @@ const ChatList = ({ roomType }: ChatProps) => {
     openRoom(chat);
   };
 
+  const openMenu = (e: React.MouseEvent<HTMLElement>, chat: ChatListItem) => {
+    if (menuFor?.roomId === chat.roomId) {
+      setMenuFor(null);
+
+      return;
+    }
+
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+
+    const preferBelow = rect.top + rect.height / 2 < window.innerHeight / 2;
+
+    const left = rect.right - 20;
+
+    const pos = preferBelow
+      ? { top: rect.bottom - 7, left }
+      : { bottom: window.innerHeight - rect.top - 7, left };
+
+    setMenuPos(pos);
+    menuAnchorRef.current = e.currentTarget as HTMLElement;
+    setMenuFor(chat);
+  };
+
+  const closeMenu = () => {
+    setMenuFor(null);
+    setMenuPos({});
+  };
+
+  // 바깥 클릭/ESC로 닫기
+  useEffect(() => {
+    if (!menuFor) return;
+    const onDown = (ev: MouseEvent) => {
+      const target = ev.target as Node;
+      if (menuRef.current?.contains(target)) return;
+      if (menuAnchorRef.current?.contains(target)) return;
+      closeMenu();
+    };
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') closeMenu();
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [menuFor]);
+
+  // 고정 토글
+  const togglePin = (chat: ChatListItem) => {
+    console.log(chat.roomId, '고정 토글');
+    // setChats(prev =>
+    //   prev ? prev.map(c => (c.roomId === chat.roomId ? { ...c, isPinned: !c.isPinned } : c)) : prev
+    // );
+    // TODO: 채팅방 고정/취소 API 호출
+  };
+
+  // 1:1 대화 나가기
+  const leaveChat = (chat: ChatListItem) => {
+    setChats(prev => (prev ? prev.filter(c => c.roomId !== chat.roomId) : prev));
+    // TODO: 채팅방 나가기 API 호출
+  };
+
+  // 팀 전용 페이지 이동 (원하는 동작으로 변경)
+  const goTeamPage = (chat: ChatListItem) => {
+    console.log('팀 전용 페이지 이동:', chat.roomId);
+    // TODO: 페이지 전환 로직 추가
+  };
+
+  const menuItems = useMemo(() => {
+    if (!menuFor) return [];
+
+    const items = [
+      {
+        icon: menuFor.isPinned ? <PushPinSimpleSlashIcon /> : <PushPinSimpleIcon />,
+        name: menuFor.isPinned ? '고정하기 취소' : '고정하기',
+        onClick: () => {
+          togglePin(menuFor);
+          closeMenu();
+        },
+      },
+    ];
+
+    if (menuFor.roomType === ChatRoomType.PRIVATE) {
+      items.push({
+        icon: <SignOutIcon />,
+        name: '대화 나가기',
+        onClick: () => {
+          leaveChat(menuFor);
+          closeMenu();
+        },
+      });
+    } else {
+      items.push({
+        icon: <ArrowSquareOutIcon />,
+        name: '팀 전용 페이지',
+        onClick: () => {
+          goTeamPage(menuFor);
+          closeMenu();
+        },
+      });
+    }
+
+    return items;
+  }, [menuFor]);
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.searchBox}>
@@ -106,9 +228,8 @@ const ChatList = ({ roomType }: ChatProps) => {
               <img
                 className={styles.profileImage}
                 src={
-                  'otherUser' in chat
-                    ? chat.otherUser.profileImage || undefined
-                    : chat.owner.profileImage || undefined
+                  ('otherUser' in chat ? chat.otherUser.profileImage : chat.owner.profileImage) ||
+                  undefined
                 }
               />
               <span className={styles.chatName} role="button" onClick={() => handleOpenRoom(chat)}>
@@ -120,9 +241,15 @@ const ChatList = ({ roomType }: ChatProps) => {
               </span>
             </div>
 
-            <Button size="sm">
+            <Button size="sm" onClick={e => openMenu(e, chat)} ref={buttonRef}>
               <DotsThreeOutlineVerticalIcon />
             </Button>
+
+            {!!menuFor && (
+              <div className={styles.overflowMenuContainer} style={menuPos}>
+                <OverflowMenu ref={menuRef} menuItems={menuItems} />
+              </div>
+            )}
           </div>
         ))}
 
