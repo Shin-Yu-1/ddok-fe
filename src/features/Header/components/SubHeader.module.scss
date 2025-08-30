@@ -4,6 +4,7 @@
 .subHeader {
   position: fixed;
   top: 56px;
+  z-index: 101;
   display: flex;
   align-items: center;
   box-sizing: border-box;
