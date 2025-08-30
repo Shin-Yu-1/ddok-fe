@@ -252,19 +252,22 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     if (e.shiftKey) return;
 
     e.preventDefault();
+    const raw = e.currentTarget.value;
+    const payload = raw.replace(/\r/g, '');
 
-    if (e.key === 'Enter' && !e.shiftKey) {
-      const input = e.currentTarget.value.replace(/\r/g, '');
-
-      if (input) {
-        sendMessage(input);
-        e.currentTarget.value = '';
-
-        requestAnimationFrame(() => {
-          scrollToBottom();
-        });
-      }
+    // 공백/개행만 있으면 전송 안 함
+    if (!/\S/.test(payload)) {
+      e.currentTarget.value = '';
+      return;
     }
+
+    sendMessage(payload);
+    e.currentTarget.value = '';
+
+    requestAnimationFrame(() => {
+      const c = messagesRef.current;
+      if (c) c.scrollTop = c.scrollHeight;
+    });
   };
 
   return (
