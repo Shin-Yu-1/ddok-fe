@@ -6,6 +6,7 @@ import Button from '@/components/Button/Button';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import type {
   ChatMessageApiResponse,
   ChatRoomMemberApiResponse,
@@ -32,7 +33,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   const { user } = useAuthStore();
 
   const messagesRef = useRef<HTMLDivElement>(null);
-  const stickToBottomRef = useRef(true);
+  const seenIdsRef = useRef<Set<number>>(new Set()); // 중복 메시지 방지
 
   // 스크롤 위치 판별
   const isNearTop = (c: HTMLElement) => c.scrollTop <= 80;
@@ -48,46 +49,103 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     url: `/api/chats/${chat.roomId}/members`,
   });
 
-  // 방이 바뀌면 초기화
+  // WebSocket 연결
+  const websocket = useWebSocket({
+    path: '/ws/chats-ws',
+    reconnectDelay: 5000,
+    debug: true,
+  });
+
   useEffect(() => {
+    websocket.connect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 방 구독 (웹소켓)
+  useEffect(() => {
+    if (!websocket.isConnected) return;
+
+    const subscriptionId = websocket.subscribe({
+      destination: `/sub/chats/${chat.roomId}`,
+      onMessage: msg => {
+        try {
+          const incoming = JSON.parse(msg.body) as ChatMessage;
+          // 중복 방지
+          if (seenIdsRef.current.has(incoming.messageId)) return;
+          seenIdsRef.current.add(incoming.messageId);
+
+          // 스크롤 위치 확인
+          const c = messagesRef.current;
+          const wasAtBottom = c ? isNearBottom(c) : true;
+
+          setMessages(prev => [...prev, incoming]);
+
+          // 하단에 있었다면 하단 유지
+          if (wasAtBottom) {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const container = messagesRef.current;
+                if (container) {
+                  container.scrollTop = container.scrollHeight;
+                }
+              });
+            });
+          }
+          // 하단에 있지 않았다면 현재 위치 유지
+        } catch (e) {
+          console.error('소켓 메시지 파싱 실패:', e);
+        }
+      },
+    });
+
+    return () => {
+      if (subscriptionId) websocket.unsubscribe(subscriptionId);
+    };
+  }, [websocket.isConnected, websocket, chat.roomId]);
+
+  useEffect(() => {
+    seenIdsRef.current.clear();
     setMessages([]);
     setHasMore(true);
     setIsFetching(false);
     setPagination({ page: 0, size: 5 });
-
-    stickToBottomRef.current = true;
   }, [chat.roomId]);
 
-  // 멤버 맵 캐싱
   const memberByUserId = useMemo(() => {
     const members = chatMemberResponse?.data?.members ?? [];
     return new Map(members.map(m => [m.userId, m]));
   }, [chatMemberResponse?.data?.members]);
 
-  // 정렬/병합 유틸
   const toAsc = (arr: ChatMessage[]) =>
     [...arr].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-  const mergeUniqueAppendAsc = (prev: ChatMessage[], incomingAsc: ChatMessage[]) => {
-    const seen = new Set(prev.map(m => m.messageId));
+  const appendUniqueAsc = (incomingAsc: ChatMessage[]) => {
+    const seen = seenIdsRef.current;
     const add = incomingAsc.filter(m => !seen.has(m.messageId));
-    return [...prev, ...add];
+    if (add.length === 0) return;
+    add.forEach(m => seen.add(m.messageId));
+    setMessages(prev => [...prev, ...add]);
   };
 
   const prependWithScrollPreserve = (olderAsc: ChatMessage[]) => {
+    const seen = seenIdsRef.current;
+    const unique = olderAsc.filter(m => !seen.has(m.messageId));
+    if (unique.length === 0) return;
+    unique.forEach(m => seen.add(m.messageId));
+
     const c = messagesRef.current;
     if (!c) {
-      setMessages(prev => [...olderAsc, ...prev]);
+      setMessages(prev => [...unique, ...prev]);
       return;
     }
-    const prevScrollHeight = c.scrollHeight;
-    const prevScrollTop = c.scrollTop;
+    // 현재 뷰포트 하단 기준 보정
+    const prevBottom = c.scrollHeight - c.scrollTop;
 
-    setMessages(prev => [...olderAsc, ...prev]);
+    setMessages(prev => [...unique, ...prev]);
 
     requestAnimationFrame(() => {
-      const newScrollHeight = c.scrollHeight;
-      c.scrollTop = prevScrollTop + (newScrollHeight - prevScrollHeight);
+      if (!messagesRef.current) return;
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight - prevBottom;
     });
   };
 
@@ -97,7 +155,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     c.scrollTop = c.scrollHeight;
   };
 
-  // 메시지 응답 처리
+  // 메시지 응답 처리(페이지네이션)
   useEffect(() => {
     const res = chatMessageResponse?.data;
     if (!res) return;
@@ -114,11 +172,13 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     const incomingAsc = toAsc(fetched);
 
     if (p.currentPage === 0) {
-      setMessages(prev => mergeUniqueAppendAsc(prev, incomingAsc));
+      // 첫 페이지 로드 시에는 항상 하단으로 스크롤
+      appendUniqueAsc(incomingAsc);
       requestAnimationFrame(() => {
-        if (stickToBottomRef.current) scrollToBottom();
+        scrollToBottom();
       });
     } else {
+      // 이전 메시지 로드 시에는 스크롤 위치 보존
       prependWithScrollPreserve(incomingAsc);
     }
 
@@ -126,12 +186,11 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     setIsFetching(false);
   }, [chatMessageResponse]);
 
+  // 스크롤 핸들러 (페이지네이션용)
   const onScroll = () => {
     const c = messagesRef.current;
+
     if (!c) return;
-
-    stickToBottomRef.current = isNearBottom(c);
-
     if (isFetching || !hasMore) return;
     if (isNearTop(c)) {
       setIsFetching(true);
@@ -141,11 +200,37 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
   const onWheel: React.WheelEventHandler<HTMLDivElement> = e => {
     if (e.ctrlKey) return;
+
     const c = messagesRef.current;
+
     if (!c || isFetching || !hasMore) return;
     if (e.deltaY < 0 && isNearTop(c)) {
       setIsFetching(true);
       setPagination(prev => ({ ...prev, page: prev.page + 1 }));
+    }
+  };
+
+  const sendMessage = (input: string) => {
+    websocket.publish({
+      destination: `/pub/chats/${chat.roomId}/send`,
+      payload: { contentType: 'TEXT', contentText: input },
+    });
+  };
+
+  const onEnterPress: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      const input = e.currentTarget.value.trim();
+
+      if (input) {
+        sendMessage(input);
+        e.currentTarget.value = '';
+
+        // 메시지 전송 후 하단으로 스크롤 (사용자가 메시지를 보낸 경우)
+        requestAnimationFrame(() => {
+          scrollToBottom();
+        });
+      }
     }
   };
 
@@ -217,7 +302,11 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
             <MagicWandIcon className={styles.aiButtonIcon} />
           </Button>
 
-          <textarea className={styles.chatInputField} name="" id="" disabled={!!search}></textarea>
+          <textarea
+            className={styles.chatInputField}
+            onKeyUp={onEnterPress}
+            disabled={!!search}
+          ></textarea>
         </div>
       </main>
     </div>
