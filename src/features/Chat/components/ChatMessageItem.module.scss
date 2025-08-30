@@ -1,0 +1,79 @@
+@use '@/styles/variables.scss' as *;
+
+.chatMessageWrapper {
+  position: relative;
+  width: calc(100%);
+  height: max-content;
+
+  .memberProfile {
+    position: absolute;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #c4c4c4;
+    border-radius: 50%;
+  }
+
+  .message {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-sizing: border-box;
+    margin-left: 34px;
+    padding: 0 10px;
+
+    .sender {
+      font-size: $fs-xsmall;
+      font-weight: $fw-semibold;
+      color: $black-3;
+    }
+
+    /* ⬇️ 텍스트 버블과 시간을 한 줄에, 하단 기준으로 맞춤 */
+    .bubbleRow {
+      display: flex;
+      align-items: flex-end; /* 시간과 버블의 바닥선 맞추기 */
+      gap: 6px;
+      width: fit-content; /* 내용 크기만큼만 차지 */
+      max-width: 100%;
+    }
+
+    .text {
+      display: inline-block;
+      box-sizing: border-box;
+      width: fit-content;
+      max-width: 186px;
+      padding: 6px;
+      border-radius: $r-xxsmall;
+      overflow-wrap: break-word;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      background: $white-1;
+    }
+
+    .time {
+      font-size: $fs-xxsmall;
+      line-height: 1;
+      white-space: nowrap;
+      color: $black-1;
+    }
+  }
+
+  &.myMessage {
+    .memberProfile {
+      display: none;
+    }
+
+    .message {
+      margin-left: 0;
+
+      .sender {
+        display: none;
+      }
+
+      .bubbleRow {
+        flex-direction: row-reverse;
+        align-self: flex-end;
+      }
+    }
+  }
+}
