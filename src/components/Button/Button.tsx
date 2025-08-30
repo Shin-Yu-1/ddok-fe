@@ -71,8 +71,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    console.log(backgroundColor);
-
     const buttonClasses = clsx(
       styles.defaultButton,
       styles[`variant-${variant}`],
