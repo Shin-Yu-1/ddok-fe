@@ -110,7 +110,13 @@
   color: $black-1;
 }
 
-/* 메시지 아이템 */
+.messageListWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0% 10px;
+}
+
 .message {
   line-height: 1.4;
 }
