@@ -115,6 +115,13 @@
   flex-direction: column;
   gap: 20px;
   padding: 0% 10px;
+
+  .dateDivider {
+    height: 19px;
+    font-size: $fs-xsmall;
+    line-height: 19px;
+    text-align: center;
+  }
 }
 
 .message {

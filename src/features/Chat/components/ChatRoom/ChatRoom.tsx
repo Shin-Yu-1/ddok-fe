@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ArrowUUpLeftIcon, UserIcon, MagicWandIcon } from '@phosphor-icons/react';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 import Button from '@/components/Button/Button';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
@@ -23,6 +25,20 @@ interface ChatRoomProps {
   chat: ChatListItem;
   onBack: () => void;
 }
+
+// 메시지 + 날짜구분자 리스트 생성
+type RenderItem =
+  | { kind: 'date'; id: string; label: string }
+  | { kind: 'msg'; id: number; msg: ChatMessage };
+
+const dateKey = (iso: string) => dayjs(iso).format('YYYY-MM-DD');
+
+// 구분자 라벨(오늘/어제/그 외)
+const dateLabel = (iso: string) => {
+  const d = dayjs(iso);
+
+  return d.format('YYYY년 MM월 DD일');
+};
 
 const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   const [search] = useState('');
@@ -115,6 +131,22 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     const members = chatMemberResponse?.data?.members ?? [];
     return new Map(members.map(m => [m.userId, m]));
   }, [chatMemberResponse?.data?.members]);
+
+  const itemsToRender = useMemo<RenderItem[]>(() => {
+    // messages는 오름차순(과거 → 최신)이라 가정(현재 로직이 그렇게 유지함)
+    const out: RenderItem[] = [];
+    let prevDay: string | null = null;
+
+    for (const m of messages) {
+      const k = dateKey(m.createdAt);
+      if (k !== prevDay) {
+        out.push({ kind: 'date', id: `date-${k}`, label: dateLabel(m.createdAt) });
+        prevDay = k;
+      }
+      out.push({ kind: 'msg', id: m.messageId, msg: m });
+    }
+    return out;
+  }, [messages]);
 
   const toAsc = (arr: ChatMessage[]) =>
     [...arr].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
@@ -279,14 +311,21 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           </div>
 
           <div className={styles.messageListWrapper}>
-            {messages.map(msg => (
-              <ChatMessageItem
-                key={msg.messageId}
-                messageItem={msg}
-                memberInfo={memberByUserId.get(msg.senderId)!}
-                isMyMessage={msg.senderId === user?.id}
-              />
-            ))}
+            {!!itemsToRender &&
+              itemsToRender.map(item =>
+                item.kind === 'date' ? (
+                  <div key={item.id} className={styles.dateDivider}>
+                    <span>{item.label}</span>
+                  </div>
+                ) : (
+                  <ChatMessageItem
+                    key={item.id}
+                    messageItem={item.msg}
+                    memberInfo={memberByUserId.get(item.msg.senderId)!}
+                    isMyMessage={item.msg.senderId === user?.id}
+                  />
+                )
+              )}
           </div>
         </div>
 

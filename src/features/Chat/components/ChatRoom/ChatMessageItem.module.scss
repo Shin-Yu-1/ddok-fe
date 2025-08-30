@@ -28,12 +28,11 @@
       color: $black-3;
     }
 
-    /* ⬇️ 텍스트 버블과 시간을 한 줄에, 하단 기준으로 맞춤 */
     .bubbleRow {
       display: flex;
-      align-items: flex-end; /* 시간과 버블의 바닥선 맞추기 */
+      align-items: flex-end;
       gap: 6px;
-      width: fit-content; /* 내용 크기만큼만 차지 */
+      width: fit-content;
       max-width: 100%;
     }
 
