@@ -96,7 +96,9 @@ const ChatList = ({ roomType }: ChatProps) => {
       return;
     }
 
-    if (p.currentPage === lastLoadedPageRef.current) return;
+    // if (p.currentPage === lastLoadedPageRef.current) {
+    //   return;
+    // } // 중복 로드 방지
 
     setChats(prev => (p.currentPage === 0 ? newChats : [...(prev ?? []), ...newChats]));
     lastLoadedPageRef.current = p.currentPage;
@@ -212,6 +214,13 @@ const ChatList = ({ roomType }: ChatProps) => {
   }, [menuFor]);
 
   const onSearchInputHandler: React.KeyboardEventHandler<HTMLInputElement> = e => {
+    console.log(e.currentTarget.value);
+
+    if (!e.currentTarget.value) {
+      setSearch('');
+      refetch();
+    }
+
     if (e.key !== 'Enter') return;
 
     e.preventDefault();
