@@ -187,6 +187,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
               leftIcon={<UserIcon className={styles.icon} />}
               fontSize="xxsmall"
               padding="0px"
+              backgroundColor={'none'}
             >
               {'otherUser' in chat ? 2 : chat.memberCount}명
             </Button>
