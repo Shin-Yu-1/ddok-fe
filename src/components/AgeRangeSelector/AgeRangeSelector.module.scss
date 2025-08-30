@@ -22,13 +22,12 @@
 
 .ageOptionsSection {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 70px);
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 8px;
   width: 100%;
 }
 
 .ageButton {
-  width: 70px;
   height: 36px;
   padding: 8px 16px;
   border: 1.5px solid $gray-3 !important;
