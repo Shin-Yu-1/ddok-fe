@@ -247,9 +247,14 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   };
 
   const onEnterPress: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
+    if (e.key !== 'Enter') return;
+
+    if (e.shiftKey) return;
+
+    e.preventDefault();
+
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      const input = e.currentTarget.value.trim();
+      const input = e.currentTarget.value.replace(/\r/g, '');
 
       if (input) {
         sendMessage(input);
