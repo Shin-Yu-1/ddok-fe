@@ -1,7 +1,6 @@
 import React from 'react';
 
 import RecruitmentTable from './RecruitmentTable';
-import type { RecruitmentPosition } from './RecruitmentTable';
 
 interface CreateRecruitmentTableProps {
   /** 선택된 포지션들 */
@@ -29,17 +28,10 @@ const CreateRecruitmentTable: React.FC<CreateRecruitmentTableProps> = ({
   onRemovePosition,
   onLeaderPositionChange,
 }) => {
-  // 포지션 목록을 RecruitmentPosition 형태로 변환
-  const recruitmentPositions: RecruitmentPosition[] = positions.map(position => ({
-    position,
-    applied: 0,
-    confirmed: leaderPosition === position ? 1 : 0, // 리더 포지션인 경우 확정 1명
-  }));
-
   return (
     <RecruitmentTable
       pageType="create"
-      positions={recruitmentPositions}
+      positions={positions.map(position => ({ position, applied: 0, confirmed: 0 }))}
       leaderPosition={leaderPosition}
       onAddPosition={onAddPosition}
       onRemovePosition={onRemovePosition}
