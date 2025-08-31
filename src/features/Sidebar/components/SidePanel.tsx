@@ -17,9 +17,11 @@ const SidePanel = forwardRef<HTMLDivElement, SidePanelProps>(
         role="complementary"
         aria-label={`${title} 섹션`}
       >
-        <header className={styles.header}>
-          <h2 className={styles.title}>{title}</h2>
-        </header>
+        {title && (
+          <header className={styles.header}>
+            <h2 className={styles.title}>{title}</h2>
+          </header>
+        )}
 
         <div className={styles.body}>{children}</div>
       </aside>
