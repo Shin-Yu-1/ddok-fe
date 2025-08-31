@@ -7,6 +7,7 @@ import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
+import PostCapacitySelector from '@/features/post/components/PostCapacitySelector/PostCapacitySelector';
 import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
@@ -27,6 +28,7 @@ const CreateProjectPage = () => {
     updateTraits,
     updateLocation,
     updateExpectedStart,
+    updateCapacity,
     isValid,
   } = useCreateProjectForm();
 
@@ -222,7 +224,9 @@ const CreateProjectPage = () => {
                 <SideSection readonly={true} title={'진행 상태'}>
                   진행 상태 버튼 들어갈 예정
                 </SideSection>
-                <SideSection title={'모집 인원'}>모집 인원 드롭 추가 예정</SideSection>
+                <MainSection title={'모집 인원'}>
+                  <PostCapacitySelector value={formData.capacity} onChange={updateCapacity} />
+                </MainSection>
                 <MainSection title={'시작 예정일'}>
                   <PostDateSelector
                     value={formData.expectedStart}
