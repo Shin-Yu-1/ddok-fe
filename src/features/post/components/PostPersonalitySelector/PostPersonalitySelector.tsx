@@ -3,17 +3,17 @@ import { USER_TRAITS } from '@/constants/userTraits';
 
 import styles from './PostPersonalitySelector.module.scss';
 
-interface ProjectPersonalitySelectorProps {
+interface PostPersonalitySelectorProps {
   selectedPersonality: string[];
   onPersonalityToggle: (personalityName: string) => void;
   maxSelection?: number;
 }
 
-const ProjectPersonalitySelector = ({
+const PostPersonalitySelector = ({
   selectedPersonality,
   onPersonalityToggle,
   maxSelection = 5,
-}: ProjectPersonalitySelectorProps) => {
+}: PostPersonalitySelectorProps) => {
   // 문자열 배열을 ID 배열로 변환
   const selectedPersonalityIds = selectedPersonality
     .map(traitName => {
@@ -64,4 +64,4 @@ const ProjectPersonalitySelector = ({
   );
 };
 
-export default ProjectPersonalitySelector;
+export default PostPersonalitySelector;

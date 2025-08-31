@@ -7,8 +7,8 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
-import ProjectLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
-import ProjectPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
+import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
+import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
 
 import styles from './CreateProjectPage.module.scss';
@@ -182,7 +182,7 @@ const CreateProjectPage = () => {
                   />
                 </MainSection>
                 <MainSection title={'이런 분을 찾습니다!'}>
-                  <ProjectPersonalitySelector
+                  <PostPersonalitySelector
                     selectedPersonality={formData.traits}
                     onPersonalityToggle={handlePersonalityToggle}
                     maxSelection={5}
@@ -244,7 +244,7 @@ const CreateProjectPage = () => {
                 {/* 조건부 렌더링: 오프라인일 때만 지역 섹션 표시 */}
                 {formData.mode === 'OFFLINE' && (
                   <MainSection title={'지역'}>
-                    <ProjectLocationSelector
+                    <PostLocationSelector
                       location={formData.location}
                       onLocationChange={updateLocation}
                     />

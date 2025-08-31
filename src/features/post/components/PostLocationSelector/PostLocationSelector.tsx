@@ -4,12 +4,12 @@ import { convertAddressToCoords } from '@/utils/kakaoGeocoder';
 
 import styles from './PostLocationSelector.module.scss';
 
-interface ProjectLocationSelectorProps {
+interface PostLocationSelectorProps {
   location: Location | null;
   onLocationChange: (location: Location | null) => void;
 }
 
-const ProjectLocationSelector = ({ location, onLocationChange }: ProjectLocationSelectorProps) => {
+const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelectorProps) => {
   const handleLocationSearchChange = () => {
     // 단순 텍스트 변경은 처리하지 않음 (읽기 전용)
     // AddressSearchInput이 readOnly이므로 실제로는 호출되지 않음
@@ -53,4 +53,4 @@ const ProjectLocationSelector = ({ location, onLocationChange }: ProjectLocation
   );
 };
 
-export default ProjectLocationSelector;
+export default PostLocationSelector;
