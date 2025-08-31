@@ -1,7 +1,7 @@
 import PersonalityGrid from '@/components/PersonalityGrid/PersonalityGrid';
 import { USER_TRAITS } from '@/constants/userTraits';
 
-import styles from './ProjectPersonalitySelector.module.scss';
+import styles from './PostPersonalitySelector.module.scss';
 
 interface ProjectPersonalitySelectorProps {
   selectedPersonality: string[];
