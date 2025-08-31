@@ -7,6 +7,7 @@ import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
+import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
@@ -25,6 +26,7 @@ const CreateProjectPage = () => {
     updatePreferredAges,
     updateTraits,
     updateLocation,
+    updateExpectedStart,
     isValid,
   } = useCreateProjectForm();
 
@@ -78,6 +80,12 @@ const CreateProjectPage = () => {
       const newTraits = [...currentTraits, personalityName];
       updateTraits(newTraits);
     }
+  };
+
+  const getTomorrowDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
   };
 
   // 모집 공고 등록하기 버튼 클릭 시
@@ -215,7 +223,15 @@ const CreateProjectPage = () => {
                   진행 상태 버튼 들어갈 예정
                 </SideSection>
                 <SideSection title={'모집 인원'}>모집 인원 드롭 추가 예정</SideSection>
-                <SideSection title={'시작 예정일'}>날짜 선택 섹션 추가 예정</SideSection>
+                <MainSection title={'시작 예정일'}>
+                  <PostDateSelector
+                    value={formData.expectedStart}
+                    onChange={updateExpectedStart}
+                    label="프로젝트를 언제 시작하실 예정인가요?"
+                    placeholder="날짜를 선택해주세요"
+                    min={getTomorrowDate()} // 내일부터 선택 가능
+                  />
+                </MainSection>
                 <SideSection title={'예상 기간'}>날짜 선택 섹션 추가 예정</SideSection>
                 <MainSection title={'모임 형태'}>
                   <RadioGroup.Root
