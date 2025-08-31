@@ -97,7 +97,7 @@ export const initialFormData: CreateProjectData = {
   mode: 'OFFLINE',
   location: null,
   preferredAges: null,
-  capacity: 2,
+  capacity: 1,
   traits: [],
   positions: [],
   leaderPosition: '',
