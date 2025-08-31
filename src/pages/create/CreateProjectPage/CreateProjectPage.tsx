@@ -7,7 +7,8 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
-import ProjectPersonalitySelector from '@/features/post/components/ProjectPersonalitySelector/ProjectPersonalitySelector';
+import ProjectLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
+import ProjectPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
 
 import styles from './CreateProjectPage.module.scss';
@@ -23,6 +24,7 @@ const CreateProjectPage = () => {
     handleSubmit,
     updatePreferredAges,
     updateTraits,
+    updateLocation,
     isValid,
   } = useCreateProjectForm();
 
@@ -241,7 +243,12 @@ const CreateProjectPage = () => {
                 </MainSection>
                 {/* 조건부 렌더링: 오프라인일 때만 지역 섹션 표시 */}
                 {formData.mode === 'OFFLINE' && (
-                  <SideSection title={'지역'}>지역 선택 기능 추가 예정</SideSection>
+                  <MainSection title={'지역'}>
+                    <ProjectLocationSelector
+                      location={formData.location}
+                      onLocationChange={updateLocation}
+                    />
+                  </MainSection>
                 )}
                 <MainSection title={'희망 나이대'}>
                   <AgeRangeSelector value={formData.preferredAges} onChange={updatePreferredAges} />
