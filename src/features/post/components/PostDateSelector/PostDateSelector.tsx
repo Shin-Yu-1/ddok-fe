@@ -29,6 +29,7 @@ const PostDateSelector = ({
         min={min}
         max={max}
         required
+        readOnly={true}
       />
 
       {value && (
