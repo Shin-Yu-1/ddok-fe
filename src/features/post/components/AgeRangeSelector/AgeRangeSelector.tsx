@@ -142,6 +142,8 @@ const AgeRangeSelector = ({ value, onChange, className }: AgeRangeSelectorProps)
           })}
         </div>
 
+        <hr className={styles.hrStyle} />
+
         {/* 연령대 선택 섹션 */}
         <div className={styles.ageOptionsSection}>
           {AGE_RANGES.filter(option => option.id !== 0).map(option => {
@@ -151,7 +153,7 @@ const AgeRangeSelector = ({ value, onChange, className }: AgeRangeSelectorProps)
               <Button
                 key={option.id}
                 variant="primary"
-                radius="full"
+                radius="xsm"
                 size="sm"
                 fontSizePreset="xxsmall"
                 fontWeightPreset="medium"

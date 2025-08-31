@@ -1,12 +1,12 @@
 import { MagicWand } from '@phosphor-icons/react';
 import { RadioGroup } from 'radix-ui';
 
-import AgeRangeSelector from '@/components/AgeRangeSelector/AgeRangeSelector';
 import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
+import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
