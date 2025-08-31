@@ -1,0 +1,23 @@
+@use '@/styles/variables' as *;
+
+.container {
+  width: 100%;
+}
+
+.section {
+  margin-bottom: 16px;
+}
+
+.sectionSubtitle {
+  margin-bottom: 16px;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-regular;
+  color: $gray-1;
+}
+
+.selectionCount {
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  text-align: center;
+  color: $gray-1;
+}
