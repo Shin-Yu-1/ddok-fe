@@ -42,6 +42,7 @@ const PostDateSelector = ({
               day: 'numeric',
               weekday: 'short',
             })}
+            요일
           </span>
         </div>
       )}
