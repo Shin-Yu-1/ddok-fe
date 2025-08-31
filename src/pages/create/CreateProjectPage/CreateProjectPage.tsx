@@ -11,7 +11,7 @@ import PostCapacitySelector from '@/features/post/components/PostCapacitySelecto
 import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
-import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
+import { useCreateProjectForm } from '@/hooks/post/useCreateProjectForm';
 
 import styles from './CreateProjectPage.module.scss';
 
