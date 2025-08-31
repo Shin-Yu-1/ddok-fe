@@ -7,6 +7,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
+import ProjectPersonalitySelector from '@/features/post/components/ProjectPersonalitySelector/ProjectPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/useCreateProjectForm';
 
 import styles from './CreateProjectPage.module.scss';
@@ -21,6 +22,7 @@ const CreateProjectPage = () => {
     updateLeaderPosition,
     handleSubmit,
     updatePreferredAges,
+    updateTraits,
     isValid,
   } = useCreateProjectForm();
 
@@ -58,6 +60,21 @@ const CreateProjectPage = () => {
       updateLeaderPosition('');
     } else {
       updateLeaderPosition(position);
+    }
+  };
+
+  const handlePersonalityToggle = (personalityName: string) => {
+    const currentTraits = formData.traits;
+    const isSelected = currentTraits.includes(personalityName);
+
+    if (isSelected) {
+      // 제거
+      const newTraits = currentTraits.filter(trait => trait !== personalityName);
+      updateTraits(newTraits);
+    } else {
+      // 추가
+      const newTraits = [...currentTraits, personalityName];
+      updateTraits(newTraits);
     }
   };
 
@@ -163,7 +180,11 @@ const CreateProjectPage = () => {
                   />
                 </MainSection>
                 <MainSection title={'이런 분을 찾습니다!'}>
-                  성향 입력 컴포넌트 들어갈 예정
+                  <ProjectPersonalitySelector
+                    selectedPersonality={formData.traits}
+                    onPersonalityToggle={handlePersonalityToggle}
+                    maxSelection={5}
+                  />
                 </MainSection>
                 <MainSection
                   title={'모집 공고 상세'}
