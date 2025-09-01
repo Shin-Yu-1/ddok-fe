@@ -1,7 +1,7 @@
 @use '@/styles/variables' as *;
 
 .overflowMenuWrapper {
-  z-index: 7;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   gap: 5px;

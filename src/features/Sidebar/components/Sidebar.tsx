@@ -9,6 +9,11 @@ import {
 } from '@phosphor-icons/react';
 import { useLocation } from 'react-router-dom';
 
+import ChatList from '@/features/Chat/components/ChatList/ChatList';
+import ChatRoom from '@/features/Chat/components/ChatRoom/ChatRoom';
+import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import { useChatUiStore } from '@/stores/chatUiStore';
+
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
 import { useSidebarState } from '../hooks/useSidebarState';
 import type { SectionType, ButtonConfig, SubButtonConfig } from '../types/sidebar';
@@ -22,12 +27,17 @@ const Sidebar = () => {
 
   const { activeSection, expandedButton, activeSubSection, setActiveSection } = useSidebarState();
   const { handleButtonClick, handleSubButtonClick } = useSidebarHandlers();
+  const { selectedRoom, closeRoom } = useChatUiStore();
 
   useEffect(() => {
     if (!isMapPage && activeSection === 'map') {
       setActiveSection(null);
     }
   }, [isMapPage, activeSection, setActiveSection]);
+
+  useEffect(() => {
+    closeRoom();
+  }, [activeSubSection]);
 
   const chatSubButtons: SubButtonConfig[] = [
     {
@@ -85,17 +95,27 @@ const Sidebar = () => {
         );
       case 'chat': {
         let chatTitle = '채팅';
-        if (activeSubSection === 'personal-chat') {
-          chatTitle = '1:1 채팅';
-        } else if (activeSubSection === 'group-chat') {
-          chatTitle = '팀 채팅';
-        }
+        if (selectedRoom == null) {
+          if (activeSubSection === 'personal-chat') {
+            chatTitle = '1:1 채팅';
+          } else if (activeSubSection === 'group-chat') {
+            chatTitle = '팀 채팅';
+          }
 
-        return (
-          <SidePanel title={chatTitle} {...sectionProps}>
-            <div>채팅입니닷</div>
-          </SidePanel>
-        );
+          return (
+            <SidePanel title={chatTitle} {...sectionProps}>
+              <ChatList
+                roomType={chatTitle === '팀 채팅' ? ChatRoomType.GROUP : ChatRoomType.PRIVATE}
+              />
+            </SidePanel>
+          );
+        } else {
+          return (
+            <SidePanel {...sectionProps}>
+              <ChatRoom chat={selectedRoom} onBack={closeRoom} />
+            </SidePanel>
+          );
+        }
       }
       case 'map':
         // map 섹션은 MapPage에서 처리하므로 SidePanel을 렌더링하지 않음

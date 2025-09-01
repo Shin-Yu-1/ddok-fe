@@ -95,7 +95,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...(gap ? { gap: toCssSize(gap) } : null),
       ...(backgroundColor ? { backgroundColor: backgroundColor } : null),
       ...(textColor ? { color: textColor } : null),
-      ...(border ? ({ '--button-border': border } as React.CSSProperties) : null),
+      ...(border ? ({ border: border, '--button-border': border } as React.CSSProperties) : null),
+      ...(backgroundColor === 'none' ? { background: 'none' } : null),
     };
 
     return (

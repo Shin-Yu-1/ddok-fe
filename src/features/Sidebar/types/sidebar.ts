@@ -27,7 +27,7 @@ export interface SidebarState {
 }
 
 export interface SidePanelProps {
-  title: string;
+  title?: string;
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;

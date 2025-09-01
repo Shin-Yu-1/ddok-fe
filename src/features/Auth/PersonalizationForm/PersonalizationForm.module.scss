@@ -1,0 +1,31 @@
+@use '@/styles/variables' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  border: 0.7px solid $gray-3;
+  border-radius: 10px;
+  background-color: $white-3;
+}
+
+.contentInner {
+  width: 100%;
+  max-width: 600px;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-bottom: 1rem;
+}
