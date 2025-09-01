@@ -18,15 +18,22 @@ export default function ResetPasswordPage() {
 
   // localStorage에서 reauthToken 가져오기
   useEffect(() => {
+    // sessionStorage에서 비밀번호 찾기 성공 플래그 확인
+    const findPasswordSuccess = sessionStorage.getItem('findPasswordSuccess');
+
     // localStorage에서 reauthToken 확인
     const token = localStorage.getItem('reauthToken');
 
-    if (token) {
-      setReauthToken(token);
-    } else {
-      navigate('/auth/findpassword');
+    // 비밀번호 찾기를 거치지 않고 직접 접근하거나 토큰이 없으면 리다이렉트
+    if (!findPasswordSuccess || !token) {
+      navigate('/auth/findpassword', { replace: true });
       return;
     }
+
+    setReauthToken(token);
+
+    // 페이지 접근 후 플래그 제거 (일회성 접근)
+    sessionStorage.removeItem('findPasswordSuccess');
   }, [navigate]);
 
   const {

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { sendPhoneCode, verifyPhoneCode, findPassword, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
@@ -35,6 +36,7 @@ export default function FindPasswordForm() {
 
   // 폼 데이터 감시
   const username = watch('username');
+  const email = watch('email');
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
 
@@ -54,20 +56,19 @@ export default function FindPasswordForm() {
 
   // 인증번호 발송
   const handleSendPhoneCode = async () => {
-    if (!phone || !username) {
+    if (!phone || !username || !email) {
       return;
     }
 
     setIsLoading(prev => ({ ...prev, phone: true }));
 
     try {
-      // 목 데이터로 처리
-      await new Promise(resolve => setTimeout(resolve, 800));
-
+      await sendPhoneCode(phone, username, 'FIND_PASSWORD');
       setCodeSent(true);
       startTimer();
-    } catch {
-      // 인증번호 발송 실패 처리
+    } catch (error) {
+      console.error('인증번호 발송 실패:', getErrorMessage(error));
+      // 에러 처리 로직 추가
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -82,26 +83,24 @@ export default function FindPasswordForm() {
     setIsLoading(prev => ({ ...prev, verify: true }));
 
     try {
-      // 목 데이터로 처리 (123456 또는 000000을 올바른 인증번호로 처리)
-      await new Promise(resolve => setTimeout(resolve, 600));
+      const result = await verifyPhoneCode(phone, phoneCode);
 
-      const verified = phoneCode === '123456' || phoneCode === '000000';
-
-      if (verified) {
+      if (result.verified) {
         setCodeVerified(true);
       } else {
-        // 인증번호가 올바르지 않은 경우 처리
+        console.error('인증번호가 올바르지 않습니다.');
+        // 에러 처리 로직 추가
       }
-    } catch {
-      // 인증번호 확인 실패 처리
+    } catch (error) {
+      console.error('인증번호 확인 실패:', getErrorMessage(error));
+      // 에러 처리 로직 추가
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
   };
 
-  // 폼 제출 - 사용자 검증 목 데이터 처리
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (_data: FindPasswordFormValues) => {
+  // 폼 제출 - 비밀번호 찾기 API 호출
+  const onSubmit = async (data: FindPasswordFormValues) => {
     if (!codeVerified) {
       return;
     }
@@ -109,19 +108,24 @@ export default function FindPasswordForm() {
     setIsLoading(prev => ({ ...prev, submit: true }));
 
     try {
-      // 목 데이터로 처리
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await findPassword({
+        username: data.username,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        phoneCode: data.phoneCode,
+      });
 
-      // 목 reauthToken 생성
-      const mockReauthToken = 'mock_reauth_token_' + Date.now();
+      // reauthToken을 localStorage에 저장
+      localStorage.setItem('reauthToken', result.reauthToken);
 
-      // localStorage에 reauthToken 저장
-      localStorage.setItem('reauthToken', mockReauthToken);
+      // 비밀번호 찾기 성공 플래그를 sessionStorage에 저장
+      sessionStorage.setItem('findPasswordSuccess', 'true');
 
       // ResetPasswordPage로 이동
       navigate('/auth/resetpassword');
-    } catch {
-      // 사용자 검증 실패 처리
+    } catch (error) {
+      console.error('비밀번호 찾기 실패:', getErrorMessage(error));
+      // 에러 처리 로직 추가
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
@@ -151,7 +155,7 @@ export default function FindPasswordForm() {
           <Button
             type="button"
             onClick={handleSendPhoneCode}
-            disabled={!phone || !username || timer > 0 || isLoading.phone}
+            disabled={!phone || !username || !email || timer > 0 || isLoading.phone}
             variant={codeSent ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
