@@ -176,7 +176,7 @@ export default function FindIdForm() {
         label="인증번호"
         htmlFor="phoneCode"
         required
-        error={errors.phoneCode?.message || apiErrors.verify}
+        error={errors.phoneCode?.message || apiErrors.verify || apiErrors.submit}
       >
         <div className={styles.fieldWithButton}>
           <Input id="phoneCode" {...register('phoneCode')} placeholder="123456" />
@@ -203,8 +203,6 @@ export default function FindIdForm() {
       >
         {isSubmitting ? '아이디 찾는 중...' : '아이디 찾기'}
       </Button>
-
-      {apiErrors.submit && <div className={styles.errorMessage}>{apiErrors.submit}</div>}
     </form>
   );
 }
