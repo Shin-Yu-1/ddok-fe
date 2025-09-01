@@ -228,6 +228,12 @@ interface ResetPasswordRequest {
   passwordCheck: string;
 }
 
+// 카카오 로그인 요청 타입
+interface KakaoSignInRequest {
+  authorizationCode: string;
+  redirectUri: string;
+}
+
 // 이메일 찾기
 export const findEmail = async (findEmailData: FindEmailRequest): Promise<FindEmailResponse> => {
   const response = await publicApi.post<ApiResponseDto<FindEmailResponse>>(
@@ -258,6 +264,32 @@ export const resetPassword = async (
       Authorization: `Bearer ${reauthToken}`,
     },
   });
+};
+
+// 카카오 로그인 (authorizationCode 방식)
+export const signInWithKakao = async (kakaoData: KakaoSignInRequest): Promise<SignInResponse> => {
+  const response = await publicApi.post<ApiResponseDto<SignInResponse>>(
+    '/api/auth/signin/kakao',
+    kakaoData
+  );
+  return response.data.data;
+};
+
+// 카카오 로그인 리다이렉트 URL 생성
+export const getKakaoLoginUrl = (): string => {
+  // 카카오 개발자 콘솔에서 설정한 JavaScript 키
+  const kakaoAppKey = import.meta.env.VITE_KAKAO_APP_KEY;
+  // 프론트엔드 콜백 URL (카카오 개발자 콘솔에 등록된 URL과 일치해야 함)
+  const redirectUri = `${window.location.origin}/auth/kakao/callback`;
+
+  const kakaoAuthUrl = 'https://kauth.kakao.com/oauth/authorize';
+  const params = new URLSearchParams({
+    client_id: kakaoAppKey,
+    redirect_uri: redirectUri,
+    response_type: 'code',
+  });
+
+  return `${kakaoAuthUrl}?${params.toString()}`;
 };
 
 // API 에러 처리를 위한 유틸리티 함수

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { signIn, getErrorMessage } from '@/api/auth';
+import { signIn, getErrorMessage, getKakaoLoginUrl } from '@/api/auth';
 import kakaoIcon from '@/assets/icons/kakao-icon.svg';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
@@ -73,7 +73,9 @@ export default function SignInForm() {
   const isButtonDisabled = isLoading || !email || !password || hasErrors;
 
   const handleKakaoLogin = () => {
-    // 카카오 로그인 구현
+    // 카카오 로그인 URL로 리다이렉트
+    const kakaoLoginUrl = getKakaoLoginUrl();
+    window.location.href = kakaoLoginUrl;
   };
 
   return (
