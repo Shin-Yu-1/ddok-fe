@@ -236,7 +236,7 @@ export const findPassword = async (
   findPasswordData: FindPasswordRequest
 ): Promise<FindPasswordResponse> => {
   const response = await publicApi.post<ApiResponseDto<FindPasswordResponse>>(
-    '/api/auth/password/find',
+    '/api/auth/password/verify-user',
     findPasswordData
   );
   return response.data.data;
