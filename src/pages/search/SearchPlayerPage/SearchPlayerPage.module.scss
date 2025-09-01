@@ -1,11 +1,77 @@
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as m;
 
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
-  background-color: $blue-1;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  place-items: center;
 }
 
-.title {
-  @include m.font-title;
+.searchWrapper {
+  width: fit-content;
+  height: fit-content;
+
+  .infoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    margin-top: 10px;
+    font-size: $fs-xxxsmall;
+    color: $gray-1;
+  }
+}
+
+.playerCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 230px;
+  padding: 25px 13px;
+
+  // height: 290px;
+  border: 1px solid $gray-3;
+  border-radius: $r-medium;
+  background: $white-3;
+
+  .playerTempWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 85px;
+    margin-top: 9px;
+    margin-bottom: 16px;
+  }
+
+  .profileImage {
+    width: 89px;
+    height: 89px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+  }
+
+  .nickname {
+    margin-bottom: 12px;
+  }
+
+  .line {
+    width: 100%;
+    height: 1px;
+    background-color: $gray-3;
+  }
+
+  .playerInfo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+
+    .details {
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
