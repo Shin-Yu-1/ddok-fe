@@ -3,11 +3,15 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 
 import styles from './SignUpCompletePage.module.scss';
 
 export default function SignUpCompletePage() {
   const navigate = useNavigate();
+
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
 
   // sessionStorage에서 회원가입 성공 플래그 확인
   useEffect(() => {

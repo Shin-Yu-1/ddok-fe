@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 
 import SignUpForm from '@/features/Auth/SignUpForm/SignUpForm';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 
 import styles from './SignUpPage.module.scss';
 
 export default function SignUpPage() {
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
+
   return (
     <div className={styles.inner}>
       <h1 className={styles.title}>회원가입</h1>

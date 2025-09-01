@@ -8,6 +8,7 @@ import { resetPassword, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 import { changePasswordSchema, type ChangePasswordFormValues } from '@/schemas/auth.schema';
 
 import styles from './ResetPasswordPage.module.scss';
@@ -16,6 +17,9 @@ export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [reauthToken, setReauthToken] = useState<string | null>(null);
   const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
+
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
 
   // sessionStorage에서 reauthToken 가져오기
   useEffect(() => {

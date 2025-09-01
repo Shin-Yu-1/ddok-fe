@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 
 import styles from './FindIdCompletePage.module.scss';
 
@@ -10,6 +11,9 @@ export default function FindIdCompletePage() {
   const [searchParams] = useSearchParams();
   const email = searchParams.get('email') || '';
   const navigate = useNavigate();
+
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
 
   useEffect(() => {
     // sessionStorage에서 아이디 찾기 성공 플래그 확인
