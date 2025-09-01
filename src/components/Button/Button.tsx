@@ -96,6 +96,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...(backgroundColor ? { backgroundColor: backgroundColor } : null),
       ...(textColor ? { color: textColor } : null),
       ...(border ? ({ border: border, '--button-border': border } as React.CSSProperties) : null),
+      ...(backgroundColor === 'none' ? { background: 'none' } : null),
     };
 
     return (

@@ -20,7 +20,7 @@ const OverflowMenu = forwardRef<HTMLDivElement, menuProps>(
         <ul className={styles.menuList}>
           {menuItems?.map(item => (
             <li key={item.name} className={styles.itemWrapper} onClick={item.onClick}>
-              <span className={styles.icon}>{item.icon}</span>
+              {item.icon && <span className={styles.icon}>{item.icon}</span>}
               <span className={styles.name}>{item.name}</span>
             </li>
           ))}

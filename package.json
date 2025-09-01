@@ -17,9 +17,12 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@phosphor-icons/react": "^2.1.10",
+    "@stomp/stompjs": "^7.1.1",
     "@tanstack/react-query": "^5.85.3",
+    "@uiw/react-md-editor": "^4.0.8",
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.17",
     "radix-ui": "^1.4.3",
     "react": "^19.1.1",
     "react-datepicker": "^8.7.0",
