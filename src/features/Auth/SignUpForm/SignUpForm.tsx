@@ -184,6 +184,9 @@ export default function SignUpForm() {
       const result = await signUp(signUpData);
 
       if (result.id) {
+        // 회원가입 성공 플래그를 sessionStorage에 저장
+        sessionStorage.setItem('signUpSuccess', 'true');
+
         // 회원가입 성공 시 회원가입 완료 페이지로 이동
         navigate('/auth/signupcomplete');
       }

@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -6,6 +8,20 @@ import styles from './SignUpCompletePage.module.scss';
 
 export default function SignUpCompletePage() {
   const navigate = useNavigate();
+
+  // sessionStorage에서 회원가입 성공 플래그 확인
+  useEffect(() => {
+    const signUpSuccess = sessionStorage.getItem('signUpSuccess');
+
+    // 회원가입을 거치지 않고 직접 접근하면 회원가입 페이지로 리다이렉트
+    if (!signUpSuccess) {
+      navigate('/auth/signup', { replace: true });
+      return;
+    }
+
+    // 페이지 접근 후 플래그 제거 (일회성 접근)
+    sessionStorage.removeItem('signUpSuccess');
+  }, [navigate]);
 
   return (
     <div className={styles.inner}>
