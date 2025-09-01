@@ -33,6 +33,11 @@ export default function FindPasswordForm() {
     verify: false,
     submit: false,
   });
+  const [apiErrors, setApiErrors] = useState({
+    phone: '',
+    verify: '',
+    submit: '',
+  });
 
   // 폼 데이터 감시
   const username = watch('username');
@@ -61,6 +66,7 @@ export default function FindPasswordForm() {
     }
 
     setIsLoading(prev => ({ ...prev, phone: true }));
+    setApiErrors(prev => ({ ...prev, phone: '' })); // 이전 에러 초기화
 
     try {
       await sendPhoneCode(phone, username, 'FIND_PASSWORD');
@@ -68,7 +74,7 @@ export default function FindPasswordForm() {
       startTimer();
     } catch (error) {
       console.error('인증번호 발송 실패:', getErrorMessage(error));
-      // 에러 처리 로직 추가
+      setApiErrors(prev => ({ ...prev, phone: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -81,6 +87,7 @@ export default function FindPasswordForm() {
     }
 
     setIsLoading(prev => ({ ...prev, verify: true }));
+    setApiErrors(prev => ({ ...prev, verify: '' })); // 이전 에러 초기화
 
     try {
       const result = await verifyPhoneCode(phone, phoneCode);
@@ -88,12 +95,11 @@ export default function FindPasswordForm() {
       if (result.verified) {
         setCodeVerified(true);
       } else {
-        console.error('인증번호가 올바르지 않습니다.');
-        // 에러 처리 로직 추가
+        setApiErrors(prev => ({ ...prev, verify: '인증번호가 올바르지 않습니다.' }));
       }
     } catch (error) {
       console.error('인증번호 확인 실패:', getErrorMessage(error));
-      // 에러 처리 로직 추가
+      setApiErrors(prev => ({ ...prev, verify: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
@@ -106,6 +112,7 @@ export default function FindPasswordForm() {
     }
 
     setIsLoading(prev => ({ ...prev, submit: true }));
+    setApiErrors(prev => ({ ...prev, submit: '' })); // 이전 에러 초기화
 
     try {
       const result = await findPassword({
@@ -125,7 +132,7 @@ export default function FindPasswordForm() {
       navigate('/auth/resetpassword');
     } catch (error) {
       console.error('비밀번호 찾기 실패:', getErrorMessage(error));
-      // 에러 처리 로직 추가
+      setApiErrors(prev => ({ ...prev, submit: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
@@ -148,7 +155,7 @@ export default function FindPasswordForm() {
         label="휴대폰 번호"
         htmlFor="phoneNumber"
         required
-        error={errors.phoneNumber?.message}
+        error={errors.phoneNumber?.message || apiErrors.phone}
       >
         <div className={styles.fieldWithButton}>
           <Input id="phoneNumber" {...register('phoneNumber')} placeholder="01012345678" />
@@ -165,7 +172,12 @@ export default function FindPasswordForm() {
         </div>
       </FormField>
 
-      <FormField label="인증번호" htmlFor="phoneCode" required error={errors.phoneCode?.message}>
+      <FormField
+        label="인증번호"
+        htmlFor="phoneCode"
+        required
+        error={errors.phoneCode?.message || apiErrors.verify || apiErrors.submit}
+      >
         <div className={styles.fieldWithButton}>
           <Input id="phoneCode" {...register('phoneCode')} placeholder="123456" />
           <Button
