@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { resetPassword, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
@@ -14,26 +15,31 @@ import styles from './ResetPasswordPage.module.scss';
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [reauthToken, setReauthToken] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
 
   // sessionStorage에서 reauthToken 가져오기
   useEffect(() => {
-    // sessionStorage에서 비밀번호 찾기 성공 플래그 확인
-    const findPasswordSuccess = sessionStorage.getItem('findPasswordSuccess');
+    // 약간의 지연을 주어 sessionStorage 저장이 완료되도록 함
+    const timer = setTimeout(() => {
+      // sessionStorage에서 비밀번호 찾기 성공 플래그 확인
+      const findPasswordSuccess = sessionStorage.getItem('findPasswordSuccess');
 
-    // sessionStorage에서 reauthToken 확인
-    const token = sessionStorage.getItem('reauthToken');
+      // sessionStorage에서 reauthToken 확인
+      const token = sessionStorage.getItem('reauthToken');
 
-    // 비밀번호 찾기를 거치지 않고 직접 접근하거나 토큰이 없으면 리다이렉트
-    if (!findPasswordSuccess || !token) {
-      navigate('/auth/findpassword', { replace: true });
-      return;
-    }
+      // 비밀번호 찾기를 거치지 않고 직접 접근하거나 토큰이 없으면 리다이렉트
+      if (!findPasswordSuccess || !token) {
+        navigate('/auth/findpassword', { replace: true });
+        return;
+      }
 
-    setReauthToken(token);
+      setReauthToken(token);
 
-    // 페이지 접근 후 플래그 제거 (일회성 접근)
-    sessionStorage.removeItem('findPasswordSuccess');
+      // 페이지 접근 후 플래그 제거 (일회성 접근)
+      sessionStorage.removeItem('findPasswordSuccess');
+    }, 100); // 100ms 지연
+
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   const {
@@ -52,19 +58,24 @@ export default function ResetPasswordPage() {
   const passwordCheck = watch('passwordCheck');
 
   // 폼 제출
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = async (_data: ChangePasswordFormValues) => {
+  const onSubmit = async (data: ChangePasswordFormValues) => {
     if (!reauthToken) {
-      setError('인증 토큰이 없습니다. 다시 시도해주세요.');
+      setApiErrors({ general: '인증 토큰이 없습니다. 다시 시도해주세요.' });
       return;
     }
 
     setIsSubmitting(true);
-    setError(null);
+    setApiErrors({});
 
     try {
-      // 목 데이터로 처리
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      // 실제 API 호출
+      await resetPassword(
+        {
+          newPassword: data.newPassword,
+          passwordCheck: data.passwordCheck,
+        },
+        reauthToken
+      );
 
       // sessionStorage에서 reauthToken 제거
       sessionStorage.removeItem('reauthToken');
@@ -73,8 +84,8 @@ export default function ResetPasswordPage() {
       navigate('/auth/signin', {
         state: { message: '비밀번호가 성공적으로 변경되었습니다.' },
       });
-    } catch {
-      setError('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+    } catch (error) {
+      setApiErrors({ general: getErrorMessage(error) });
     } finally {
       setIsSubmitting(false);
     }
@@ -96,16 +107,12 @@ export default function ResetPasswordPage() {
       <h1 className={styles.title}>새 비밀번호 설정</h1>
       <p className={styles.text}>새로운 비밀번호를 입력하고 계정을 보호하세요!</p>
 
-      {error && (
-        <div style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <FormField
           label="새 비밀번호"
           htmlFor="newPassword"
           required
-          error={errors.newPassword?.message}
+          error={errors.newPassword?.message || apiErrors.newPassword}
         >
           <PasswordInput
             id="newPassword"
@@ -118,7 +125,7 @@ export default function ResetPasswordPage() {
           label="비밀번호 확인"
           htmlFor="passwordCheck"
           required
-          error={errors.passwordCheck?.message}
+          error={errors.passwordCheck?.message || apiErrors.passwordCheck}
         >
           <PasswordInput
             id="passwordCheck"
@@ -126,6 +133,12 @@ export default function ResetPasswordPage() {
             placeholder="비밀번호를 다시 입력하세요"
           />
         </FormField>
+
+        {apiErrors.general && (
+          <div style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>
+            {apiErrors.general}
+          </div>
+        )}
 
         <Button
           type="submit"

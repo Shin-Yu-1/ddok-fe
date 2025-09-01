@@ -129,7 +129,7 @@ export default function FindPasswordForm() {
       sessionStorage.setItem('findPasswordSuccess', 'true');
 
       // ResetPasswordPage로 이동
-      navigate('/auth/resetpassword');
+      navigate('/auth/resetpassword', { replace: true });
     } catch (error) {
       console.error('비밀번호 찾기 실패:', getErrorMessage(error));
       setApiErrors(prev => ({ ...prev, submit: getErrorMessage(error) }));
