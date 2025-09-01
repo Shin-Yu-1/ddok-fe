@@ -9,11 +9,11 @@ export const playerSchema = z.object({
   category: z.string(),
   nickname: z.string(),
   profileImageUrl: z.string(),
-  mainBagde: {
+  mainBadge: {
     type: z.string(),
     tier: z.string(),
   },
-  abandonBagde: {
+  abandonBadge: {
     isGranted: z.boolean(),
     count: z.number(),
   },
@@ -32,4 +32,4 @@ export const playerListSchema = z.object({
 });
 
 export const playerListApiResponseSchema = apiResponseSchema(playerListSchema);
-export type ChatListApiResponse = z.infer<typeof playerListApiResponseSchema>;
+export type playerListApiResponse = z.infer<typeof playerListApiResponseSchema>;
