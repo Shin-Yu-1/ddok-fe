@@ -127,6 +127,10 @@ export default function FindIdForm() {
       const result = await findEmail(findEmailData);
 
       if (result.email) {
+        // 아이디 찾기 성공 플래그를 sessionStorage에 저장
+        sessionStorage.setItem('findIdSuccess', 'true');
+        sessionStorage.setItem('findIdEmail', result.email);
+
         // 찾은 이메일과 함께 완료 페이지로 이동
         navigate(`/auth/findidcomplete?email=${encodeURIComponent(result.email)}`);
       }
