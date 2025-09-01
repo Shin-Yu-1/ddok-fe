@@ -222,6 +222,12 @@ interface FindPasswordResponse {
   reauthToken: string;
 }
 
+// 비밀번호 재설정 요청 타입
+interface ResetPasswordRequest {
+  newPassword: string;
+  passwordCheck: string;
+}
+
 // 이메일 찾기
 export const findEmail = async (findEmailData: FindEmailRequest): Promise<FindEmailResponse> => {
   const response = await publicApi.post<ApiResponseDto<FindEmailResponse>>(
@@ -240,6 +246,18 @@ export const findPassword = async (
     findPasswordData
   );
   return response.data.data;
+};
+
+// 비밀번호 재설정
+export const resetPassword = async (
+  resetPasswordData: ResetPasswordRequest,
+  reauthToken: string
+): Promise<void> => {
+  await publicApi.post<ApiResponseDto<null>>('/api/auth/password/reset', resetPasswordData, {
+    headers: {
+      Authorization: `Bearer ${reauthToken}`,
+    },
+  });
 };
 
 // API 에러 처리를 위한 유틸리티 함수
