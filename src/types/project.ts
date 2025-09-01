@@ -8,7 +8,7 @@ export interface PreferredAges {
 }
 
 // 프로젝트 모드
-export type ProjectMode = 'ONLINE' | 'OFFLINE';
+export type ProjectMode = 'online' | 'offline';
 
 // 위치 정보
 export interface Location {
@@ -103,7 +103,7 @@ export const initialFormData: CreateProjectData = {
     return `${year}-${month}-${day}`;
   })(),
   expectedMonth: 1,
-  mode: 'OFFLINE',
+  mode: 'offline',
   location: null,
   preferredAges: null,
   capacity: 1,

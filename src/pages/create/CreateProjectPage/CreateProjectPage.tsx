@@ -9,6 +9,7 @@ import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
 import PostCapacitySelector from '@/features/post/components/PostCapacitySelector/PostCapacitySelector';
 import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
+import PostDurationSlider from '@/features/post/components/PostDurationSlider/PostDurationSlider';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/post/useCreateProjectForm';
@@ -29,11 +30,12 @@ const CreateProjectPage = () => {
     updateLocation,
     updateExpectedStart,
     updateCapacity,
+    updateExpectedMonth,
     isValid,
   } = useCreateProjectForm();
 
   const handleModeChange = (value: string) => {
-    updateMode(value as 'ONLINE' | 'OFFLINE');
+    updateMode(value as 'online' | 'offline');
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +117,7 @@ const CreateProjectPage = () => {
       expectedStart: formData.expectedStart,
       expectedMonth: formData.expectedMonth,
       mode: formData.mode,
-      location: formData.mode === 'OFFLINE' ? formData.location : null,
+      location: formData.mode === 'offline' ? formData.location : null,
       preferredAges: formData.preferredAges,
       capacity: formData.capacity,
       traits: formData.traits,
@@ -236,7 +238,13 @@ const CreateProjectPage = () => {
                     min={getTomorrowDate()} // 내일부터 선택 가능
                   />
                 </MainSection>
-                <SideSection title={'예상 기간'}>날짜 선택 섹션 추가 예정</SideSection>
+                <MainSection title={'예상 기간'}>
+                  <PostDurationSlider
+                    value={formData.expectedMonth}
+                    onChange={updateExpectedMonth}
+                    startDate={formData.expectedStart}
+                  />
+                </MainSection>
                 <MainSection title={'모임 형태'}>
                   <RadioGroup.Root
                     className={styles.radioRoot}
@@ -244,7 +252,7 @@ const CreateProjectPage = () => {
                     onValueChange={handleModeChange}
                   >
                     <div className={styles.radioItemGroup}>
-                      <RadioGroup.Item className={styles.radioItem} value="ONLINE" id="r1">
+                      <RadioGroup.Item className={styles.radioItem} value="online" id="r1">
                         <RadioGroup.Indicator className={styles.radioIndicator} />
                       </RadioGroup.Item>
                       <label className={styles.radioLabel} htmlFor="r1">
@@ -252,7 +260,7 @@ const CreateProjectPage = () => {
                       </label>
                     </div>
                     <div className={styles.radioItemGroup}>
-                      <RadioGroup.Item className={styles.radioItem} value="OFFLINE" id="r2">
+                      <RadioGroup.Item className={styles.radioItem} value="offline" id="r2">
                         <RadioGroup.Indicator className={styles.radioIndicator} />
                       </RadioGroup.Item>
                       <label className={styles.radioLabel} htmlFor="r2">
@@ -262,7 +270,7 @@ const CreateProjectPage = () => {
                   </RadioGroup.Root>
                 </MainSection>
                 {/* 조건부 렌더링: 오프라인일 때만 지역 섹션 표시 */}
-                {formData.mode === 'OFFLINE' && (
+                {formData.mode === 'offline' && (
                   <MainSection title={'지역'}>
                     <PostLocationSelector
                       location={formData.location}
