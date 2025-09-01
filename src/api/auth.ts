@@ -130,14 +130,15 @@ export const checkEmail = async (email: string): Promise<EmailCheckResponse> => 
 // 휴대폰 인증 코드 발송
 export const sendPhoneCode = async (
   phoneNumber: string,
-  username: string
+  username: string,
+  authType: 'SIGN_UP' | 'FIND_ID' | 'FIND_PASSWORD' = 'SIGN_UP'
 ): Promise<PhoneVerificationResponse> => {
   const response = await publicApi.post<ApiResponseDto<PhoneVerificationResponse>>(
     '/api/auth/phone/send-code',
     {
       phoneNumber,
       username,
-      authType: 'SIGN_UP',
+      authType,
     }
   );
   return response.data.data;
@@ -192,6 +193,51 @@ export const submitPersonalization = async (
   const response = await api.post<ApiResponseDto<PersonalizationResponse>>(
     '/api/auth/preferences',
     personalizationData
+  );
+  return response.data.data;
+};
+
+// 이메일 찾기 요청 타입
+interface FindEmailRequest {
+  username: string;
+  phoneNumber: string;
+  phoneCode: string;
+}
+
+// 이메일 찾기 응답 타입
+interface FindEmailResponse {
+  email: string;
+}
+
+// 비밀번호 찾기 요청 타입
+interface FindPasswordRequest {
+  username: string;
+  email: string;
+  phoneNumber: string;
+  phoneCode: string;
+}
+
+// 비밀번호 찾기 응답 타입
+interface FindPasswordResponse {
+  reauthToken: string;
+}
+
+// 이메일 찾기
+export const findEmail = async (findEmailData: FindEmailRequest): Promise<FindEmailResponse> => {
+  const response = await publicApi.post<ApiResponseDto<FindEmailResponse>>(
+    '/api/auth/email/find',
+    findEmailData
+  );
+  return response.data.data;
+};
+
+// 비밀번호 찾기
+export const findPassword = async (
+  findPasswordData: FindPasswordRequest
+): Promise<FindPasswordResponse> => {
+  const response = await publicApi.post<ApiResponseDto<FindPasswordResponse>>(
+    '/api/auth/password/find',
+    findPasswordData
   );
   return response.data.data;
 };
