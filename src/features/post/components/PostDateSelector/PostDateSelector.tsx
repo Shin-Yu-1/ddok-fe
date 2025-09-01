@@ -1,6 +1,11 @@
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+
 import DateInput from '@/components/DateInput/DateInput';
 
 import styles from './PostDateSelector.module.scss';
+
+dayjs.locale('ko');
 
 interface PostDateSelectorProps {
   value: string;
@@ -35,14 +40,7 @@ const PostDateSelector = ({
       {value && (
         <div className={styles.selectedDate}>
           <span className={styles.dateText}>
-            선택된 날짜:{' '}
-            {new Date(value).toLocaleDateString('ko-KR', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'short',
-            })}
-            요일
+            선택된 날짜: {dayjs(value).format('YYYY년 M월 D일 (ddd)')}
           </span>
         </div>
       )}
