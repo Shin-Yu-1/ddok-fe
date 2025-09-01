@@ -278,7 +278,7 @@ export const signInWithKakao = async (kakaoData: KakaoSignInRequest): Promise<Si
 // 카카오 로그인 리다이렉트 URL 생성
 export const getKakaoLoginUrl = (): string => {
   // 카카오 개발자 콘솔에서 설정한 JavaScript 키
-  const kakaoAppKey = import.meta.env.VITE_KAKAO_APP_KEY;
+  const kakaoAppKey = import.meta.env.VITE_KAKAO_API_KEY;
   // 프론트엔드 콜백 URL (카카오 개발자 콘솔에 등록된 URL과 일치해야 함)
   const redirectUri = `${window.location.origin}/auth/kakao/callback`;
 
