@@ -16,13 +16,13 @@ export default function ResetPasswordPage() {
   const [reauthToken, setReauthToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // localStorage에서 reauthToken 가져오기
+  // sessionStorage에서 reauthToken 가져오기
   useEffect(() => {
     // sessionStorage에서 비밀번호 찾기 성공 플래그 확인
     const findPasswordSuccess = sessionStorage.getItem('findPasswordSuccess');
 
-    // localStorage에서 reauthToken 확인
-    const token = localStorage.getItem('reauthToken');
+    // sessionStorage에서 reauthToken 확인
+    const token = sessionStorage.getItem('reauthToken');
 
     // 비밀번호 찾기를 거치지 않고 직접 접근하거나 토큰이 없으면 리다이렉트
     if (!findPasswordSuccess || !token) {
@@ -66,8 +66,8 @@ export default function ResetPasswordPage() {
       // 목 데이터로 처리
       await new Promise(resolve => setTimeout(resolve, 1200));
 
-      // localStorage에서 reauthToken 제거
-      localStorage.removeItem('reauthToken');
+      // sessionStorage에서 reauthToken 제거
+      sessionStorage.removeItem('reauthToken');
 
       // 로그인 페이지로 이동
       navigate('/auth/signin', {

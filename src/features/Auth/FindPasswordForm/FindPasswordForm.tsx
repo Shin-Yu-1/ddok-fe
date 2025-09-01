@@ -122,8 +122,8 @@ export default function FindPasswordForm() {
         phoneCode: data.phoneCode,
       });
 
-      // reauthToken을 localStorage에 저장
-      localStorage.setItem('reauthToken', result.reauthToken);
+      // reauthToken을 sessionStorage에 저장
+      sessionStorage.setItem('reauthToken', result.reauthToken);
 
       // 비밀번호 찾기 성공 플래그를 sessionStorage에 저장
       sessionStorage.setItem('findPasswordSuccess', 'true');
