@@ -4,33 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { sendPhoneCode, verifyPhoneCode, findEmail, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
-import {
-  mockSendPhoneCodeForFindId,
-  mockVerifyPhoneCodeForFindId,
-  mockFindId,
-} from '@/mocks/mockFindId';
 import { findIdSchema } from '@/schemas/auth.schema';
 import type { FindIdFormValues } from '@/schemas/auth.schema';
 
 import styles from './FindIdForm.module.scss';
-
-// API 연결 부분 주석 처리
-// import type {
-//   FindIdURL,
-//   PhoneSendCodeURL,
-//   PhoneVerifyCodeURL,
-// } from '@/types/apiEndpoints.types';
-// import {
-//   useFindId,
-//   useSendPhoneCodeForFindId,
-//   useVerifyPhoneCodeForFindId,
-// } from '@/hooks/auth/useFindId';
-// const findIdURL: FindIdURL = '/api/auth/email/find';
-// const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
-// const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
 
 export default function FindIdForm() {
   const navigate = useNavigate();
@@ -52,6 +33,11 @@ export default function FindIdForm() {
     phone: false,
     verify: false,
     submit: false,
+  });
+  const [apiErrors, setApiErrors] = useState({
+    phone: '',
+    verify: '',
+    submit: '',
   });
 
   // 폼 데이터 감시
@@ -80,15 +66,17 @@ export default function FindIdForm() {
     }
 
     setIsLoading(prev => ({ ...prev, phone: true }));
+    setApiErrors(prev => ({ ...prev, phone: '' })); // 이전 에러 초기화
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
-      const result = await mockSendPhoneCodeForFindId(cleanPhoneNumber, username.trim());
+      await sendPhoneCode(cleanPhoneNumber, username.trim(), 'FIND_ID');
 
-      if (result.success) {
-        setCodeSent(true);
-        startTimer();
-      }
+      setCodeSent(true);
+      startTimer();
+    } catch (error) {
+      console.error('인증번호 발송 실패:', getErrorMessage(error));
+      setApiErrors(prev => ({ ...prev, phone: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -101,15 +89,20 @@ export default function FindIdForm() {
     }
 
     setIsLoading(prev => ({ ...prev, verify: true }));
-    // setError(null);
+    setApiErrors(prev => ({ ...prev, verify: '' })); // 이전 에러 초기화
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
-      const result = await mockVerifyPhoneCodeForFindId(cleanPhoneNumber, phoneCode.trim());
+      const result = await verifyPhoneCode(cleanPhoneNumber, phoneCode.trim());
 
-      if (result.success && result.verified) {
+      if (result.verified) {
         setCodeVerified(true);
+      } else {
+        setApiErrors(prev => ({ ...prev, verify: '인증번호가 올바르지 않습니다.' }));
       }
+    } catch (error) {
+      console.error('인증번호 확인 실패:', getErrorMessage(error));
+      setApiErrors(prev => ({ ...prev, verify: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
@@ -122,20 +115,24 @@ export default function FindIdForm() {
     }
 
     setIsLoading(prev => ({ ...prev, submit: true }));
+    setApiErrors(prev => ({ ...prev, submit: '' })); // 이전 에러 초기화
 
     try {
-      const findIdData = {
+      const findEmailData = {
         username: data.username,
         phoneNumber: data.phoneNumber.replace(/-/g, ''), // 하이픈 제거
         phoneCode: data.phoneCode,
       };
 
-      const result = await mockFindId(findIdData);
+      const result = await findEmail(findEmailData);
 
-      if (result.success && result.email) {
+      if (result.email) {
         // 찾은 이메일과 함께 완료 페이지로 이동
         navigate(`/auth/findidcomplete?email=${encodeURIComponent(result.email)}`);
       }
+    } catch (error) {
+      console.error('이메일 찾기 실패:', getErrorMessage(error));
+      setApiErrors(prev => ({ ...prev, submit: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
@@ -154,7 +151,7 @@ export default function FindIdForm() {
         label="휴대폰 번호"
         htmlFor="phoneNumber"
         required
-        error={errors.phoneNumber?.message}
+        error={errors.phoneNumber?.message || apiErrors.phone}
       >
         <div className={styles.fieldWithButton}>
           <Input id="phoneNumber" {...register('phoneNumber')} placeholder="01012345678" />
@@ -171,7 +168,12 @@ export default function FindIdForm() {
         </div>
       </FormField>
 
-      <FormField label="인증번호" htmlFor="phoneCode" required error={errors.phoneCode?.message}>
+      <FormField
+        label="인증번호"
+        htmlFor="phoneCode"
+        required
+        error={errors.phoneCode?.message || apiErrors.verify}
+      >
         <div className={styles.fieldWithButton}>
           <Input id="phoneCode" {...register('phoneCode')} placeholder="123456" />
           <Button
@@ -197,6 +199,8 @@ export default function FindIdForm() {
       >
         {isSubmitting ? '아이디 찾는 중...' : '아이디 찾기'}
       </Button>
+
+      {apiErrors.submit && <div className={styles.errorMessage}>{apiErrors.submit}</div>}
     </form>
   );
 }
