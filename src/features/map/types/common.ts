@@ -20,3 +20,13 @@ export interface BaseMapItem {
   category: MapItemCategory;
   location: Location;
 }
+
+/** 지도 사각형 영역 및 중심 좌표에 대한 정보 */
+export interface MapBounds {
+  swLat: number;
+  swLng: number;
+  neLat: number;
+  neLng: number;
+  lat: number;
+  lng: number;
+}
