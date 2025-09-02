@@ -16,6 +16,8 @@ export interface PlayerMapItem extends BaseMapItem {
 export interface PlayerPanelItem extends BaseMapItem {
   userId: number;
   nickname: string;
+  position: string;
+  isMine: boolean;
   mainBadge: {
     type: string;
     tier: string;

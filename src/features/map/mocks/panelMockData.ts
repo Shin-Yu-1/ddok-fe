@@ -68,6 +68,8 @@ export const panelMockData: MapPanelItem[] = [
       longitude: 126.977,
       address: '서울특별시 강남구 테헤란로',
     },
+    position: '백엔드',
+    isMine: false,
     mainBadge: {
       type: 'login',
       tier: 'bronze',
