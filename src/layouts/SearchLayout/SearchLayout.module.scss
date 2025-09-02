@@ -18,14 +18,12 @@
   background-color: $white-2;
 
   @include m.mobile {
-    width: calc(100vw - 37px);
     min-height: calc(100vh - 81px);
     margin-top: calc(46px + 35px);
     margin-left: 37px;
   }
 
   @include m.tablet {
-    width: calc(100vw - 42px);
     min-height: calc(100vh - 96px);
     margin-left: 42px;
   }
