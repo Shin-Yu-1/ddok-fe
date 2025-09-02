@@ -3,28 +3,11 @@ import type { Cafe } from '@/features/map/types';
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelCafeItemProps {
-  //   category: string;
-  //   cafeId: number;
-  //   title: string;
-  //   location: {
-  //     latitude: number;
-  //     longitude: number;
-  //     address: string;
-  //   };
-  //   bannerImageUrl: string;
   cafe: Cafe;
   onItemClick: () => void;
 }
 
-const MapPanelCafeItem: React.FC<MapPanelCafeItemProps> = ({
-  //   category,
-  //   cafeId,
-  //   title,
-  //   location: { latitude, longitude, address },
-  //   bannerImageUrl,
-  cafe,
-  onItemClick,
-}) => {
+const MapPanelCafeItem: React.FC<MapPanelCafeItemProps> = ({ cafe, onItemClick }) => {
   return (
     <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>

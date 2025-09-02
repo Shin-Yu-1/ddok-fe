@@ -3,28 +3,11 @@ import type { Player } from '@/features/map/types';
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelPlayerItemProps {
-  //   category: string;
-  //   userId: number;
-  //   nickname: string;
-  //   location: {
-  //     latitude: number;
-  //     longitude: number;
-  //     address: string;
-  //   };
-  //   profileImageUrl: string;
   player: Player;
   onItemClick: () => void;
 }
 
-const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({
-  //   category,
-  //   projectId,
-  //   nickname,
-  //   location: { latitude, longitude, address },
-  //   profileImageUrl,
-  player,
-  onItemClick,
-}) => {
+const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({ player, onItemClick }) => {
   return (
     <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>

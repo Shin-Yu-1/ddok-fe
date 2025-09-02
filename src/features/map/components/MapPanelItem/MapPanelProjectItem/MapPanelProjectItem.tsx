@@ -4,30 +4,11 @@ import { MapItemStatusFilter } from '../../../constants/MapItemStatusFilter.enum
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelProjectItemProps {
-  //   category: string;
-  //   projectId: number;
-  //   title: string;
-  //   location: {
-  //     latitude: number;
-  //     longitude: number;
-  //     address: string;
-  //   };
-  //   teamStatus: string;
-  //   bannerImageUrl: string;
   project: Project;
   onItemClick: () => void;
 }
 
-const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({
-  //   category,
-  //   projectId,
-  //   title,
-  //   location: { latitude, longitude, address },
-  //   teamStatus,
-  //   bannerImageUrl,
-  project,
-  onItemClick,
-}) => {
+const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({ project, onItemClick }) => {
   return (
     <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>
