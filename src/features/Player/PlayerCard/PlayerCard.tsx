@@ -46,7 +46,7 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
     //     alert('DM 요청 전송 중 오류가 발생했습니다.');
     //   },
     // });
-  };
+  }, [player.nickname, closeMenu]);
 
   const menuItems = useMemo(() => {
     const items = [
