@@ -5,6 +5,7 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import Input from '@/components/Input/Input';
 
 import { panelMockData } from '../../mocks/panelMockData';
+import type { Pagination } from '../../schemas/mapSearchSchema';
 import type { MapPanelItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
 import {
@@ -14,6 +15,7 @@ import {
   type CategoryFilterOption,
   type StatusFilterOption,
 } from '../../types/common';
+import MapPagination from '../MapPagination/MapPagination';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
@@ -23,11 +25,19 @@ import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
   data?: MapPanelItem[];
+  pagination?: Pagination;
   isLoading?: boolean;
   handleItemClick: (itemType: MapItemCategory, itemId?: number) => void;
+  onPageChange?: (page: number) => void;
 }
 
-const MapPanel: React.FC<MapPanelProps> = ({ data, isLoading, handleItemClick }) => {
+const MapPanel: React.FC<MapPanelProps> = ({
+  data,
+  pagination,
+  isLoading,
+  handleItemClick,
+  onPageChange,
+}) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<CategoryFilterOption>(
     CATEGORY_FILTER_OPTIONS[0] // 'ALL'
   );
@@ -202,6 +212,11 @@ const MapPanel: React.FC<MapPanelProps> = ({ data, isLoading, handleItemClick })
           ))
         )}
       </div>
+
+      {/* 페이지네이션 */}
+      {pagination && onPageChange && (
+        <MapPagination pagination={pagination} onPageChange={onPageChange} />
+      )}
     </div>
   );
 };
