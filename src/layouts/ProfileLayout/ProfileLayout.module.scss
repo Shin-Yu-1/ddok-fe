@@ -1,0 +1,26 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.layoutContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.contentContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(56px + 40px); // 헤더(56px)와 서브 헤더(40px) 높이 더한 값
+  margin-left: 47px; // 사이드바 너비(47px)
+  background-color: $white-2;
+
+  @include m.mobile {
+    margin-top: calc(46px + 35px); // 모바일 너비의 헤더(46px)와 서브 헤더(35px) 높이 더한 값
+    margin-left: 37px; // 사이드바 반응형 너비(37px)
+  }
+
+  @include m.tablet {
+    margin-left: 42px;
+  }
+}

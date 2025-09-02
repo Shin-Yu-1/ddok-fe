@@ -1,6 +1,8 @@
 import { Outlet } from 'react-router-dom';
 
 import Header from '@/features/Header/components/Header';
+import SubHeader from '@/features/Header/components/SubHeader';
+import Sidebar from '@/features/Sidebar/components/Sidebar';
 
 import styles from './ProfileLayout.module.scss';
 
@@ -12,9 +14,13 @@ const ProfileLayout = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.layoutContainer}>
       <Header variant={isLoggedIn ? 'user' : 'guest'} user={isLoggedIn ? user : undefined} />
-      <Outlet />
+      <SubHeader />
+      <Sidebar />
+      <div className={styles.contentContainer}>
+        <Outlet />
+      </div>
     </div>
   );
 };
