@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import { CustomOverlayMap, Map, MapMarker, ZoomControl } from 'react-kakao-maps-sdk';
+import {
+  CustomOverlayMap,
+  Map,
+  MapMarker,
+  useKakaoLoader,
+  ZoomControl,
+} from 'react-kakao-maps-sdk';
 
 import Button from '@/components/Button/Button';
 import MapCafeOverlay from '@/features/map/components/MapOverlay/MapCafeOverlay/MapCafeOverlay';
@@ -28,6 +34,8 @@ const MapPage = () => {
   const [isMapChanged, setIsMapChanged] = useState(false);
 
   const { isSectionOpen } = useSidebarHandlers();
+
+  useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
   useEffect(() => {
@@ -86,7 +94,8 @@ const MapPage = () => {
             }}
           >
             {/* 컨트롤 */}
-            <ZoomControl position="TOPRIGHT" />
+            {/* <ZoomControl position="TOPRIGHT" /> */}
+            <ZoomControl position="BOTTOMRIGHT" />
 
             {/* 마커 */}
             {mapMockData.map(m => (
