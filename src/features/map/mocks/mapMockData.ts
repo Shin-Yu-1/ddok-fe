@@ -74,4 +74,14 @@ export const mapMockData: MapItem[] = [
       address: '서울특별시 강남구 테헤란로…',
     },
   },
+  {
+    category: 'cafe',
+    cafeId: 2,
+    title: '새로운 카페',
+    location: {
+      latitude: 37.563,
+      longitude: 126.977,
+      address: '서울특별시 강남구 테헤란로',
+    },
+  },
 ];
