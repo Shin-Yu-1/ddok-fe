@@ -375,42 +375,7 @@ const SearchPlayerPage = () => {
   const autoLoadsRef = useRef(0);
   const isFetchingRef = useRef(false);
 
-  // keyword 변경 시 playerList, pagination 초기화
-  useEffect(() => {
-    if (!keyword.trim()) {
-      setPlayerList([]);
-      setPagination({ page: 1, size: PAGE_SIZE });
-      setHasMore(true);
-      autoLoadsRef.current = 0;
-      return;
-    }
-
-    // 키워드가 있을 때 첫 페이지 로드
-    autoLoadsRef.current = 0;
-    setPlayerList([]);
-    setPagination({ page: 1, size: PAGE_SIZE });
-    setHasMore(true);
-    loadPlayers(1, true);
-  }, [keyword]);
-
-  // 페이지 변경 시 추가 로드 (키워드가 있을 때만)
-  useEffect(() => {
-    if (!keyword.trim() || pagination.page <= 1) return;
-    loadPlayers(pagination.page, false);
-  }, [pagination.page]);
-
-  // 스크롤 가능하도록 보장
-  useEffect(() => {
-    if (!keyword.trim()) return;
-
-    const timer = setTimeout(() => {
-      ensureScrollable();
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [playerList, keyword]);
-
-  const loadPlayers = async (page: number, isNewSearch: boolean = false) => {
+  const loadPlayers = useCallback(async (page: number, isNewSearch: boolean = false) => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
     setIsLoading(true);
