@@ -26,7 +26,11 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
   //   url: `/api/players/${player.userId}/dm-requests`,
   // });
 
-  const sendDmRequest = () => {
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  const sendDmRequest = useCallback(() => {
     /* TODO: API 연동 시 제거 */
     console.log(player.nickname + ' 1:1 채팅 요청');
     closeMenu();
