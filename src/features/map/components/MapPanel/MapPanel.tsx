@@ -22,10 +22,12 @@ import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyIt
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
+  data?: MapPanelItem[];
+  isLoading?: boolean;
   handleItemClick: (itemType: MapItemCategory, itemId?: number) => void;
 }
 
-const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
+const MapPanel: React.FC<MapPanelProps> = ({ data, isLoading, handleItemClick }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<CategoryFilterOption>(
     CATEGORY_FILTER_OPTIONS[0] // 'ALL'
   );
@@ -41,7 +43,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
 
   // 데이터 필터링 함수
   const filteredData = useMemo(() => {
-    let filtered = panelMockData;
+    // API에서 받은 데이터가 있으면 사용, 없으면 mock 데이터 사용
+    const sourceData = data || panelMockData;
+    let filtered = sourceData;
 
     // 1. 카테고리 필터링
     if (selectedCategoryFilter.value) {
@@ -60,7 +64,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     }
 
     return filtered;
-  }, [selectedCategoryFilter, selectedStatusFilter]);
+  }, [data, selectedCategoryFilter, selectedStatusFilter]);
 
   // 타입별 컴포넌트 렌더링 함수
   const renderMapItem = (item: MapPanelItem) => {
@@ -179,14 +183,24 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
 
       {/* 목록 섹션 */}
       <div className={styles.panel__list}>
-        {filteredData.map((item, index) => (
-          <div key={index}>
-            {renderMapItem(item)}
-            {index < filteredData.length - 1 && (
-              <hr className={styles.panel__list__item__divider} />
-            )}
+        {isLoading ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-2)' }}>
+            검색 중...
           </div>
-        ))}
+        ) : filteredData.length === 0 ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-2)' }}>
+            검색 결과가 없습니다.
+          </div>
+        ) : (
+          filteredData.map((item, index) => (
+            <div key={index}>
+              {renderMapItem(item)}
+              {index < filteredData.length - 1 && (
+                <hr className={styles.panel__list__item__divider} />
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
