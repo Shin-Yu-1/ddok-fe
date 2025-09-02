@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import {
   CustomOverlayMap,
@@ -18,6 +18,7 @@ import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { mapMockData } from '@/features/map/mocks/mapMockData';
 import { overlayMockData } from '@/features/map/mocks/overlayMockData';
 import type { CafeOverlayData } from '@/features/map/types/cafe';
+import type { MapBounds } from '@/features/map/types/common';
 import type { PlayerOverlayData } from '@/features/map/types/player';
 import type { ProjectOverlayData } from '@/features/map/types/project';
 import type { StudyOverlayData } from '@/features/map/types/study';
@@ -27,15 +28,32 @@ import { useSidebarHandlers } from '@/features/Sidebar/hooks/useSidebarHandlers'
 import styles from './MapPage.module.scss';
 
 const MapPage = () => {
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  // 지도의 정보를 담는 ref
+  const mapRef = useRef<kakao.maps.Map>(null);
+
+  // 패널, 서브패널, 오버레이의 열림/닫힘 상태
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
   const [isMapSubPanelOpen, setIsMapSubPanelOpen] = useState(false);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+
+  // 현재 선택된 추천 장소의 ID
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
+
+  // 지도 사각 영역에 대한 정보
+  const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
+
+  // 지도 사각 영역의 변경 여부
   const [isMapChanged, setIsMapChanged] = useState(false);
 
-  const { isSectionOpen } = useSidebarHandlers();
+  // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
+  const [selectedPoint, setSelectedPoint] = useState<{
+    lat: number;
+    lng: number;
+    type: string;
+  } | null>(null);
 
-  useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
+  // 사이드바에서 패널 및 서브패널의 열림 상태를 가져옴
+  const { isSectionOpen } = useSidebarHandlers();
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
   useEffect(() => {
@@ -50,6 +68,7 @@ const MapPage = () => {
     }
   }, [isSectionOpen, isMapPanelOpen]);
 
+  // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘을 조절
   const handleItemClick = (itemType: 'project' | 'study' | 'player' | 'cafe', itemId?: number) => {
     if (!isMapPanelOpen) return;
 
@@ -71,12 +90,27 @@ const MapPage = () => {
     }
   };
 
-  // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
-  const [selectedPoint, setSelectedPoint] = useState<{
-    lat: number;
-    lng: number;
-    type: string;
-  } | null>(null);
+  // 지도 영역의 변경을 자동으로 감지하여 MapBounds 업데이트
+  const handleMapChange = () => {
+    setIsMapChanged(true);
+    setMapBounds({
+      swLat: mapRef.current?.getBounds().getSouthWest().getLat() || 0,
+      swLng: mapRef.current?.getBounds().getSouthWest().getLng() || 0,
+      neLat: mapRef.current?.getBounds().getNorthEast().getLat() || 0,
+      neLng: mapRef.current?.getBounds().getNorthEast().getLng() || 0,
+      lat: mapRef.current?.getCenter().getLat() || 0,
+      lng: mapRef.current?.getCenter().getLng() || 0,
+    });
+  };
+
+  // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
+  const handleMapReload = () => {
+    setIsMapChanged(false);
+    console.log(mapBounds);
+  };
+
+  // 지도 로드
+  useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
 
   return (
     <div className={styles.container}>
@@ -90,11 +124,11 @@ const MapPage = () => {
             className={styles.map}
             center={{ lat: 37.5665, lng: 126.978 }}
             onTileLoaded={() => {
-              setIsMapChanged(true);
+              handleMapChange();
             }}
+            ref={mapRef}
           >
-            {/* 컨트롤 */}
-            {/* <ZoomControl position="TOPRIGHT" /> */}
+            {/* 줌 레벨 컨트롤 */}
             <ZoomControl position="BOTTOMRIGHT" />
 
             {/* 마커 */}
@@ -168,7 +202,7 @@ const MapPage = () => {
           width="fit-content"
           height="fit-content"
           textColor="var(--white-1)"
-          onClick={() => setIsMapChanged(false)}
+          onClick={handleMapReload}
         >
           현 지도에서 검색
         </Button>
@@ -181,7 +215,7 @@ const MapPage = () => {
         </div>
       )}
 
-      {/* 지도 서브 패널 */}
+      {/* 지도 서브패널 */}
       {isMapSubPanelOpen && selectedCafeId && (
         <div className={styles.map__subPanelContainer}>
           <MapSubPanel cafeId={selectedCafeId} />
