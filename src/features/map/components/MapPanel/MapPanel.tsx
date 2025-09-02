@@ -4,11 +4,17 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import Input from '@/components/Input/Input';
 
-import { MapItemCategoryFilter } from '../../constants/MapItemCategoryFilter.enum';
-import { MapItemStatusFilter } from '../../constants/MapItemStatusFilter.enum';
+import {
+  CATEGORY_FILTER_OPTIONS,
+  STATUS_FILTER_OPTIONS,
+  type CategoryFilterOption,
+  type StatusFilterOption,
+} from '../../constants/mapItemLabels';
 import { panelMockData } from '../../mocks/panelMockData';
 import type { MapItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
+import type { MapItemCategory } from '../../types/common';
+import { MapItemCategory as MC } from '../../types/common';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
@@ -17,35 +23,21 @@ import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyIt
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
-  handleItemClick: (itemType: 'project' | 'study' | 'player' | 'cafe', itemId?: number) => void;
+  handleItemClick: (itemType: MapItemCategory, itemId?: number) => void;
 }
 
 const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<MapItemCategoryFilter>(
-    MapItemCategoryFilter.ALL
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<CategoryFilterOption>(
+    CATEGORY_FILTER_OPTIONS[0] // 'ALL'
   );
 
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<MapItemStatusFilter>(
-    MapItemStatusFilter.ALL
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<StatusFilterOption>(
+    STATUS_FILTER_OPTIONS[0] // 'ALL'
   );
 
-  const categoryFilterItems: MapItemCategoryFilter[] = [
-    MapItemCategoryFilter.ALL,
-    MapItemCategoryFilter.PROJECT,
-    MapItemCategoryFilter.STUDY,
-    MapItemCategoryFilter.PLAYER,
-    MapItemCategoryFilter.CAFE,
-  ];
-
-  const statusFilterItems: MapItemStatusFilter[] = [
-    MapItemStatusFilter.ALL,
-    MapItemStatusFilter.RECRUITING,
-    MapItemStatusFilter.ONGOING,
-  ];
-
-  const handleFilterClick = (item: MapItemCategoryFilter) => {
-    setSelectedCategoryFilter(item);
-    setSelectedStatusFilter(MapItemStatusFilter.ALL);
+  const handleFilterClick = (option: CategoryFilterOption) => {
+    setSelectedCategoryFilter(option);
+    setSelectedStatusFilter(STATUS_FILTER_OPTIONS[0]); // 'ALL'로 리셋
   };
 
   // 데이터 필터링 함수
@@ -53,44 +45,18 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     let filtered = panelMockData;
 
     // 1. 카테고리 필터링
-    if (selectedCategoryFilter !== MapItemCategoryFilter.ALL) {
-      filtered = filtered.filter(item => {
-        switch (selectedCategoryFilter) {
-          case MapItemCategoryFilter.PROJECT:
-            return item.category === 'project';
-          case MapItemCategoryFilter.STUDY:
-            return item.category === 'study';
-          case MapItemCategoryFilter.PLAYER:
-            return item.category === 'player';
-          case MapItemCategoryFilter.CAFE:
-            return item.category === 'cafe';
-          default:
-            return true;
-        }
-      });
+    if (selectedCategoryFilter.value) {
+      filtered = filtered.filter(item => item.category === selectedCategoryFilter.value);
     }
 
     // 2. 모집 상태 필터링(프로젝트와 스터디만 적용)
-    if (
-      selectedStatusFilter !== MapItemStatusFilter.ALL &&
-      (selectedCategoryFilter === MapItemCategoryFilter.PROJECT ||
-        selectedCategoryFilter === MapItemCategoryFilter.STUDY ||
-        selectedCategoryFilter === MapItemCategoryFilter.ALL)
-    ) {
+    if (selectedStatusFilter.value) {
       filtered = filtered.filter(item => {
-        // teamStatus가 있는 project와 study의 경우에만 모집 상태 필터링
         if (isProject(item) || isStudy(item)) {
-          switch (selectedStatusFilter) {
-            case MapItemStatusFilter.RECRUITING:
-              return item.teamStatus === 'RECRUITING';
-            case MapItemStatusFilter.ONGOING:
-              return item.teamStatus === 'ONGOING';
-            default:
-              return true;
-          }
+          return item.teamStatus === selectedStatusFilter.value;
         }
-        // player, cafe는 teamStatus가 없으므로 상태 필터링 시 포함
-        return selectedCategoryFilter === MapItemCategoryFilter.ALL ? true : false;
+        // player, cafe는 teamStatus가 없으므로 상태 필터가 적용된 경우 제외
+        return false;
       });
     }
 
@@ -103,7 +69,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
       return (
         <MapPanelProjectItem
           project={item}
-          onItemClick={() => handleItemClick('project', item.projectId)}
+          onItemClick={() => handleItemClick(MC.PROJECT, item.projectId)}
         />
       );
     }
@@ -112,7 +78,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
       return (
         <MapPanelStudyItem
           study={item}
-          onItemClick={() => handleItemClick('study', item.studyId)}
+          onItemClick={() => handleItemClick(MC.STUDY, item.studyId)}
         />
       );
     }
@@ -121,14 +87,14 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
       return (
         <MapPanelPlayerItem
           player={item}
-          onItemClick={() => handleItemClick('player', item.userId)}
+          onItemClick={() => handleItemClick(MC.PLAYER, item.userId)}
         />
       );
     }
 
     if (isCafe(item)) {
       return (
-        <MapPanelCafeItem cafe={item} onItemClick={() => handleItemClick('cafe', item.cafeId)} />
+        <MapPanelCafeItem cafe={item} onItemClick={() => handleItemClick(MC.CAFE, item.cafeId)} />
       );
     }
 
@@ -160,17 +126,19 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
 
         {/* 카테고리 필터*/}
         <div className={styles.panel__categoryFilter}>
-          {categoryFilterItems.map(item => (
+          {CATEGORY_FILTER_OPTIONS.map(option => (
             <div
-              key={item}
+              key={option.key}
               className={`${styles.panel__categoryFilter__item} ${
-                selectedCategoryFilter === item ? styles.panel__categoryFilter__item__selected : ''
+                selectedCategoryFilter.key === option.key
+                  ? styles.panel__categoryFilter__item__selected
+                  : ''
               }`}
               onClick={() => {
-                handleFilterClick(item);
+                handleFilterClick(option);
               }}
             >
-              {item}
+              {option.label}
             </div>
           ))}
         </div>
@@ -179,22 +147,23 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
         <hr className={styles.panel__divider} />
 
         {/* 진행 상태 필터*/}
-        {selectedCategoryFilter === MapItemCategoryFilter.PROJECT ||
-        selectedCategoryFilter === MapItemCategoryFilter.STUDY ? (
+        {selectedCategoryFilter.key === 'project' || selectedCategoryFilter.key === 'study' ? (
           <>
             <div className={styles.panel__statusFilter}>
               {/* TODO: 버튼 컴포넌트 가져오기 */}
-              {statusFilterItems.map(item => (
+              {STATUS_FILTER_OPTIONS.map(option => (
                 <div
-                  key={item}
+                  key={option.key}
                   className={`${styles.panel__statusFilter__item} ${
-                    selectedStatusFilter === item ? styles.panel__statusFilter__item__selected : ''
+                    selectedStatusFilter.key === option.key
+                      ? styles.panel__statusFilter__item__selected
+                      : ''
                   }`}
                   onClick={() => {
-                    setSelectedStatusFilter(item);
+                    setSelectedStatusFilter(option);
                   }}
                 >
-                  {item}
+                  {option.label}
                 </div>
               ))}
             </div>
