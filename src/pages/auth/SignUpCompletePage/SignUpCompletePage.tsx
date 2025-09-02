@@ -1,30 +1,41 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
-import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 
 import styles from './SignUpCompletePage.module.scss';
 
 export default function SignUpCompletePage() {
   const navigate = useNavigate();
-
-  // 로그인된 사용자는 메인 페이지로 리다이렉트
-  useAuthRedirect('/map');
+  const hasProcessed = useRef(false);
 
   // sessionStorage에서 회원가입 성공 플래그 확인
   useEffect(() => {
+    // 이미 처리했다면 중복 실행 방지
+    if (hasProcessed.current) {
+      return;
+    }
+
+    console.log('SignUpCompletePage 로드됨');
+    console.log('현재 URL:', window.location.href);
+
     const signUpSuccess = sessionStorage.getItem('signUpSuccess');
+    console.log('signUpSuccess 플래그:', signUpSuccess);
 
     // 회원가입을 거치지 않고 직접 접근하면 회원가입 페이지로 리다이렉트
     if (!signUpSuccess) {
+      console.log('signUpSuccess 플래그가 없음, 회원가입 페이지로 리다이렉트');
       navigate('/auth/signup', { replace: true });
       return;
     }
 
+    // 처리 완료 플래그 설정
+    hasProcessed.current = true;
+
     // 페이지 접근 후 플래그 제거 (일회성 접근)
     sessionStorage.removeItem('signUpSuccess');
+    console.log('signUpSuccess 플래그 제거 완료');
   }, [navigate]);
 
   return (
