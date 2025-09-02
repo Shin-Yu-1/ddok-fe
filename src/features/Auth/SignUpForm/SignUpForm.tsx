@@ -156,13 +156,7 @@ export default function SignUpForm() {
 
   // 폼 제출
   const onSubmit = async (data: SignUpFormValues) => {
-    console.log('=== 회원가입 폼 제출 시작 ===');
-    console.log('폼 데이터:', data);
-    console.log('이메일 인증 상태:', emailVerified);
-    console.log('휴대폰 인증 상태:', codeVerified);
-
     if (!emailVerified) {
-      console.log('이메일 인증이 안됨');
       setError('email', {
         type: 'manual',
         message: '이메일 중복 확인을 완료해주세요.',
@@ -171,7 +165,6 @@ export default function SignUpForm() {
     }
 
     if (!codeVerified) {
-      console.log('휴대폰 인증이 안됨');
       setError('phoneCode', {
         type: 'manual',
         message: '휴대폰 인증을 완료해주세요.',
@@ -179,7 +172,6 @@ export default function SignUpForm() {
       return;
     }
 
-    console.log('모든 검증 통과, API 호출 시작');
     setIsLoading(prev => ({ ...prev, submit: true }));
     clearErrors('root');
 
@@ -189,50 +181,27 @@ export default function SignUpForm() {
         phoneNumber: data.phoneNumber.replace(/-/g, ''), // 하이픈 제거
       };
 
-      console.log('최종 회원가입 데이터:', signUpData);
-      console.log('회원가입 API 호출 시작...');
-
       const result = await signUp(signUpData);
 
-      console.log('회원가입 API 성공! 응답:', result);
-      console.log('result.id:', result.id);
-      console.log('typeof result.id:', typeof result.id);
-
       if (result.id) {
-        console.log('ID 확인됨, 완료 페이지로 이동 준비');
-        console.log('현재 URL:', window.location.href);
-
         // 회원가입 성공 플래그를 sessionStorage에 저장
         sessionStorage.setItem('signUpSuccess', 'true');
-        console.log('sessionStorage에 signUpSuccess 플래그 저장 완료');
 
         // 회원가입 성공 시 회원가입 완료 페이지로 이동
-        console.log('navigate 호출: /auth/signupcomplete');
         navigate('/auth/signupcomplete', { replace: true });
-        console.log('navigate 호출 완료');
-
-        // 약간의 지연 후 URL 확인
-        setTimeout(() => {
-          console.log('navigate 후 URL:', window.location.href);
-        }, 100);
       } else {
-        console.error('회원가입 응답에 ID가 없음:', result);
         setError('root', {
           type: 'manual',
           message: '회원가입 처리 중 오류가 발생했습니다.',
         });
       }
     } catch (apiError) {
-      console.error('=== 회원가입 API 에러 ===');
-      console.error('에러 객체:', apiError);
-      console.error('에러 메시지:', getErrorMessage(apiError));
       setError('root', {
         type: 'manual',
         message: getErrorMessage(apiError),
       });
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
-      console.log('=== 회원가입 처리 완료 ===');
     }
   };
 
@@ -241,16 +210,6 @@ export default function SignUpForm() {
     key => key !== 'root' && errors[key as keyof typeof errors]
   );
   const isButtonDisabled = isSubmitting || !emailVerified || !codeVerified || hasErrors;
-
-  // 디버깅을 위한 로그
-  console.log('버튼 상태 디버깅:', {
-    isSubmitting,
-    emailVerified,
-    codeVerified,
-    hasErrors,
-    isButtonDisabled,
-    errors,
-  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>

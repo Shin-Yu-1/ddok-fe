@@ -17,15 +17,10 @@ export default function SignUpCompletePage() {
       return;
     }
 
-    console.log('SignUpCompletePage 로드됨');
-    console.log('현재 URL:', window.location.href);
-
     const signUpSuccess = sessionStorage.getItem('signUpSuccess');
-    console.log('signUpSuccess 플래그:', signUpSuccess);
 
     // 회원가입을 거치지 않고 직접 접근하면 회원가입 페이지로 리다이렉트
     if (!signUpSuccess) {
-      console.log('signUpSuccess 플래그가 없음, 회원가입 페이지로 리다이렉트');
       navigate('/auth/signup', { replace: true });
       return;
     }
@@ -35,7 +30,6 @@ export default function SignUpCompletePage() {
 
     // 페이지 접근 후 플래그 제거 (일회성 접근)
     sessionStorage.removeItem('signUpSuccess');
-    console.log('signUpSuccess 플래그 제거 완료');
   }, [navigate]);
 
   return (
