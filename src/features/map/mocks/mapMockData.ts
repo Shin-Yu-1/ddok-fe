@@ -1,4 +1,6 @@
-export const mapMockData = [
+import type { MapItem } from '../types';
+
+export const mapMockData: MapItem[] = [
   {
     category: 'project',
     projectId: 1,
