@@ -78,6 +78,7 @@
       }
 
       .nickname {
+        margin-top: 5px;
         font-weight: $fw-semibold;
       }
 
@@ -112,6 +113,124 @@
           text-align: center;
           color: $gray-1;
         }
+      }
+    }
+
+    @keyframes skeleton-loading {
+      0% {
+        background-position: -200px 0;
+      }
+
+      100% {
+        background-position: calc(200px + 100%) 0;
+      }
+    }
+
+    .skeletonCard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+
+      // 실제 playerCard와 동일한 크기와 레이아웃 유지
+      min-height: 240px; // playerCard 높이에 맞춰 조정
+      padding: 16px;
+      border: 1px solid var(--gray-3, #f0f0f0);
+      border-radius: 12px;
+      background: var(--white-1, #ffffff);
+    }
+
+    // 기본 스켈레톤 요소 스타일
+    %skeleton-base {
+      border-radius: 4px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200px 100%;
+      animation: skeleton-loading 1.5s infinite;
+    }
+
+    .skeletonTemperatureWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .skeletonThermometer {
+      @extend %skeleton-base;
+
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+
+    .skeletonTemperature {
+      @extend %skeleton-base;
+
+      width: 45px;
+      height: 16px;
+    }
+
+    .skeletonButton {
+      @extend %skeleton-base;
+
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+
+    .skeletonProfileImage {
+      @extend %skeleton-base;
+
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .skeletonNickname {
+      @extend %skeleton-base;
+
+      width: 120px;
+      height: 20px;
+      margin: 8px 0;
+    }
+
+    .skeletonBadgeWrapper {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin: 8px 0;
+    }
+
+    .skeletonBadge {
+      @extend %skeleton-base;
+
+      width: 60px;
+      height: 16px;
+      border-radius: 8px;
+    }
+
+    .skeletonPlayerInfo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .skeletonDetails {
+      @extend %skeleton-base;
+
+      width: 100px;
+      height: 14px;
+
+      &:first-child {
+        width: 120px; // 주소는 조금 더 길게
+      }
+
+      &:last-child {
+        width: 60px; // 포지션은 짧게
       }
     }
   }

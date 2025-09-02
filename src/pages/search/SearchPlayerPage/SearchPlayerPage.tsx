@@ -42,7 +42,7 @@ const PROFILE = 'https://cdn.pixabay.com/photo/2017/06/13/12/53/profile-2398782_
 const playerListDummy = [
   {
     userId: 1,
-    category: 'soccer',
+    category: '프론트',
     nickname: '골때리는수비수',
     profileImageUrl: PROFILE,
     mainBadge: [
@@ -50,150 +50,151 @@ const playerListDummy = [
       { type: BadgeType.LOGIN, tier: BadgeTier.GOLD },
     ],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: 'DF',
+    mainPosition: '프론트',
     address: '서울 강남구',
-    temperature: 70,
+    temperature: 90,
     isMine: true,
     chatRoomId: 101,
     dmRequestPending: false,
   },
   {
     userId: 2,
-    category: 'basketball',
+    category: '백엔드',
     nickname: '리바운드왕',
     profileImageUrl: PROFILE,
     mainBadge: [
       { type: BadgeType.COMPLETE, tier: BadgeTier.SILVER },
       { type: BadgeType.LOGIN, tier: BadgeTier.BRONZE },
+      { type: BadgeType.LEADER_COMPLETE, tier: BadgeTier.GOLD },
     ],
     abandonBadge: { isGranted: true, count: 1 },
-    mainPosition: 'C',
+    mainPosition: '백엔드',
     address: '서울 마포구',
-    temperature: 37.1,
+    temperature: 80,
     isMine: false,
     chatRoomId: 102,
     dmRequestPending: true,
   },
   {
     userId: 3,
-    category: 'tennis',
+    category: '디자이너',
     nickname: '백핸드장인',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: 'Singles',
+    mainPosition: '디자이너',
     address: '경기 성남시',
-    temperature: 36.5,
+    temperature: 70,
     isMine: false,
     chatRoomId: 103,
     dmRequestPending: false,
   },
   {
     userId: 4,
-    category: 'badminton',
+    category: '프론트',
     nickname: '스매시마스터',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: true, count: 2 },
-    mainPosition: 'Doubles',
+    mainPosition: '프론트',
     address: '서울 송파구',
-    temperature: 99.0,
+    temperature: 60,
     isMine: false,
     chatRoomId: 104,
     dmRequestPending: false,
   },
   {
     userId: 5,
-    category: 'soccer',
+    category: '백엔드',
     nickname: '플메장인',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: 'MF',
+    mainPosition: '백엔드',
     address: '서울 영등포구',
-    temperature: 37.0,
+    temperature: 50,
     isMine: false,
     chatRoomId: 105,
     dmRequestPending: true,
   },
   {
     userId: 6,
-    category: 'running',
+    category: '기획자',
     nickname: '러너스하이',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: '10K',
+    mainPosition: '기획자',
     address: '부산 해운대구',
-    temperature: 20,
+    temperature: 40,
     isMine: false,
     chatRoomId: 106,
     dmRequestPending: false,
   },
   {
     userId: 7,
-    category: 'baseball',
+    category: '서버',
     nickname: '클러치히터',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: true, count: 1 },
-    mainPosition: '1B',
+    mainPosition: '서버',
     address: '대구 수성구',
-    temperature: 36.7,
+    temperature: 30,
     isMine: false,
     chatRoomId: 107,
     dmRequestPending: false,
   },
   {
     userId: 8,
-    category: 'golf',
+    category: '프론트',
     nickname: '퍼팅요정',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: 'Right',
+    mainPosition: '프론트',
     address: '인천 연수구',
-    temperature: 36.4,
+    temperature: 20,
     isMine: false,
     chatRoomId: 108,
     dmRequestPending: false,
   },
   {
     userId: 9,
-    category: 'table-tennis',
+    category: '디자이너',
     nickname: '스핀장난아님',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: 'Shakehand',
+    mainPosition: '디자이너',
     address: '광주 서구',
-    temperature: 37.2,
+    temperature: 10,
     isMine: false,
     chatRoomId: 109,
     dmRequestPending: true,
   },
   {
     userId: 10,
-    category: 'volleyball',
+    category: '백엔드',
     nickname: '블로킹기계',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: true, count: 3 },
-    mainPosition: 'MB',
+    mainPosition: '백엔드',
     address: '대전 유성구',
-    temperature: 36.8,
+    temperature: 1,
     isMine: false,
     chatRoomId: 110,
     dmRequestPending: false,
   },
   {
     userId: 11,
-    category: 'soccer',
+    category: '데브옵스',
     nickname: '폭격기',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: false, count: 0 },
-    mainPosition: 'FW',
+    mainPosition: '데브옵스',
     address: '경기 고양시',
     temperature: 37.3,
     isMine: false,
@@ -202,12 +203,124 @@ const playerListDummy = [
   },
   {
     userId: 12,
-    category: 'basketball',
+    category: '백엔드',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '백엔드',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 13,
+    category: '프론트',
+    nickname: '폭격기',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '프론트',
+    address: '경기 고양시',
+    temperature: 37.3,
+    isMine: false,
+    chatRoomId: 111,
+    dmRequestPending: false,
+  },
+  {
+    userId: 14,
+    category: '기획자',
     nickname: '딥쓰리장착',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'SG',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 15,
+    category: 'AI',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: 'AI',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 16,
+    category: '프론트',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '프론트',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 17,
+    category: '백엔드',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '백엔드',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 18,
+    category: '디자이너',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '디자이너',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 19,
+    category: '디자이너',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '디자이너',
+    address: '울산 남구',
+    temperature: 36.5,
+    isMine: false,
+    chatRoomId: 112,
+    dmRequestPending: false,
+  },
+  {
+    userId: 20,
+    category: '백엔드',
+    nickname: '딥쓰리장착',
+    profileImageUrl: PROFILE,
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
+    abandonBadge: { isGranted: false, count: 0 },
+    mainPosition: '백엔드',
     address: '울산 남구',
     temperature: 36.5,
     isMine: false,
@@ -255,71 +368,159 @@ const tempChunk = ({ page, size }: Pagination) => {
   };
 };
 
+const PAGE_SIZE = 9;
+const MAX_AUTO_LOADS = 5;
+
 const SearchPlayerPage = () => {
   const [playerList, setPlayerList] = useState<Player[]>([]);
-  const [keyword, setKeyword] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<Pagination>({ page: 1, size: 6 });
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const [keyword, setKeyword] = useState<string>(''); // null 대신 빈 문자열로 초기화
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, size: PAGE_SIZE });
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  // // // API
-  // const { data: playerListResponse, isLoading } = useGetApi<playerListApiResponse>({
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const autoLoadsRef = useRef(0);
+  const isFetchingRef = useRef(false);
+
+  const hasUserScrolledRef = useRef(false);
+
+  // // API 예시
+  // const { data: playerListResponse, isLoading: playerIsLoading } = useGetApi<playerListApiResponse>({
   //   url: `/api/players/search`,
   //   params: { keyword, ...pagination },
   // });
 
+  // 사용자 스크롤 감지 (휠/터치)
+  useEffect(() => {
+    const onWheel = () => {
+      hasUserScrolledRef.current = true;
+    };
+    const onTouchMove = () => {
+      hasUserScrolledRef.current = true;
+    };
+
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchmove', onTouchMove);
+    };
+  }, []);
+
   // keyword 변경 시 playerList, pagination 초기화
   useEffect(() => {
-    setPlayerList([]);
-    setPagination({ page: 1, size: 6 });
+    if (!keyword.trim()) {
+      setPlayerList([]);
+      setPagination({ page: 1, size: PAGE_SIZE });
+      setHasMore(true);
+      autoLoadsRef.current = 0;
+      hasUserScrolledRef.current = false;
+      return;
+    }
 
-    // TODO: API 연결 시 삭제
-    const { items: newPlayers, pagination: p } = tempChunk(pagination);
-    setPlayerList(prev => (p.currentPage === 1 ? newPlayers : [...(prev ?? []), ...newPlayers]));
+    // 키워드가 있을 때 첫 페이지 로드
+    autoLoadsRef.current = 0;
+    setPlayerList([]);
+    setPagination({ page: 1, size: PAGE_SIZE });
+    setHasMore(true);
+    hasUserScrolledRef.current = false;
+    loadPlayers(1, true);
   }, [keyword]);
 
-  // useEffect(() => { // TODO: API 연결 시 주석 해제
-  //   const res = playerListResponse?.data;
-  //   if (!res) return;
+  // 페이지 변경 시 추가 로드 (키워드가 있을 때만)
+  useEffect(() => {
+    if (!keyword.trim() || pagination.page <= 1) return;
+    loadPlayers(pagination.page, false);
+  }, [pagination.page]);
 
-  //   const { items: newPlayers, pagination: p } = res;
+  // 스크롤 가능하도록 보장 — 사용자 스크롤 이후에만 자동채우기
+  useEffect(() => {
+    if (!keyword.trim()) return;
 
-  //   if (!newPlayers) return;
-  //   console.log(newPlayers);
+    const timer = setTimeout(() => {
+      ensureScrollable();
+    }, 100);
 
-  //   setPlayerList(prev => (p.currentPage === 0 ? newPlayers : [...(prev ?? []), ...newPlayers]));
-  // }, []);
+    return () => clearTimeout(timer);
+  }, [playerList, keyword]);
 
-  const isLastPage =
-    (tempChunk(pagination)?.pagination?.currentPage ?? 0) >=
-    (tempChunk(pagination)?.pagination?.totalPages ?? 1) - 1;
+  const loadPlayers = async (page: number, isNewSearch: boolean = false) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    setIsLoading(true);
 
+    try {
+      const { items: newPlayers, pagination: responsePagination } = tempChunk({
+        page,
+        size: PAGE_SIZE,
+      });
+
+      setPlayerList(prev => (isNewSearch ? newPlayers : [...prev, ...newPlayers]));
+      setHasMore(responsePagination.currentPage < responsePagination.totalPages);
+    } catch (error) {
+      console.error('플레이어 목록 로드 실패:', error);
+    } finally {
+      isFetchingRef.current = false;
+      setIsLoading(false);
+    }
+  };
+
+  const ensureScrollable = () => {
+    const listEl = document.querySelector(`.${styles.playerListWrapper}`) as HTMLElement | null;
+    const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
+    const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
+    const scrollable = isListScrollable || isPageScrollable;
+
+    if (
+      !scrollable &&
+      !isFetchingRef.current &&
+      hasMore &&
+      autoLoadsRef.current < MAX_AUTO_LOADS &&
+      keyword.trim() &&
+      hasUserScrolledRef.current
+    ) {
+      autoLoadsRef.current += 1;
+      setPagination(prev => ({ ...prev, page: prev.page + 1 }));
+    }
+  };
+
+  // Intersection Observer 설정 — 사용자 스크롤 이후에만 동작
   useEffect(() => {
     const el = sentinelRef.current;
-    if (!el) return;
+    if (!el || !keyword.trim()) return;
 
-    const io = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       entries => {
-        const first = entries[0];
-        // if (first.isIntersecting && !isLoading && !isLastPage) {
-        if (first.isIntersecting && !isLastPage) {
+        const entry = entries[0];
+        if (
+          entry.isIntersecting &&
+          !isLoading &&
+          hasMore &&
+          keyword.trim() &&
+          hasUserScrolledRef.current
+        ) {
           setPagination(prev => ({ ...prev, page: prev.page + 1 }));
         }
       },
-      { root: null, rootMargin: '200px 0px', threshold: 0 }
+      {
+        root: null,
+        rootMargin: '100px 0px',
+        threshold: 0.1,
+      }
     );
-    io.observe(el);
-    return () => io.disconnect();
-    // }, [isLoading, isLastPage]);
-  }, [isLastPage]);
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isLoading, hasMore, keyword]);
 
   const onChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value); // TODO: keyword 저장
-    // console.log(e.target.value);
+    setKeyword(e.target.value);
   };
 
   return (
     <div className={styles.container}>
-      {keyword ? (
+      {keyword.trim() ? (
         /* keyword 있을 때 */
         <>
           <div className={styles.keywordWrapper}>
@@ -333,9 +534,9 @@ const SearchPlayerPage = () => {
               border="1px solid var(--gray-2)"
               focusBorder="1px solid var(--gray-2)"
               backgroundColor="var(--white-3)"
-              leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />} // TODO: iconSize Up 20->30
+              leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
               onChange={onChangeHandle}
-            ></Input>
+            />
           </div>
 
           <div className={styles.playerListWrapper}>
@@ -365,7 +566,34 @@ const SearchPlayerPage = () => {
                 </div>
               </div>
             ))}
+
+            {/* 스켈레톤 UI */}
+            {isLoading && (
+              <>
+                {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+                  <div key={`skeleton-${index}`} className={styles.skeletonCard}>
+                    <div className={styles.skeletonTemperatureWrapper}>
+                      <div className={styles.skeletonThermometer}></div>
+                      <div className={styles.skeletonTemperature}></div>
+                      <div className={styles.skeletonButton}></div>
+                    </div>
+                    <div className={styles.skeletonProfileImage}></div>
+                    <div className={styles.skeletonNickname}></div>
+                    <div className={styles.skeletonBadgeWrapper}>
+                      <div className={styles.skeletonBadge}></div>
+                      <div className={styles.skeletonBadge}></div>
+                    </div>
+                    <div className={styles.skeletonPlayerInfo}>
+                      <div className={styles.skeletonDetails}></div>
+                      <div className={styles.skeletonDetails}></div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
+
+          {/* Intersection Observer용 센티널 */}
           <div ref={sentinelRef} style={{ height: 1 }} />
         </>
       ) : (
@@ -380,9 +608,9 @@ const SearchPlayerPage = () => {
             border="1px solid var(--gray-2)"
             focusBorder="1px solid var(--gray-2)"
             backgroundColor="var(--white-3)"
-            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />} // TODO: iconSize Up 20->30
+            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
             onChange={onChangeHandle}
-          ></Input>
+          />
           <div className={styles.infoWrapper}>
             <WarningCircleIcon />
             <span>
