@@ -1,6 +1,6 @@
 import type { Study } from '@/features/map/types';
+import { MAP_ITEM_STATUS_LABELS } from '@/features/map/types/common';
 
-import { MAP_ITEM_STATUS_LABELS } from '../../../constants/mapItemLabels';
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelStudyItemProps {

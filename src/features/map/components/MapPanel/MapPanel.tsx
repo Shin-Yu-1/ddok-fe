@@ -4,16 +4,16 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import Input from '@/components/Input/Input';
 
-import {
-  CATEGORY_FILTER_OPTIONS,
-  STATUS_FILTER_OPTIONS,
-  type CategoryFilterOption,
-  type StatusFilterOption,
-} from '../../constants/mapItemLabels';
 import { panelMockData } from '../../mocks/panelMockData';
 import type { MapItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
-import { MapItemCategory } from '../../types/common';
+import {
+  CATEGORY_FILTER_OPTIONS,
+  STATUS_FILTER_OPTIONS,
+  MapItemCategory,
+  type CategoryFilterOption,
+  type StatusFilterOption,
+} from '../../types/common';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
