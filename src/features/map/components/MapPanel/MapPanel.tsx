@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import Input from '@/components/Input/Input';
 
 import { panelMockData } from '../../mocks/panelMockData';
-import type { MapItem } from '../../types';
+import type { MapPanelItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
 import {
   CATEGORY_FILTER_OPTIONS,
@@ -63,7 +63,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
   }, [selectedCategoryFilter, selectedStatusFilter]);
 
   // 타입별 컴포넌트 렌더링 함수
-  const renderMapItem = (item: MapItem) => {
+  const renderMapItem = (item: MapPanelItem) => {
     if (isProject(item)) {
       return (
         <MapPanelProjectItem
