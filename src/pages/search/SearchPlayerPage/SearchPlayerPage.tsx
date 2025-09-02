@@ -398,7 +398,7 @@ const SearchPlayerPage = () => {
     }
   }, []);
 
-  const ensureScrollable = () => {
+  const ensureScrollable = useCallback(() => {
     const listEl = document.querySelector(`.${styles.playerListWrapper}`) as HTMLElement | null;
     const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
     const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
