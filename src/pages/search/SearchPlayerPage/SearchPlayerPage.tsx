@@ -43,7 +43,7 @@ const playerListDummy = [
   {
     userId: 1,
     category: '프론트',
-    nickname: '골때리는수비수',
+    nickname: '골때리는아르마딜로',
     profileImageUrl: PROFILE,
     mainBadge: [
       { type: BadgeType.COMPLETE, tier: BadgeTier.GOLD },
@@ -60,7 +60,7 @@ const playerListDummy = [
   {
     userId: 2,
     category: '백엔드',
-    nickname: '리바운드왕',
+    nickname: '누구인가누가아소릴내었어',
     profileImageUrl: PROFILE,
     mainBadge: [
       { type: BadgeType.COMPLETE, tier: BadgeTier.SILVER },
@@ -78,7 +78,7 @@ const playerListDummy = [
   {
     userId: 3,
     category: '디자이너',
-    nickname: '백핸드장인',
+    nickname: '배겐도장인',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -92,7 +92,7 @@ const playerListDummy = [
   {
     userId: 4,
     category: '프론트',
-    nickname: '스매시마스터',
+    nickname: '후론트만',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: true, count: 2 },
@@ -106,7 +106,7 @@ const playerListDummy = [
   {
     userId: 5,
     category: '백엔드',
-    nickname: '플메장인',
+    nickname: '백룸',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -120,7 +120,7 @@ const playerListDummy = [
   {
     userId: 6,
     category: '기획자',
-    nickname: '러너스하이',
+    nickname: '골룸',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -148,7 +148,7 @@ const playerListDummy = [
   {
     userId: 8,
     category: '프론트',
-    nickname: '퍼팅요정',
+    nickname: '파팅피팅푸팅',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -204,7 +204,7 @@ const playerListDummy = [
   {
     userId: 12,
     category: '백엔드',
-    nickname: '딥쓰리장착',
+    nickname: '제이슨상하차',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -218,7 +218,7 @@ const playerListDummy = [
   {
     userId: 13,
     category: '프론트',
-    nickname: '폭격기',
+    nickname: '제이슨배달기사',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -232,7 +232,7 @@ const playerListDummy = [
   {
     userId: 14,
     category: '기획자',
-    nickname: '딥쓰리장착',
+    nickname: '제이슨판매자',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -246,7 +246,7 @@ const playerListDummy = [
   {
     userId: 15,
     category: 'AI',
-    nickname: '딥쓰리장착',
+    nickname: '제이슨생성자',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -260,7 +260,7 @@ const playerListDummy = [
   {
     userId: 16,
     category: '프론트',
-    nickname: '딥쓰리장착',
+    nickname: '고마해라마이바깠다이가',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -274,7 +274,7 @@ const playerListDummy = [
   {
     userId: 17,
     category: '백엔드',
-    nickname: '딥쓰리장착',
+    nickname: '드엔백',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -288,7 +288,7 @@ const playerListDummy = [
   {
     userId: 18,
     category: '디자이너',
-    nickname: '딥쓰리장착',
+    nickname: '너이자디',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -301,8 +301,8 @@ const playerListDummy = [
   },
   {
     userId: 19,
-    category: '디자이너',
-    nickname: '딥쓰리장착',
+    category: '서버',
+    nickname: '쟤있슨',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -316,7 +316,7 @@ const playerListDummy = [
   {
     userId: 20,
     category: '백엔드',
-    nickname: '딥쓰리장착',
+    nickname: '갓푸린',
     profileImageUrl: PROFILE,
     mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
@@ -368,7 +368,7 @@ const tempChunk = ({ page, size }: Pagination) => {
   };
 };
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 6;
 const MAX_AUTO_LOADS = 5;
 
 const SearchPlayerPage = () => {
@@ -377,36 +377,9 @@ const SearchPlayerPage = () => {
   const [pagination, setPagination] = useState<Pagination>({ page: 1, size: PAGE_SIZE });
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const autoLoadsRef = useRef(0);
   const isFetchingRef = useRef(false);
-
-  const hasUserScrolledRef = useRef(false);
-
-  // // API 예시
-  // const { data: playerListResponse, isLoading: playerIsLoading } = useGetApi<playerListApiResponse>({
-  //   url: `/api/players/search`,
-  //   params: { keyword, ...pagination },
-  // });
-
-  // 사용자 스크롤 감지 (휠/터치)
-  useEffect(() => {
-    const onWheel = () => {
-      hasUserScrolledRef.current = true;
-    };
-    const onTouchMove = () => {
-      hasUserScrolledRef.current = true;
-    };
-
-    window.addEventListener('wheel', onWheel, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-
-    return () => {
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchmove', onTouchMove);
-    };
-  }, []);
 
   // keyword 변경 시 playerList, pagination 초기화
   useEffect(() => {
@@ -415,7 +388,6 @@ const SearchPlayerPage = () => {
       setPagination({ page: 1, size: PAGE_SIZE });
       setHasMore(true);
       autoLoadsRef.current = 0;
-      hasUserScrolledRef.current = false;
       return;
     }
 
@@ -424,7 +396,6 @@ const SearchPlayerPage = () => {
     setPlayerList([]);
     setPagination({ page: 1, size: PAGE_SIZE });
     setHasMore(true);
-    hasUserScrolledRef.current = false;
     loadPlayers(1, true);
   }, [keyword]);
 
@@ -434,7 +405,7 @@ const SearchPlayerPage = () => {
     loadPlayers(pagination.page, false);
   }, [pagination.page]);
 
-  // 스크롤 가능하도록 보장 — 사용자 스크롤 이후에만 자동채우기
+  // 스크롤 가능하도록 보장
   useEffect(() => {
     if (!keyword.trim()) return;
 
@@ -457,6 +428,8 @@ const SearchPlayerPage = () => {
       });
 
       setPlayerList(prev => (isNewSearch ? newPlayers : [...prev, ...newPlayers]));
+
+      // 더 이상 로드할 데이터가 없는지 확인
       setHasMore(responsePagination.currentPage < responsePagination.totalPages);
     } catch (error) {
       console.error('플레이어 목록 로드 실패:', error);
@@ -477,15 +450,14 @@ const SearchPlayerPage = () => {
       !isFetchingRef.current &&
       hasMore &&
       autoLoadsRef.current < MAX_AUTO_LOADS &&
-      keyword.trim() &&
-      hasUserScrolledRef.current
+      keyword.trim()
     ) {
       autoLoadsRef.current += 1;
       setPagination(prev => ({ ...prev, page: prev.page + 1 }));
     }
   };
 
-  // Intersection Observer 설정 — 사용자 스크롤 이후에만 동작
+  // Intersection Observer 설정
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el || !keyword.trim()) return;
@@ -493,13 +465,7 @@ const SearchPlayerPage = () => {
     const observer = new IntersectionObserver(
       entries => {
         const entry = entries[0];
-        if (
-          entry.isIntersecting &&
-          !isLoading &&
-          hasMore &&
-          keyword.trim() &&
-          hasUserScrolledRef.current
-        ) {
+        if (entry.isIntersecting && !isLoading && hasMore && keyword.trim()) {
           setPagination(prev => ({ ...prev, page: prev.page + 1 }));
         }
       },
