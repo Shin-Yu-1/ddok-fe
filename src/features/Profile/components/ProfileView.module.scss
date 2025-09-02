@@ -1,0 +1,243 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.profileView {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+
+  @include m.mobile {
+    max-width: 100%;
+  }
+
+  &.loading {
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
+}
+
+.loadingMessage {
+  @include m.font-description;
+
+  text-align: center;
+  color: v.$gray-1;
+}
+
+.userInfoWrapper {
+  width: 100%;
+}
+
+.twoColumnLayout {
+  display: grid;
+  grid-template-columns: 737px 404px;
+  gap: 38px;
+  width: 100%;
+  max-width: 1179px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  @include m.mobile {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  padding: 40px 0;
+
+  @include m.mobile {
+    gap: 24px;
+    padding: 24px 0;
+  }
+}
+
+.rightColumn {
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  gap: 20px;
+  width: 100%;
+  padding: 40px 0;
+
+  @include m.mobile {
+    position: static;
+    gap: 24px;
+    padding: 24px 0;
+    border-left: none;
+  }
+}
+
+.ToggleSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 1179px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 40px 20px 0;
+
+  @include m.mobile {
+    padding: 40px 20px;
+  }
+}
+
+.profileToggle {
+  display: flex;
+  justify-content: flex-end;
+  width: 404px;
+
+  @include m.mobile {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+.toggleLabel {
+  @include m.font-text;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: v.$black-4;
+  cursor: pointer;
+
+  @include m.mobile {
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+.toggleText {
+  @include m.font-sub-description;
+
+  text-align: center;
+  white-space: nowrap;
+
+  @include m.mobile {
+    @include m.font-text;
+  }
+}
+
+.toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 28px;
+  border-radius: 14px;
+  background-color: v.$gray-2;
+  transition: background-color 0.2s ease;
+
+  &.on {
+    background-color: v.$blue-1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: v.$white-3;
+    transition: transform 0.2s ease;
+  }
+
+  &.on::before {
+    transform: translateX(32px);
+  }
+
+  @include m.mobile {
+    width: 50px;
+    height: 24px;
+    border-radius: 12px;
+
+    &::before {
+      width: 20px;
+      height: 20px;
+    }
+
+    &.on::before {
+      transform: translateX(26px);
+    }
+  }
+}
+
+.toggleStatus {
+  @include m.font-small-text;
+
+  position: absolute;
+  left: 8px;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: v.$fw-semibold;
+  color: v.$black-4;
+  transition: left 0.2s ease;
+
+  @include m.mobile {
+    left: 6px;
+    font-size: 9px;
+  }
+}
+
+.toggle.on .toggleStatus {
+  left: 38px;
+
+  @include m.mobile {
+    left: 30px;
+  }
+}
+
+.chatButton {
+  @include m.font-small-text;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 5.5px 16px;
+  border: 1px solid v.$blue-1;
+  border-radius: v.$r-xsmall;
+  font-weight: v.$fw-bold;
+  white-space: nowrap;
+  color: v.$white-3;
+  background-color: v.$black-3;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: v.$black-4;
+  }
+
+  &:active:not(:disabled) {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  &:disabled,
+  &.pending {
+    border-color: v.$gray-2;
+    color: v.$white-3;
+    background-color: v.$gray-2;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @include m.mobile {
+    @include m.font-text;
+
+    padding: 8px 12px;
+  }
+}
