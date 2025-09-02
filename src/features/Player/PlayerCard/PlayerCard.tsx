@@ -54,7 +54,7 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
     ];
 
     return items;
-  }, []);
+  }, [sendDmRequest]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
