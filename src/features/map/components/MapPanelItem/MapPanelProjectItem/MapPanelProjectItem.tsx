@@ -1,6 +1,6 @@
 import type { Project } from '@/features/map/types';
 
-import { MapItemStatusFilter } from '../../../constants/MapItemStatusFilter.enum';
+import { MAP_ITEM_STATUS_LABELS } from '../../../constants/mapItemLabels';
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelProjectItemProps {
@@ -25,13 +25,13 @@ const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({ project, onIt
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__recruiting}`}
           >
-            {MapItemStatusFilter.RECRUITING}
+            {MAP_ITEM_STATUS_LABELS.RECRUITING}
           </div>
         ) : (
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__ongoing}`}
           >
-            {MapItemStatusFilter.ONGOING}
+            {MAP_ITEM_STATUS_LABELS.ONGOING}
           </div>
         ))}
     </div>
