@@ -1,18 +1,23 @@
 import { z } from 'zod';
 
+import BadgeTier from '@/constants/enums/BadgeTier.enum';
+import BadgeType from '@/constants/enums/BadgeType.enum';
 import { apiResponseSchema } from '@/schemas/api.schema';
 
 import { paginationSchema } from './chat.schema';
+
+export const mainBadgeSchema = z.object({
+  type: z.nativeEnum(BadgeType),
+  tier: z.nativeEnum(BadgeTier),
+});
+export type MainBadge = z.infer<typeof mainBadgeSchema>;
 
 export const playerSchema = z.object({
   userId: z.number(),
   category: z.string(),
   nickname: z.string(),
   profileImageUrl: z.string(),
-  mainBadge: {
-    type: z.string(),
-    tier: z.string(),
-  },
+  mainBadge: z.array(mainBadgeSchema),
   abandonBadge: {
     isGranted: z.boolean(),
     count: z.number(),
