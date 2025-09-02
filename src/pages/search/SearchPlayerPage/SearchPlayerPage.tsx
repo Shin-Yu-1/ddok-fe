@@ -501,7 +501,7 @@ const SearchPlayerPage = () => {
 
           <div className={styles.playerListWrapper}>
             {playerList.map(player => (
-              <PlayerCard player={player} />
+              <PlayerCard key={`${player.userId}`} player={player} />
             ))}
 
             {/* 스켈레톤 UI */}
