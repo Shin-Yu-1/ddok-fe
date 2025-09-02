@@ -32,7 +32,7 @@ export const useCreateProjectForm = () => {
       expectedStart: data.expectedStart,
       expectedMonth: data.expectedMonth,
       mode: data.mode,
-      location: data.mode === 'OFFLINE' ? data.location : null,
+      location: data.mode === 'offline' ? data.location : null,
       preferredAges: data.preferredAges,
       capacity: data.capacity,
       traits: data.traits,
@@ -85,8 +85,8 @@ export const useCreateProjectForm = () => {
     setFormData(prev => ({
       ...prev,
       mode,
-      // ONLINE으로 변경 시 location 초기화
-      location: mode === 'ONLINE' ? null : prev.location,
+      // online 변경 시 location 초기화
+      location: mode === 'online' ? null : prev.location,
     }));
   }, []);
 
@@ -129,8 +129,8 @@ export const useCreateProjectForm = () => {
     if (!formData.expectedStart) return false;
     if (formData.expectedMonth < 1) return false;
 
-    // OFFLINE 모드일 때 위치 정보 필수
-    if (formData.mode === 'OFFLINE' && !formData.location) return false;
+    // offline 모드일 때 위치 정보 필수
+    if (formData.mode === 'offline' && !formData.location) return false;
 
     if (formData.capacity < 1) return false;
     if (formData.capacity > 7) return false;

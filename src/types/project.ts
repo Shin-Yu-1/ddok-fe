@@ -8,7 +8,7 @@ export interface PreferredAges {
 }
 
 // 프로젝트 모드
-export type ProjectMode = 'ONLINE' | 'OFFLINE';
+export type ProjectMode = 'online' | 'offline';
 
 // 위치 정보
 export interface Location {
@@ -92,12 +92,21 @@ export interface EditProjectResponse {
 // 초기 폼 데이터
 export const initialFormData: CreateProjectData = {
   title: '',
-  expectedStart: '',
+  expectedStart: (() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  })(),
   expectedMonth: 1,
-  mode: 'OFFLINE',
+  mode: 'offline',
   location: null,
   preferredAges: null,
-  capacity: 2,
+  capacity: 1,
   traits: [],
   positions: [],
   leaderPosition: '',
