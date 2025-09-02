@@ -102,12 +102,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     if (isProject(item)) {
       return (
         <MapPanelProjectItem
-          category={item.category}
-          projectId={item.projectId}
-          title={item.title}
-          location={item.location}
-          teamStatus={item.teamStatus}
-          bannerImageUrl={item.bannerImageUrl}
+          project={item}
           onItemClick={() => handleItemClick('project', item.projectId)}
         />
       );
@@ -116,12 +111,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     if (isStudy(item)) {
       return (
         <MapPanelStudyItem
-          category={item.category}
-          studyId={item.studyId}
-          title={item.title}
-          location={item.location}
-          teamStatus={item.teamStatus}
-          bannerImageUrl={item.bannerImageUrl}
+          study={item}
           onItemClick={() => handleItemClick('study', item.studyId)}
         />
       );
@@ -130,11 +120,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
     if (isPlayer(item)) {
       return (
         <MapPanelPlayerItem
-          category={item.category}
-          userId={item.userId}
-          nickname={item.nickname}
-          location={item.location}
-          profileImageUrl={item.profileImageUrl}
+          player={item}
           onItemClick={() => handleItemClick('player', item.userId)}
         />
       );
@@ -142,14 +128,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
 
     if (isCafe(item)) {
       return (
-        <MapPanelCafeItem
-          category={item.category}
-          cafeId={item.cafeId}
-          title={item.title}
-          location={item.location}
-          bannerImageUrl={item.bannerImageUrl}
-          onItemClick={() => handleItemClick('cafe', item.cafeId)}
-        />
+        <MapPanelCafeItem cafe={item} onItemClick={() => handleItemClick('cafe', item.cafeId)} />
       );
     }
 
