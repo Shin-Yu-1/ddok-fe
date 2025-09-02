@@ -1,11 +1,11 @@
-import type { MapItem } from '../types';
+import type { MapPanelItem } from '../types';
 
 /**
  * 지도 패널에서 사용할 목 데이터
  * 각 카테고리별 샘플 데이터 포함
  */
 
-export const panelMockData: MapItem[] = [
+export const panelMockData: MapPanelItem[] = [
   // 프로젝트 데이터
   {
     category: 'project',
