@@ -1,18 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-import {
-  MagnifyingGlassIcon,
-  WarningCircleIcon,
-  DotsThreeVerticalIcon,
-} from '@phosphor-icons/react';
+import { MagnifyingGlassIcon, WarningCircleIcon } from '@phosphor-icons/react';
 
-import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import Thermometer from '@/components/Thermometer/Thermometer';
 import BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
-import Badge from '@/features/Badge/Component/Badge';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
+import PlayerCard from '@/features/Player/PlayerCard/PlayerCard';
 import type { Player } from '@/schemas/player.schema';
 // import { useGetApi } from '@/hooks/useGetApi';
 // import type { playerListApiResponse, Player } from '@/schemas/player.schema';
@@ -507,30 +501,7 @@ const SearchPlayerPage = () => {
 
           <div className={styles.playerListWrapper}>
             {playerList.map(player => (
-              <div key={player.userId} className={styles.playerCard}>
-                <div className={styles.playerTemperatureWrapper}>
-                  <Thermometer temperature={player.temperature} />
-                  <span className={styles.temperature}>{player.temperature}℃</span>
-                  <Button size="sm" textColor={'var(--gray-1)'} backgroundColor="none" padding="0%">
-                    <DotsThreeVerticalIcon className={styles.buttonIcon} />
-                  </Button>
-                </div>
-                <div className={styles.profileImage}>
-                  <img src={player.profileImageUrl} alt={`${player.nickname} 프로필`} />
-                </div>
-                <h3 className={styles.nickname}>{player.nickname}</h3>
-                <div className={styles.line}>
-                  <div className={styles.badgeWrapper}>
-                    {player.mainBadge.map(badge => (
-                      <Badge key={`${badge.type}${badge.tier}`} heightSize={16} mainBadge={badge} />
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.playerInfo}>
-                  <p className={styles.details}>{player.address}</p>
-                  <p className={styles.details}>{player.mainPosition}</p>
-                </div>
-              </div>
+              <PlayerCard player={player} />
             ))}
 
             {/* 스켈레톤 UI */}
