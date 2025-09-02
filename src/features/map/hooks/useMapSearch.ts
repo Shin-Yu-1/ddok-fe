@@ -4,20 +4,21 @@ import type { MapSearchResponse } from '../schemas/mapSearchSchema';
 import type { MapPanelItem } from '../types';
 import type { MapBounds } from '../types/common';
 
+interface UseMapSearchOptions {
+  enabled?: boolean;
+  page?: number;
+  pageSize?: number;
+}
+
 /**
  * 지도 검색을 위한 React Query 훅
  *
  * @param mapBounds - 지도의 사각형 영역 정보
- * @param options - React Query 옵션
+ * @param options - React Query 옵션 (enabled, page, pageSize)
  * @returns 지도 검색 결과
  */
-export const useMapSearch = (
-  mapBounds: MapBounds | null,
-  options: {
-    enabled?: boolean;
-  } = {}
-) => {
-  const { enabled = true } = options;
+export const useMapSearch = (mapBounds: MapBounds | null, options: UseMapSearchOptions = {}) => {
+  const { enabled = true, page = 0, pageSize = 10 } = options;
 
   const params = mapBounds
     ? {
@@ -27,6 +28,8 @@ export const useMapSearch = (
         neLng: mapBounds.neLng,
         lat: mapBounds.lat,
         lng: mapBounds.lng,
+        page,
+        size: pageSize,
       }
     : undefined;
 
@@ -36,9 +39,10 @@ export const useMapSearch = (
     enabled: enabled && !!mapBounds,
   });
 
-  // response.data.data를 data로 노출하여 사용하기 편하게 함
+  // response.data.data를 더 구체적으로 노출
   return {
     ...result,
-    data: result.data?.data as MapPanelItem[] | undefined,
+    data: result.data?.data?.items as MapPanelItem[] | undefined,
+    pagination: result.data?.data?.pagination,
   };
 };
