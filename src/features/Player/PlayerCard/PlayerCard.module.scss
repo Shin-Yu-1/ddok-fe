@@ -18,6 +18,7 @@
   }
 
   .playerTemperatureWrapper {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -27,6 +28,13 @@
 
     .temperature {
       font-size: $fs-xxxsmall;
+    }
+
+    .overflowMenuContainer {
+      position: absolute;
+      top: 25px;
+      right: -20px;
+      z-index: 101;
     }
   }
 
@@ -38,12 +46,17 @@
     img {
       width: inherit;
       height: inherit;
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
     }
   }
 
   .nickname {
     margin-top: 10px;
     font-weight: $fw-semibold;
+    cursor: pointer;
   }
 
   .line {
