@@ -8,6 +8,8 @@ import type { BaseMapItem } from './common';
 export interface PlayerMapItem extends BaseMapItem {
   userId: number;
   nickname: string;
+  position: string;
+  isMine: boolean;
 }
 
 /** 패널의 플레이어 아이템 정보 */
