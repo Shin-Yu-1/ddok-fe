@@ -41,6 +41,9 @@ const MapPage = () => {
   // 현재 선택된 추천 장소의 ID
   const [selectedCafeId, setSelectedCafeId] = useState<number | null>(null);
 
+  // 현재 페이지 상태
+  const [currentPage, setCurrentPage] = useState(0);
+
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
@@ -60,10 +63,13 @@ const MapPage = () => {
   // 지도 검색 API 호출
   const {
     data: mapSearchData,
+    pagination: mapSearchPagination,
     refetch: refetchMapSearch,
     isLoading: isMapSearchLoading,
   } = useMapSearch(mapBounds, {
     enabled: false, // 수동으로 호출
+    page: currentPage,
+    pageSize: 5,
   });
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
@@ -117,6 +123,15 @@ const MapPage = () => {
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
   const handleMapReload = () => {
     setIsMapChanged(false);
+    setCurrentPage(0); // 페이지를 첫 번째로 리셋
+    if (mapBounds) {
+      refetchMapSearch();
+    }
+  };
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
     if (mapBounds) {
       refetchMapSearch();
     }
@@ -226,8 +241,10 @@ const MapPage = () => {
         <div className={styles.map__panelContainer}>
           <MapPanel
             data={mapSearchData}
+            pagination={mapSearchPagination}
             isLoading={isMapSearchLoading}
             handleItemClick={handleItemClick}
+            onPageChange={handlePageChange}
           />
         </div>
       )}
