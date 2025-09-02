@@ -1,6 +1,6 @@
 import { useGetApi } from '@/hooks/useGetApi';
 
-import type { MapSearchResponse } from '../schemas';
+import type { MapSearchResponse } from '../schemas/mapSearchSchema';
 import type { MapPanelItem } from '../types';
 import type { MapBounds } from '../types/common';
 
