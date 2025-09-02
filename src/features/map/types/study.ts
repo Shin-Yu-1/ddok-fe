@@ -5,7 +5,7 @@ import type { BaseMapItem, TeamStatus } from './common';
  */
 
 /** 패널의 스터디 아이템 정보 */
-export interface Study extends BaseMapItem {
+export interface StudyPanelItem extends BaseMapItem {
   studyId: number;
   title: string;
   teamStatus: TeamStatus;

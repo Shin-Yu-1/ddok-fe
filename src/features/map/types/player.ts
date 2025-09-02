@@ -4,8 +4,14 @@ import type { BaseMapItem } from './common';
  * 플레이어 관련 타입 정의
  */
 
+/** 지도상의 플레이어 정보 */
+export interface PlayerMapItem extends BaseMapItem {
+  userId: number;
+  nickname: string;
+}
+
 /** 패널의 플레이어 아이템 정보 */
-export interface Player extends BaseMapItem {
+export interface PlayerPanelItem extends BaseMapItem {
   userId: number;
   nickname: string;
   profileImageUrl: string;

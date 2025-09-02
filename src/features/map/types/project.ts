@@ -5,7 +5,7 @@ import type { BaseMapItem, TeamStatus } from './common';
  */
 
 /** 패널의 프로젝트 아이템 정보 */
-export interface Project extends BaseMapItem {
+export interface ProjectPanelItem extends BaseMapItem {
   projectId: number;
   title: string;
   teamStatus: TeamStatus;
