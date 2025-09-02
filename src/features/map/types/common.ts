@@ -19,7 +19,11 @@ export const MapItemCategory = {
 export type MapItemCategory = (typeof MapItemCategory)[keyof typeof MapItemCategory];
 
 /** 프로젝트 및 스터디의 팀 상태 */
-export type TeamStatus = 'RECRUITING' | 'ONGOING';
+export const TeamStatus = {
+  RECRUITING: 'RECRUITING',
+  ONGOING: 'ONGOING',
+} as const;
+export type TeamStatus = (typeof TeamStatus)[keyof typeof TeamStatus];
 
 /** 패널 아이템 기본 인터페이스(공통 데이터) */
 export interface BaseMapItem {
