@@ -11,6 +11,7 @@ import PostDurationSlider from '@/features/post/components/PostDurationSlider/Po
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import PostModeSelector from '@/features/post/components/PostModeSelector/PostModeSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
+import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
 import PostStudyTypeSelector from '@/features/post/components/PostStudyTypeSelector/PostStudyTypeSelector';
 import { useCreateStudyForm } from '@/hooks/post/useCreateStudyForm';
 
@@ -191,7 +192,7 @@ const CreateStudyPage = () => {
               </div>
               <div className={styles.rightSection}>
                 <SideSection readonly={true} title={'진행 상태'}>
-                  진행 상태 버튼 들어갈 예정
+                  <PostStatusSelector value="RECRUITING" postType="study" editable={false} />
                 </SideSection>
                 <MainSection title={'모집 인원'}>
                   <PostCapacitySelector value={formData.capacity} onChange={updateCapacity} />
