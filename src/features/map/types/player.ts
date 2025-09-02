@@ -16,6 +16,15 @@ export interface PlayerMapItem extends BaseMapItem {
 export interface PlayerPanelItem extends BaseMapItem {
   userId: number;
   nickname: string;
+  mainBadge: {
+    type: string;
+    tier: string;
+  };
+  abandonBadge: {
+    isGranted: boolean;
+    count: number;
+  };
+  temperature: number;
   profileImageUrl: string;
 }
 
