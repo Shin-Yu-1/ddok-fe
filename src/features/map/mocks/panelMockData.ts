@@ -68,10 +68,19 @@ export const panelMockData: MapPanelItem[] = [
       longitude: 126.977,
       address: '서울특별시 강남구 테헤란로',
     },
+    mainBadge: {
+      type: 'login',
+      tier: 'bronze',
+    },
+    abandonBadge: {
+      isGranted: true,
+      count: 5,
+    },
+    temperature: 36.5,
     profileImageUrl: '/src/assets/images/avatar.png',
   },
 
-  // 카페 데이터
+  // 추천 장소 데이터
   {
     category: 'cafe',
     cafeId: 1,
