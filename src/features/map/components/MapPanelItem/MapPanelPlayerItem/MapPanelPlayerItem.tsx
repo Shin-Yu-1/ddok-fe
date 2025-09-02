@@ -1,9 +1,9 @@
-import type { Player } from '@/features/map/types';
+import type { PlayerPanelItem } from '@/features/map/types';
 
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelPlayerItemProps {
-  player: Player;
+  player: PlayerPanelItem;
   onItemClick: () => void;
 }
 

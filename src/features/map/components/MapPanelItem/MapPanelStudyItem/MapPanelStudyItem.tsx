@@ -1,10 +1,10 @@
-import type { Study } from '@/features/map/types';
+import type { StudyPanelItem } from '@/features/map/types';
 import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
 
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelStudyItemProps {
-  study: Study;
+  study: StudyPanelItem;
   onItemClick: () => void;
 }
 

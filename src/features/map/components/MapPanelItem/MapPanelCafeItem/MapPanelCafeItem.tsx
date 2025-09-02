@@ -1,9 +1,9 @@
-import type { Cafe } from '@/features/map/types';
+import type { CafePanelItem } from '@/features/map/types';
 
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelCafeItemProps {
-  cafe: Cafe;
+  cafe: CafePanelItem;
   onItemClick: () => void;
 }
 

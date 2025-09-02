@@ -1,10 +1,10 @@
-import type { Project } from '@/features/map/types';
+import type { ProjectPanelItem } from '@/features/map/types';
 import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
 
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelProjectItemProps {
-  project: Project;
+  project: ProjectPanelItem;
   onItemClick: () => void;
 }
 
