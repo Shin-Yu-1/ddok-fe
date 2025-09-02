@@ -1,6 +1,7 @@
 import type { MapItem } from '../types';
 
 export const mapMockData: MapItem[] = [
+  // 프로젝트 데이터
   {
     category: 'project',
     projectId: 1,
@@ -23,6 +24,8 @@ export const mapMockData: MapItem[] = [
     },
     teamStatus: 'ONGOING',
   },
+
+  // 스터디 데이터
   {
     category: 'study',
     studyId: 1,
@@ -45,6 +48,8 @@ export const mapMockData: MapItem[] = [
     },
     teamStatus: 'ONGOING',
   },
+
+  // 플레이어 데이터
   {
     category: 'player',
     userId: 1,
@@ -57,6 +62,8 @@ export const mapMockData: MapItem[] = [
     position: '백엔드',
     isMine: false,
   },
+
+  // 추천 장소 데이터
   {
     category: 'cafe',
     cafeId: 1,
