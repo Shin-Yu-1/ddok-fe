@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -11,39 +11,43 @@ export default function KakaoCallbackPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { setAuthSocialLogin } = useAuthStore();
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
-    const handleKakaoCallback = async () => {
-      console.log('카카오 콜백 페이지 진입');
-      console.log('현재 URL:', window.location.href);
+    if (hasProcessed.current) return;
+    hasProcessed.current = true;
 
-      const code = searchParams.get('code');
-      const error = searchParams.get('error');
+    const code = searchParams.get('code');
+    const error = searchParams.get('error');
 
-      console.log('인증 코드:', code);
-      console.log('에러:', error);
+    const processKey = code ? `kakao_cb_processed_${code}` : null;
+    if (processKey && sessionStorage.getItem(processKey) === '1') {
+      return;
+    }
+    if (processKey) {
+      sessionStorage.setItem(processKey, '1');
+    }
 
-      // 에러가 있거나 코드가 없으면 로그인 페이지로 리다이렉트
-      if (error || !code) {
-        console.error('카카오 로그인 에러:', error);
-        navigate('/auth/signin', {
-          replace: true,
-          state: { message: '카카오 로그인에 실패했습니다.' },
-        });
-        return;
-      }
+    const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+    window.history.replaceState({}, document.title, cleanUrl);
 
+    if (error || !code) {
+      navigate('/auth/signin', {
+        replace: true,
+        state: { message: '카카오 로그인에 실패했습니다.' },
+      });
+      return;
+    }
+
+    (async () => {
       try {
-        console.log('카카오 로그인 API 호출 시작');
-        // 카카오 로그인 API 호출
+        const redirectUri = `${window.location.origin}/auth/kakao/callback`;
+
         const result = await signInWithKakao({
           authorizationCode: code,
-          redirectUri: `${window.location.origin}/auth/kakao/callback`,
+          redirectUri,
         });
 
-        console.log('카카오 로그인 성공:', result);
-
-        // 로그인 성공 - authStore에 사용자 정보 설정
         setAuthSocialLogin({
           accessToken: result.accessToken,
           user: {
@@ -62,27 +66,21 @@ export default function KakaoCallbackPage() {
           },
         });
 
-        console.log('인증 정보 저장 완료');
-
-        // 개인화 설정 완료 여부에 따라 리다이렉트
-        if (!result.user.isPreference) {
-          console.log('개인화 설정 페이지로 리다이렉트');
-          navigate('/personalization', { replace: true });
-        } else {
-          console.log('메인 페이지로 리다이렉트');
-          navigate('/map', { replace: true });
-        }
+        navigate(result.user.isPreference ? '/map' : '/personalization', {
+          replace: true,
+        });
       } catch (apiError) {
-        console.error('카카오 로그인 API 에러:', getErrorMessage(apiError));
+        if (processKey) {
+          sessionStorage.removeItem(processKey);
+        }
         navigate('/auth/signin', {
           replace: true,
           state: { message: getErrorMessage(apiError) },
         });
       }
-    };
-
-    handleKakaoCallback();
-  }, [searchParams, navigate, setAuthSocialLogin]);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.container}>
