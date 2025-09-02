@@ -15,6 +15,7 @@ import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOv
 import MapStudyOverlay from '@/features/map/components/MapOverlay/MapStudyOverlay/MapStudyOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
+import { useMapSearch } from '@/features/map/hooks/useMapSearch';
 import { mapMockData } from '@/features/map/mocks/mapMockData';
 import { overlayMockData } from '@/features/map/mocks/overlayMockData';
 import type { CafeOverlayData } from '@/features/map/types/cafe';
@@ -55,6 +56,15 @@ const MapPage = () => {
 
   // 사이드바에서 패널 및 서브패널의 열림 상태를 가져옴
   const { isSectionOpen } = useSidebarHandlers();
+
+  // 지도 검색 API 호출
+  const {
+    data: mapSearchData,
+    refetch: refetchMapSearch,
+    isLoading: isMapSearchLoading,
+  } = useMapSearch(mapBounds, {
+    enabled: false, // 수동으로 호출
+  });
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
   useEffect(() => {
@@ -102,13 +112,14 @@ const MapPage = () => {
       lat: mapRef.current?.getCenter().getLat() || 0,
       lng: mapRef.current?.getCenter().getLng() || 0,
     });
-    console.log(mapBounds);
   };
 
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
   const handleMapReload = () => {
     setIsMapChanged(false);
-    console.log(mapBounds);
+    if (mapBounds) {
+      refetchMapSearch();
+    }
   };
 
   // 지도 로드
@@ -213,7 +224,11 @@ const MapPage = () => {
       {/* 지도 패널 */}
       {isMapPanelOpen && (
         <div className={styles.map__panelContainer}>
-          <MapPanel handleItemClick={handleItemClick} />
+          <MapPanel
+            data={mapSearchData}
+            isLoading={isMapSearchLoading}
+            handleItemClick={handleItemClick}
+          />
         </div>
       )}
 
