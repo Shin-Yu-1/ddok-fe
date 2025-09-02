@@ -8,7 +8,10 @@ import {
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import Thermometer from '@/components/Thermometer/thermometer';
+import Thermometer from '@/components/Thermometer/Thermometer';
+import BadgeTier from '@/constants/enums/BadgeTier.enum';
+import BadgeType from '@/constants/enums/BadgeType.enum';
+import Badge from '@/features/Badge/Component/Badge';
 import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import type { Player } from '@/schemas/player.schema';
 // import { useGetApi } from '@/hooks/useGetApi';
@@ -16,38 +19,36 @@ import type { Player } from '@/schemas/player.schema';
 
 import styles from './SearchPlayerPage.module.scss';
 
-type temp = {
-  items: {
-    userId: number;
-    category: string;
-    nickname: string;
-    profileImageUrl: string;
-    mainBadge: unknown;
-    abandonBadge: unknown;
-    mainPosition: string;
-    address: string;
-    temperature: number;
-    isMine: boolean;
-    chatRoomId: number;
-    dmRequestPending: boolean;
-  }[];
-  pagination: {
-    currentPage: number;
-    pageSize: number;
-    totalPages: number;
-    totalItems: number;
-  };
+// TODO: API 연동 시 제거
+type playerListDummy = {
+  userId: number;
+  category: string;
+  nickname: string;
+  profileImageUrl: string;
+  mainBadge: { type: BadgeType; tier: BadgeTier }[];
+  abandonBadge: { isGranted: boolean; count: number };
+  mainPosition: string;
+  address: string;
+  temperature: number;
+  isMine: boolean;
+  chatRoomId: number;
+  dmRequestPending: boolean;
 };
 
+// TODO: API 연동 시 제거
 const PROFILE = 'https://cdn.pixabay.com/photo/2017/06/13/12/53/profile-2398782_1280.png';
 
-const playerListDummy: Player[] = [
+// TODO: API 연동 시 제거
+const playerListDummy = [
   {
     userId: 1,
     category: 'soccer',
     nickname: '골때리는수비수',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'MVP', tier: 'Gold' },
+    mainBadge: [
+      { type: BadgeType.COMPLETE, tier: BadgeTier.GOLD },
+      { type: BadgeType.LOGIN, tier: BadgeTier.GOLD },
+    ],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'DF',
     address: '서울 강남구',
@@ -61,7 +62,10 @@ const playerListDummy: Player[] = [
     category: 'basketball',
     nickname: '리바운드왕',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Rebounder', tier: 'Silver' },
+    mainBadge: [
+      { type: BadgeType.COMPLETE, tier: BadgeTier.SILVER },
+      { type: BadgeType.LOGIN, tier: BadgeTier.BRONZE },
+    ],
     abandonBadge: { isGranted: true, count: 1 },
     mainPosition: 'C',
     address: '서울 마포구',
@@ -75,7 +79,7 @@ const playerListDummy: Player[] = [
     category: 'tennis',
     nickname: '백핸드장인',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Baseline', tier: 'Bronze' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'Singles',
     address: '경기 성남시',
@@ -89,7 +93,7 @@ const playerListDummy: Player[] = [
     category: 'badminton',
     nickname: '스매시마스터',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Attacker', tier: 'Gold' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: true, count: 2 },
     mainPosition: 'Doubles',
     address: '서울 송파구',
@@ -103,7 +107,7 @@ const playerListDummy: Player[] = [
     category: 'soccer',
     nickname: '플메장인',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Playmaker', tier: 'Silver' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'MF',
     address: '서울 영등포구',
@@ -117,7 +121,7 @@ const playerListDummy: Player[] = [
     category: 'running',
     nickname: '러너스하이',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Pacer', tier: 'Gold' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: '10K',
     address: '부산 해운대구',
@@ -131,7 +135,7 @@ const playerListDummy: Player[] = [
     category: 'baseball',
     nickname: '클러치히터',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Slugger', tier: 'Silver' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: true, count: 1 },
     mainPosition: '1B',
     address: '대구 수성구',
@@ -145,7 +149,7 @@ const playerListDummy: Player[] = [
     category: 'golf',
     nickname: '퍼팅요정',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'GreenMaster', tier: 'Bronze' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'Right',
     address: '인천 연수구',
@@ -159,7 +163,7 @@ const playerListDummy: Player[] = [
     category: 'table-tennis',
     nickname: '스핀장난아님',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Spinner', tier: 'Silver' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.SILVER }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'Shakehand',
     address: '광주 서구',
@@ -173,7 +177,7 @@ const playerListDummy: Player[] = [
     category: 'volleyball',
     nickname: '블로킹기계',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Blocker', tier: 'Gold' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: true, count: 3 },
     mainPosition: 'MB',
     address: '대전 유성구',
@@ -187,7 +191,7 @@ const playerListDummy: Player[] = [
     category: 'soccer',
     nickname: '폭격기',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Striker', tier: 'Gold' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.GOLD }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'FW',
     address: '경기 고양시',
@@ -201,7 +205,7 @@ const playerListDummy: Player[] = [
     category: 'basketball',
     nickname: '딥쓰리장착',
     profileImageUrl: PROFILE,
-    mainBadge: { type: 'Shooter', tier: 'Bronze' },
+    mainBadge: [{ type: BadgeType.COMPLETE, tier: BadgeTier.BRONZE }],
     abandonBadge: { isGranted: false, count: 0 },
     mainPosition: 'SG',
     address: '울산 남구',
@@ -212,6 +216,7 @@ const playerListDummy: Player[] = [
   },
 ];
 
+// TODO: API 연동 시 제거
 const tempChunk = ({ page, size }: Pagination) => {
   const pageSize = Math.max(1, size | 0);
   const totalItems = playerListDummy.length;
@@ -226,8 +231,11 @@ const tempChunk = ({ page, size }: Pagination) => {
     category: p.category,
     nickname: p.nickname,
     profileImageUrl: p.profileImageUrl,
-    mainBadge: p.mainBadge as unknown,
-    abandonBadge: p.abandonBadge as unknown,
+    mainBadge: p.mainBadge,
+    abandonBadge: p.abandonBadge as {
+      isGranted: boolean;
+      count: number;
+    },
     mainPosition: p.mainPosition,
     address: p.address,
     temperature: p.temperature,
@@ -259,35 +267,27 @@ const SearchPlayerPage = () => {
   //   params: { keyword, ...pagination },
   // });
 
-  // TODO: API 연결 시 삭제
-  let tempList: temp | null = null;
-
-  if (keyword) {
-    tempList = tempChunk(pagination);
-  }
-
   // keyword 변경 시 playerList, pagination 초기화
   useEffect(() => {
     setPlayerList([]);
-    setPagination({ page: 1, size: 10 });
+    setPagination({ page: 1, size: 6 });
 
     // TODO: API 연결 시 삭제
     const { items: newPlayers, pagination: p } = tempChunk(pagination);
-    setPlayerList(prev => (p.currentPage === 0 ? newPlayers : [...(prev ?? []), ...newPlayers]));
+    setPlayerList(prev => (p.currentPage === 1 ? newPlayers : [...(prev ?? []), ...newPlayers]));
   }, [keyword]);
 
-  useEffect(() => {
-    // const res = playerListResponse?.data;
-    const res = tempList; // TODO: API 연결 시 삭제
-    if (!res) return;
+  // useEffect(() => { // TODO: API 연결 시 주석 해제
+  //   const res = playerListResponse?.data;
+  //   if (!res) return;
 
-    const { items: newPlayers, pagination: p } = res;
+  //   const { items: newPlayers, pagination: p } = res;
 
-    if (!newPlayers) return;
-    console.log(newPlayers);
+  //   if (!newPlayers) return;
+  //   console.log(newPlayers);
 
-    setPlayerList(prev => (p.currentPage === 0 ? newPlayers : [...(prev ?? []), ...newPlayers]));
-  }, []);
+  //   setPlayerList(prev => (p.currentPage === 0 ? newPlayers : [...(prev ?? []), ...newPlayers]));
+  // }, []);
 
   const isLastPage =
     (tempChunk(pagination)?.pagination?.currentPage ?? 0) >=
@@ -322,37 +322,43 @@ const SearchPlayerPage = () => {
       {keyword ? (
         /* keyword 있을 때 */
         <>
-          <Input
-            type="text"
-            width={'476px'}
-            height={66}
-            value={keyword}
-            fontSize="var(--fs-xsmall)"
-            placeholder="플레이어의 닉네임, 포지션, 장소를 검색하세요"
-            border="1px solid var(--gray-2)"
-            focusBorder="1px solid var(--gray-2)"
-            backgroundColor="var(--white-3)"
-            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />} // TODO: iconSize Up 20->30
-            onChange={onChangeHandle}
-          ></Input>
+          <div className={styles.keywordWrapper}>
+            <Input
+              type="text"
+              width={'476px'}
+              height={66}
+              value={keyword}
+              fontSize="var(--fs-xsmall)"
+              placeholder="플레이어의 닉네임, 포지션, 장소를 검색하세요"
+              border="1px solid var(--gray-2)"
+              focusBorder="1px solid var(--gray-2)"
+              backgroundColor="var(--white-3)"
+              leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />} // TODO: iconSize Up 20->30
+              onChange={onChangeHandle}
+            ></Input>
+          </div>
 
-          <div>
+          <div className={styles.playerListWrapper}>
             {playerList.map(player => (
               <div key={player.userId} className={styles.playerCard}>
-                <div className={styles.playerTempWrapper}>
+                <div className={styles.playerTemperatureWrapper}>
                   <Thermometer temperature={player.temperature} />
-                  <span>{player.temperature}℃</span>
+                  <span className={styles.temperature}>{player.temperature}℃</span>
                   <Button size="sm" textColor={'var(--gray-1)'} backgroundColor="none" padding="0%">
-                    <DotsThreeVerticalIcon />
+                    <DotsThreeVerticalIcon className={styles.buttonIcon} />
                   </Button>
                 </div>
-                <img
-                  src={player.profileImageUrl}
-                  alt={`${player.nickname} 프로필`}
-                  className={styles.profileImage}
-                />
+                <div className={styles.profileImage}>
+                  <img src={player.profileImageUrl} alt={`${player.nickname} 프로필`} />
+                </div>
                 <h3 className={styles.nickname}>{player.nickname}</h3>
-                <span className={styles.line}></span>
+                <div className={styles.line}>
+                  <div className={styles.badgeWrapper}>
+                    {player.mainBadge.map(badge => (
+                      <Badge key={`${badge.type}${badge.tier}`} heightSize={16} mainBadge={badge} />
+                    ))}
+                  </div>
+                </div>
                 <div className={styles.playerInfo}>
                   <p className={styles.details}>{player.address}</p>
                   <p className={styles.details}>{player.mainPosition}</p>
