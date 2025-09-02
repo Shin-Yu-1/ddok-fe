@@ -8,8 +8,8 @@ export interface PreferredAges {
   ageMax: number;
 }
 
-// 프로젝트 모드
-export type StudyMode = 'ONLINE' | 'OFFLINE';
+// 스터디 모드
+export type StudyMode = 'online' | 'offline';
 
 // 위치 정보
 export interface Location {
@@ -18,7 +18,7 @@ export interface Location {
   address: string;
 }
 
-// 프로젝트 생성 데이터
+// 스터디 생성 데이터
 export interface CreateStudyData {
   title: string;
   expectedStart: string;
@@ -28,13 +28,12 @@ export interface CreateStudyData {
   preferredAges: PreferredAges | null;
   capacity: number;
   traits: string[];
-  studyType: string[];
-  leaderPosition: string;
+  studyType: string;
   detail: string;
   bannerImage?: File | null;
 }
 
-// 프로젝트 수정 데이터 (수정 API용)
+// 스터디 수정 데이터 (수정 API용)
 export interface UpdateStudyData extends CreateStudyData {
   teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
   bannerImageUrl?: string; // 기존 이미지 URL
@@ -45,10 +44,9 @@ export interface CreateStudyResponse {
   status: number;
   message: string;
   data: {
-    projectId: number;
+    studyId: number;
     userId: number;
     nickname: string;
-    leaderPosition: string;
     title: string;
     teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
     expectedStart: string;
@@ -59,7 +57,7 @@ export interface CreateStudyResponse {
     capacity: number;
     bannerImageUrl: string;
     traits: string[];
-    studyType: string[];
+    studyType: string;
     detail: string;
   };
 }
@@ -81,7 +79,68 @@ export interface EditStudyResponse {
     expectedMonth: number;
     startDate: string;
     detail: string;
-    leaderPosition: string;
+  };
+}
+
+// 스터디 상세 조회 응답 타입
+export interface DetailStudyResponse {
+  status: number;
+  message: string;
+  data: {
+    studyId: number;
+    title: string;
+    studyType: string;
+    isMine: boolean;
+    isApplied: boolean;
+    isApproved: boolean;
+    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
+    bannerImageUrl: string;
+    traits: string[];
+    capacity: number;
+    applicantCount: number;
+    mode: string;
+    address: string | null;
+    preferredAges: PreferredAges;
+    expectedMonth: number;
+    startDate: string;
+    detail: string;
+    leader: {
+      userId: number;
+      nickname: string;
+      profileImageUrl: string;
+      mainPosition: string;
+      mainBadge: {
+        type: string;
+        tier: string;
+      };
+      abandonBadge: {
+        isGranted: boolean;
+        count: number;
+      };
+      temperature: number;
+      isMine: boolean;
+      chatRoomId: number | null;
+      dmRequestPending: boolean;
+    };
+    participants: Array<{
+      userId: number;
+      nickname: string;
+      profileImageUrl: string;
+      mainPosition: string;
+      mainBadge: {
+        type: string;
+        tier: string;
+      };
+      abandonBadge: {
+        isGranted: boolean;
+        count: number;
+      };
+      temperature: number;
+      isMine: boolean;
+      chatRoomId: number | null;
+      dmRequestPending: boolean;
+    }>;
+    participantsCount: number;
   };
 }
 
@@ -99,13 +158,12 @@ export const initialFormData: CreateStudyData = {
     return `${year}-${month}-${day}`;
   })(),
   expectedMonth: 1,
-  mode: 'OFFLINE',
+  mode: 'offline',
   location: null,
   preferredAges: null,
   capacity: 1,
   traits: [],
-  studyType: [],
-  leaderPosition: '',
+  studyType: '',
   detail: STUDY_DETAIL_TEMPLATE,
   bannerImage: null,
 };
