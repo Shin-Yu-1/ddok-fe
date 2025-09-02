@@ -13,8 +13,7 @@ import {
 import { panelMockData } from '../../mocks/panelMockData';
 import type { MapItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
-import type { MapItemCategory } from '../../types/common';
-import { MapItemCategory as MC } from '../../types/common';
+import { MapItemCategory } from '../../types/common';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
@@ -69,7 +68,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
       return (
         <MapPanelProjectItem
           project={item}
-          onItemClick={() => handleItemClick(MC.PROJECT, item.projectId)}
+          onItemClick={() => handleItemClick(MapItemCategory.PROJECT, item.projectId)}
         />
       );
     }
@@ -78,7 +77,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
       return (
         <MapPanelStudyItem
           study={item}
-          onItemClick={() => handleItemClick(MC.STUDY, item.studyId)}
+          onItemClick={() => handleItemClick(MapItemCategory.STUDY, item.studyId)}
         />
       );
     }
@@ -87,14 +86,17 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
       return (
         <MapPanelPlayerItem
           player={item}
-          onItemClick={() => handleItemClick(MC.PLAYER, item.userId)}
+          onItemClick={() => handleItemClick(MapItemCategory.PLAYER, item.userId)}
         />
       );
     }
 
     if (isCafe(item)) {
       return (
-        <MapPanelCafeItem cafe={item} onItemClick={() => handleItemClick(MC.CAFE, item.cafeId)} />
+        <MapPanelCafeItem
+          cafe={item}
+          onItemClick={() => handleItemClick(MapItemCategory.CAFE, item.cafeId)}
+        />
       );
     }
 
@@ -147,7 +149,8 @@ const MapPanel: React.FC<MapPanelProps> = ({ handleItemClick }) => {
         <hr className={styles.panel__divider} />
 
         {/* 진행 상태 필터*/}
-        {selectedCategoryFilter.key === 'project' || selectedCategoryFilter.key === 'study' ? (
+        {selectedCategoryFilter.key === MapItemCategory.PROJECT ||
+        selectedCategoryFilter.key === MapItemCategory.STUDY ? (
           <>
             <div className={styles.panel__statusFilter}>
               {/* TODO: 버튼 컴포넌트 가져오기 */}
