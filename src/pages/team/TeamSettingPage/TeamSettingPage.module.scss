@@ -1,11 +1,61 @@
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as m;
 
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
-  background-color: $blue-1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  height: 100%;
+  color: $black-4;
+  background-color: $white-2;
 }
 
 .title {
   @include m.font-title;
+}
+
+.label {
+  @include m.font-description;
+
+  font-weight: $fw-semibold;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 30px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background-color: $white-3;
+}
+
+.members {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 150px 1fr 80px;
+  gap: 10px;
+}
+
+.participants {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 50px 150px 1fr 80px;
+  gap: 10px;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 40px;
+  line-height: 40px;
 }
