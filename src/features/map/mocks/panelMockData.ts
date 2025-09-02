@@ -1,8 +1,7 @@
 import type { MapPanelItem } from '../types';
 
 /**
- * 지도 패널에서 사용할 목 데이터
- * 각 카테고리별 샘플 데이터 포함
+ * 지도 패널 목 데이터
  */
 
 export const panelMockData: MapPanelItem[] = [

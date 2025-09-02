@@ -1,5 +1,9 @@
 import type { MapItem } from '../types';
 
+/**
+ * 지도 목 데이터
+ */
+
 export const mapMockData: MapItem[] = [
   // 프로젝트 데이터
   {
