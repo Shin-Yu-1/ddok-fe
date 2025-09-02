@@ -74,7 +74,7 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, closeMenu]);
 
   const openMenu = () => {
     setIsMenuOpen(true);
