@@ -431,7 +431,7 @@ const SearchPlayerPage = () => {
       isFetchingRef.current = false;
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const ensureScrollable = () => {
     const listEl = document.querySelector(`.${styles.playerListWrapper}`) as HTMLElement | null;
