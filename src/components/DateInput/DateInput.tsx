@@ -15,6 +15,7 @@ interface DateInputProps {
   max?: string;
   min?: string;
   placeholder?: string;
+  readOnly?: boolean;
 }
 
 const DateInput = ({
@@ -24,6 +25,7 @@ const DateInput = ({
   max,
   min,
   placeholder,
+  readOnly = false,
 }: DateInputProps) => {
   const [displayValue, setDisplayValue] = useState(value || '');
   const [showCalendar, setShowCalendar] = useState(false);
@@ -42,6 +44,9 @@ const DateInput = ({
   }, [value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // readOnly일 때는 입력 변경을 무시
+    if (readOnly) return;
+
     const inputValue = e.target.value;
     setDisplayValue(inputValue);
 
@@ -60,6 +65,12 @@ const DateInput = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // readOnly일 때는 모든 키 입력 차단
+    if (readOnly) {
+      e.preventDefault();
+      return;
+    }
+
     const allowedKeys = [
       'Backspace',
       'Delete',
@@ -114,10 +125,11 @@ const DateInput = ({
         fontSize="var(--fs-xxsmall)"
         border="1px solid var(--gray-3)"
         focusBorder="1px solid var(--gray-3)"
+        readOnly={readOnly}
         style={
           {
             '--placeholder-color': 'var(--gray-2)',
-            cursor: 'text',
+            cursor: readOnly ? 'pointer' : 'text',
             marginBottom: '1.5rem',
           } as React.CSSProperties
         }

@@ -1,0 +1,333 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+// 테이블 스타일
+.table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  overflow: hidden;
+  background-color: $white-3;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 120px 60px;
+  min-height: 50px;
+  border-bottom: 1px solid $gray-3;
+  background-color: $white-1;
+
+  // Create 페이지에서는 지원/확정 인원 컬럼이 없음
+  &[data-page-type='create'] {
+    grid-template-columns: 1fr 140px 60px;
+  }
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 120px 60px;
+  min-height: 56px;
+  border-bottom: 1px solid $gray-4;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  // Create 페이지에서는 지원/확정 인원 컬럼이 없음
+  &[data-page-type='create'] {
+    grid-template-columns: 1fr 140px 60px;
+  }
+}
+
+.headerCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  text-align: center;
+  color: $gray-1;
+
+  &:first-child {
+    justify-content: flex-start;
+    padding-left: 20px;
+  }
+}
+
+.bodyCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+
+  &:first-child {
+    justify-content: flex-start;
+    padding-left: 20px;
+  }
+}
+
+// 포지션 태그
+.positionTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xxxxlarge;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  background-color: $white-3;
+}
+
+// 인원 수
+.count {
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $black-3;
+}
+
+// 액션 버튼들
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 8px 12px;
+  border: 1px solid;
+  border-radius: $r-xxxxlarge;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  // 선택하기 / 지원하기 (기본 상태)
+  &.selectable {
+    border-color: $gray-3;
+    color: $black-1;
+    background-color: $white-3;
+
+    &:hover {
+      border-color: $blue-1;
+      color: $blue-1;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // 확정 상태
+  &.confirmed {
+    border-color: $blue-1;
+    color: $white-3;
+    background-color: $blue-1;
+    cursor: default;
+  }
+
+  // 지원 취소 (빨간색)
+  &.applied {
+    border-color: $red-1;
+    color: $red-1;
+    background-color: $white-3;
+
+    &:hover {
+      color: $white-3;
+      background-color: $red-1;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // 선택 취소 (빨간색)
+  &.cancel {
+    border-color: $red-1;
+    color: $red-1;
+    background-color: $white-3;
+
+    &:hover {
+      color: $white-3;
+      background-color: $red-1;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // 비활성화 상태
+  &.disabled {
+    border-color: $gray-2;
+    color: $gray-2;
+    background-color: $white-3;
+    opacity: 0.7;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: $gray-2;
+      color: $gray-2;
+      background-color: $white-3;
+    }
+  }
+}
+
+// 삭제 버튼
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: $r-xxsmall;
+  color: $gray-1;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: $red-1;
+    background-color: rgba($red-1, 0.1);
+    transform: scale(1.05);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    color: $gray-3;
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover {
+      color: $gray-3;
+      background-color: transparent;
+      transform: none;
+    }
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// 드롭다운 컨테이너
+.dropdownContainer {
+  width: 100%;
+}
+
+// 드롭다운 트리거
+.dropdownTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  background-color: $white-3;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $yellow-1;
+    background-color: rgba($yellow-1, 0.05);
+  }
+
+  &:focus {
+    border-color: $yellow-1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($yellow-1, 0.2);
+  }
+
+  &[data-state='open'] {
+    border-color: $yellow-1;
+    background-color: rgba($yellow-1, 0.05);
+  }
+}
+
+// 드롭다운 컨텐츠
+.dropdownContent {
+  position: relative;
+  z-index: 50;
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background-color: $white-3;
+  box-shadow:
+    0 4px 8px rgba($black-1, 0.08),
+    0 2px 4px rgba($black-1, 0.04);
+  animation: drop-down-slide-down 0.15s ease-out;
+}
+
+.dropdownViewport {
+  padding: 0;
+}
+
+// 드롭다운 아이템
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: $r-xxsmall;
+  outline: none;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $black-3;
+  background-color: transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: $yellow-1;
+    background-color: rgba($yellow-1, 0.1);
+  }
+
+  &:focus {
+    color: $yellow-1;
+    background-color: rgba($yellow-1, 0.1);
+  }
+
+  &[data-highlighted] {
+    color: $yellow-1;
+    background-color: rgba($yellow-1, 0.1);
+  }
+}
+
+// 애니메이션
+@keyframes drop-down-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

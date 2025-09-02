@@ -4,16 +4,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/api/api';
-import type { CreateProjectData, ProjectMode, Location, PreferredAges } from '@/types/project';
+import type {
+  CreateProjectData,
+  CreateProjectResponse,
+  ProjectMode,
+  Location,
+  PreferredAges,
+} from '@/types/project';
 import { initialFormData } from '@/types/project';
-
-interface CreateProjectResponse {
-  success: boolean;
-  data: {
-    id: number;
-    bannerImageUrl?: string;
-  };
-}
 
 export const useCreateProjectForm = () => {
   const [formData, setFormData] = useState<CreateProjectData>(initialFormData);
@@ -24,28 +22,29 @@ export const useCreateProjectForm = () => {
     // FormData 객체 생성 (파일 업로드를 위해)
     const formDataToSend = new FormData();
 
-    // 배너 이미지가 있으면 추가, 없으면 null로 처리
+    // 배너 이미지가 있을 때만 추가
     if (data.bannerImage) {
       formDataToSend.append('bannerImage', data.bannerImage);
     }
 
-    // 나머지 데이터는 JSON으로 추가 (null 값도 포함)
-    const requestData = {
+    const requestData: Omit<CreateProjectData, 'bannerImage'> = {
       title: data.title,
       expectedStart: data.expectedStart,
       expectedMonth: data.expectedMonth,
       mode: data.mode,
-      location: data.location,
+      location: data.mode === 'offline' ? data.location : null,
       preferredAges: data.preferredAges,
       capacity: data.capacity,
       traits: data.traits,
       positions: data.positions,
       leaderPosition: data.leaderPosition,
       detail: data.detail,
-      bannerImage: data.bannerImage,
     };
 
-    formDataToSend.append('data', JSON.stringify(requestData));
+    formDataToSend.append(
+      'request',
+      new Blob([JSON.stringify(requestData)], { type: 'application/json' })
+    );
 
     const response = await api.post<CreateProjectResponse>('/api/projects', formDataToSend, {
       headers: {
@@ -61,11 +60,11 @@ export const useCreateProjectForm = () => {
     mutationFn: createProject,
     onSuccess: response => {
       // 성공 시 상세 페이지로 이동
-      navigate(`/detail/project/${response.data.id}`);
+      navigate(`/detail/project/${response.data.projectId}`);
     },
     onError: error => {
       console.error('프로젝트 생성 실패:', error);
-      // 에러 처리 (토스트 알림 등)
+      // TODO: 에러 처리 (토스트 알림 등)
     },
   });
 
@@ -86,8 +85,8 @@ export const useCreateProjectForm = () => {
     setFormData(prev => ({
       ...prev,
       mode,
-      // ONLINE으로 변경 시 location 초기화
-      location: mode === 'ONLINE' ? null : prev.location,
+      // online 변경 시 location 초기화
+      location: mode === 'online' ? null : prev.location,
     }));
   }, []);
 
@@ -95,7 +94,7 @@ export const useCreateProjectForm = () => {
     setFormData(prev => ({ ...prev, location }));
   }, []);
 
-  const updatePreferredAges = useCallback((preferredAges: PreferredAges) => {
+  const updatePreferredAges = useCallback((preferredAges: PreferredAges | null) => {
     setFormData(prev => ({ ...prev, preferredAges }));
   }, []);
 
@@ -124,15 +123,23 @@ export const useCreateProjectForm = () => {
   }, []);
 
   // 폼 유효성 검사
-  // TODO: zod로 변경 필요
   const validateForm = useCallback((): boolean => {
+    // 필수 필드 검증
     if (!formData.title.trim()) return false;
     if (!formData.expectedStart) return false;
     if (formData.expectedMonth < 1) return false;
-    if (formData.mode === 'OFFLINE' && !formData.location) return false;
-    if (formData.capacity < 2) return false;
+
+    // offline 모드일 때 위치 정보 필수
+    if (formData.mode === 'offline' && !formData.location) return false;
+
+    if (formData.capacity < 1) return false;
+    if (formData.capacity > 7) return false;
     if (formData.positions.length === 0) return false;
     if (!formData.leaderPosition) return false;
+
+    // 리더 포지션이 모집 포지션에 포함되어야 함
+    if (!formData.positions.includes(formData.leaderPosition)) return false;
+
     if (!formData.detail.trim()) return false;
 
     return true;
@@ -142,7 +149,6 @@ export const useCreateProjectForm = () => {
   const handleSubmit = useCallback(() => {
     if (!validateForm()) {
       console.error('폼 유효성 검사 실패');
-      // 유효성 검사 실패 알림
       return;
     }
 
