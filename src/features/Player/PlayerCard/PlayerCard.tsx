@@ -80,10 +80,6 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
     setIsMenuOpen(true);
   };
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
   return (
     <div className={styles.playerCard}>
       <div className={styles.playerTemperatureWrapper}>
