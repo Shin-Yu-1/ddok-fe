@@ -19,6 +19,7 @@ import { mapMockData } from '@/features/map/mocks/mapMockData';
 import { overlayMockData } from '@/features/map/mocks/overlayMockData';
 import type { CafeOverlayData } from '@/features/map/types/cafe';
 import type { MapBounds } from '@/features/map/types/common';
+import { MapItemCategory } from '@/features/map/types/common';
 import type { PlayerOverlayData } from '@/features/map/types/player';
 import type { ProjectOverlayData } from '@/features/map/types/project';
 import type { StudyOverlayData } from '@/features/map/types/study';
@@ -69,10 +70,10 @@ const MapPage = () => {
   }, [isSectionOpen, isMapPanelOpen]);
 
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘을 조절
-  const handleItemClick = (itemType: 'project' | 'study' | 'player' | 'cafe', itemId?: number) => {
+  const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
     if (!isMapPanelOpen) return;
 
-    if (itemType === 'cafe' && itemId !== undefined) {
+    if (itemType === MapItemCategory.CAFE && itemId !== undefined) {
       // 카페 아이템 클릭 시
       if (selectedCafeId === itemId && isMapSubPanelOpen) {
         // 같은 카페를 다시 클릭했고 서브패널이 열려있으면 닫기
@@ -161,25 +162,25 @@ const MapPage = () => {
                   };
 
                   switch (selectedPoint.type) {
-                    case 'project':
+                    case MapItemCategory.PROJECT:
                       return (
                         <MapProjectOverlay
                           {...commonProps}
                           project={overlayData as ProjectOverlayData}
                         />
                       );
-                    case 'study':
+                    case MapItemCategory.STUDY:
                       return (
                         <MapStudyOverlay {...commonProps} study={overlayData as StudyOverlayData} />
                       );
-                    case 'player':
+                    case MapItemCategory.PLAYER:
                       return (
                         <MapPlayerOverlay
                           {...commonProps}
                           player={overlayData as PlayerOverlayData}
                         />
                       );
-                    case 'cafe':
+                    case MapItemCategory.CAFE:
                       return (
                         <MapCafeOverlay {...commonProps} cafe={overlayData as CafeOverlayData} />
                       );

@@ -10,7 +10,13 @@ export interface Location {
 }
 
 /** 지도 아이템 카테고리 타입 */
-export type MapItemCategory = 'project' | 'study' | 'player' | 'cafe';
+export const MapItemCategory = {
+  PROJECT: 'project',
+  STUDY: 'study',
+  PLAYER: 'player',
+  CAFE: 'cafe',
+} as const;
+export type MapItemCategory = (typeof MapItemCategory)[keyof typeof MapItemCategory];
 
 /** 프로젝트 및 스터디의 팀 상태 */
 export type TeamStatus = 'RECRUITING' | 'ONGOING';
