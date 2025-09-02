@@ -81,7 +81,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
       teamStatus: data.teamStatus,
       expectedMonth: data.expectedMonth,
       mode: data.mode,
-      location: data.mode === 'OFFLINE' ? data.location : null,
+      location: data.mode === 'offline' ? data.location : null,
       preferredAges: data.preferredAges,
       capacity: data.capacity,
       traits: data.traits,
@@ -141,7 +141,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
         ? {
             ...prev,
             mode,
-            location: mode === 'ONLINE' ? null : prev.location,
+            location: mode === 'online' ? null : prev.location,
           }
         : null
     );
@@ -190,7 +190,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     if (!formData.title.trim()) return false;
     if (!formData.expectedStart) return false;
     if (formData.expectedMonth < 1) return false;
-    if (formData.mode === 'OFFLINE' && !formData.location) return false;
+    if (formData.mode === 'offline' && !formData.location) return false;
     if (formData.capacity < 1 || formData.capacity > 7) return false;
     if (formData.positions.length === 0) return false;
     if (!formData.leaderPosition) return false;
