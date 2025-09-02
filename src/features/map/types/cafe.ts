@@ -50,9 +50,7 @@ export interface CafeMapItem extends BaseMapItem {
 }
 
 /** 패널의 추천 장소 아이템 정보 */
-export interface CafePanelItem extends BaseMapItem {
-  cafeId: number;
-  title: string;
+export interface CafePanelItem extends CafeMapItem {
   bannerImageUrl: string;
 }
 

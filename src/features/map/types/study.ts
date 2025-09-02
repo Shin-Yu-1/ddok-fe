@@ -12,10 +12,7 @@ export interface StudyMapItem extends BaseMapItem {
 }
 
 /** 패널의 스터디 아이템 정보 */
-export interface StudyPanelItem extends BaseMapItem {
-  studyId: number;
-  title: string;
-  teamStatus: TeamStatus;
+export interface StudyPanelItem extends StudyMapItem {
   bannerImageUrl: string;
 }
 

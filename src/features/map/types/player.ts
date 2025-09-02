@@ -13,11 +13,7 @@ export interface PlayerMapItem extends BaseMapItem {
 }
 
 /** 패널의 플레이어 아이템 정보 */
-export interface PlayerPanelItem extends BaseMapItem {
-  userId: number;
-  nickname: string;
-  position: string;
-  isMine: boolean;
+export interface PlayerPanelItem extends PlayerMapItem {
   mainBadge: {
     type: string;
     tier: string;
