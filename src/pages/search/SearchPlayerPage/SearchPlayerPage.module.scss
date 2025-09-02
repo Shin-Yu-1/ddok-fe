@@ -32,9 +32,10 @@
 
   .playerListWrapper {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    place-items: center center;
+    grid-template-columns: repeat(3, 230px);
     width: 830px;
-    row-gap: 20px;
+    gap: 20px 73px;
 
     .playerCard {
       display: flex;
@@ -132,16 +133,13 @@
       align-items: center;
       gap: 12px;
       width: 100%;
-
-      // 실제 playerCard와 동일한 크기와 레이아웃 유지
-      min-height: 240px; // playerCard 높이에 맞춰 조정
+      min-height: 240px;
       padding: 16px;
       border: 1px solid var(--gray-3, #f0f0f0);
       border-radius: 12px;
       background: var(--white-1, #ffffff);
     }
 
-    // 기본 스켈레톤 요소 스타일
     %skeleton-base {
       border-radius: 4px;
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -226,11 +224,11 @@
       height: 14px;
 
       &:first-child {
-        width: 120px; // 주소는 조금 더 길게
+        width: 120px;
       }
 
       &:last-child {
-        width: 60px; // 포지션은 짧게
+        width: 60px;
       }
     }
   }
