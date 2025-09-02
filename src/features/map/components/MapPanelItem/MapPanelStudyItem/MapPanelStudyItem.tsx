@@ -1,5 +1,5 @@
 import type { Study } from '@/features/map/types';
-import { MAP_ITEM_STATUS_LABELS } from '@/features/map/types/common';
+import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
 
 import styles from '../MapPanelItem.module.scss';
 
@@ -21,7 +21,7 @@ const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({ study, onItemClic
         </div>
       </div>
       {study.teamStatus &&
-        (study.teamStatus === 'RECRUITING' ? (
+        (study.teamStatus === TeamStatus.RECRUITING ? (
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__recruiting}`}
           >
