@@ -6,7 +6,6 @@ import type { BaseMapItem } from './common';
 
 /** 패널의 플레이어 아이템 정보 */
 export interface Player extends BaseMapItem {
-  category: 'player';
   userId: number;
   nickname: string;
   profileImageUrl: string;

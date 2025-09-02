@@ -45,7 +45,6 @@ export interface CafeReviewResponse {
 
 /** 패널의 추천 장소 아이템 정보 */
 export interface Cafe extends BaseMapItem {
-  category: 'cafe';
   cafeId: number;
   title: string;
   bannerImageUrl: string;
