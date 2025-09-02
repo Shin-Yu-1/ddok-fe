@@ -102,6 +102,7 @@ const MapPage = () => {
       lat: mapRef.current?.getCenter().getLat() || 0,
       lng: mapRef.current?.getCenter().getLng() || 0,
     });
+    console.log(mapBounds);
   };
 
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
