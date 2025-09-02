@@ -1,5 +1,4 @@
 import { MagicWand } from '@phosphor-icons/react';
-import { RadioGroup } from 'radix-ui';
 
 import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -11,6 +10,7 @@ import PostCapacitySelector from '@/features/post/components/PostCapacitySelecto
 import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
 import PostDurationSlider from '@/features/post/components/PostDurationSlider/PostDurationSlider';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
+import PostModeSelector from '@/features/post/components/PostModeSelector/PostModeSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import { useCreateProjectForm } from '@/hooks/post/useCreateProjectForm';
 
@@ -34,8 +34,8 @@ const CreateProjectPage = () => {
     isValid,
   } = useCreateProjectForm();
 
-  const handleModeChange = (value: string) => {
-    updateMode(value as 'online' | 'offline');
+  const handleModeChange = (mode: 'online' | 'offline') => {
+    updateMode(mode);
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,28 +246,7 @@ const CreateProjectPage = () => {
                   />
                 </MainSection>
                 <MainSection title={'모임 형태'}>
-                  <RadioGroup.Root
-                    className={styles.radioRoot}
-                    value={formData.mode}
-                    onValueChange={handleModeChange}
-                  >
-                    <div className={styles.radioItemGroup}>
-                      <RadioGroup.Item className={styles.radioItem} value="online" id="r1">
-                        <RadioGroup.Indicator className={styles.radioIndicator} />
-                      </RadioGroup.Item>
-                      <label className={styles.radioLabel} htmlFor="r1">
-                        온라인
-                      </label>
-                    </div>
-                    <div className={styles.radioItemGroup}>
-                      <RadioGroup.Item className={styles.radioItem} value="offline" id="r2">
-                        <RadioGroup.Indicator className={styles.radioIndicator} />
-                      </RadioGroup.Item>
-                      <label className={styles.radioLabel} htmlFor="r2">
-                        오프라인
-                      </label>
-                    </div>
-                  </RadioGroup.Root>
+                  <PostModeSelector value={formData.mode} onChange={handleModeChange} />
                 </MainSection>
                 {/* 조건부 렌더링: 오프라인일 때만 지역 섹션 표시 */}
                 {formData.mode === 'offline' && (
