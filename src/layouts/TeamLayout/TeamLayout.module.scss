@@ -1,0 +1,32 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.layoutContainer {
+  display: flex;
+  flex-direction: column;
+
+  //   height: 100%;
+  width: 100%;
+}
+
+.contentContainer {
+  display: flex;
+  flex-grow: 1;
+  height: calc(100vh - 96px);
+  margin-top: 96px;
+  margin-left: 47px;
+  padding: 55px 103px;
+  background-color: $white-2;
+
+  @include m.tablet {
+    height: calc(100vh - 96px);
+    margin-top: 96px;
+    margin-left: 42px;
+  }
+
+  @include m.mobile {
+    height: calc(100vh - 81px);
+    margin-top: 81px;
+    margin-left: 37px;
+  }
+}
