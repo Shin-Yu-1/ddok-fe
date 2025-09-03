@@ -6,13 +6,9 @@ import { forwardRef } from 'react';
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
-import BurningIcon from '@/assets/icons/temperature-burning-icon.svg';
-import ColdIcon from '@/assets/icons/temperature-cold-icon.svg';
-import CoolIcon from '@/assets/icons/temperature-cool-icon.svg';
-import FreezingIcon from '@/assets/icons/temperature-freezing-icon.svg';
-import HotIcon from '@/assets/icons/temperature-hot-icon.svg';
-import WarmIcon from '@/assets/icons/temperature-warm-icon.svg';
-import type { ProfileSectionProps, TemperatureLevel } from '@/types/user';
+import type { ProfileSectionProps } from '@/types/user';
+
+import { getTemperatureIcon } from '../../utils';
 
 import styles from './UserInfoSection.module.scss';
 
@@ -33,26 +29,6 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
     const handleIntroductionEdit = () => {
       if (isEditable && onEditIntroduction) {
         onEditIntroduction();
-      }
-    };
-
-    // 온도 레벨에 맞는 아이콘 반환
-    const getTemperatureIcon = (level: TemperatureLevel) => {
-      switch (level) {
-        case 'freezing':
-          return FreezingIcon;
-        case 'cold':
-          return ColdIcon;
-        case 'cool':
-          return CoolIcon;
-        case 'warm':
-          return WarmIcon;
-        case 'hot':
-          return HotIcon;
-        case 'burning':
-          return BurningIcon;
-        default:
-          return WarmIcon; // 기본값
       }
     };
 

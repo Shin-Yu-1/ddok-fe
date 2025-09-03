@@ -1,11 +1,15 @@
 // 프로젝트 이력
 // 프로젝트 이력
-import { forwardRef, useState } from 'react';
+
+import { forwardRef } from 'react';
 
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
-import type { ProfileSectionProps, ParticipationHistory } from '@/types/user';
+import type { ProfileSectionProps } from '@/types/user';
+
+import { useShowMore } from '../../hooks';
+import { formatDateRange, getStatusText } from '../../utils';
 
 import styles from './ProjectSection.module.scss';
 
@@ -15,16 +19,13 @@ interface ProjectSectionProps extends ProfileSectionProps {
 
 const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
   ({ user, isEditable = false, onEdit, className }, ref) => {
-    const [showAll, setShowAll] = useState(false);
+    const { showAll, handleToggleShowAll, getDisplayItems, hasMoreItems, getShowMoreText } =
+      useShowMore(3);
 
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('projects');
       }
-    };
-
-    const handleToggleShowAll = () => {
-      setShowAll(!showAll);
     };
 
     if (!user.participationHistory) {
@@ -39,23 +40,8 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
     }
 
     // 처음에는 3개만 표시, "Show more project" 클릭시 전체 표시
-    const displayedProjects = showAll ? projects : projects.slice(0, 3);
-    const hasMoreItems = projects.length > 3;
-
-    const getStatusText = (status: ParticipationHistory['status']) => {
-      switch (status) {
-        case 'ongoing':
-          return '프로젝트 진행 중';
-        case 'completed':
-          return '프로젝트 종료';
-        default:
-          return '프로젝트 종료';
-      }
-    };
-
-    const formatDateRange = (startDate: string, endDate?: string) => {
-      return endDate ? `${startDate} - ${endDate}` : `${startDate} -`;
-    };
+    const displayedProjects = getDisplayItems(projects);
+    const hasMore = hasMoreItems(projects);
 
     return (
       <section
@@ -95,17 +81,17 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
 
                 <div className={styles.projectStatus}>
                   <span className={clsx(styles.statusBadge, styles[`status-${project.status}`])}>
-                    {getStatusText(project.status)}
+                    {getStatusText(project.status, 'project')}
                   </span>
                 </div>
               </div>
             ))}
           </div>
 
-          {hasMoreItems && (
+          {hasMore && (
             <div className={styles.showMoreContainer}>
               <button type="button" onClick={handleToggleShowAll} className={styles.showMoreButton}>
-                {showAll ? 'Show less project ▲' : 'Show more project ▼'}
+                {getShowMoreText(showAll, 'project')}
               </button>
             </div>
           )}

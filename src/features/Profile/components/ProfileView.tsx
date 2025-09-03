@@ -18,6 +18,8 @@ import UserInfoSection from './sections/UserInfoSection';
 interface ExtendedProfileViewProps extends ProfileViewProps {
   onChatRequest?: () => void;
   getChatButtonText?: () => string;
+  onEditPersonalInfo?: () => void;
+  onEditIntroduction?: () => void;
 }
 
 const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
@@ -30,6 +32,8 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
       className,
       onChatRequest,
       getChatButtonText,
+      onEditPersonalInfo,
+      onEditIntroduction,
     },
     ref
   ) => {
@@ -61,12 +65,8 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
             user={user}
             isEditable={isEditable}
             onEdit={handleSectionEdit}
-            onEditPersonalInfo={() => {
-              console.log('비밀번호 확인 모달 → 개인정보 수정 페이지');
-            }}
-            onEditIntroduction={() => {
-              console.log('자기소개 수정 모달 열기');
-            }}
+            onEditPersonalInfo={onEditPersonalInfo}
+            onEditIntroduction={onEditIntroduction}
           />
 
           {/* 본인 프로필: 공개/비공개 토글, 타인 프로필: 채팅 버튼 */}
@@ -89,9 +89,9 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
                   onClick={onChatRequest}
                   disabled={user.dmRequestPending}
                   className={clsx(styles.chatButton, user.dmRequestPending && styles.pending)}
-                  aria-label={getChatButtonText?.() || '채팅'}
+                  aria-label={getChatButtonText?.() || '채팅하기'}
                 >
-                  {getChatButtonText?.() || '채팅'}
+                  {getChatButtonText?.() || '채팅하기'}
                 </button>
               )}
             </div>

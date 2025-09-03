@@ -1,12 +1,14 @@
 // 기술스택
 // 기술스택
 
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
 import type { ProfileSectionProps } from '@/types/user';
+
+import { useShowMore } from '../../hooks';
 
 import styles from './TechStackSection.module.scss';
 
@@ -16,7 +18,8 @@ interface TechStackSectionProps extends ProfileSectionProps {
 
 const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
   ({ user, isEditable = false, onEdit, className }, ref) => {
-    const [showAll, setShowAll] = useState(false);
+    const { showAll, handleToggleShowAll, getDisplayItems, hasMoreItems, getShowMoreText } =
+      useShowMore(8);
 
     const handleEdit = () => {
       if (isEditable && onEdit) {
@@ -24,17 +27,13 @@ const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
       }
     };
 
-    const handleToggleShowAll = () => {
-      setShowAll(!showAll);
-    };
-
     if (!user.techStacks || user.techStacks.length === 0) {
       return null;
     }
 
     // 처음에는 8개만 표시, "Show more tools" 클릭시 전체 표시
-    const displayedTechStacks = showAll ? user.techStacks : user.techStacks.slice(0, 8);
-    const hasMoreItems = user.techStacks.length > 8;
+    const displayedTechStacks = getDisplayItems(user.techStacks);
+    const hasMore = hasMoreItems(user.techStacks);
 
     return (
       <section
@@ -68,10 +67,10 @@ const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
             ))}
           </div>
 
-          {hasMoreItems && (
+          {hasMore && (
             <div className={styles.showMoreContainer}>
               <button type="button" onClick={handleToggleShowAll} className={styles.showMoreButton}>
-                {showAll ? 'Show less tools ▲' : 'Show more tools ▼'}
+                {getShowMoreText(showAll, 'tools')}
               </button>
             </div>
           )}

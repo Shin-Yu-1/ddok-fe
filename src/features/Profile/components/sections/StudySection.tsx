@@ -1,12 +1,15 @@
 // 스터디 이력
 // 스터디 이력
 
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
-import type { ProfileSectionProps, ParticipationHistory } from '@/types/user';
+import type { ProfileSectionProps } from '@/types/user';
+
+import { useShowMore } from '../../hooks';
+import { formatDateRange, getStatusText } from '../../utils';
 
 import styles from './StudySection.module.scss';
 
@@ -16,16 +19,13 @@ interface StudySectionProps extends ProfileSectionProps {
 
 const StudySection = forwardRef<HTMLElement, StudySectionProps>(
   ({ user, isEditable = false, onEdit, className }, ref) => {
-    const [showAll, setShowAll] = useState(false);
+    const { showAll, handleToggleShowAll, getDisplayItems, hasMoreItems, getShowMoreText } =
+      useShowMore(3);
 
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('studies');
       }
-    };
-
-    const handleToggleShowAll = () => {
-      setShowAll(!showAll);
     };
 
     if (!user.participationHistory) {
@@ -39,24 +39,9 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(
       return null;
     }
 
-    // 처음에는 4개만 표시, "Show more study" 클릭시 전체 표시
-    const displayedStudies = showAll ? studies : studies.slice(0, 4);
-    const hasMoreItems = studies.length > 4;
-
-    const getStatusText = (status: ParticipationHistory['status']) => {
-      switch (status) {
-        case 'ongoing':
-          return '스터디 진행 중';
-        case 'completed':
-          return '스터디 종료';
-        default:
-          return '스터디 종료';
-      }
-    };
-
-    const formatDateRange = (startDate: string, endDate?: string) => {
-      return endDate ? `${startDate} - ${endDate}` : `${startDate} -`;
-    };
+    // 처음에는 3개만 표시, "Show more study" 클릭시 전체 표시
+    const displayedStudies = getDisplayItems(studies);
+    const hasMore = hasMoreItems(studies);
 
     return (
       <section
@@ -96,17 +81,17 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(
 
                 <div className={styles.studyStatus}>
                   <span className={clsx(styles.statusBadge, styles[`status-${study.status}`])}>
-                    {getStatusText(study.status)}
+                    {getStatusText(study.status, 'study')}
                   </span>
                 </div>
               </div>
             ))}
           </div>
 
-          {hasMoreItems && (
+          {hasMore && (
             <div className={styles.showMoreContainer}>
               <button type="button" onClick={handleToggleShowAll} className={styles.showMoreButton}>
-                {showAll ? 'Show less study ▲' : 'Show more study ▼'}
+                {getShowMoreText(showAll, 'study')}
               </button>
             </div>
           )}

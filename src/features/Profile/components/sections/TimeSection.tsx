@@ -8,6 +8,8 @@ import clsx from 'clsx';
 
 import type { ProfileSectionProps } from '@/types/user';
 
+import { formatTime } from '../../utils';
+
 import styles from './TimeSection.module.scss';
 
 interface TimeSectionProps extends ProfileSectionProps {
@@ -20,12 +22,6 @@ const TimeSection = forwardRef<HTMLElement, TimeSectionProps>(
       if (isEditable && onEdit) {
         onEdit('time');
       }
-    };
-
-    const formatTime = (hour: string) => {
-      const hourNum = parseInt(hour, 10);
-      if (hourNum === 0) return '00:00';
-      return `${hour.padStart(2, '0')}:00`;
     };
 
     const getTimeRange = () => {
