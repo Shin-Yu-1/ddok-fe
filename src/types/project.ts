@@ -33,9 +33,11 @@ export interface CreateProjectData {
   bannerImage?: File | null;
 }
 
+export type TeamStatus = 'RECRUITING' | 'ONGOING' | 'CLOSED';
+
 // 프로젝트 수정 데이터 (수정 API용)
 export interface UpdateProjectData extends CreateProjectData {
-  teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
+  teamStatus: TeamStatus;
   bannerImageUrl?: string; // 기존 이미지 URL
 }
 
