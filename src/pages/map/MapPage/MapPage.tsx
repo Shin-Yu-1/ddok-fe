@@ -85,9 +85,36 @@ const MapPage = () => {
     }
   }, [isSectionOpen, isMapPanelOpen]);
 
-  // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘을 조절
+  // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
     if (!isMapPanelOpen) return;
+
+    // 클릭한 아이템 찾기
+    const items = mapSearchData || panelMockData;
+    const clickedItem = items.find(item => {
+      if (itemType === MapItemCategory.PROJECT && 'projectId' in item)
+        return item.projectId === itemId;
+      if (itemType === MapItemCategory.STUDY && 'studyId' in item) return item.studyId === itemId;
+      if (itemType === MapItemCategory.PLAYER && 'userId' in item) return item.userId === itemId;
+      if (itemType === MapItemCategory.CAFE && 'cafeId' in item) return item.cafeId === itemId;
+      return false;
+    });
+
+    // 클릭한 아이템 위치에 오버레이 표시
+    if (clickedItem) {
+      //   지도 중심을 클릭한 아이템 위치로 이동
+      mapRef.current?.setCenter(
+        new kakao.maps.LatLng(clickedItem.location.latitude, clickedItem.location.longitude)
+      );
+
+      // 오버레이 표시
+      setSelectedPoint({
+        lat: clickedItem.location.latitude,
+        lng: clickedItem.location.longitude,
+        type: clickedItem.category,
+      });
+      setIsOverlayOpen(true);
+    }
 
     if (itemType === MapItemCategory.CAFE && itemId !== undefined) {
       // 카페 아이템 클릭 시
