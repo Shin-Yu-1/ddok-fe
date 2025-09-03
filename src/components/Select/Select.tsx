@@ -255,7 +255,7 @@ const Select = <V,>({
 
               return (
                 <li
-                  key={String(opt.value)}
+                  key={String(opt.label)}
                   id={`${id ?? 'select'}-option-${i}`}
                   data-index={i}
                   role="option"
