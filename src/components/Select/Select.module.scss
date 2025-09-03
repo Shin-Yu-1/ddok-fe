@@ -28,7 +28,7 @@
 
 /* 트리거 버튼 */
 .trigger {
-  --radius: var(--r-xxsmall); /* 5px */
+  --radius: var(--r-xxsmall);
 
   all: unset;
   display: flex;
@@ -46,8 +46,6 @@
   color: var(--black-3);
   background: var(--white-3);
   cursor: pointer;
-
-  /* 그림자 없음 */
 
   &:hover {
     border-color: var(--gray-2-hover);
@@ -92,11 +90,11 @@
   font-size: 14px;
   line-height: 1;
   color: var(--gray-1);
-  transition: transform 0.2s ease-in-out; /* 부드러운 회전 애니메이션 */
-  transform: rotate(180deg); /* 기본 상태: 상하반전 */
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(180deg);
 
   &.chevronOpen {
-    transform: rotate(0deg); /* 열렸을 때: 원래 방향 */
+    transform: rotate(0deg);
   }
 
   .selectArrow {
@@ -113,11 +111,24 @@
   min-width: 100%;
   max-height: var(--dropdown-max-height);
   border: 1px solid var(--gray-2);
-  border-radius: var(--r-xxsmall); /* 5px */
+  border-radius: var(--r-xxsmall);
   overflow: hidden;
   background: var(--white-3);
+  opacity: 0;
+  animation: dropdown-slide-in 0.2s ease-out forwards;
+  transform: translateY(-8px);
+}
 
-  /* 그림자 없음 */
+@keyframes dropdown-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 검색 상자(선택) */
@@ -174,6 +185,18 @@
   &.optDisabled {
     color: var(--gray-2);
     cursor: not-allowed;
+  }
+}
+
+@keyframes option-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
