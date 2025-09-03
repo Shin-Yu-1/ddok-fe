@@ -56,20 +56,23 @@
 
 .selectContent {
   position: relative;
-  z-index: 50;
+  z-index: 9999;
   min-width: 200px;
-  padding: 8px;
+  max-height: 200px;
+  padding: 4px;
   border: 1px solid $gray-3;
   border-radius: $r-xsmall;
   background-color: $white-3;
   box-shadow:
-    0 4px 8px rgba($black-1, 0.08),
-    0 2px 4px rgba($black-1, 0.04);
-  animation: slide-down-fade 0.2s ease-out;
+    0 10px 38px -10px rgba($black-1, 0.35),
+    0 10px 20px -15px rgba($black-1, 0.2);
+  animation: slide-down-fade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: var(--radix-select-content-transform-origin);
+  will-change: transform, opacity;
 }
 
 .selectViewport {
-  padding: 0;
+  padding: 4px;
 }
 
 // Select 아이템
