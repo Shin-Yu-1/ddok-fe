@@ -16,14 +16,14 @@ const ProfileLayout = () => {
 
   return (
     <ProtectedRoute requirePreference={true}>
-    <div className={styles.layoutContainer}>
-      <Header variant={isLoggedIn ? 'user' : 'guest'} user={isLoggedIn ? user : undefined} />
-      <SubHeader />
-      <Sidebar />
-      <div className={styles.contentContainer}>
-        <Outlet />
+      <div className={styles.layoutContainer}>
+        <Header variant={isLoggedIn ? 'user' : 'guest'} user={isLoggedIn ? user : undefined} />
+        <SubHeader />
+        <Sidebar />
+        <div className={styles.contentContainer}>
+          <Outlet />
+        </div>
       </div>
-    </div>
     </ProtectedRoute>
   );
 };
