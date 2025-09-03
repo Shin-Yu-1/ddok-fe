@@ -1,47 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { checkEmail, sendPhoneCode, verifyPhoneCode, signUp, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
-import {
-  mockCheckEmail,
-  mockSendPhoneCode,
-  mockVerifyPhoneCode,
-  mockSignUp,
-} from '@/mocks/mockSignUp';
 import { signUpSchema } from '@/schemas/auth.schema';
 import type { SignUpFormValues } from '@/schemas/auth.schema';
 
 import styles from './SignUpForm.module.scss';
-
-// API 연결 부분 주석 처리
-// import type {
-//   SignUpURL,
-//   EmailCheckURL,
-//   PhoneSendCodeURL,
-//   PhoneVerifyCodeURL,
-// } from '@/types/apiEndpoints.types';
-// import {
-//   useSignUp,
-//   useCheckEmail,
-//   useSendPhoneCode,
-//   useVerifyPhoneCode,
-// } from '@/hooks/auth/useSignUp';
-// const signUpURL: SignUpURL = '/api/auth/signup';
-// const emailCheckURL: EmailCheckURL = '/api/auth/email/check';
-// const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
-// const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
 
 export default function SignUpForm() {
   const {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -61,7 +40,9 @@ export default function SignUpForm() {
     verify: false,
     submit: false,
   });
-  const [error, setError] = useState<string | null>(null);
+
+  // 이전 이메일 값 추적을 위한 ref
+  const prevEmailRef = useRef<string>('');
 
   // 폼 데이터 감시
   const email = watch('email');
@@ -69,31 +50,13 @@ export default function SignUpForm() {
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
 
-  // API 훅들 주석 처리
-  // const signUpMutation = useSignUp(signUpURL);
-  // const checkEmailMutation = useCheckEmail(emailCheckURL, {
-  //   onSuccess: data => {
-  //     if (data.data.isAvailable) {
-  //       setEmailVerified(true);
-  //     }
-  //   },
-  // });
-  // const sendPhoneCodeMutation = useSendPhoneCode(phoneSendCodeURL, {
-  //   onSuccess: () => {
-  //     setCodeSent(true);
-  //     startTimer();
-  //   },
-  //   onError: error => {
-  //     console.error('인증번호 발송 실패:', error);
-  //   },
-  // });
-  // const verifyPhoneCodeMutation = useVerifyPhoneCode(phoneVerifyCodeURL, {
-  //   onSuccess: data => {
-  //     if (data.data.verified) {
-  //       setCodeVerified(true);
-  //     }
-  //   },
-  // });
+  // 이메일이 변경되면 중복확인 상태 초기화
+  useEffect(() => {
+    if (prevEmailRef.current && prevEmailRef.current !== email && emailVerified) {
+      setEmailVerified(false);
+    }
+    prevEmailRef.current = email;
+  }, [email, emailVerified]);
 
   // 타이머 로직
   const startTimer = () => {
@@ -116,15 +79,18 @@ export default function SignUpForm() {
     }
 
     setIsLoading(prev => ({ ...prev, email: true }));
-    setError(null);
+    clearErrors('email');
 
     try {
-      const result = await mockCheckEmail(email.trim());
-      if (result.success && result.isAvailable) {
+      const result = await checkEmail(email.trim());
+      if (result.isAvailable) {
         setEmailVerified(true);
       }
-    } catch {
-      setError('이메일 중복 확인에 실패했습니다.');
+    } catch (apiError) {
+      setError('email', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, email: false }));
     }
@@ -137,18 +103,21 @@ export default function SignUpForm() {
     }
 
     setIsLoading(prev => ({ ...prev, phone: true }));
-    setError(null);
+    clearErrors('phoneNumber');
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
-      const result = await mockSendPhoneCode(cleanPhoneNumber, username.trim());
+      const result = await sendPhoneCode(cleanPhoneNumber, username.trim());
 
-      if (result.success) {
+      if (result.expiresIn) {
         setCodeSent(true);
         startTimer();
       }
-    } catch {
-      setError('인증번호 발송에 실패했습니다.');
+    } catch (apiError) {
+      setError('phoneNumber', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -161,19 +130,25 @@ export default function SignUpForm() {
     }
 
     setIsLoading(prev => ({ ...prev, verify: true }));
-    setError(null);
+    clearErrors('phoneCode');
 
     try {
       const cleanPhoneNumber = phone.replace(/-/g, '');
-      const result = await mockVerifyPhoneCode(cleanPhoneNumber, phoneCode.trim());
+      const result = await verifyPhoneCode(cleanPhoneNumber, phoneCode.trim());
 
-      if (result.success && result.verified) {
+      if (result.verified) {
         setCodeVerified(true);
       } else {
-        setError(result.message);
+        setError('phoneCode', {
+          type: 'manual',
+          message: '인증번호가 일치하지 않습니다.',
+        });
       }
-    } catch {
-      setError('인증번호 확인에 실패했습니다.');
+    } catch (apiError) {
+      setError('phoneCode', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
@@ -182,17 +157,23 @@ export default function SignUpForm() {
   // 폼 제출
   const onSubmit = async (data: SignUpFormValues) => {
     if (!emailVerified) {
-      setError('이메일 중복 확인을 완료해주세요.');
+      setError('email', {
+        type: 'manual',
+        message: '이메일 중복 확인을 완료해주세요.',
+      });
       return;
     }
 
     if (!codeVerified) {
-      setError('휴대폰 인증을 완료해주세요.');
+      setError('phoneCode', {
+        type: 'manual',
+        message: '휴대폰 인증을 완료해주세요.',
+      });
       return;
     }
 
     setIsLoading(prev => ({ ...prev, submit: true }));
-    setError(null);
+    clearErrors('root');
 
     try {
       const signUpData = {
@@ -200,35 +181,57 @@ export default function SignUpForm() {
         phoneNumber: data.phoneNumber.replace(/-/g, ''), // 하이픈 제거
       };
 
-      const result = await mockSignUp(signUpData);
+      const result = await signUp(signUpData);
 
-      if (result.success) {
+      if (result.id) {
+        // 회원가입 성공 플래그를 sessionStorage에 저장
+        sessionStorage.setItem('signUpSuccess', 'true');
+
         // 회원가입 성공 시 회원가입 완료 페이지로 이동
-        navigate('/auth/signupcomplete');
+        navigate('/auth/signupcomplete', { replace: true });
       } else {
-        setError(result.message);
+        setError('root', {
+          type: 'manual',
+          message: '회원가입 처리 중 오류가 발생했습니다.',
+        });
       }
-    } catch {
-      setError('회원가입에 실패했습니다. 다시 시도해주세요.');
+    } catch (apiError) {
+      setError('root', {
+        type: 'manual',
+        message: getErrorMessage(apiError),
+      });
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
   };
 
   const isSubmitting = isLoading.submit;
-  const isButtonDisabled = isSubmitting || !emailVerified || !codeVerified;
+  const hasErrors = Object.keys(errors).some(
+    key => key !== 'root' && errors[key as keyof typeof errors]
+  );
+  const isButtonDisabled = isSubmitting || !emailVerified || !codeVerified || hasErrors;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      {error && <div className={styles.errorMessage}>{error}</div>}
+      {errors.root && <div className={styles.errorMessage}>{errors.root.message}</div>}
 
       <FormField label="이메일" htmlFor="email" required error={errors.email?.message}>
         <div className={styles.fieldWithButton}>
-          <Input id="email" {...register('email')} placeholder="user@goorm.com" />
+          <Input
+            id="email"
+            {...register('email')}
+            placeholder="user@goorm.com"
+            disabled={emailVerified}
+          />
           <Button
             type="button"
             onClick={handleCheckEmail}
-            disabled={!email || emailVerified || isLoading.email}
+            disabled={
+              !email ||
+              emailVerified ||
+              isLoading.email ||
+              (!!errors.email && errors.email.type !== 'manual')
+            }
             variant={emailVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
@@ -266,7 +269,14 @@ export default function SignUpForm() {
           <Button
             type="button"
             onClick={handleSendPhoneCode}
-            disabled={!phone || !username || timer > 0 || isLoading.phone}
+            disabled={
+              !phone ||
+              !username ||
+              timer > 0 ||
+              isLoading.phone ||
+              (!!errors.phoneNumber && errors.phoneNumber.type !== 'manual') ||
+              (!!errors.username && errors.username.type !== 'manual')
+            }
             variant={codeSent ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
@@ -282,7 +292,12 @@ export default function SignUpForm() {
           <Button
             type="button"
             onClick={handleVerifyPhoneCode}
-            disabled={!phoneCode || codeVerified || isLoading.verify}
+            disabled={
+              !phoneCode ||
+              codeVerified ||
+              isLoading.verify ||
+              (!!errors.phoneCode && errors.phoneCode.type !== 'manual')
+            }
             variant={codeVerified ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"

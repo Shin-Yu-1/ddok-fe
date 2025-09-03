@@ -4,29 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { sendPhoneCode, verifyPhoneCode, findPassword, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import Input from '@/features/Auth/components/Input/Input';
 import { findPasswordSchema, type FindPasswordFormValues } from '@/schemas/auth.schema';
 
-// API 연결 부분 주석 처리
-// import {
-//   useFindPassword,
-//   useSendPhoneCodeForFindPassword,
-//   useVerifyPhoneCodeForFindPassword,
-// } from '@/hooks/auth/useFindPassword';
-// import type {
-//   FindPasswordURL,
-//   PhoneSendCodeURL,
-//   PhoneVerifyCodeURL,
-// } from '@/types/apiEndpoints.types';
-
 import styles from './FindPasswordForm.module.scss';
-
-// URL들 정의 (주석 처리)
-// const findPasswordURL: FindPasswordURL = '/api/auth/password/verify-user';
-// const phoneSendCodeURL: PhoneSendCodeURL = '/api/auth/phone/send-code';
-// const phoneVerifyCodeURL: PhoneVerifyCodeURL = '/api/auth/phone/verify-code';
 
 export default function FindPasswordForm() {
   const navigate = useNavigate();
@@ -49,33 +33,17 @@ export default function FindPasswordForm() {
     verify: false,
     submit: false,
   });
+  const [apiErrors, setApiErrors] = useState({
+    phone: '',
+    verify: '',
+    submit: '',
+  });
 
   // 폼 데이터 감시
   const username = watch('username');
+  const email = watch('email');
   const phone = watch('phoneNumber');
   const phoneCode = watch('phoneCode');
-
-  // API 훅들 주석 처리
-  // const findPasswordMutation = useFindPassword(findPasswordURL);
-  // const sendPhoneCodeMutation = useSendPhoneCodeForFindPassword(phoneSendCodeURL, {
-  //   onSuccess: () => {
-  //     setCodeSent(true);
-  //     startTimer();
-  //   },
-  //   onError: error => {
-  //     console.error('인증번호 발송 실패:', error);
-  //   },
-  // });
-  // const verifyPhoneCodeMutation = useVerifyPhoneCodeForFindPassword(phoneVerifyCodeURL, {
-  //   onSuccess: data => {
-  //     if (data.data.verified) {
-  //       setCodeVerified(true);
-  //     }
-  //   },
-  //   onError: () => {
-  //     console.error('인증번호 확인에 실패했습니다.');
-  //   },
-  // });
 
   // 타이머 로직
   const startTimer = () => {
@@ -93,21 +61,20 @@ export default function FindPasswordForm() {
 
   // 인증번호 발송
   const handleSendPhoneCode = async () => {
-    if (!phone || !username) {
+    if (!phone || !username || !email) {
       return;
     }
 
     setIsLoading(prev => ({ ...prev, phone: true }));
+    setApiErrors(prev => ({ ...prev, phone: '' })); // 이전 에러 초기화
 
     try {
-      // 목 데이터로 처리
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      console.log('비밀번호 찾기 - 인증번호 발송 성공 (목 데이터)');
+      await sendPhoneCode(phone, username, 'FIND_PASSWORD');
       setCodeSent(true);
       startTimer();
     } catch (error) {
-      console.error('인증번호 발송 실패:', error);
+      console.error('인증번호 발송 실패:', getErrorMessage(error));
+      setApiErrors(prev => ({ ...prev, phone: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, phone: false }));
     }
@@ -120,56 +87,52 @@ export default function FindPasswordForm() {
     }
 
     setIsLoading(prev => ({ ...prev, verify: true }));
+    setApiErrors(prev => ({ ...prev, verify: '' })); // 이전 에러 초기화
 
     try {
-      // 목 데이터로 처리 (123456 또는 000000을 올바른 인증번호로 처리)
-      await new Promise(resolve => setTimeout(resolve, 600));
+      const result = await verifyPhoneCode(phone, phoneCode);
 
-      const verified = phoneCode === '123456' || phoneCode === '000000';
-
-      if (verified) {
+      if (result.verified) {
         setCodeVerified(true);
-        console.log('휴대폰 인증 완료 (목 데이터)');
       } else {
-        console.error('인증번호가 올바르지 않습니다.');
+        setApiErrors(prev => ({ ...prev, verify: '인증번호가 올바르지 않습니다.' }));
       }
     } catch (error) {
-      console.error('인증번호 확인에 실패했습니다:', error);
+      console.error('인증번호 확인 실패:', getErrorMessage(error));
+      setApiErrors(prev => ({ ...prev, verify: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, verify: false }));
     }
   };
 
-  // 폼 제출 - 사용자 검증 목 데이터 처리
+  // 폼 제출 - 비밀번호 찾기 API 호출
   const onSubmit = async (data: FindPasswordFormValues) => {
     if (!codeVerified) {
       return;
     }
 
     setIsLoading(prev => ({ ...prev, submit: true }));
+    setApiErrors(prev => ({ ...prev, submit: '' })); // 이전 에러 초기화
 
     try {
-      // 목 데이터로 처리
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      console.log('사용자 검증 요청 데이터 (목 데이터):', {
+      const result = await findPassword({
         username: data.username,
         email: data.email,
-        phoneNumber: data.phoneNumber.replace(/-/g, ''),
+        phoneNumber: data.phoneNumber,
         phoneCode: data.phoneCode,
       });
 
-      // 목 reauthToken 생성
-      const mockReauthToken = 'mock_reauth_token_' + Date.now();
+      // reauthToken을 sessionStorage에 저장
+      sessionStorage.setItem('reauthToken', result.reauthToken);
 
-      // localStorage에 reauthToken 저장
-      localStorage.setItem('reauthToken', mockReauthToken);
-      console.log('목 reauthToken 저장 완료:', '***' + mockReauthToken.slice(-4));
+      // 비밀번호 찾기 성공 플래그를 sessionStorage에 저장
+      sessionStorage.setItem('findPasswordSuccess', 'true');
 
       // ResetPasswordPage로 이동
-      navigate('/auth/resetpassword');
+      navigate('/auth/resetpassword', { replace: true });
     } catch (error) {
-      console.error('사용자 검증 실패:', error);
+      console.error('비밀번호 찾기 실패:', getErrorMessage(error));
+      setApiErrors(prev => ({ ...prev, submit: getErrorMessage(error) }));
     } finally {
       setIsLoading(prev => ({ ...prev, submit: false }));
     }
@@ -192,14 +155,14 @@ export default function FindPasswordForm() {
         label="휴대폰 번호"
         htmlFor="phoneNumber"
         required
-        error={errors.phoneNumber?.message}
+        error={errors.phoneNumber?.message || apiErrors.phone}
       >
         <div className={styles.fieldWithButton}>
           <Input id="phoneNumber" {...register('phoneNumber')} placeholder="01012345678" />
           <Button
             type="button"
             onClick={handleSendPhoneCode}
-            disabled={!phone || !username || timer > 0 || isLoading.phone}
+            disabled={!phone || !username || !email || timer > 0 || isLoading.phone}
             variant={codeSent ? 'ghost' : 'secondary'}
             radius="xsm"
             height="45px"
@@ -209,7 +172,12 @@ export default function FindPasswordForm() {
         </div>
       </FormField>
 
-      <FormField label="인증번호" htmlFor="phoneCode" required error={errors.phoneCode?.message}>
+      <FormField
+        label="인증번호"
+        htmlFor="phoneCode"
+        required
+        error={errors.phoneCode?.message || apiErrors.verify || apiErrors.submit}
+      >
         <div className={styles.fieldWithButton}>
           <Input id="phoneCode" {...register('phoneCode')} placeholder="123456" />
           <Button
