@@ -29,7 +29,13 @@ const PostCapacitySelector = ({ value, onChange }: PostCapacitySelectorProps) =>
         </Select.Trigger>
 
         <Select.Portal>
-          <Select.Content className={styles.selectContent}>
+          <Select.Content
+            className={styles.selectContent}
+            position="popper"
+            side="bottom"
+            align="end"
+            sideOffset={4}
+          >
             <Select.Viewport className={styles.selectViewport}>
               {Array.from({ length: 7 }, (_, i) => (
                 <Select.Item key={i + 1} value={(i + 1).toString()} className={styles.selectItem}>
