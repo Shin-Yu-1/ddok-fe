@@ -103,9 +103,9 @@ const MapPage = () => {
     // 클릭한 아이템 위치에 오버레이 표시
     if (clickedItem) {
       //   지도 중심을 클릭한 아이템 위치로 이동
-      mapRef.current?.setCenter(
-        new kakao.maps.LatLng(clickedItem.location.latitude, clickedItem.location.longitude)
-      );
+      //   mapRef.current?.setCenter(
+      //     new kakao.maps.LatLng(clickedItem.location.latitude, clickedItem.location.longitude)
+      //   );
 
       // 패널에서 선택한 아이템에 대해 오버레이 표시
       setSelectedPoint({
@@ -137,7 +137,7 @@ const MapPage = () => {
   // 지도 영역의 변경을 자동으로 감지하여 MapBounds 업데이트
   const handleMapChange = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
-    // mapRef.current?.relayout();
+    mapRef.current?.relayout();
 
     setIsMapChanged(true);
     setMapBounds({
