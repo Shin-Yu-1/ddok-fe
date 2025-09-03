@@ -55,7 +55,7 @@ const TimeSection = forwardRef<HTMLElement, TimeSectionProps>(
 
         <div>
           <div className={styles.timeDisplay}>
-            <span className={styles.timeLabel}>[ 주 활동 시간]</span>
+            <span className={styles.timeLabel}>[ 주활동 시간]</span>
             <span className={styles.timeRange}>{getTimeRange()}</span>
           </div>
         </div>
