@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 
 import FindIdForm from '@/features/Auth/FindIdForm/FindIdForm';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 
 import styles from './FindIdPage.module.scss';
 
 export default function FindIdPage() {
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
+
   return (
     <div className={styles.inner}>
       <h1 className={styles.title}>이메일을 잊어버리셨습니까?</h1>

@@ -4,9 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { resetPassword, getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import FormField from '@/features/Auth/components/FormField/FormField';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 import { changePasswordSchema, type ChangePasswordFormValues } from '@/schemas/auth.schema';
 
 import styles from './ResetPasswordPage.module.scss';
@@ -14,25 +16,34 @@ import styles from './ResetPasswordPage.module.scss';
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [reauthToken, setReauthToken] = useState<string | null>(null);
+  const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
 
-  // localStorage에서 reauthToken 가져오기
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
+
+  // sessionStorage에서 reauthToken 가져오기
   useEffect(() => {
-    console.log('ResetPasswordPage 마운트됨');
+    // 약간의 지연을 주어 sessionStorage 저장이 완료되도록 함
+    const timer = setTimeout(() => {
+      // sessionStorage에서 비밀번호 찾기 성공 플래그 확인
+      const findPasswordSuccess = sessionStorage.getItem('findPasswordSuccess');
 
-    // localStorage 전체 내용 확인
-    console.log('localStorage 전체 내용:', { ...localStorage });
+      // sessionStorage에서 reauthToken 확인
+      const token = sessionStorage.getItem('reauthToken');
 
-    const token = localStorage.getItem('reauthToken');
-    console.log('localStorage에서 가져온 reauthToken:', token ? '***' + token.slice(-4) : 'null');
+      // 비밀번호 찾기를 거치지 않고 직접 접근하거나 토큰이 없으면 리다이렉트
+      if (!findPasswordSuccess || !token) {
+        navigate('/auth/findpassword', { replace: true });
+        return;
+      }
 
-    if (!token) {
-      console.error('localStorage에 reauthToken이 없습니다!');
-      navigate('/auth/findpassword');
-      return;
-    }
+      setReauthToken(token);
 
-    setReauthToken(token);
-    console.log('reauthToken 상태 설정 완료');
+      // 페이지 접근 후 플래그 제거 (일회성 접근)
+      sessionStorage.removeItem('findPasswordSuccess');
+    }, 100); // 100ms 지연
+
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   const {
@@ -52,33 +63,33 @@ export default function ResetPasswordPage() {
 
   // 폼 제출
   const onSubmit = async (data: ChangePasswordFormValues) => {
-    console.log('비밀번호 변경 폼 제출');
-
     if (!reauthToken) {
-      console.error('인증 토큰이 없습니다. 처음부터 다시 시도해주세요.');
+      setApiErrors({ general: '인증 토큰이 없습니다. 다시 시도해주세요.' });
       return;
     }
 
     setIsSubmitting(true);
+    setApiErrors({});
 
     try {
-      // 목 데이터로 처리 (실제로는 API 호출)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 실제 API 호출
+      await resetPassword(
+        {
+          newPassword: data.newPassword,
+          passwordCheck: data.passwordCheck,
+        },
+        reauthToken
+      );
 
-      console.log('비밀번호 변경 성공 (목 데이터)', {
-        newPassword: data.newPassword,
-        passwordCheck: data.passwordCheck,
-        reauthToken: '***' + reauthToken.slice(-4),
-      });
-
-      // 성공 시 localStorage에서 토큰 제거
-      localStorage.removeItem('reauthToken');
-      console.log('localStorage에서 reauthToken 제거 완료');
+      // sessionStorage에서 reauthToken 제거
+      sessionStorage.removeItem('reauthToken');
 
       // 로그인 페이지로 이동
-      navigate('/auth/signin');
+      navigate('/auth/signin', {
+        state: { message: '비밀번호가 성공적으로 변경되었습니다.' },
+      });
     } catch (error) {
-      console.error('비밀번호 재설정에 실패했습니다:', error);
+      setApiErrors({ general: getErrorMessage(error) });
     } finally {
       setIsSubmitting(false);
     }
@@ -91,9 +102,6 @@ export default function ResetPasswordPage() {
     return (
       <div className={styles.container}>
         <div>토큰을 확인하는 중...</div>
-        <div style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
-          개발자 도구 콘솔을 확인해주세요.
-        </div>
       </div>
     );
   }
@@ -108,7 +116,7 @@ export default function ResetPasswordPage() {
           label="새 비밀번호"
           htmlFor="newPassword"
           required
-          error={errors.newPassword?.message}
+          error={errors.newPassword?.message || apiErrors.newPassword}
         >
           <PasswordInput
             id="newPassword"
@@ -121,7 +129,7 @@ export default function ResetPasswordPage() {
           label="비밀번호 확인"
           htmlFor="passwordCheck"
           required
-          error={errors.passwordCheck?.message}
+          error={errors.passwordCheck?.message || apiErrors.passwordCheck}
         >
           <PasswordInput
             id="passwordCheck"
@@ -129,6 +137,12 @@ export default function ResetPasswordPage() {
             placeholder="비밀번호를 다시 입력하세요"
           />
         </FormField>
+
+        {apiErrors.general && (
+          <div style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>
+            {apiErrors.general}
+          </div>
+        )}
 
         <Button
           type="submit"
