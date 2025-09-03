@@ -1,0 +1,21 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: $white-2;
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: $black-1;
+  }
+}

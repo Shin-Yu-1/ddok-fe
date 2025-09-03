@@ -31,6 +31,7 @@ const PositionSelector = ({
         onPositionToggle={onInterestPositionToggle}
         multiSelect={true}
         keyPrefix="interest"
+        disabledPositions={selectedMainPosition ? [selectedMainPosition] : []}
       />
     </div>
   );

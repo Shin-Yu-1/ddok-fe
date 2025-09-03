@@ -5,7 +5,10 @@ import styles from './LocationSelector.module.scss';
 interface LocationSelectorProps {
   locationSearch: string;
   onLocationSearchChange: (value: string) => void;
-  onLocationSelect: (location: string) => void;
+  onLocationSelect: (
+    location: string,
+    coordinates?: { latitude: number; longitude: number }
+  ) => void;
 }
 
 const LocationSelector = ({

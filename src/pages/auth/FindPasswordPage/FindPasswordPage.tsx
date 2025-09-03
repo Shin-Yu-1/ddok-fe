@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 
 import FindPasswordForm from '@/features/Auth/FindPasswordForm/FindPasswordForm';
+import { useAuthRedirect } from '@/hooks/auth/useAuthRedirect';
 
 import styles from './FindPasswordPage.module.scss';
 
 export default function FindPasswordPage() {
+  // 로그인된 사용자는 메인 페이지로 리다이렉트
+  useAuthRedirect('/map');
+
   return (
     <div className={styles.inner}>
       <h1 className={styles.title}>비밀번호를 잊어버리셨습니까?</h1>

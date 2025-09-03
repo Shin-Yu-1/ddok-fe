@@ -48,3 +48,19 @@
   text-align: center;
   color: $gray-2;
 }
+
+.loading {
+  padding: 1rem;
+  font-style: italic;
+  text-align: center;
+  color: $gray-2;
+}
+
+.error {
+  padding: 1rem;
+  border: 1px solid rgba($red-1, 0.3);
+  border-radius: 4px;
+  text-align: center;
+  color: $red-1;
+  background-color: rgba($red-1, 0.1);
+}
