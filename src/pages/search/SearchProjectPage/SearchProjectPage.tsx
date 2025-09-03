@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MagnifyingGlassIcon } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 import { ko } from 'date-fns/locale';
 import DatePicker from 'react-datepicker';
 
@@ -177,6 +177,15 @@ const SearchProjectPage = () => {
           onChange={date => setSelectedDate(date as Date)}
           dateFormat="yyyy.MM.dd"
         />
+        <Button
+          backgroundColor="none"
+          textColor="var(--gray-1)"
+          fontWeight="var(--fw-regular)"
+          height={32}
+          leftIcon={<ArrowClockwiseIcon />}
+        >
+          초기화
+        </Button>
       </div>
     </div>
   );
