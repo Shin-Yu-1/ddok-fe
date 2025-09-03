@@ -18,9 +18,6 @@ const TeamLayout = () => {
           <Outlet />
         </div>
       </div>
-      <div className={styles.container}>
-        <Outlet />
-      </div>
     </ProtectedRoute>
   );
 };
