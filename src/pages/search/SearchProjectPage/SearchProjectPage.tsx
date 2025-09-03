@@ -47,7 +47,7 @@ const items = [
     projectId: 1,
     title: '구지라지 프로젝트',
     teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['backend', 'frontend'],
     capacity: 4,
     mode: 'offline',
@@ -254,7 +254,7 @@ const SearchProjectPage = () => {
       </div>
       <div className={styles.cardListWrapper}>
         {items.map(item => (
-          <SearchCard item={item} />
+          <SearchCard item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }} />
         ))}
       </div>
     </div>
