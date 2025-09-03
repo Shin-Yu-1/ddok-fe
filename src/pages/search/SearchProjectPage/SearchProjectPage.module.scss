@@ -3,9 +3,41 @@
 
 // TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
-  background-color: $blue-1;
-}
+  width: 1051px;
 
-.title {
-  @include m.font-title;
+  .titleWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 54px;
+
+    .title {
+      font-size: $fs-xxlarge;
+      font-weight: $fw-bold;
+    }
+  }
+
+  .searchWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .datePicker {
+    box-sizing: border-box;
+    width: 129px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid $gray-2;
+    border-radius: $r-xxsmall;
+    font-family: $font-family-primary;
+    font-size: $fs-xsmall;
+    text-align: center;
+    color: $black-1;
+    background: $white-3;
+  }
 }
