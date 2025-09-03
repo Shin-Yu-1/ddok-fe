@@ -58,7 +58,7 @@ export interface ParticipationHistory {
   id: number;
   title: string;
   type: 'project' | 'study';
-  status: 'ongoing' | 'completed' | 'paused';
+  status: 'ongoing' | 'completed';
   role?: string;
   startDate: string;
   endDate?: string;

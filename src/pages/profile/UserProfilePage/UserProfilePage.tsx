@@ -1,84 +1,15 @@
-import { useState, useEffect } from 'react';
-
 import { useParams, useNavigate } from 'react-router-dom';
 
 import ProfileView from '@/features/Profile/components/ProfileView';
-import { mockOtherProfile } from '@/mocks/mockProfile';
-import type { CompleteProfileInfo } from '@/types/user';
+import { useProfileData, useChatRequest } from '@/features/Profile/hooks';
 
 import styles from './UserProfilePage.module.scss';
 
 const UserProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [profileData, setProfileData] = useState<CompleteProfileInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // 프로필 데이터 로딩 시뮬레이션
-  useEffect(() => {
-    const loadProfile = async () => {
-      if (!id) {
-        setError('사용자 ID가 없습니다.');
-        setIsLoading(false);
-        return;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        // API 호출 시뮬레이션 (1.2초 로딩)
-        setTimeout(() => {
-          // 나중엔 id를 사용해서 API 호출: `/api/profile/${id}`
-          if (id === '1') {
-            setProfileData(mockOtherProfile);
-          } else {
-            // 다른 사용자 ID의 경우 목 데이터 변형
-            setProfileData({
-              ...mockOtherProfile,
-              userId: parseInt(id, 10),
-              nickname: `사용자${id}`,
-            });
-          }
-          setIsLoading(false);
-        }, 1200);
-      } catch {
-        setError('프로필을 불러오는 중 오류가 발생했습니다.');
-        setIsLoading(false);
-      }
-    };
-
-    loadProfile();
-  }, [id]);
-
-  const handleChatRequest = () => {
-    if (!profileData) return;
-
-    if (profileData.chatRoomId) {
-      // 이미 채팅방이 있는 경우 - 채팅방으로 이동
-      console.log('기존 채팅방으로 이동:', profileData.chatRoomId);
-    } else if (profileData.dmRequestPending) {
-      // 채팅 요청 대기 중
-      console.log('채팅 요청 대기 중...');
-    } else {
-      // 새로운 채팅 요청 보내기
-      console.log('채팅 요청 보내기:', profileData.userId);
-      // TODO: 실제 채팅 요청 API 호출
-    }
-  };
-
-  const getChatButtonText = () => {
-    if (!profileData) return '채팅하기';
-
-    if (profileData.chatRoomId) {
-      return '채팅하기';
-    } else if (profileData.dmRequestPending) {
-      return '요청 대기 중...';
-    } else {
-      return '채팅 요청';
-    }
-  };
+  const { profileData, isLoading, error } = useProfileData(id, false);
+  const { handleChatRequest, getChatButtonText } = useChatRequest(profileData);
 
   const handleBack = () => {
     navigate(-1);
