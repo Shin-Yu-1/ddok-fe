@@ -19,6 +19,9 @@ const BirthDateInput = ({
   max,
   min,
 }: BirthDateInputProps) => {
+  // 오늘 날짜를 YYYY-MM-DD 형식으로 생성
+  const today = new Date().toISOString().split('T')[0];
+
   return (
     <div className={styles.section}>
       <h2 className={styles.sectionTitle}>
@@ -29,7 +32,7 @@ const BirthDateInput = ({
         value={birthDate}
         onChange={onBirthDateChange}
         required={required}
-        max={max}
+        max={max || today} // max가 제공되지 않으면 오늘 날짜를 사용
         min={min}
       />
     </div>

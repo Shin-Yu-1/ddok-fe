@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '@/App';
+import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout';
 import MapLayout from '@/layouts/MapLayout/MapLayout';
 import PersonalizationLayout from '@/layouts/PersonalizationLayout/PersonalizationLayout';
@@ -11,6 +12,7 @@ import TeamLayout from '@/layouts/TeamLayout/TeamLayout';
 import FindIdCompletePage from '@/pages/auth/FindIdCompletePage/FindIdCompletePage';
 import FindIdPage from '@/pages/auth/FindIdPage/FindIdPage';
 import FindPasswordPage from '@/pages/auth/FindPasswordPage/FindPasswordPage';
+import KakaoCallbackPage from '@/pages/auth/KakaoCallbackPage/KakaoCallbackPage';
 import ResetPasswordPage from '@/pages/auth/ResetPasswordPage/ResetPasswordPage';
 import SignInPage from '@/pages/auth/SignInPage/SignInPage';
 import SignUpCompletePage from '@/pages/auth/SignUpCompletePage/SignUpCompletePage';
@@ -82,6 +84,10 @@ export const router = createBrowserRouter([
           {
             path: 'auth/resetpassword',
             element: <ResetPasswordPage />,
+          },
+          {
+            path: 'auth/kakao/callback',
+            element: <KakaoCallbackPage />,
           },
         ],
       },
@@ -181,7 +187,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'ranking',
-        element: <RankingPage />,
+        element: (
+          <ProtectedRoute requirePreference={true}>
+            <RankingPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'button-example',
