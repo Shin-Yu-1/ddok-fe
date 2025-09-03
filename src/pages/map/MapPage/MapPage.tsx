@@ -16,8 +16,8 @@ import MapStudyOverlay from '@/features/map/components/MapOverlay/MapStudyOverla
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { useMapSearch } from '@/features/map/hooks/useMapSearch';
-import { mapMockData } from '@/features/map/mocks/mapMockData';
 import { overlayMockData } from '@/features/map/mocks/overlayMockData';
+import { panelMockData } from '@/features/map/mocks/panelMockData';
 import type { CafeOverlayData } from '@/features/map/types/cafe';
 import type { MapBounds } from '@/features/map/types/common';
 import { MapItemCategory } from '@/features/map/types/common';
@@ -159,21 +159,39 @@ const MapPage = () => {
             {/* 줌 레벨 컨트롤 */}
             <ZoomControl position="BOTTOMRIGHT" />
 
-            {/* 마커 */}
-            {mapMockData.map(m => (
-              <MapMarker
-                key={`marker__${m.location.latitude}-${m.location.longitude}`}
-                position={{ lat: m.location.latitude, lng: m.location.longitude }}
-                onClick={() => {
-                  setIsOverlayOpen(true);
-                  setSelectedPoint({
-                    lat: m.location.latitude,
-                    lng: m.location.longitude,
-                    type: m.category,
-                  });
-                }}
-              ></MapMarker>
-            ))}
+            {/* 마커 - API에서 받은 데이터(mapSearchData)로 표시 */}
+            {mapSearchData &&
+              mapSearchData.map(m => (
+                <MapMarker
+                  key={`marker__${m.location.latitude}-${m.location.longitude}`}
+                  position={{ lat: m.location.latitude, lng: m.location.longitude }}
+                  onClick={() => {
+                    setIsOverlayOpen(true);
+                    setSelectedPoint({
+                      lat: m.location.latitude,
+                      lng: m.location.longitude,
+                      type: m.category,
+                    });
+                  }}
+                ></MapMarker>
+              ))}
+
+            {/* API 데이터가 없는 경우 panelMockData로 표시 (테스트용, 추후 제거) */}
+            {(!mapSearchData || mapSearchData.length === 0) &&
+              panelMockData.map(m => (
+                <MapMarker
+                  key={`marker__mock__${m.location.latitude}-${m.location.longitude}`}
+                  position={{ lat: m.location.latitude, lng: m.location.longitude }}
+                  onClick={() => {
+                    setIsOverlayOpen(true);
+                    setSelectedPoint({
+                      lat: m.location.latitude,
+                      lng: m.location.longitude,
+                      type: m.category,
+                    });
+                  }}
+                ></MapMarker>
+              ))}
 
             {/* 오버레이 */}
             {isOverlayOpen && selectedPoint && (
