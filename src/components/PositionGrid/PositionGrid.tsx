@@ -12,6 +12,7 @@ interface PositionGridProps {
   onPositionToggle?: (positionId: number) => void;
   keyPrefix?: string;
   multiSelect?: boolean;
+  disabledPositions?: number[];
 }
 
 const PositionGrid = ({
@@ -21,6 +22,7 @@ const PositionGrid = ({
   onPositionToggle,
   keyPrefix = '',
   multiSelect = false,
+  disabledPositions = [],
 }: PositionGridProps) => {
   return (
     <div className={styles.optionGrid}>
@@ -29,7 +31,11 @@ const PositionGrid = ({
           ? selectedPositions.includes(position.id)
           : selectedPosition === position.id;
 
+        const isDisabled = disabledPositions.includes(position.id);
+
         const handleClick = () => {
+          if (isDisabled) return;
+
           if (multiSelect && onPositionToggle) {
             onPositionToggle(position.id);
           } else if (!multiSelect && onPositionSelect) {
@@ -48,6 +54,7 @@ const PositionGrid = ({
             fontWeightPreset="regular"
             className={clsx(styles.positionButton, isSelected && styles.selected)}
             onClick={handleClick}
+            disabled={isDisabled}
           >
             {position.name}
           </Button>

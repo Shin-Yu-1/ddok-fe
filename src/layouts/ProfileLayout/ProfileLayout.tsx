@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
+import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import Header from '@/features/Header/components/Header';
 
 import styles from './ProfileLayout.module.scss';
@@ -12,10 +13,12 @@ const ProfileLayout = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <Header variant={isLoggedIn ? 'user' : 'guest'} user={isLoggedIn ? user : undefined} />
-      <Outlet />
-    </div>
+    <ProtectedRoute requirePreference={true}>
+      <div className={styles.container}>
+        <Header variant={isLoggedIn ? 'user' : 'guest'} user={isLoggedIn ? user : undefined} />
+        <Outlet />
+      </div>
+    </ProtectedRoute>
   );
 };
 

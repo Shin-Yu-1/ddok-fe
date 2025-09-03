@@ -65,8 +65,17 @@ api.interceptors.request.use(config => {
 });
 
 api.interceptors.response.use(
-  res => res,
+  res => {
+    return res;
+  },
   async error => {
+    console.error('API 응답 에러:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      message: error.response?.data?.message,
+      data: error.response?.data,
+    });
+
     const originalRequest = error.config;
     const req = originalRequest as typeof originalRequest & { _retry?: boolean };
 
