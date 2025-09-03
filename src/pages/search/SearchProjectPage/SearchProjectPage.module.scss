@@ -21,10 +21,34 @@
 
   .searchWrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 23px;
+    margin-top: 58px;
+    margin-bottom: 18px;
+
+    .inputWrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .filterOptionsWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .cardListWrapper {
+    display: flex;
+    flex-flow: row wrap;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    gap: 39px;
+    box-sizing: border-box;
+    padding: 20px 0%;
   }
 
   .datePicker {
