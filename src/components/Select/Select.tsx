@@ -5,7 +5,7 @@ import { CaretUpIcon } from '@phosphor-icons/react';
 import styles from './Select.module.scss';
 
 type CSSVariables = React.CSSProperties & {
-  [key: `--${string}`]: string | number;
+  [key: `--${string}`]: string | number | undefined;
 };
 
 export type SelectOption<V = string> = {
