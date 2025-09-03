@@ -1,0 +1,76 @@
+@use '@/styles/variables' as *;
+
+.container {
+  width: 100%;
+}
+
+.radioRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.radioItemGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radioItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $gray-2;
+  border-radius: 50%;
+  background-color: $white-3;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $yellow-1;
+    background-color: rgba($yellow-1, 0.05);
+  }
+
+  &:focus {
+    border-color: $yellow-1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($yellow-1, 0.2);
+  }
+
+  &[data-state='checked'] {
+    border-color: $yellow-1;
+    background-color: $yellow-1;
+  }
+}
+
+.radioIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: $white-3;
+
+  &[data-state='checked'] {
+    background-color: $white-3;
+  }
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    color: $black-3;
+  }
+}
