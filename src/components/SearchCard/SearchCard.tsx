@@ -2,7 +2,8 @@ import dayjs from 'dayjs';
 
 import 'dayjs/locale/ko';
 import banner from '@/assets/images/DDOK/DDOK-banner.png';
-import type { projectItem, studyItem } from '@/schemas/project.schema';
+import type { projectItem } from '@/schemas/project.schema';
+import type { studyItem } from '@/schemas/study.schema';
 import type { TeamStatus } from '@/types/project';
 
 import styles from './SearchCard.module.scss';
