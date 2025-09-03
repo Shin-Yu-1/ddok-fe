@@ -1,13 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// 사용자 정보 타입
+// 사용자 정보 타입 (로그인 응답 데이터 기준)
 export interface UserInfo {
   id: number;
   username: string;
   email: string;
-  nickname: string;
-  profileImageUrl: string;
+  nickname?: string | null;
+  profileImageUrl?: string | null;
+  isPreference?: boolean;
+  mainPosition?: string | null;
+  location?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  } | null;
 }
 
 export interface SignInUser {
@@ -16,8 +23,15 @@ export interface SignInUser {
     id: number;
     username: string;
     email: string;
-    nickname: string;
-    profileImageUrl: string;
+    nickname?: string | null;
+    profileImageUrl?: string | null;
+    isPreference?: boolean;
+    mainPosition?: string | null;
+    location?: {
+      latitude: number;
+      longitude: number;
+      address: string;
+    } | null;
   };
 }
 
@@ -50,6 +64,8 @@ interface AuthState {
   setLoggedIn: (user: UserInfo, accessToken: string) => void;
   setLoggedOut: () => void;
   setAuthSocialLogin: (data: SignInUser) => void;
+  updatePreference: (isPreference: boolean) => void; // 개인화 설정 완료 상태 업데이트
+  updateUserInfo: (userData: Partial<UserInfo>) => void; // 사용자 정보 부분 업데이트
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -98,6 +114,38 @@ export const useAuthStore = create<AuthState>()(
           isLoggedIn: false,
           user: null,
         });
+      },
+
+      // 개인화 설정 완료 상태 업데이트
+      updatePreference: (isPreference: boolean) => {
+        const state = get();
+        if (state.user) {
+          const updatedUser = { ...state.user, isPreference };
+
+          // 세션스토리지 업데이트
+          sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+          // 상태 업데이트
+          set({
+            user: updatedUser,
+          });
+        }
+      },
+
+      // 사용자 정보 부분 업데이트
+      updateUserInfo: (userData: Partial<UserInfo>) => {
+        const state = get();
+        if (state.user) {
+          const updatedUser = { ...state.user, ...userData };
+
+          // 세션스토리지 업데이트
+          sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+          // 상태 업데이트
+          set({
+            user: updatedUser,
+          });
+        }
       },
     }),
     {

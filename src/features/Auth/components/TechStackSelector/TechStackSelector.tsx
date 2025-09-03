@@ -7,8 +7,8 @@ import TechStackSearchResults from '@/components/TechStackSearchResults/TechStac
 import styles from './TechStackSelector.module.scss';
 
 interface TechStackSelectorProps {
-  selectedTechStack: number[];
-  onTechStackToggle: (techId: number) => void;
+  selectedTechStack: string[];
+  onTechStackToggle: (techName: string) => void;
 }
 
 const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSelectorProps) => {
@@ -18,12 +18,12 @@ const TechStackSelector = ({ selectedTechStack, onTechStackToggle }: TechStackSe
     setSearchTerm(term);
   };
 
-  const handleTechStackSelect = (techId: number) => {
-    onTechStackToggle(techId);
+  const handleTechStackSelect = (techName: string) => {
+    onTechStackToggle(techName);
   };
 
-  const handleTechStackRemove = (techId: number) => {
-    onTechStackToggle(techId);
+  const handleTechStackRemove = (techName: string) => {
+    onTechStackToggle(techName);
   };
 
   const handleButtonKeyDown = (e: React.KeyboardEvent) => {
