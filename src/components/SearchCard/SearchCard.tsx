@@ -30,9 +30,9 @@ const SearchCard = ({ item, isLoading }: SearchCardProps) => {
       case 'RECRUITING':
         return '모집 중';
       case 'ONGOING':
-        return '프로젝트 진행 중';
+        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 진행 중`;
       case 'CLOSED':
-        return '프로젝트 종료';
+        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 종료`;
       default:
         return '모집 중';
     }
