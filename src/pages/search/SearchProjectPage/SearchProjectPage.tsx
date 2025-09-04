@@ -546,61 +546,63 @@ const SearchProjectPage = () => {
           </Button>
         </div>
         <div className={styles.filterOptionsWrapper}>
-          <Select
-            placeholder="진행 여부"
-            width={154}
-            height={32}
-            options={statusOptions}
-            value={filterOption.status as string | null | undefined}
-            onChange={v => handleChangeOptionValue('status', v)}
-          />
-          <Select
-            placeholder="모집 포지션"
-            width={150}
-            height={32}
-            options={positionOptions}
-            value={filterOption.position as number | null | undefined}
-            onChange={v => handleChangeOptionValue('position', v)}
-          />
-          <Select
-            placeholder="모집 인원"
-            width={108}
-            height={32}
-            options={capacityOptions}
-            value={filterOption.capacity as number | null | undefined}
-            onChange={v => handleChangeOptionValue('capacity', v)}
-          />
-          <Select
-            placeholder="진행 방식"
-            width={108}
-            height={32}
-            options={modeOptions}
-            value={filterOption.mode as string | null | undefined}
-            onChange={v => handleChangeOptionValue('mode', v)}
-          />
-          <Select
-            placeholder="희망 나이"
-            width={108}
-            height={32}
-            options={ageRangeOptions}
-            value={filterOption.age as number | null | undefined}
-            onChange={v => handleChangeOptionValue('age', v)}
-          />
-          <Select
-            placeholder="예상 기간"
-            width={118}
-            height={32}
-            options={periodOptions}
-            value={filterOption.period as number | null | undefined}
-            onChange={v => handleChangeOptionValue('period', v)}
-          />
-          <DatePicker
-            locale={ko}
-            className={styles.datePicker}
-            selected={selectedDate}
-            onChange={date => setSelectedDate(date || new Date())}
-            dateFormat="yyyy.MM.dd"
-          />
+          <div className={styles.optionsGroup}>
+            <Select
+              placeholder="진행 여부"
+              width={154}
+              height={32}
+              options={statusOptions}
+              value={filterOption.status as string | null | undefined}
+              onChange={v => handleChangeOptionValue('status', v)}
+            />
+            <Select
+              placeholder="모집 포지션"
+              width={150}
+              height={32}
+              options={positionOptions}
+              value={filterOption.position as number | null | undefined}
+              onChange={v => handleChangeOptionValue('position', v)}
+            />
+            <Select
+              placeholder="모집 인원"
+              width={108}
+              height={32}
+              options={capacityOptions}
+              value={filterOption.capacity as number | null | undefined}
+              onChange={v => handleChangeOptionValue('capacity', v)}
+            />
+            <Select
+              placeholder="진행 방식"
+              width={108}
+              height={32}
+              options={modeOptions}
+              value={filterOption.mode as string | null | undefined}
+              onChange={v => handleChangeOptionValue('mode', v)}
+            />
+            <Select
+              placeholder="희망 나이"
+              width={108}
+              height={32}
+              options={ageRangeOptions}
+              value={filterOption.age as number | null | undefined}
+              onChange={v => handleChangeOptionValue('age', v)}
+            />
+            <Select
+              placeholder="예상 기간"
+              width={118}
+              height={32}
+              options={periodOptions}
+              value={filterOption.period as number | null | undefined}
+              onChange={v => handleChangeOptionValue('period', v)}
+            />
+            <DatePicker
+              locale={ko}
+              className={styles.datePicker}
+              selected={selectedDate}
+              onChange={date => setSelectedDate(date || new Date())}
+              dateFormat="yyyy.MM.dd"
+            />
+          </div>
           <Button
             backgroundColor="none"
             textColor="var(--gray-1)"
