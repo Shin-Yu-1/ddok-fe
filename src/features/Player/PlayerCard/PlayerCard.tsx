@@ -9,6 +9,7 @@ import Thermometer from '@/components/Thermometer/Thermometer';
 import Badge from '@/features/Badge/Badge';
 // import { usePostApi } from '@/hooks/usePostApi';
 import type { Player } from '@/schemas/player.schema';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from './PlayerCard.module.scss';
 
@@ -18,6 +19,7 @@ interface PlayerCardProps {
 
 const PlayerCard = ({ player }: PlayerCardProps) => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -82,18 +84,20 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
 
   return (
     <div className={styles.playerCard}>
-      <div className={styles.playerTemperatureWrapper}>
+      <div className={`${styles.playerTemperatureWrapper} ${isLoggedIn ? '' : styles.center}`}>
         <Thermometer temperature={player.temperature} />
         <span className={styles.temperature}>{player.temperature}℃</span>
-        <Button
-          size="sm"
-          textColor={'var(--gray-1)'}
-          backgroundColor="none"
-          padding="0%"
-          onClick={openMenu}
-        >
-          <DotsThreeVerticalIcon className={styles.buttonIcon} />
-        </Button>
+        {isLoggedIn && (
+          <Button
+            size="sm"
+            textColor={'var(--gray-1)'}
+            backgroundColor="none"
+            padding="0%"
+            onClick={openMenu}
+          >
+            <DotsThreeVerticalIcon className={styles.buttonIcon} />
+          </Button>
+        )}
 
         {isMenuOpen && (
           <div className={styles.overflowMenuContainer}>
