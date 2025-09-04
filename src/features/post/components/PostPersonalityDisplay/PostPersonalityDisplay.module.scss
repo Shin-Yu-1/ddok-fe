@@ -1,0 +1,33 @@
+@use '@/styles/variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.chipContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border: 1px solid rgba($yellow-1, 0.2);
+  border-radius: 50px;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $yellow-1;
+  background-color: rgba($yellow-1, 0.1);
+  transition: all 0.2s ease;
+  cursor: default;
+
+  &:hover {
+    background-color: rgba($yellow-1, 0.15);
+    box-shadow: 0 2px 4px rgba($yellow-1, 0.2);
+    transform: translateY(-1px);
+  }
+}

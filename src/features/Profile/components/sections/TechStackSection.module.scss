@@ -1,0 +1,135 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.techStackSection {
+  position: relative;
+  padding: 20px;
+  border: 0.7px solid v.$gray-3;
+  border-radius: v.$r-small;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    padding: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  @include m.font-small-title;
+
+  margin: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-description;
+  }
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+}
+
+.techStackGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  @include m.mobile {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+}
+
+.techStackItem {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: v.$r-small;
+  color: v.$white-3;
+  background-color: v.$black-4;
+
+  @include m.mobile {
+    gap: 6px;
+    padding: 2px 4px;
+  }
+}
+
+.techName {
+  @include m.font-text;
+
+  text-align: center;
+  white-space: nowrap;
+
+  @include m.mobile {
+    @include m.font-small-text;
+  }
+}
+
+.showMoreContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.showMoreButton {
+  @include m.font-text;
+
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: v.$r-xsmall;
+  color: v.$gray-1;
+  background-color: transparent;
+  transition: color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: v.$black-4;
+  }
+
+  &:active {
+    color: v.$black-1;
+  }
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 6px 12px;
+  }
+}
