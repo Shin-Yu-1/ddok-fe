@@ -9,6 +9,7 @@ const ProfileMap = () => {
     <div className={styles.container}>
       <Map
         className={styles.map}
+        // TODO: 추후 사용자 위치 기반으로 변경
         center={{ lat: 37.5665, lng: 126.978 }}
         draggable={false}
         zoomable={false}
