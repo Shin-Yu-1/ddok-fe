@@ -13,10 +13,10 @@ import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
-import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
 import type { ChatListApiResponse, ChatListItem } from '@/schemas/chat.schema';
 import { useChatUiStore } from '@/stores/chatUiStore';
+import type { Pagination } from '@/types/pagination.types';
 
 import styles from './ChatList.module.scss';
 

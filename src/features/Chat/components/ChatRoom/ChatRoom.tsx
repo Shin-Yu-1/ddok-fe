@@ -7,7 +7,6 @@ import 'dayjs/locale/ko';
 import Button from '@/components/Button/Button';
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
-import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import { useGetApi } from '@/hooks/useGetApi';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import type {
@@ -17,6 +16,7 @@ import type {
   ChatMessage,
 } from '@/schemas/chat.schema';
 import { useAuthStore } from '@/stores/authStore';
+import type { Pagination } from '@/types/pagination.types';
 
 import ChatRoomType from '../../enums/ChatRoomType.enum';
 
