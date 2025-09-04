@@ -30,7 +30,7 @@ export const studyItemSchema = z.object({
   expectedMonth: z.number(),
   startDate: z.string(),
 });
-export type studyItem = z.infer<typeof studyItemSchema>;
+export type StudyItem = z.infer<typeof studyItemSchema>;
 
 export const studyListSchema = z.object({
   items: z.array(studyItemSchema),
@@ -38,4 +38,4 @@ export const studyListSchema = z.object({
 });
 
 export const studyListApiResponseSchema = apiResponseSchema(studyListSchema);
-export type studyListApiResponse = z.infer<typeof studyListApiResponseSchema>;
+export type StudyListApiResponse = z.infer<typeof studyListApiResponseSchema>;

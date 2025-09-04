@@ -22,7 +22,7 @@ export const projectItemSchema = z.object({
   startDate: z.string(),
 });
 
-export type projectItem = z.infer<typeof projectItemSchema>;
+export type ProjectItem = z.infer<typeof projectItemSchema>;
 
 export const projectListSchema = z.object({
   items: z.array(projectItemSchema),
@@ -30,4 +30,4 @@ export const projectListSchema = z.object({
 });
 
 export const projectListApiResponseSchema = apiResponseSchema(projectListSchema);
-export type projectListApiResponse = z.infer<typeof projectListApiResponseSchema>;
+export type ProjectListApiResponse = z.infer<typeof projectListApiResponseSchema>;

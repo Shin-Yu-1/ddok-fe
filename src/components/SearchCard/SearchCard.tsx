@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 
 import 'dayjs/locale/ko';
 import banner from '@/assets/images/DDOK/DDOK-banner.png';
-import type { projectItem } from '@/schemas/project.schema';
-import type { studyItem } from '@/schemas/study.schema';
+import type { ProjectItem } from '@/schemas/project.schema';
+import type { StudyItem } from '@/schemas/study.schema';
 import type { TeamStatus } from '@/types/project';
 
 import styles from './SearchCard.module.scss';
@@ -18,12 +18,12 @@ interface CardProps {
 }
 
 // 타입 가드
-const isProjectItem = (item: projectItem | studyItem): item is projectItem => {
+const isProjectItem = (item: ProjectItem | StudyItem): item is ProjectItem => {
   return 'projectId' in item;
 };
 
 // 한글 변환
-const getStudyTypeText = (type: studyItem['studyType']) => {
+const getStudyTypeText = (type: StudyItem['studyType']) => {
   switch (type) {
     case 'CERTIFICATION':
       return '자격증';
