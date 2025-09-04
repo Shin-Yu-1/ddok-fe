@@ -13,9 +13,9 @@ type PreferredAges = {
   ageMax: number;
 };
 
-interface CardProps {
-  item: projectItem | studyItem;
-}
+type SearchCardProps = {
+  item: ProjectItem | StudyItem;
+};
 
 // 타입 가드
 const isProjectItem = (item: ProjectItem | StudyItem): item is ProjectItem => {
@@ -44,7 +44,7 @@ const getStudyTypeText = (type: StudyItem['studyType']) => {
   }
 };
 
-const SearchCard = ({ item }: CardProps) => {
+const SearchCard = ({ item }: SearchCardProps) => {
   // 한글 변환
   const getTeamStatusText = (status: TeamStatus) => {
     switch (status) {
