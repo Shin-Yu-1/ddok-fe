@@ -23,28 +23,6 @@ const isProjectItem = (item: ProjectItem | StudyItem): item is ProjectItem => {
   return 'projectId' in item;
 };
 
-// 한글 변환
-const getStudyTypeText = (type: StudyItem['studyType']) => {
-  switch (type) {
-    case 'CERTIFICATION':
-      return '자격증';
-    case 'JOB_INTERVIEW':
-      return '취업 면접';
-    case 'SELF_DEV':
-      return '자기계발';
-    case 'LANGUAGE':
-      return '어학';
-    case 'LIFE':
-      return '생활';
-    case 'HOBBY':
-      return '취미';
-    case 'ETC':
-      return '기타';
-    default:
-      return '-';
-  }
-};
-
 const SearchCard = ({ item, isLoading }: SearchCardProps) => {
   // 한글 변환
   const getTeamStatusText = (status: TeamStatus) => {
@@ -162,7 +140,7 @@ const SearchCard = ({ item, isLoading }: SearchCardProps) => {
               {isProjectItem(item) ? '모집 포지션' : '스터디 유형'}
             </span>
             <span className={styles.value}>
-              {isProjectItem(item) ? item.positions.join(', ') : getStudyTypeText(item.studyType)}
+              {isProjectItem(item) ? item.positions.join(', ') : item.studyType}
             </span>
           </div>
 
