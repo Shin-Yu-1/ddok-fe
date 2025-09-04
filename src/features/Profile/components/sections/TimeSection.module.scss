@@ -81,7 +81,7 @@
 .timeLabel {
   @include m.font-text;
 
-  font-weight: v.$fw-medium;
+  font-weight: v.$fw-bold;
   color: v.$black-3;
 
   @include m.mobile {
