@@ -375,10 +375,21 @@ const SearchProjectPage = () => {
         size: PAGE_SIZE,
       });
 
-      setProjectList(prev => (isNewSearch ? newProjects : [...prev, ...newProjects]));
+      setProjectList(prev => {
+        if (isNewSearch) {
+          return newProjects;
+        } else {
+          // 중복 제거를 위해 기존 항목의 ID들을 Set으로 관리
+          const existingIds = new Set(prev.map(item => item.projectId));
+          const filteredNewProjects = newProjects.filter(item => !existingIds.has(item.projectId));
+          return [...prev, ...filteredNewProjects];
+        }
+      });
 
+      // 더 이상 로드할 데이터가 없는지 확인
       setHasMore(responsePagination.currentPage < responsePagination.totalPages);
 
+      // pagination 상태 업데이트
       setPagination({
         page: responsePagination.currentPage,
         size: responsePagination.pageSize,
@@ -391,6 +402,7 @@ const SearchProjectPage = () => {
     }
   }, []);
 
+  // 무한 스크롤을 위한 Intersection Observer 설정
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -422,6 +434,7 @@ const SearchProjectPage = () => {
     };
   }, [loadProjects, hasMore, isLoading, pagination.page]);
 
+  // 초기 데이터 로드
   useEffect(() => {
     loadProjects(1, true);
   }, []);
@@ -481,6 +494,8 @@ const SearchProjectPage = () => {
     setSelectedDate(new Date());
     // 초기화 후 첫 페이지부터 다시 로드
     autoLoadsRef.current = 0;
+    setProjectList([]); // 기존 데이터 초기화
+    setHasMore(true);
     setPagination({ page: 1, size: PAGE_SIZE });
     loadProjects(1, true);
   };
@@ -491,10 +506,12 @@ const SearchProjectPage = () => {
     console.log(filterOption);
     console.log(selectedDate);
 
-    // TODO: 초기화 버튼 클릭 시 동작 확인 후 주석 또는 코드 제거
-    // autoLoadsRef.current = 0;
-    // setPagination({ page: 1, size: PAGE_SIZE });
-    // loadProjects(1, true);
+    // 검색 시 첫 페이지부터 다시 로드
+    autoLoadsRef.current = 0;
+    setProjectList([]); // 기존 데이터 초기화
+    setHasMore(true);
+    setPagination({ page: 1, size: PAGE_SIZE });
+    loadProjects(1, true);
   };
 
   return (
