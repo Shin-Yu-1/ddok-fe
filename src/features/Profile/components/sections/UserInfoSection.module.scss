@@ -1,0 +1,237 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.userInfoSection {
+  align-content: center;
+  height: 8rem;
+  padding: 0 1rem;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    padding: 20px;
+  }
+}
+
+.container {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+
+  @include m.mobile {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.leftContent {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+
+  @include m.mobile {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+}
+
+.profileImageContainer {
+  flex-shrink: 0;
+}
+
+.profileImage {
+  width: 89px;
+  height: 89px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  @include m.mobile {
+    width: 69px;
+    height: 69px;
+  }
+}
+
+.userBasicInfo {
+  flex: 1;
+  align-content: center;
+  min-width: 0;
+}
+
+.userNameRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
+
+.nickname {
+  @include m.font-subtitle;
+
+  margin: 0;
+  padding: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-small-title;
+  }
+}
+
+.ageGroup {
+  @include m.font-text;
+
+  color: v.$black-1;
+}
+
+.personalInfoEditButton {
+  @include m.font-small-text;
+
+  padding: 7px 10px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xsmall;
+  white-space: nowrap;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+}
+
+.introductionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.introduction {
+  @include m.font-small-text;
+
+  margin: 0;
+  line-height: 1.5;
+  color: v.$gray-1;
+}
+
+.introductionEditButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+}
+
+.rightContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 8px;
+
+  @include m.mobile {
+    align-items: center;
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+.badgeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+// 뱃지는 일단 임시로 넣음
+.mainBadge,
+.abandonBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  background-color: v.$gray-1;
+  cursor: default;
+
+  @include m.mobile {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}
+
+.abandonBadge {
+  background-color: v.$red-1;
+}
+
+.temperatureContainer {
+  text-align: right;
+
+  @include m.mobile {
+    text-align: left;
+  }
+}
+
+.temperatureDisplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.temperatureIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+
+  @include m.mobile {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.temperature {
+  @include m.font-description;
+
+  font-weight: v.$fw-regular;
+  color: v.$black-4;
+}
