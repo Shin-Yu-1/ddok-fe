@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 
 import { MagnifyingGlassIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 import { ko } from 'date-fns/locale';
@@ -10,7 +10,9 @@ import SearchCard from '@/components/SearchCard/SearchCard';
 import Select from '@/components/Select/Select';
 import { AGE_RANGES } from '@/constants/ageRanges';
 import { POSITIONS } from '@/constants/positions';
+import type { ProjectItem } from '@/schemas/project.schema';
 import { useAuthStore } from '@/stores/authStore';
+import type { Pagination } from '@/types/pagination.types';
 import type { TeamStatus } from '@/types/project';
 
 import styles from './SearchProjectPage.module.scss';
@@ -51,7 +53,7 @@ const periodOptions = [
   { label: '5개월 이상', value: 5 },
 ];
 // TODO: API 연동 시 제거
-const items = [
+const projectListDummy = [
   {
     projectId: 1,
     title: '구지라지 프로젝트',
@@ -69,7 +71,7 @@ const items = [
     projectId: 2,
     title: '구라라지 프로젝트',
     teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['백엔드', '프론트엔드'],
     capacity: 4,
     mode: 'online',
@@ -82,7 +84,7 @@ const items = [
     projectId: 3,
     title: '구라지라 프로젝트',
     teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['백엔드', '프론트엔드'],
     capacity: 4,
     mode: 'online',
@@ -121,7 +123,7 @@ const items = [
     projectId: 6,
     title: '모바일 뱅킹 앱 보안 강화',
     teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['보안', '모바일', '데브옵스'],
     capacity: 7,
     mode: 'offline',
@@ -173,7 +175,7 @@ const items = [
     projectId: 10,
     title: '클라우드 인프라 최적화',
     teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['서버', '데브옵스', '보안'],
     capacity: 5,
     mode: 'online',
@@ -225,7 +227,7 @@ const items = [
     projectId: 14,
     title: '게임 서버 인프라 구축',
     teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['게임', '서버', '데브옵스'],
     capacity: 8,
     mode: 'offline',
@@ -277,7 +279,7 @@ const items = [
     projectId: 18,
     title: 'AI 기반 이미지 분석 솔루션',
     teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: null,
+    bannerImageUrl: '',
     positions: ['머신러닝', '백엔드', '프론트엔드'],
     capacity: 7,
     mode: 'online',
@@ -313,9 +315,35 @@ const items = [
     startDate: '2025-12-20',
   },
 ];
+// TODO: API 연동 시 제거
+const tempChunk = ({ page, size }: Pagination) => {
+  const pageSize = Math.max(1, size | 0);
+  const totalItems = projectListDummy.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const currentPage = Math.min(Math.max(1, page | 0), totalPages);
+
+  const start = (currentPage - 1) * pageSize;
+  const end = Math.min(start + pageSize, totalItems);
+
+  const items = projectListDummy.slice(start, end);
+
+  return {
+    items,
+    pagination: {
+      currentPage,
+      pageSize,
+      totalPages,
+      totalItems,
+    },
+  };
+};
+
+const PAGE_SIZE = 6;
+const MAX_AUTO_LOADS = 5;
 
 const SearchProjectPage = () => {
   const { isLoggedIn } = useAuthStore();
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, size: PAGE_SIZE });
   const [keyword, setKeyword] = useState('');
   const [filterOption, setFilterOption] = useState<FilterOption>({
     status: null, // 진행 여부
@@ -329,6 +357,74 @@ const SearchProjectPage = () => {
     'expected-month': null, // 종료 예정일(?)
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [projectList, setProjectList] = useState<ProjectItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const autoLoadsRef = useRef(0);
+  const isFetchingRef = useRef(false);
+
+  const loadProjects = useCallback(async (page: number, isNewSearch: boolean = false) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    setIsLoading(true);
+
+    try {
+      const { items: newProjects, pagination: responsePagination } = tempChunk({
+        page,
+        size: PAGE_SIZE,
+      });
+
+      setProjectList(prev => (isNewSearch ? newProjects : [...prev, ...newProjects]));
+
+      setHasMore(responsePagination.currentPage < responsePagination.totalPages);
+
+      setPagination({
+        page: responsePagination.currentPage,
+        size: responsePagination.pageSize,
+      });
+    } catch (error) {
+      console.error('플레이어 목록 로드 실패:', error);
+    } finally {
+      isFetchingRef.current = false;
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        const target = entries[0];
+        if (
+          target.isIntersecting &&
+          hasMore &&
+          !isLoading &&
+          autoLoadsRef.current < MAX_AUTO_LOADS
+        ) {
+          autoLoadsRef.current += 1;
+          loadProjects(pagination.page + 1, false);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px',
+      }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [loadProjects, hasMore, isLoading, pagination.page]);
+
+  useEffect(() => {
+    loadProjects(1, true);
+  }, []);
 
   /* 옵션 세팅 */
   const positionOptions = POSITIONS.reduce(
@@ -383,6 +479,10 @@ const SearchProjectPage = () => {
       'expected-month': null,
     });
     setSelectedDate(new Date());
+    // 초기화 후 첫 페이지부터 다시 로드
+    autoLoadsRef.current = 0;
+    setPagination({ page: 1, size: PAGE_SIZE });
+    loadProjects(1, true);
   };
 
   const handleClickSearch = () => {
@@ -390,6 +490,11 @@ const SearchProjectPage = () => {
     console.log(keyword);
     console.log(filterOption);
     console.log(selectedDate);
+
+    // TODO: 초기화 버튼 클릭 시 동작 확인 후 주석 또는 코드 제거
+    // autoLoadsRef.current = 0;
+    // setPagination({ page: 1, size: PAGE_SIZE });
+    // loadProjects(1, true);
   };
 
   return (
@@ -491,14 +596,16 @@ const SearchProjectPage = () => {
           </Button>
         </div>
       </div>
+
       <div className={styles.cardListWrapper}>
-        {items.map(item => (
+        {projectList.map(item => (
           <SearchCard
             key={item.projectId}
             item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
           />
         ))}
       </div>
+      <div ref={sentinelRef} style={{ height: 1 }} />
     </div>
   );
 };
