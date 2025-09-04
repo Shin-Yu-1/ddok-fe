@@ -139,7 +139,7 @@ const MapPage = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
     mapRef.current?.relayout();
 
-    // setIsMapChanged(true);
+    setIsMapChanged(true);
     setMapBounds({
       swLat: mapRef.current?.getBounds().getSouthWest().getLat() || 0,
       swLng: mapRef.current?.getBounds().getSouthWest().getLng() || 0,
@@ -148,6 +148,8 @@ const MapPage = () => {
       lat: mapRef.current?.getCenter().getLat() || 0,
       lng: mapRef.current?.getCenter().getLng() || 0,
     });
+
+    console.log(mapBounds);
   };
 
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
