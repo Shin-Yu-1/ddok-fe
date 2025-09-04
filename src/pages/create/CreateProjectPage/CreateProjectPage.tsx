@@ -6,6 +6,7 @@ import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { CreateRecruitmentTable } from '@/components/RecruitmentTable';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
+import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
 import PostCapacitySelector from '@/features/post/components/PostCapacitySelector/PostCapacitySelector';
 import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
 import PostDurationSlider from '@/features/post/components/PostDurationSlider/PostDurationSlider';
@@ -32,6 +33,7 @@ const CreateProjectPage = () => {
     updateExpectedStart,
     updateCapacity,
     updateExpectedMonth,
+    updateBannerImage,
     isValid,
   } = useCreateProjectForm();
 
@@ -164,7 +166,12 @@ const CreateProjectPage = () => {
     <>
       <h1 className={styles.title}>CreateProjectPage</h1>
       <div className={styles.container}>
-        <div className={styles.bannerImage}>배너 이미지 섹션</div>
+        <div className={styles.bannerImage}>
+          <BannerImageSection
+            bannerImage={formData.bannerImage}
+            onImageChange={updateBannerImage}
+          />
+        </div>
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
