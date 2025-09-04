@@ -8,7 +8,7 @@ import {
   ZoomControl,
 } from 'react-kakao-maps-sdk';
 
-// import Button from '@/components/Button/Button';
+import Button from '@/components/Button/Button';
 import MapCafeOverlay from '@/features/map/components/MapOverlay/MapCafeOverlay/MapCafeOverlay';
 import MapPlayerOverlay from '@/features/map/components/MapOverlay/MapPlayerOverlay/MapPlayerOverlay';
 import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOverlay/MapProjectOverlay';
@@ -48,7 +48,7 @@ const MapPage = () => {
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
   // 지도 사각 영역의 변경 여부
-  //   const [isMapChanged, setIsMapChanged] = useState(false);
+  const [isMapChanged, setIsMapChanged] = useState(false);
 
   // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
   const [selectedPoint, setSelectedPoint] = useState<{
@@ -139,7 +139,7 @@ const MapPage = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
     mapRef.current?.relayout();
 
-    // setIsMapChanged(true);
+    setIsMapChanged(true);
     setMapBounds({
       swLat: mapRef.current?.getBounds().getSouthWest().getLat() || 0,
       swLng: mapRef.current?.getBounds().getSouthWest().getLng() || 0,
@@ -151,13 +151,13 @@ const MapPage = () => {
   };
 
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
-  //   const handleMapReload = () => {
-  //     setIsMapChanged(false);
-  //     setCurrentPage(0); // 페이지를 첫 번째로 리셋
-  //     if (mapBounds) {
-  //       refetchMapSearch();
-  //     }
-  //   };
+  const handleMapReload = () => {
+    setIsMapChanged(false);
+    setCurrentPage(0); // 페이지를 첫 번째로 리셋
+    if (mapBounds) {
+      refetchMapSearch();
+    }
+  };
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
@@ -270,7 +270,7 @@ const MapPage = () => {
       </div>
 
       {/* 지도 리로드 버튼 */}
-      {/* {isMapChanged && (
+      {isMapChanged && (
         <Button
           className={styles.map__reloadBtn}
           fontSize="var(--fs-xxxsmall)"
@@ -282,7 +282,7 @@ const MapPage = () => {
         >
           현 지도에서 검색
         </Button>
-      )} */}
+      )}
 
       {/* 지도 패널 */}
       {isMapPanelOpen && (
