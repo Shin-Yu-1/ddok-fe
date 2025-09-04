@@ -209,7 +209,7 @@ const MapPage = () => {
               ))}
 
             {/* API 데이터가 없는 경우 panelMockData로 표시 (테스트용, 추후 제거) */}
-            {(!mapSearchData || mapSearchData.length === 0) &&
+            {!mapSearchData &&
               panelMockData.map(m => (
                 <MapMarker
                   key={`marker__mock__${m.location.latitude}-${m.location.longitude}`}
