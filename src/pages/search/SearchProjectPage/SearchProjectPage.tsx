@@ -148,6 +148,22 @@ const SearchProjectPage = () => {
     }));
   };
 
+  const handleClickReset = () => {
+    setKeyword('');
+    setFilterOption({
+      status: null,
+      position: null,
+      capacity: null,
+      mode: null,
+      age: null,
+      'age-min': null,
+      'age-max': null,
+      period: null,
+      'expected-month': null,
+    });
+    setSelectedDate(new Date());
+  };
+
   const handleClickSearch = () => {
     // TODO: 추후 API 요청
     console.log(keyword);
@@ -172,6 +188,7 @@ const SearchProjectPage = () => {
             type="text"
             width={'916px'}
             height={40}
+            value={keyword}
             fontSize="var(--fs-xsmall)"
             placeholder="제목 또는 지역을 입력해주세요"
             border="1px solid var(--gray-2)"
@@ -238,7 +255,7 @@ const SearchProjectPage = () => {
             locale={ko}
             className={styles.datePicker}
             selected={selectedDate}
-            onChange={date => setSelectedDate(date as Date)}
+            onChange={date => setSelectedDate(date || new Date())}
             dateFormat="yyyy.MM.dd"
           />
           <Button
@@ -247,6 +264,7 @@ const SearchProjectPage = () => {
             fontWeight="var(--fw-regular)"
             height={32}
             leftIcon={<ArrowClockwiseIcon />}
+            onClick={handleClickReset}
           >
             초기화
           </Button>
@@ -254,7 +272,10 @@ const SearchProjectPage = () => {
       </div>
       <div className={styles.cardListWrapper}>
         {items.map(item => (
-          <SearchCard item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }} />
+          <SearchCard
+            key={item.projectId}
+            item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
+          />
         ))}
       </div>
     </div>
