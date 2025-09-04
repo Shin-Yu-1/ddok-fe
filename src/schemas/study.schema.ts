@@ -6,13 +6,13 @@ import type { TeamStatus } from '@/types/project';
 import { paginationSchema } from './chat.schema';
 
 export type StudyType =
-  | 'CERTIFICATION'
-  | 'JOB_INTERVIEW'
-  | 'SELF_DEV'
-  | 'LANGUAGE'
-  | 'LIFE'
-  | 'HOBBY'
-  | 'ETC';
+  | '자격증 취득'
+  | '취업/면접'
+  | '자기 개발'
+  | '어학'
+  | '생활'
+  | '취미/교양'
+  | '기타';
 
 export const studyItemSchema = z.object({
   studyId: z.number(),
