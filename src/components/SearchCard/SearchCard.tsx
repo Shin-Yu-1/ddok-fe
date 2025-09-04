@@ -15,6 +15,7 @@ type PreferredAges = {
 
 type SearchCardProps = {
   item: ProjectItem | StudyItem;
+  isLoading?: boolean;
 };
 
 // 타입 가드
@@ -44,7 +45,7 @@ const getStudyTypeText = (type: StudyItem['studyType']) => {
   }
 };
 
-const SearchCard = ({ item }: SearchCardProps) => {
+const SearchCard = ({ item, isLoading }: SearchCardProps) => {
   // 한글 변환
   const getTeamStatusText = (status: TeamStatus) => {
     switch (status) {
@@ -90,6 +91,58 @@ const SearchCard = ({ item }: SearchCardProps) => {
   const formatStartDate = (dateString: string) => {
     return dayjs(dateString).format('YYYY.MM.DD');
   };
+
+  if (isLoading) {
+    return (
+      <div className={`${styles.cardContainer} ${styles.skeleton}`}>
+        <div className={styles.bannerWrapper}>
+          <div className={styles.skeletonBanner}></div>
+          <div className={`${styles.statusBadge} ${styles.skeletonBadge}`}></div>
+        </div>
+
+        <div className={styles.infoWrapper}>
+          <div className={`${styles.title} ${styles.skeletonTitle}`}></div>
+
+          <div className={styles.infoGrid}>
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValue}`}></span>
+            </div>
+
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValueShort}`}></span>
+            </div>
+
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValueShort}`}></span>
+            </div>
+
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValueShort}`}></span>
+            </div>
+
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValueShort}`}></span>
+            </div>
+
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValue}`}></span>
+            </div>
+
+            <div className={styles.infoRow}>
+              <span className={`${styles.label} ${styles.skeletonLabel}`}></span>
+              <span className={`${styles.value} ${styles.skeletonValueShort}`}></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.cardContainer}>
