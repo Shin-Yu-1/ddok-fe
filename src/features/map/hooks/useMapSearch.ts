@@ -18,7 +18,7 @@ interface UseMapSearchOptions {
  * @returns 지도 검색 결과
  */
 export const useMapSearch = (mapBounds: MapBounds | null, options: UseMapSearchOptions = {}) => {
-  const { enabled = true, page = 0, pageSize = 10 } = options;
+  const { enabled = true, page = 0, pageSize = 20 } = options;
 
   const params = mapBounds
     ? {

@@ -69,7 +69,7 @@ const MapPage = () => {
   } = useMapSearch(mapBounds, {
     enabled: false, // 수동으로 호출
     page: currentPage,
-    pageSize: 10,
+    pageSize: 20,
   });
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
