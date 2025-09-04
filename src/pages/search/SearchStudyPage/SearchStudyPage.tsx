@@ -546,7 +546,7 @@ const SearchStudyPage = () => {
           </Button>
         </div>
         <div className={styles.filterOptionsWrapper}>
-          <div className={styles.optionsWrapper}>
+          <div className={styles.optionsGroup}>
             <Select
               placeholder="진행 여부"
               width={154}
