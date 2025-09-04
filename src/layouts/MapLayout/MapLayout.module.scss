@@ -11,10 +11,17 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
-  margin-top: calc(56px + 40px);
+  width: calc(100% - 47px);
+  margin-top: 96px;
   background-color: $white-2;
 
+  @include m.tablet {
+    width: calc(100% - 42px);
+    margin-top: 96px;
+  }
+
   @include m.mobile {
-    margin-top: calc(46px + 35px);
+    width: calc(100% - 37px);
+    margin-top: 81px;
   }
 }
