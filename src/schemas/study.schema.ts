@@ -14,6 +14,22 @@ export type StudyType =
   | '취미/교양'
   | '기타';
 
+/* API REQUEST SCHEMA */
+export const StudySearchRequestSchema = z.object({
+  keyword: z.string(),
+  status: z.custom<TeamStatus>(),
+  type: z.string(),
+  capacity: z.number(),
+  mode: z.string(),
+  ageMin: z.number(),
+  ageMax: z.number(),
+  expectedMonth: z.number(),
+  startDate: z.string(),
+  page: z.number(),
+  size: z.number(),
+});
+export type StudySearchRequest = z.infer<typeof StudySearchRequestSchema>;
+
 export const studyItemSchema = z.object({
   studyId: z.number(),
   title: z.string(),
@@ -32,10 +48,10 @@ export const studyItemSchema = z.object({
 });
 export type StudyItem = z.infer<typeof studyItemSchema>;
 
-export const studyListSchema = z.object({
+export const StudySearchDataSchema = z.object({
   items: z.array(studyItemSchema),
   pagination: paginationSchema,
 });
 
-export const studyListApiResponseSchema = apiResponseSchema(studyListSchema);
-export type StudyListApiResponse = z.infer<typeof studyListApiResponseSchema>;
+export const studySearchApiResponseSchema = apiResponseSchema(StudySearchDataSchema);
+export type StudySearchApiResponse = z.infer<typeof studySearchApiResponseSchema>;
