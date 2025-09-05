@@ -390,18 +390,16 @@ const SearchProjectPage = () => {
 
         {/* 로딩 상태 표시 */}
         {isLoading && (
-          <div style={{ padding: '20px', textAlign: 'center' }}>
-            <span>프로젝트를 불러오는 중...</span>
-          </div>
-        )}
-
-        {/* 검색 결과가 없을 때 */}
-        {!isLoading && projectList.length === 0 && (
           <>
             {Array.from({ length: PAGE_SIZE }).map((_, index) => (
               <SearchCard key={index} isLoading={true} item={null} />
             ))}
           </>
+        )}
+
+        {/* 검색 결과가 없을 때 */}
+        {!isLoading && projectList.length === 0 && (
+          <span className={styles.warning}>프로젝트가 없습니다.</span>
         )}
       </div>
 
