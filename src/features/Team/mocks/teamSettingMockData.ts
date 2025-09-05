@@ -22,7 +22,7 @@ export const teamSettingMockData: TeamSettingData = {
       user: {
         userId: 11,
         nickname: '용',
-        profileImageUrl: 'https://~',
+        profileImageUrl: '/src/assets/images/avatar.png',
         temperature: 66.5,
         mainPosition: '풀스택',
         chatRoomId: null,
@@ -46,7 +46,7 @@ export const teamSettingMockData: TeamSettingData = {
       user: {
         userId: 12,
         nickname: '은',
-        profileImageUrl: 'https://~',
+        profileImageUrl: '/src/assets/images/avatar.png',
         temperature: 36.7,
         mainPosition: '프론트엔드',
         chatRoomId: null,

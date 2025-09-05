@@ -21,8 +21,8 @@ export const teamApplicantsMockData: TeamApplicantListData = {
       user: {
         userId: 11,
         nickname: '이름최대열두자여서채워봄',
-        profileImageUrl: 'https://~',
-        temperature: 36.5,
+        profileImageUrl: '/src/assets/images/avatar.png',
+        temperature: 20.1,
         mainPosition: 'backend',
         chatRoomId: null,
         dmRequestPending: false,
