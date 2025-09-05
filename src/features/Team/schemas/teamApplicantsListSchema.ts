@@ -18,7 +18,7 @@ export const ApplicantSchema = z.object({
 /**
  * 참여 희망자 조회 API 데이터 스키마
  */
-export const TeamApplicantListSchema = z.object({
+export const ApplicantListSchema = z.object({
   teamId: z.number(),
   teamType: z.enum(['PROJECT', 'STUDY']),
   recruitmentId: z.number(),
@@ -30,8 +30,8 @@ export const TeamApplicantListSchema = z.object({
 /**
  * 참여 희망자 조회 API 응답 스키마
  */
-export const TeamApplicantListResponseSchema = z.object({
-  data: TeamApplicantListSchema,
+export const ApplicantListResponseSchema = z.object({
+  data: ApplicantListSchema,
   message: z.string(),
   status: z.number(),
 });
@@ -39,14 +39,14 @@ export const TeamApplicantListResponseSchema = z.object({
 /**
  * 참여 희망자 타입
  */
-export type TeamApplicant = z.infer<typeof ApplicantSchema>;
+export type ApplicantType = z.infer<typeof ApplicantSchema>;
 
 /**
  * 참여 희망자 조회 API 데이터 타입
  */
-export type TeamApplicantListData = z.infer<typeof TeamApplicantListSchema>;
+export type TeamApplicantListData = z.infer<typeof ApplicantListSchema>;
 
 /**
  * 참여 희망자 조회 API 응답 타입
  */
-export type TeamApplicantListResponse = z.infer<typeof TeamApplicantListResponseSchema>;
+export type TeamApplicantListResponse = z.infer<typeof ApplicantListResponseSchema>;
