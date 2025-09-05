@@ -34,7 +34,7 @@ export const UserSchema = z.object({
 /**
  * 팀 멤버 스키마
  */
-export const TeamMemberSchema = z.object({
+export const MemberSchema = z.object({
   memberId: z.number(),
   decidedPosition: z.string(),
   role: z.enum(['LEADER', 'MEMBER']),
@@ -44,6 +44,11 @@ export const TeamMemberSchema = z.object({
 });
 
 /**
+ * 유저 타입
+ */
+export type UserType = z.infer<typeof UserSchema>;
+
+/**
  * 팀 멤버 타입
  */
-export type TeamMember = z.infer<typeof TeamMemberSchema>;
+export type MemberType = z.infer<typeof MemberSchema>;
