@@ -26,6 +26,10 @@
     width: 85px;
     height: 20px;
 
+    &.center {
+      justify-content: center;
+    }
+
     .temperature {
       font-size: $fs-xxxsmall;
     }

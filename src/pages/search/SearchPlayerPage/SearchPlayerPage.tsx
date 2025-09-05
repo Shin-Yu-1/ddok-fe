@@ -5,9 +5,9 @@ import { MagnifyingGlassIcon, WarningCircleIcon } from '@phosphor-icons/react';
 import Input from '@/components/Input/Input';
 import BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
-import type { Pagination } from '@/features/Chat/types/Pagination.types';
 import PlayerCard from '@/features/Player/PlayerCard/PlayerCard';
 import type { Player } from '@/schemas/player.schema';
+import type { Pagination } from '@/types/pagination.types';
 // import { useGetApi } from '@/hooks/useGetApi';
 // import type { playerListApiResponse, Player } from '@/schemas/player.schema';
 
