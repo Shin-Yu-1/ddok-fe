@@ -581,7 +581,7 @@ const SearchProjectPage = () => {
             />
             <Select
               placeholder="희망 나이"
-              width={108}
+              width={114}
               height={32}
               options={ageRangeOptions}
               value={filterOption.age as number | null | undefined}
