@@ -391,6 +391,7 @@ const SearchProjectPage = () => {
       <div className={styles.cardListWrapper}>
         {projectList.map(item => (
           <SearchCard
+            key={item.projectId}
             clickHandle={item => handleClickCard(item as ProjectItem)}
             item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
           />
