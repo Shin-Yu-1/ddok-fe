@@ -1,6 +1,8 @@
 import Button from '@/components/Button/Button';
+import ApplicantRow from '@/features/Team/components/ApplicantRow/ApplicantRow';
 import MemberRow from '@/features/Team/components/MemberRow/MemberRow';
-import ParticipantRow from '@/features/Team/components/ParticipantRow/ParticipantRow';
+import { teamApplicantsMockData } from '@/features/Team/mocks/teamApplicantsListMockData';
+import { teamSettingMockData } from '@/features/Team/mocks/teamSettingMockData';
 
 import styles from './TeamSettingPage.module.scss';
 
@@ -15,10 +17,9 @@ const TeamSettingPage = () => {
           <div className={styles.gridLabel}>담당 포지션</div>
           <div className={styles.gridLabel}>멤버</div>
           <div className={styles.gridLabel}>액션</div>
-
-          <MemberRow />
-          <MemberRow />
-          <MemberRow />
+          {teamSettingMockData.items.map(member => (
+            <MemberRow key={member.memberId} member={member} />
+          ))}
         </div>
       </section>
 
@@ -29,9 +30,9 @@ const TeamSettingPage = () => {
           <div className={styles.gridLabel}>멤버</div>
           <div className={styles.gridLabel}>액션</div>
 
-          <ParticipantRow />
-          <ParticipantRow />
-          <ParticipantRow />
+          {teamApplicantsMockData.items.map(member => (
+            <ApplicantRow key={member.applicantId} member={member} />
+          ))}
         </div>
       </section>
 
