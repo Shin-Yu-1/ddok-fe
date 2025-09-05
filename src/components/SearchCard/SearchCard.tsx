@@ -16,6 +16,7 @@ type PreferredAges = {
 type SearchCardProps = {
   item: ProjectItem | StudyItem | null;
   isLoading?: boolean;
+  clickHandle?: (item: ProjectItem | StudyItem) => void;
 };
 
 // 타입 가드
@@ -23,7 +24,7 @@ const isProjectItem = (item: ProjectItem | StudyItem): item is ProjectItem => {
   return 'projectId' in item;
 };
 
-const SearchCard = ({ item, isLoading }: SearchCardProps) => {
+const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
   if (isLoading || !item) {
     return (
       <div className={`${styles.cardContainer} ${styles.skeleton}`}>
@@ -123,7 +124,12 @@ const SearchCard = ({ item, isLoading }: SearchCardProps) => {
   };
 
   return (
-    <div className={styles.cardContainer}>
+    <div
+      className={styles.cardContainer}
+      onClick={() => {
+        clickHandle(item);
+      }}
+    >
       <div className={styles.bannerWrapper}>
         <img src={item.bannerImageUrl || banner} alt={item.title} />
         <div className={`${styles.statusBadge} ${styles[item.teamStatus.toLowerCase()]}`}>

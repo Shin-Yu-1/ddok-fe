@@ -5,6 +5,7 @@ import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import DatePicker from 'react-datepicker';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
@@ -54,6 +55,7 @@ const PAGE_SIZE = 2;
 const MAX_AUTO_LOADS = 5;
 
 const SearchProjectPage = () => {
+  const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
   const [submittedParams, setSubmittedParams] = useState<Record<string, string | number>>({
@@ -243,6 +245,12 @@ const SearchProjectPage = () => {
     setStartDate(null);
   };
 
+  const handleClickCard = (item: ProjectItem | null) => {
+    if (item) {
+      navigate(`/detail/project/${item.projectId}`);
+    }
+  };
+
   const buildParams = () => {
     const validFilters = Object.entries(filterOption).reduce(
       (acc, [key, value]) => {
@@ -383,7 +391,7 @@ const SearchProjectPage = () => {
       <div className={styles.cardListWrapper}>
         {projectList.map(item => (
           <SearchCard
-            key={item.projectId}
+            clickHandle={item => handleClickCard(item as ProjectItem)}
             item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
           />
         ))}
