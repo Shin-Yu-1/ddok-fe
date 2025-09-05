@@ -8,10 +8,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 20px;
     width: 500px;
     height: 40px;
-    padding: 13px 20px;
+    padding: 13px 15px;
     border: 1px solid $gray-3;
     border-radius: $r-small;
     line-height: 40px;
@@ -19,7 +18,7 @@
     &__left {
       display: flex;
       flex-direction: row;
-      gap: 10px;
+      gap: 15px;
 
       &__img {
         width: 40px;
@@ -31,7 +30,9 @@
         font-weight: $fw-bold;
       }
 
-      &__badges {
+      &__badge {
+        display: flex;
+        align-items: center;
         font-size: $fs-xxxsmall;
       }
     }
@@ -39,7 +40,7 @@
     &__right {
       display: flex;
       flex-direction: row;
-      gap: 20px;
+      gap: 10px;
 
       &__position {
         width: fit-content;
@@ -55,6 +56,8 @@
       }
 
       &__temperature {
+        display: flex;
+        align-items: center;
         font-size: $fs-xxsmall;
       }
     }

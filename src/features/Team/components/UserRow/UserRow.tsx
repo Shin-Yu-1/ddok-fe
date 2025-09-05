@@ -1,3 +1,11 @@
+import { DotsThreeVertical } from '@phosphor-icons/react';
+
+import Button from '@/components/Button/Button';
+import Thermometer from '@/components/Thermometer/Thermometer';
+import BadgeTier from '@/constants/enums/BadgeTier.enum';
+import BadgeType from '@/constants/enums/BadgeType.enum';
+import Badge from '@/features/Badge/Badge';
+
 import type { UserType } from '../../schemas/teamMemberSchema';
 
 import styles from './UserRow.module.scss';
@@ -17,11 +25,27 @@ const User = ({ user }: UserProps) => {
             alt="Banner"
           />
           <div className={styles.user__item__left__nickname}>{user.nickname}</div>
-          <div className={styles.user__item__left__badges}>배지 리스트 표시</div>
+          <div className={styles.user__item__left__badge}>
+            <Badge
+              className={styles.mainBadge}
+              mainBadge={{
+                type: user.mainBadge.type.toUpperCase() as BadgeType,
+                tier: user.mainBadge.tier.toUpperCase() as BadgeTier,
+              }}
+              widthSize="13px"
+            />
+          </div>
         </div>
+
         <div className={styles.user__item__right}>
           <div className={styles.user__item__right__position}>{user.mainPosition}</div>
-          <div className={styles.user__item__right__temperature}>{user.temperature}℃</div>
+          <div className={styles.user__item__right__temperature}>
+            <Thermometer temperature={user.temperature} />
+            {user.temperature}℃
+          </div>
+          <Button width="12" padding="0">
+            <DotsThreeVertical size={20} />
+          </Button>
         </div>
       </div>
     </div>
