@@ -23,7 +23,7 @@ export const teamApplicantsMockData: TeamApplicantListData = {
         nickname: '이름최대열두자여서채워봄',
         profileImageUrl: '/src/assets/images/avatar.png',
         temperature: 20.1,
-        mainPosition: 'backend',
+        mainPosition: '백엔드',
         chatRoomId: null,
         dmRequestPending: false,
         mainBadge: {
