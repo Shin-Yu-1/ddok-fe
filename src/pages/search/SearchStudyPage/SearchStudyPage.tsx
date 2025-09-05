@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import { MagnifyingGlassIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 import { ko } from 'date-fns/locale';
@@ -10,10 +10,10 @@ import SearchCard from '@/components/SearchCard/SearchCard';
 import Select from '@/components/Select/Select';
 import { AGE_RANGES } from '@/constants/ageRanges';
 import { STUDY_TRAITS } from '@/constants/studyTraits';
-import type { StudyType, StudyItem } from '@/schemas/study.schema';
+import { useGetApi } from '@/hooks/useGetApi';
+import type { StudyItem, StudySearchApiResponse } from '@/schemas/study.schema';
 import { useAuthStore } from '@/stores/authStore';
 import type { Pagination } from '@/types/pagination.types';
-import type { TeamStatus } from '@/types/project';
 
 import styles from './SearchStudyPage.module.scss';
 
@@ -52,298 +52,13 @@ const periodOptions = [
   { label: '4개월', value: 4 },
   { label: '5개월 이상', value: 5 },
 ];
-// TODO: API 연동 시 제거
-export const studyListDummy = [
-  {
-    studyId: 1,
-    title: '구지라지 프로젝트',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 4,
-    mode: 'offline',
-    address: '서울 마포구',
-    studyType: '자격증 취득' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 30 },
-    expectedMonth: 3,
-    startDate: '2025-09-10',
-  },
-  {
-    studyId: 2,
-    title: '구지라 프로젝트',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 4,
-    mode: 'offline',
-    address: '서울 마포구',
-    studyType: '자소서' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 30 },
-    expectedMonth: 3,
-    startDate: '2025-09-10',
-  },
-  {
-    studyId: 3,
-    title: '프론트엔드 면접 대비 스터디',
-    teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 6,
-    mode: 'online',
-    address: 'online',
-    studyType: '취업/면접' as StudyType,
-    preferredAges: { ageMin: 22, ageMax: 32 },
-    expectedMonth: 2,
-    startDate: '2025-09-15',
-  },
-  {
-    studyId: 4,
-    title: '영어 회화 스터디',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 5,
-    mode: 'offline',
-    address: '서울 강남구',
-    studyType: '어학' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 35 },
-    expectedMonth: 4,
-    startDate: '2025-09-20',
-  },
-  {
-    studyId: 5,
-    title: '자격증 취득 스터디 - 정보처리기사',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 8,
-    mode: 'offline',
-    address: '부산 해운대구',
-    studyType: '자격증 취득' as StudyType,
-    preferredAges: { ageMin: 21, ageMax: 36 },
-    expectedMonth: 5,
-    startDate: '2025-10-05',
-  },
-  {
-    studyId: 6,
-    title: '독서 토론 모임',
-    teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 10,
-    mode: 'offline',
-    address: '대구 달서구',
-    studyType: '취미/교양' as StudyType,
-    preferredAges: { ageMin: 25, ageMax: 40 },
-    expectedMonth: 6,
-    startDate: '2025-06-15',
-  },
-  {
-    studyId: 7,
-    title: '데이터 분석 프로젝트',
-    teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 7,
-    mode: 'online',
-    address: 'online',
-    studyType: '자기 개발' as StudyType,
-    preferredAges: { ageMin: 23, ageMax: 38 },
-    expectedMonth: 3,
-    startDate: '2025-09-25',
-  },
-  {
-    studyId: 8,
-    title: '포트폴리오 제작 스터디',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 6,
-    mode: 'offline',
-    address: '서울 성동구',
-    studyType: '취업/면접' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 32 },
-    expectedMonth: 2,
-    startDate: '2025-08-30',
-  },
-  {
-    studyId: 9,
-    title: '프로그래밍 알고리즘 스터디',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 8,
-    mode: 'offline',
-    address: '서울 서초구',
-    studyType: '자기 개발' as StudyType,
-    preferredAges: { ageMin: 22, ageMax: 33 },
-    expectedMonth: 4,
-    startDate: '2025-09-05',
-  },
-  {
-    studyId: 10,
-    title: '프리토킹 영어 회화',
-    teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 5,
-    mode: 'online',
-    address: 'online',
-    studyType: '어학' as StudyType,
-    preferredAges: { ageMin: 18, ageMax: 28 },
-    expectedMonth: 3,
-    startDate: '2025-09-08',
-  },
-  {
-    studyId: 11,
-    title: '리더십 개발 스터디',
-    teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 6,
-    mode: 'offline',
-    address: '대전 유성구',
-    studyType: '자기 개발' as StudyType,
-    preferredAges: { ageMin: 27, ageMax: 40 },
-    expectedMonth: 5,
-    startDate: '2025-07-12',
-  },
-  {
-    studyId: 12,
-    title: 'JLPT N1 대비 스터디',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 6,
-    mode: 'offline',
-    address: '서울 종로구',
-    studyType: '어학' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 35 },
-    expectedMonth: 6,
-    startDate: '2025-11-01',
-  },
-  {
-    studyId: 13,
-    title: '사진 촬영 기초 스터디',
-    teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 8,
-    mode: 'offline',
-    address: '부산 수영구',
-    studyType: '취미/교양' as StudyType,
-    preferredAges: { ageMin: 19, ageMax: 29 },
-    expectedMonth: 4,
-    startDate: '2025-09-28',
-  },
-  {
-    studyId: 14,
-    title: '생활습관 개선 챌린지',
-    teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 10,
-    mode: 'online',
-    address: 'online',
-    studyType: '생활' as StudyType,
-    preferredAges: { ageMin: 25, ageMax: 40 },
-    expectedMonth: 2,
-    startDate: '2025-06-10',
-  },
-  {
-    studyId: 15,
-    title: '코딩 부트캠프 준비반',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 12,
-    mode: 'offline',
-    address: '서울 강동구',
-    studyType: '자기 개발' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 30 },
-    expectedMonth: 3,
-    startDate: '2025-09-12',
-  },
-  {
-    studyId: 16,
-    title: '취미로 배우는 수채화',
-    teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 7,
-    mode: 'offline',
-    address: '인천 연수구',
-    studyType: '취미/교양' as StudyType,
-    preferredAges: { ageMin: 23, ageMax: 35 },
-    expectedMonth: 5,
-    startDate: '2025-08-22',
-  },
-  {
-    studyId: 17,
-    title: '프로그래밍 언어 스터디 - Rust',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 6,
-    mode: 'online',
-    address: 'online',
-    studyType: '자기 개발' as StudyType,
-    preferredAges: { ageMin: 22, ageMax: 34 },
-    expectedMonth: 4,
-    startDate: '2025-09-30',
-  },
-  {
-    studyId: 18,
-    title: '면접 모의 스터디',
-    teamStatus: 'RECRUITING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 6,
-    mode: 'offline',
-    address: '서울 노원구',
-    studyType: '취업/면접' as StudyType,
-    preferredAges: { ageMin: 21, ageMax: 30 },
-    expectedMonth: 3,
-    startDate: '2025-10-02',
-  },
-  {
-    studyId: 19,
-    title: '기타 연습 모임',
-    teamStatus: 'CLOSED' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 5,
-    mode: 'offline',
-    address: '광주 북구',
-    studyType: '취미/교양' as StudyType,
-    preferredAges: { ageMin: 20, ageMax: 33 },
-    expectedMonth: 2,
-    startDate: '2025-06-20',
-  },
-  {
-    studyId: 20,
-    title: 'IT 트렌드 리서치 스터디',
-    teamStatus: 'ONGOING' as TeamStatus,
-    bannerImageUrl: '',
-    capacity: 9,
-    mode: 'online',
-    address: 'online',
-    studyType: '기타' as StudyType,
-    preferredAges: { ageMin: 24, ageMax: 38 },
-    expectedMonth: 5,
-    startDate: '2025-09-18',
-  },
-];
-// TODO: API 연동 시 제거
-const tempChunk = ({ page, size }: Pagination) => {
-  const pageSize = Math.max(1, size | 0);
-  const totalItems = studyListDummy.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-  const currentPage = Math.min(Math.max(1, page | 0), totalPages);
-
-  const start = (currentPage - 1) * pageSize;
-  const end = Math.min(start + pageSize, totalItems);
-
-  const items = studyListDummy.slice(start, end);
-
-  return {
-    items,
-    pagination: {
-      currentPage,
-      pageSize,
-      totalPages,
-      totalItems,
-    },
-  };
-};
 
 const PAGE_SIZE = 6;
 const MAX_AUTO_LOADS = 5;
 
 const SearchStudyPage = () => {
   const { isLoggedIn } = useAuthStore();
-  const [pagination, setPagination] = useState<Pagination>({ page: 1, size: PAGE_SIZE });
+  const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
   const [keyword, setKeyword] = useState('');
   const [filterOption, setFilterOption] = useState<FilterOption>({
     status: null, // 진행 여부
@@ -357,50 +72,39 @@ const SearchStudyPage = () => {
     'expected-month': null, // 종료 예정일(?)
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [projectList, setProjectList] = useState<StudyItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [studyList, setStudyList] = useState<StudyItem[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const autoLoadsRef = useRef(0);
-  const isFetchingRef = useRef(false);
+  const {
+    data: responseData,
+    isLoading,
+    refetch,
+  } = useGetApi<StudySearchApiResponse>({
+    url: 'api/studies/search',
+    params: { ...(keyword && { keyword }), ...pagination },
+  });
 
-  const loadProjects = useCallback(async (page: number, isNewSearch: boolean = false) => {
-    if (isFetchingRef.current) return;
-    isFetchingRef.current = true;
-    setIsLoading(true);
-
-    try {
-      const { items: newProjects, pagination: responsePagination } = tempChunk({
-        page,
-        size: PAGE_SIZE,
+  useEffect(() => {
+    if (responseData?.data?.items) {
+      setStudyList((prev: StudyItem[]) => {
+        const safeNewProjects = responseData?.data?.items || [];
+        const existingIds = new Set(prev.map(item => item.studyId));
+        const filteredNewProjects = safeNewProjects.filter(item => !existingIds.has(item.studyId));
+        return [...prev, ...filteredNewProjects];
       });
+    }
 
-      setProjectList(prev => {
-        if (isNewSearch) {
-          return newProjects;
-        } else {
-          // 중복 제거를 위해 기존 항목의 ID들을 Set으로 관리
-          const existingIds = new Set(prev.map(item => item.studyId));
-          const filteredNewProjects = newProjects.filter(item => !existingIds.has(item.studyId));
-          return [...prev, ...filteredNewProjects];
-        }
-      });
-
-      // 더 이상 로드할 데이터가 없는지 확인
+    if (responseData?.data?.pagination) {
+      const responsePagination = responseData?.data?.pagination;
       setHasMore(responsePagination.currentPage < responsePagination.totalPages);
 
-      // pagination 상태 업데이트
       setPagination({
         page: responsePagination.currentPage,
         size: responsePagination.pageSize,
       });
-    } catch (error) {
-      console.error('플레이어 목록 로드 실패:', error);
-    } finally {
-      isFetchingRef.current = false;
-      setIsLoading(false);
     }
-  }, []);
+  }, [responseData]);
 
   // 무한 스크롤을 위한 Intersection Observer 설정
   useEffect(() => {
@@ -414,7 +118,8 @@ const SearchStudyPage = () => {
           autoLoadsRef.current < MAX_AUTO_LOADS
         ) {
           autoLoadsRef.current += 1;
-          loadProjects(pagination.page + 1, false);
+          // loadProjects(pagination.page + 1, false);
+          refetch();
         }
       },
       {
@@ -432,12 +137,12 @@ const SearchStudyPage = () => {
         observer.unobserve(sentinelRef.current);
       }
     };
-  }, [loadProjects, hasMore, isLoading, pagination.page]);
+  }, [hasMore, isLoading, pagination.page]);
 
   // 초기 데이터 로드
-  useEffect(() => {
-    loadProjects(1, true);
-  }, []);
+  // useEffect(() => {
+  //   loadProjects(1, true);
+  // }, []);
 
   /* 옵션 세팅 */
   const studyOptions = STUDY_TRAITS.reduce(
@@ -494,10 +199,10 @@ const SearchStudyPage = () => {
     setSelectedDate(new Date());
     // 초기화 후 첫 페이지부터 다시 로드
     autoLoadsRef.current = 0;
-    setProjectList([]); // 기존 데이터 초기화
+    setStudyList([]); // 기존 데이터 초기화
     setHasMore(true);
     setPagination({ page: 1, size: PAGE_SIZE });
-    loadProjects(1, true);
+    refetch();
   };
 
   const handleClickSearch = () => {
@@ -508,10 +213,10 @@ const SearchStudyPage = () => {
 
     // 검색 시 첫 페이지부터 다시 로드
     autoLoadsRef.current = 0;
-    setProjectList([]); // 기존 데이터 초기화
+    setStudyList([]); // 기존 데이터 초기화
     setHasMore(true);
     setPagination({ page: 1, size: PAGE_SIZE });
-    loadProjects(1, true);
+    refetch();
   };
 
   return (
@@ -618,7 +323,8 @@ const SearchStudyPage = () => {
       </div>
 
       <div className={styles.cardListWrapper}>
-        {projectList.map(item => (
+        {studyList.length == 0 && <span className={styles.warning}>스터디가 없습니다.</span>}
+        {studyList.map(item => (
           <SearchCard
             key={item.studyId}
             item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
