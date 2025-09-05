@@ -1,11 +1,10 @@
-import type { MapItem } from '../types';
+import type { MapPanelItem } from '../types';
 
 /**
- * 지도 패널에서 사용할 목 데이터
- * 각 카테고리별 샘플 데이터 포함
+ * 지도 패널 목 데이터
  */
 
-export const panelMockData: MapItem[] = [
+export const panelMockData: MapPanelItem[] = [
   // 프로젝트 데이터
   {
     category: 'project',
@@ -68,10 +67,21 @@ export const panelMockData: MapItem[] = [
       longitude: 126.977,
       address: '서울특별시 강남구 테헤란로',
     },
+    position: '백엔드',
+    isMine: false,
+    mainBadge: {
+      type: 'login',
+      tier: 'bronze',
+    },
+    abandonBadge: {
+      isGranted: true,
+      count: 5,
+    },
+    temperature: 36.5,
     profileImageUrl: '/src/assets/images/avatar.png',
   },
 
-  // 카페 데이터
+  // 추천 장소 데이터
   {
     category: 'cafe',
     cafeId: 1,

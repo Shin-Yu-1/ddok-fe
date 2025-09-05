@@ -7,7 +7,7 @@ export const useActiveRoute = () => {
     map: pathname === '/map',
     project: pathname.includes('/project'),
     study: pathname.includes('/study'),
-    player: pathname === '/search/player',
+    player: pathname.includes('/search/player') || pathname.includes('/profile/user'),
     ranking: pathname === '/ranking',
   };
 

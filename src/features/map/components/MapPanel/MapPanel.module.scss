@@ -100,9 +100,10 @@
 
 .panel__list {
   display: flex;
-  flex: 1; // 페이지네이션 구현 시 사라질 수 있음
-  flex-direction: column; // 페이지네이션 구현 시 사라질 수 있음
+  flex: 1;
+  flex-direction: column;
   gap: 0;
+  min-height: 0; // 페이지네이션과 함께 사용할 때 올바른 스크롤을 위해 필요
   overflow-y: auto;
 
   &__item__divider {

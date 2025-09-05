@@ -1,0 +1,137 @@
+@use '@/styles/variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.mapSection {
+  position: relative;
+  border: 1px solid $gray-4;
+  border-radius: $r-small;
+  overflow: hidden;
+}
+
+.map {
+  position: relative;
+  width: 100%;
+  background-color: $gray-3;
+}
+
+.mapError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 200px;
+  font-size: $fs-small;
+  color: $gray-2;
+  background-color: $gray-3;
+
+  svg {
+    opacity: 0.5;
+  }
+}
+
+.mapControls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.navigateButton,
+.recenterButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border: 1px solid rgba($gray-3, 0.3);
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  color: $blue-1;
+  background-color: rgba($white-1, 0.95);
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: $white-1;
+    background-color: $blue-1;
+    box-shadow: 0 2px 8px rgba($blue-1, 0.2);
+    transform: translateY(-1px);
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.recenterButton {
+  min-width: auto;
+  padding: 8px;
+}
+
+.locationInfo {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba($blue-1, 0.2);
+  border-radius: $r-xsmall;
+  background-color: rgba($blue-1, 0.05);
+}
+
+.iconSection {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.addressSection {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.region {
+  font-size: $fs-small;
+  font-weight: $fw-bold;
+  color: $black-3;
+}
+
+.detail {
+  font-size: $fs-xxsmall;
+  font-weight: $fw-regular;
+  line-height: 1.4;
+  color: $gray-1;
+}
+
+.mapLinkButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid rgba($blue-1, 0.3);
+  border-radius: $r-xxsmall;
+  color: $blue-1;
+  background-color: rgba($blue-1, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: $white-1;
+    background-color: $blue-1;
+    transform: scale(1.05);
+  }
+}

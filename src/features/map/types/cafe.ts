@@ -43,11 +43,14 @@ export interface CafeReviewResponse {
   cafeReviews: CafeReview[];
 }
 
-/** 패널의 추천 장소 아이템 정보 */
-export interface Cafe extends BaseMapItem {
-  category: 'cafe';
+/** 지도상의 추천 장소 정보 */
+export interface CafeMapItem extends BaseMapItem {
   cafeId: number;
   title: string;
+}
+
+/** 패널의 추천 장소 아이템 정보 */
+export interface CafePanelItem extends CafeMapItem {
   bannerImageUrl: string;
 }
 

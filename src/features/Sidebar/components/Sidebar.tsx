@@ -118,11 +118,8 @@ const Sidebar = () => {
         }
       }
       case 'map':
-        return (
-          <SidePanel title="지도" {...sectionProps}>
-            <div>지도임다</div>
-          </SidePanel>
-        );
+        // map 섹션은 MapPage에서 처리하므로 SidePanel을 렌더링하지 않음
+        return null;
       default:
         return null;
     }

@@ -1,52 +1,37 @@
-import { MapItemStatusFilter } from '../../../constants/MapItemStatusFilter.enum';
+import type { StudyPanelItem } from '@/features/map/types';
+import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
+
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelStudyItemProps {
-  category: string;
-  studyId: number;
-  title: string;
-  location: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  };
-  teamStatus: string;
-  bannerImageUrl: string;
+  study: StudyPanelItem;
   onItemClick: () => void;
 }
 
-const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({
-  //   category,
-  //   studyId,
-  title,
-  //   location: { latitude, longitude, address },
-  teamStatus,
-  bannerImageUrl,
-  onItemClick,
-}) => {
+const MapPanelStudyItem: React.FC<MapPanelStudyItemProps> = ({ study, onItemClick }) => {
   return (
     <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>
         <div className={styles.panel__list__item__img}>
-          <img src={bannerImageUrl} alt="Banner" />
+          <img src={study.bannerImageUrl} alt="Banner" />
         </div>
         <div className={styles.panel__list__item__info}>
-          <div className={styles.panel__list__item__title}>{title}</div>
+          <div className={styles.panel__list__item__title}>{study.title}</div>
           <div className={styles.panel__list__item__category}>스터디</div>
         </div>
       </div>
-      {teamStatus &&
-        (teamStatus === 'RECRUITING' ? (
+      {study.teamStatus &&
+        (study.teamStatus === TeamStatus.RECRUITING ? (
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__recruiting}`}
           >
-            {MapItemStatusFilter.RECRUITING}
+            {MAP_ITEM_STATUS_LABELS.RECRUITING}
           </div>
         ) : (
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__ongoing}`}
           >
-            {MapItemStatusFilter.ONGOING}
+            {MAP_ITEM_STATUS_LABELS.ONGOING}
           </div>
         ))}
     </div>

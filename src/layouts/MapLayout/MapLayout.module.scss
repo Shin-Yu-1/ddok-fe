@@ -1,0 +1,20 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.layoutContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.contentContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(56px + 40px);
+  background-color: $white-2;
+
+  @include m.mobile {
+    margin-top: calc(46px + 35px);
+  }
+}

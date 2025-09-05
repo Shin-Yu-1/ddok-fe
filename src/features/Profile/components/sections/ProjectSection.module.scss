@@ -1,0 +1,198 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.projectSection {
+  position: relative;
+  padding: 20px;
+  border: 0.7px solid v.$gray-3;
+  border-radius: v.$r-small;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    padding: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  @include m.font-small-title;
+
+  margin: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-description;
+  }
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+}
+
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  @include m.mobile {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+}
+
+.projectItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 0.5px solid v.$gray-3;
+  border-radius: v.$r-xxsmall;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+.projectIcon {
+  flex-shrink: 0;
+  width: 32px;
+  font-size: 24px;
+  text-align: center;
+
+  @include m.mobile {
+    width: 24px;
+    font-size: 20px;
+  }
+}
+
+.projectInfo {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  min-width: 0;
+}
+
+.projectTitle {
+  @include m.font-sub-description;
+
+  margin: 0;
+  font-weight: v.$fw-regular;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-text;
+  }
+}
+
+.projectDate {
+  @include m.font-tiny-text;
+
+  margin: 0;
+  color: v.$gray-1;
+}
+
+.projectStatus {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+
+  @include m.mobile {
+    align-items: center;
+  }
+}
+
+.statusBadge {
+  @include m.font-text;
+
+  padding: 2px 12px;
+  border-radius: v.$r-xxsmall;
+  font-weight: v.$fw-medium;
+  white-space: nowrap;
+
+  &.status-ongoing {
+    color: v.$white-3;
+    background-color: v.$blue-1;
+  }
+
+  &.status-completed {
+    border: 1px solid v.$gray-3;
+    color: v.$black-4;
+    background-color: v.$white-2;
+  }
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 3px 8px;
+  }
+}
+
+.showMoreContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.showMoreButton {
+  @include m.font-text;
+
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: v.$r-xsmall;
+  color: v.$gray-1;
+  background-color: transparent;
+  transition: color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: v.$black-4;
+  }
+
+  &:active {
+    color: v.$black-1;
+  }
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 6px 12px;
+  }
+}
