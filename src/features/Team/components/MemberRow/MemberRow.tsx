@@ -1,13 +1,19 @@
 import Button from '@/components/Button/Button';
-import User from '@/features/Team/components/User/User';
+import UserRow from '@/features/Team/components/UserRow/UserRow';
+
+import type { MemberType } from '../../schemas/teamMemberSchema';
 
 import styles from './MemberRow.module.scss';
 
-const MemberRow = () => {
+interface MemberRowProps {
+  member: MemberType;
+}
+
+const MemberRow = ({ member }: MemberRowProps) => {
   return (
     <>
-      <div className={styles.position}>포지션</div>
-      <User />
+      <div className={styles.position}>{member.decidedPosition}</div>
+      <UserRow user={member.user} />
       <div className={styles.actionContainer}>
         <Button
           className={styles.action}
