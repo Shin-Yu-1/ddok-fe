@@ -12,7 +12,10 @@ interface MemberRowProps {
 const MemberRow = ({ member }: MemberRowProps) => {
   return (
     <>
-      <div className={styles.position}>{member.decidedPosition}</div>
+      <div className={styles.positionContainer}>
+        {member.role === 'LEADER' ? <div className={styles.leader}>팀장</div> : null}
+        <div className={styles.position}>{member.decidedPosition}</div>
+      </div>
       <UserRow user={member.user} />
       <div className={styles.actionContainer}>
         <Button
