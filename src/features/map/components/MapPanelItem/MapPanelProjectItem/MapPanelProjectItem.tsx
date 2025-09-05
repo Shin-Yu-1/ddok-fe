@@ -1,52 +1,37 @@
-import { MapItemStatusFilter } from '../../../constants/MapItemStatusFilter.enum';
+import type { ProjectPanelItem } from '@/features/map/types';
+import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
+
 import styles from '../MapPanelItem.module.scss';
 
 interface MapPanelProjectItemProps {
-  category: string;
-  projectId: number;
-  title: string;
-  location: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  };
-  teamStatus: string;
-  bannerImageUrl: string;
+  project: ProjectPanelItem;
   onItemClick: () => void;
 }
 
-const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({
-  //   category,
-  //   projectId,
-  title,
-  //   location: { latitude, longitude, address },
-  teamStatus,
-  bannerImageUrl,
-  onItemClick,
-}) => {
+const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({ project, onItemClick }) => {
   return (
     <div className={styles.panel__list__item} onClick={onItemClick}>
       <div className={styles.panel__list__item__user}>
         <div className={styles.panel__list__item__img}>
-          <img src={bannerImageUrl} alt="Banner" />
+          <img src={project.bannerImageUrl} alt="Banner" />
         </div>
         <div className={styles.panel__list__item__info}>
-          <div className={styles.panel__list__item__title}>{title}</div>
+          <div className={styles.panel__list__item__title}>{project.title}</div>
           <div className={styles.panel__list__item__category}>프로젝트</div>
         </div>
       </div>
-      {teamStatus &&
-        (teamStatus === 'RECRUITING' ? (
+      {project.teamStatus &&
+        (project.teamStatus === TeamStatus.RECRUITING ? (
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__recruiting}`}
           >
-            {MapItemStatusFilter.RECRUITING}
+            {MAP_ITEM_STATUS_LABELS.RECRUITING}
           </div>
         ) : (
           <div
             className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__ongoing}`}
           >
-            {MapItemStatusFilter.ONGOING}
+            {MAP_ITEM_STATUS_LABELS.ONGOING}
           </div>
         ))}
     </div>

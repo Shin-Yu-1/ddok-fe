@@ -104,14 +104,24 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
       const isApplied = position.isApplied;
       const isAvailable = position.isAvailable;
 
+      // 확정된 포지션
       if (isConfirmed) {
         return <button className={`${styles.actionButton} ${styles.confirmed}`}>확정</button>;
       }
 
+      // 지원한 포지션 (취소 가능)
       if (isApplied) {
-        return <button className={`${styles.actionButton} ${styles.applied}`}>지원하기</button>;
+        return (
+          <button
+            className={`${styles.actionButton} ${styles.cancel}`}
+            onClick={() => onApply?.(position.position)}
+          >
+            지원 취소
+          </button>
+        );
       }
 
+      // 지원 불가능한 포지션
       if (!isAvailable) {
         return (
           <button className={`${styles.actionButton} ${styles.disabled}`} disabled>
@@ -120,6 +130,7 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
         );
       }
 
+      // 지원 가능한 포지션
       return (
         <button
           className={`${styles.actionButton} ${styles.selectable}`}
@@ -161,7 +172,8 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
             <div className={styles.headerCell}>확정 인원</div>
           )}
           <div className={styles.headerCell}>본인 포지션 선택</div>
-          <div className={styles.headerCell}>삭제</div>
+          {/* detail 페이지에서는 삭제 컬럼 헤더도 숨김 */}
+          {pageType !== 'detail' && <div className={styles.headerCell}>삭제</div>}
         </div>
 
         {/* 바디 */}
@@ -190,21 +202,23 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
               {/* 액션 버튼 */}
               <div className={styles.bodyCell}>{renderActionButton(position)}</div>
 
-              {/* 삭제 버튼 */}
-              <div className={styles.bodyCell}>
-                {canRemovePosition(position) ? (
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => handleRemovePosition(position.position)}
-                  >
-                    <TrashSimple size={16} weight="regular" />
-                  </button>
-                ) : (
-                  <button className={styles.deleteButton} disabled>
-                    <Prohibit size={16} weight="regular" />
-                  </button>
-                )}
-              </div>
+              {/* 삭제 버튼 - detail 페이지에서는 표시하지 않음 */}
+              {pageType !== 'detail' && (
+                <div className={styles.bodyCell}>
+                  {canRemovePosition(position) ? (
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => handleRemovePosition(position.position)}
+                    >
+                      <TrashSimple size={16} weight="regular" />
+                    </button>
+                  ) : (
+                    <button className={styles.deleteButton} disabled>
+                      <Prohibit size={16} weight="regular" />
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

@@ -1,11 +1,102 @@
-@use '@/styles/variables' as *;
+@use '@/styles/variables' as v;
 @use '@/styles/mixins' as m;
 
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
-.container {
-  background-color: $blue-1;
+.userProfilePage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: v.$white-1;
 }
 
-.title {
+.content {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 0;
+}
+
+.profileView {
+  width: 100%;
+}
+
+.loadingContainer,
+.noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+
+  p {
+    @include m.font-description;
+
+    margin: 0;
+    color: v.$gray-1;
+  }
+}
+
+.errorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.errorContent {
+  max-width: 400px;
+  text-align: center;
+}
+
+.errorTitle {
   @include m.font-title;
+
+  margin: 0 0 12px;
+  color: v.$red-1;
+
+  @include m.mobile {
+    @include m.font-subtitle;
+  }
+}
+
+.errorMessage {
+  @include m.font-description;
+
+  margin: 0 0 20px;
+  color: v.$gray-1;
+
+  @include m.mobile {
+    @include m.font-sub-description;
+  }
+}
+
+.backButton {
+  @include m.font-sub-description;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: v.$black-4;
+  }
+
+  &:active:not(:disabled) {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    @include m.font-text;
+
+    padding: 8px 12px;
+  }
 }

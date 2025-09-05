@@ -1,69 +1,74 @@
 @use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
 
-// TODO: 레이아웃 잡은 뒤 수정 필요할 수 있음
 .container {
+  display: flex;
   width: 100%;
   height: 100%;
-}
-
-.map__header {
-  width: 100%;
-  height: 56px;
-  line-height: 56px;
-  text-align: center;
-  background-color: $white-3;
-}
-
-.map__subHeader {
-  width: 100%;
-  height: 41px;
-  line-height: 41px;
-  text-align: center;
-  background-color: $white-1;
 }
 
 .map__content {
   display: flex;
-  flex-direction: row;
+  flex: 1;
+  flex-direction: column;
   width: 100%;
   height: calc(100vh - 97px);
-}
 
-.map__sidebar {
-  width: 47px;
-  height: 100%;
-  line-height: 47px;
-  background-color: $gray-4;
-  text-orientation: upright;
-  writing-mode: vertical-rl;
-}
+  @include m.tablet {
+    height: calc(100vh - 97px);
+  }
 
-.map__sidebarToggleBtn {
-  cursor: pointer;
+  @include m.mobile {
+    height: calc(100vh - 81px);
+  }
 }
 
 .map__panelContainer {
   position: absolute;
-  top: 97px;
-  left: 47px;
+  top: 96px;
+  left: 47.5px;
   z-index: 100;
   width: 363px;
-  height: calc(100% - 97px);
+  height: calc(100% - 96px);
   background-color: $white-3;
+
+  @include m.tablet {
+    top: 96px;
+    left: 42.5px;
+    height: calc(100% - 96px);
+  }
+
+  @include m.mobile {
+    top: 81px;
+    left: 37.5px;
+    height: calc(100% - 81px);
+  }
 }
 
 .map__subPanelContainer {
   position: absolute;
-  top: 97px;
-  left: 410px;
+  top: 96px;
+  left: 410.5px;
   z-index: 1000;
   width: 300px;
-  height: calc(100% - 97px);
+  height: calc(100% - 96px);
   background-color: $white-3;
+
+  @include m.tablet {
+    top: 96px;
+    left: 405.5px;
+    height: calc(100% - 96px);
+  }
+
+  @include m.mobile {
+    top: 81px;
+    left: 400.5px;
+    height: calc(100% - 81px);
+  }
 }
 
 .map__container {
-  width: calc(100% - 47px);
+  width: 100%;
   height: 100%;
 }
 
@@ -84,18 +89,18 @@
   line-height: 50px;
   text-align: center;
   color: $gray-2;
-  background-color: $white-2;
+  background-color: $white-3;
   transform: translateY(-50%);
   cursor: pointer;
 
   &:hover {
-    background-color: $white-1;
+    background-color: $white-2;
   }
 }
 
 .map__reloadBtn {
   position: absolute;
-  top: 120px;
+  bottom: 25px;
   left: 50%;
   z-index: 1;
   transform: translateX(-50%);

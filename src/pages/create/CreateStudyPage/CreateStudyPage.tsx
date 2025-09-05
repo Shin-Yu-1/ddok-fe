@@ -5,6 +5,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
+import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
 import PostCapacitySelector from '@/features/post/components/PostCapacitySelector/PostCapacitySelector';
 import PostDateSelector from '@/features/post/components/PostDateSelector/PostDateSelector';
 import PostDurationSlider from '@/features/post/components/PostDurationSlider/PostDurationSlider';
@@ -31,6 +32,7 @@ const CreateStudyPage = () => {
     updateExpectedStart,
     updateCapacity,
     updateExpectedMonth,
+    updateBannerImage,
     isValid,
   } = useCreateStudyForm();
 
@@ -134,7 +136,12 @@ const CreateStudyPage = () => {
     <>
       <h1 className={styles.title}>CreateStudyPage</h1>
       <div className={styles.container}>
-        <div className={styles.bannerImage}>배너 이미지 섹션</div>
+        <div className={styles.bannerImage}>
+          <BannerImageSection
+            bannerImage={formData.bannerImage}
+            onImageChange={updateBannerImage}
+          />
+        </div>
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>

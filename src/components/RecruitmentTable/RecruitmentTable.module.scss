@@ -30,6 +30,16 @@
   &[data-page-type='create'] {
     grid-template-columns: 1fr 140px 60px;
   }
+
+  // detail 페이지: 포지션명 + 지원인원 + 확정인원 + 선택 (4컬럼, 삭제 없음)
+  &[data-page-type='detail'] {
+    grid-template-columns: 2fr 80px 80px 120px;
+  }
+
+  // edit 페이지: 포지션명 + 지원인원 + 확정인원 + 선택 + 삭제 (5컬럼)
+  &[data-page-type='edit'] {
+    grid-template-columns: 2fr 80px 80px 120px 60px;
+  }
 }
 
 .tableBody {
@@ -50,6 +60,16 @@
   // Create 페이지에서는 지원/확정 인원 컬럼이 없음
   &[data-page-type='create'] {
     grid-template-columns: 1fr 140px 60px;
+  }
+
+  // detail 페이지: 4컬럼 (삭제 컬럼 없음)
+  &[data-page-type='detail'] {
+    grid-template-columns: 2fr 80px 80px 120px;
+  }
+
+  // edit 페이지: 5컬럼
+  &[data-page-type='edit'] {
+    grid-template-columns: 2fr 80px 80px 120px 60px;
   }
 }
 

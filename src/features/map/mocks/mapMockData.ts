@@ -1,4 +1,11 @@
-export const mapMockData = [
+import type { MapItem } from '../types';
+
+/**
+ * 지도 목 데이터
+ */
+
+export const mapMockData: MapItem[] = [
+  // 프로젝트 데이터
   {
     category: 'project',
     projectId: 1,
@@ -21,6 +28,8 @@ export const mapMockData = [
     },
     teamStatus: 'ONGOING',
   },
+
+  // 스터디 데이터
   {
     category: 'study',
     studyId: 1,
@@ -43,6 +52,8 @@ export const mapMockData = [
     },
     teamStatus: 'ONGOING',
   },
+
+  // 플레이어 데이터
   {
     category: 'player',
     userId: 1,
@@ -55,6 +66,8 @@ export const mapMockData = [
     position: '백엔드',
     isMine: false,
   },
+
+  // 추천 장소 데이터
   {
     category: 'cafe',
     cafeId: 1,
@@ -63,6 +76,16 @@ export const mapMockData = [
       latitude: 37.564,
       longitude: 126.976,
       address: '서울특별시 강남구 테헤란로…',
+    },
+  },
+  {
+    category: 'cafe',
+    cafeId: 2,
+    title: '새로운 카페',
+    location: {
+      latitude: 37.563,
+      longitude: 126.977,
+      address: '서울특별시 강남구 테헤란로',
     },
   },
 ];
