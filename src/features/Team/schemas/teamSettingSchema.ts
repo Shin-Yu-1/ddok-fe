@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { TeamMemberSchema } from './teamMemberSchema';
+import { MemberSchema } from './teamMemberSchema';
 
 /**
  * 페이지네이션 정보 스키마
@@ -21,7 +21,7 @@ export const TeamSettingSchema = z.object({
   teamTitle: z.string(),
   recruitmentId: z.number(),
   isLeader: z.boolean(),
-  items: z.array(TeamMemberSchema),
+  items: z.array(MemberSchema),
   pagination: PaginationSchema,
 });
 
