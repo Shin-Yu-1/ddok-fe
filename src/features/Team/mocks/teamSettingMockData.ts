@@ -23,7 +23,7 @@ export const teamSettingMockData: TeamSettingData = {
         userId: 11,
         nickname: '용',
         profileImageUrl: 'https://~',
-        temperature: 36.5,
+        temperature: 66.5,
         mainPosition: '풀스택',
         chatRoomId: null,
         dmRequestPending: false,
