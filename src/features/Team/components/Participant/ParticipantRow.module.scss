@@ -1,0 +1,22 @@
+@use '@/styles/variables' as *;
+
+.position {
+  width: fit-content;
+  margin: auto;
+  padding: 5px 12px;
+  border: 1px solid $gray-3;
+  border-radius: $r-small;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  text-align: center;
+  background-color: $white-2;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+  text-align: center;
+}
