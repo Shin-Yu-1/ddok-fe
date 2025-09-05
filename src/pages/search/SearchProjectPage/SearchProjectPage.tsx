@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import { MagnifyingGlassIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 import { ko } from 'date-fns/locale';
@@ -55,20 +55,20 @@ const MAX_AUTO_LOADS = 5;
 
 const SearchProjectPage = () => {
   const { isLoggedIn } = useAuthStore();
-  const [pagination, setPagination] = useState<Pagination>({ page: 1, size: PAGE_SIZE });
+  const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
   const [submittedParams, setSubmittedParams] = useState<Record<string, string | number>>({
     page: 0,
     size: PAGE_SIZE,
   });
   const [keyword, setKeyword] = useState('');
   const [filterOption, setFilterOption] = useState<FilterOption>({
-    status: null, // 진행 여부
-    position: null, // 모집 포지션
-    capacity: null, // 모집 입원
-    mode: null, // 진행 방식
-    ageMin: null, // 희망 나이대(이상)
-    ageMax: null, // 희망 나이대(미만)
-    expectedMonth: null, // 예상 개월 수
+    status: null,
+    position: null,
+    capacity: null,
+    mode: null,
+    ageMin: null,
+    ageMax: null,
+    expectedMonth: null,
     startDate: null,
   });
   const [age, setAge] = useState<number | null>(null);
@@ -77,70 +77,109 @@ const SearchProjectPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const autoLoadsRef = useRef(0);
+  const isFetchingRef = useRef(false);
+  const lastLoadedPageRef = useRef(-1);
+  const paramsChangedRef = useRef(false);
 
-  const {
-    data: responseData,
-    isLoading,
-    refetch,
-  } = useGetApi<ProjectSearchApiResponse>({
+  const { data: responseData, isLoading } = useGetApi<ProjectSearchApiResponse>({
     url: 'api/projects/search',
     params: submittedParams,
   });
 
+  // API 응답 처리
   useEffect(() => {
-    if (responseData?.data?.items) {
-      setProjectList((prev: ProjectItem[]) => {
-        const safeNewItems = responseData?.data?.items || [];
+    if (!responseData?.data?.items) return;
+
+    const newItems = responseData.data.items;
+    const responsePagination = responseData.data.pagination;
+
+    if (paramsChangedRef.current || responsePagination.currentPage === 0) {
+      setProjectList(newItems);
+      paramsChangedRef.current = false;
+    } else {
+      setProjectList(prev => {
         const existingIds = new Set(prev.map(item => item.projectId));
-        const filteredNewItems = safeNewItems.filter(item => !existingIds.has(item.projectId));
+        const filteredNewItems = newItems.filter(item => !existingIds.has(item.projectId));
         return [...prev, ...filteredNewItems];
       });
     }
 
-    if (responseData?.data?.pagination) {
-      const responsePagination = responseData?.data?.pagination;
-      setHasMore(responsePagination.currentPage < responsePagination.totalPages);
+    setHasMore(responsePagination.currentPage < responsePagination.totalPages - 1);
 
-      setPagination({
-        page: responsePagination.currentPage,
-        size: responsePagination.pageSize,
-      });
-    }
+    setPagination({
+      page: responsePagination.currentPage,
+      size: responsePagination.pageSize,
+    });
+
+    lastLoadedPageRef.current = responsePagination.currentPage;
+    isFetchingRef.current = false;
   }, [responseData]);
 
-  // 무한 스크롤을 위한 Intersection Observer 설정
   useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       entries => {
-        const target = entries[0];
+        const entry = entries[0];
         if (
-          target.isIntersecting &&
+          entry.isIntersecting &&
           hasMore &&
           !isLoading &&
+          !isFetchingRef.current &&
           autoLoadsRef.current < MAX_AUTO_LOADS
         ) {
           autoLoadsRef.current += 1;
-          refetch();
+          isFetchingRef.current = true;
+
+          const nextPage = pagination.page + 1;
+          const updatedParams = {
+            ...submittedParams,
+            page: nextPage,
+          };
+
+          setSubmittedParams(updatedParams);
         }
       },
       {
+        root: null,
+        rootMargin: '100px 0px',
         threshold: 0.1,
-        rootMargin: '100px',
       }
     );
 
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, isLoading, pagination.page, submittedParams]);
+
+  const ensureScrollable = useCallback(() => {
+    const listEl = document.querySelector(`.${styles.cardListWrapper}`) as HTMLElement | null;
+    const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
+    const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
+    const scrollable = isListScrollable || isPageScrollable;
+
+    if (!scrollable && !isFetchingRef.current && hasMore && autoLoadsRef.current < MAX_AUTO_LOADS) {
+      autoLoadsRef.current += 1;
+      isFetchingRef.current = true;
+
+      const nextPage = pagination.page + 1;
+      const updatedParams = {
+        ...submittedParams,
+        page: nextPage,
+      };
+
+      setSubmittedParams(updatedParams);
     }
+  }, [hasMore, pagination.page, submittedParams]);
 
-    return () => {
-      if (sentinelRef.current) {
-        observer.unobserve(sentinelRef.current);
-      }
-    };
-  }, [hasMore, isLoading, pagination.page]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ensureScrollable();
+    }, 100);
 
-  /* 옵션 세팅 */
+    return () => clearTimeout(timer);
+  }, [projectList, ensureScrollable]);
+
   const positionOptions = POSITIONS.reduce(
     (acc, cur) => {
       acc.push({ label: cur.name, value: cur.name });
@@ -166,7 +205,6 @@ const SearchProjectPage = () => {
     return options;
   })();
 
-  /* 이벤트 동작 함수 */
   const handleChangeKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
   };
@@ -197,7 +235,6 @@ const SearchProjectPage = () => {
       position: null,
       capacity: null,
       mode: null,
-      age: null,
       ageMin: null,
       ageMax: null,
       expectedMonth: null,
@@ -230,11 +267,14 @@ const SearchProjectPage = () => {
 
   const handleClickSearch = () => {
     autoLoadsRef.current = 0;
+    isFetchingRef.current = false;
+    lastLoadedPageRef.current = -1;
+    paramsChangedRef.current = true;
     setProjectList([]);
     setHasMore(true);
 
-    setSubmittedParams(buildParams());
-    refetch();
+    const newParams = buildParams();
+    setSubmittedParams(newParams);
   };
 
   return (
@@ -262,7 +302,7 @@ const SearchProjectPage = () => {
             backgroundColor="var(--white-3)"
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
             onChange={handleChangeKeyword}
-          ></Input>
+          />
 
           <Button size="md" variant="secondary" radius="xsm" onClick={handleClickSearch}>
             검색하기
@@ -347,7 +387,25 @@ const SearchProjectPage = () => {
             item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
           />
         ))}
+
+        {/* 로딩 상태 표시 */}
+        {isLoading && (
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <span>프로젝트를 불러오는 중...</span>
+          </div>
+        )}
+
+        {/* 검색 결과가 없을 때 */}
+        {!isLoading && projectList.length === 0 && (
+          <>
+            {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <SearchCard key={index} isLoading={true} item={null} />
+            ))}
+          </>
+        )}
       </div>
+
+      {/* 무한 스크롤을 위한 센티널 */}
       <div ref={sentinelRef} style={{ height: 1 }} />
     </div>
   );
