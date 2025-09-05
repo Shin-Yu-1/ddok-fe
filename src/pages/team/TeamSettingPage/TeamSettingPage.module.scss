@@ -16,6 +16,10 @@
   @include m.font-title;
 }
 
+.subtitle {
+  @include m.font-description;
+}
+
 .label {
   @include m.font-description;
 

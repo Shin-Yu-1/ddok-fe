@@ -9,7 +9,10 @@ import styles from './TeamSettingPage.module.scss';
 const TeamSettingPage = () => {
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{teamSettingMockData.teamTitle} 관리 페이지</h1>
+      <h1 className={styles.title}>
+        {teamSettingMockData.teamTitle}
+        <span className={styles.subtitle}> 관리 페이지</span>
+      </h1>
 
       <section className={styles.wrapper}>
         <div className={styles.label}>팀원</div>
