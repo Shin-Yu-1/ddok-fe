@@ -1,0 +1,62 @@
+@use '@/styles/variables' as *;
+
+.user {
+  margin: auto;
+  text-align: center;
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    width: 450px;
+    height: 40px;
+    padding: 13px 20px;
+    border: 1px solid $gray-3;
+    border-radius: $r-small;
+    line-height: 40px;
+
+    &__left {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+
+      &__img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      &__nickname {
+        font-weight: $fw-bold;
+      }
+
+      &__badges {
+        font-size: $fs-xxxsmall;
+      }
+    }
+
+    &__right {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+
+      &__position {
+        width: fit-content;
+        height: min-content;
+        margin: auto;
+        padding: 8px 14px;
+        border-radius: $r-medium;
+        font-size: $fs-xxsmall;
+        font-weight: $fw-semibold;
+        line-height: $fs-xxsmall;
+        color: $white-1;
+        background-color: $yellow-1;
+      }
+
+      &__temperature {
+        font-size: $fs-xxsmall;
+      }
+    }
+  }
+}
