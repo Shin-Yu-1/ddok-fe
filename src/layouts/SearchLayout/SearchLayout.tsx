@@ -4,21 +4,28 @@ import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import Header from '@/features/Header/components/Header';
 import SubHeader from '@/features/Header/components/SubHeader';
 import Sidebar from '@/features/Sidebar/components/Sidebar';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from './SearchLayout.module.scss';
 
 const SearchLayout = () => {
+  const { isLoggedIn } = useAuthStore();
+
   return (
-    <ProtectedRoute requirePreference={true}>
-      <div className={styles.layoutContainer}>
-        <Header variant="user" />
-        <SubHeader />
-        <Sidebar />
-        <div className={styles.contentContainer}>
+    <div className={styles.layoutContainer}>
+      <Header variant={isLoggedIn ? 'user' : 'guest'} />
+      <SubHeader />
+      {isLoggedIn && <Sidebar />}
+      <div className={`${styles.contentContainer} ${isLoggedIn ? styles.moveRight : ''}`}>
+        {isLoggedIn ? (
+          <ProtectedRoute requirePreference={true}>
+            <Outlet />
+          </ProtectedRoute>
+        ) : (
           <Outlet />
-        </div>
+        )}
       </div>
-    </ProtectedRoute>
+    </div>
   );
 };
 

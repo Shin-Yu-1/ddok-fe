@@ -14,17 +14,26 @@
   max-height: fit-content;
   min-height: calc(100vh - 96px);
   margin-top: calc(56px + 40px);
-  margin-left: 42px;
   background-color: $white-2;
+
+  &.moveRight {
+    margin-left: 42px;
+  }
 
   @include m.mobile {
     min-height: calc(100vh - 81px);
     margin-top: calc(46px + 35px);
-    margin-left: 37px;
+
+    &.moveRight {
+      margin-left: 37px;
+    }
   }
 
   @include m.tablet {
     min-height: calc(100vh - 96px);
-    margin-left: 42px;
+
+    &.moveRight {
+      margin-left: 42px;
+    }
   }
 }
