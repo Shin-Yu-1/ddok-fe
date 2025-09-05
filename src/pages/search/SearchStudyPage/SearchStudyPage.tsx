@@ -1,10 +1,11 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import { MagnifyingGlassIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import DatePicker from 'react-datepicker';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
@@ -56,6 +57,7 @@ const PAGE_SIZE = 6;
 const MAX_AUTO_LOADS = 5;
 
 const SearchStudyPage = () => {
+  const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
   const [keyword, setKeyword] = useState('');
@@ -79,69 +81,109 @@ const SearchStudyPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const autoLoadsRef = useRef(0);
+  const isFetchingRef = useRef(false);
+  const lastLoadedPageRef = useRef(-1);
+  const paramsChangedRef = useRef(false);
 
-  const {
-    data: responseData,
-    isLoading,
-    refetch,
-  } = useGetApi<StudySearchApiResponse>({
+  const { data: responseData, isLoading } = useGetApi<StudySearchApiResponse>({
     url: 'api/studies/search',
     params: submittedParams,
   });
 
+  // API 응답 처리
   useEffect(() => {
-    if (responseData?.data?.items) {
-      setStudyList((prev: StudyItem[]) => {
-        const safeNewProjects = responseData?.data?.items || [];
+    if (!responseData?.data?.items) return;
+
+    const newItems = responseData.data.items;
+    const responsePagination = responseData.data.pagination;
+
+    if (paramsChangedRef.current || responsePagination.currentPage === 0) {
+      setStudyList(newItems);
+      paramsChangedRef.current = false;
+    } else {
+      setStudyList(prev => {
         const existingIds = new Set(prev.map(item => item.studyId));
-        const filteredNewProjects = safeNewProjects.filter(item => !existingIds.has(item.studyId));
-        return [...prev, ...filteredNewProjects];
+        const filteredNewItems = newItems.filter(item => !existingIds.has(item.studyId));
+        return [...prev, ...filteredNewItems];
       });
     }
 
-    if (responseData?.data?.pagination) {
-      const responsePagination = responseData?.data?.pagination;
-      setHasMore(responsePagination.currentPage < responsePagination.totalPages);
+    setHasMore(responsePagination.currentPage < responsePagination.totalPages - 1);
 
-      setPagination({
-        page: responsePagination.currentPage,
-        size: responsePagination.pageSize,
-      });
-    }
+    setPagination({
+      page: responsePagination.currentPage,
+      size: responsePagination.pageSize,
+    });
+
+    lastLoadedPageRef.current = responsePagination.currentPage;
+    isFetchingRef.current = false;
   }, [responseData]);
 
   useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       entries => {
-        const target = entries[0];
+        const entry = entries[0];
         if (
-          target.isIntersecting &&
+          entry.isIntersecting &&
           hasMore &&
           !isLoading &&
+          !isFetchingRef.current &&
           autoLoadsRef.current < MAX_AUTO_LOADS
         ) {
           autoLoadsRef.current += 1;
-          refetch();
+          isFetchingRef.current = true;
+
+          const nextPage = pagination.page + 1;
+          const updatedParams = {
+            ...submittedParams,
+            page: nextPage,
+          };
+
+          setSubmittedParams(updatedParams);
         }
       },
       {
+        root: null,
+        rootMargin: '100px 0px',
         threshold: 0.1,
-        rootMargin: '100px',
       }
     );
 
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, isLoading, pagination.page, submittedParams]);
+
+  const ensureScrollable = useCallback(() => {
+    const listEl = document.querySelector(`.${styles.cardListWrapper}`) as HTMLElement | null;
+    const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
+    const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
+    const scrollable = isListScrollable || isPageScrollable;
+
+    if (!scrollable && !isFetchingRef.current && hasMore && autoLoadsRef.current < MAX_AUTO_LOADS) {
+      autoLoadsRef.current += 1;
+      isFetchingRef.current = true;
+
+      const nextPage = pagination.page + 1;
+      const updatedParams = {
+        ...submittedParams,
+        page: nextPage,
+      };
+
+      setSubmittedParams(updatedParams);
     }
+  }, [hasMore, pagination.page, submittedParams]);
 
-    return () => {
-      if (sentinelRef.current) {
-        observer.unobserve(sentinelRef.current);
-      }
-    };
-  }, [hasMore, isLoading, pagination.page]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ensureScrollable();
+    }, 100);
 
-  /* 옵션 세팅 */
+    return () => clearTimeout(timer);
+  }, [studyList, ensureScrollable]);
+
   const studyOptions = STUDY_TRAITS.reduce(
     (acc, cur) => {
       acc.push({ label: cur.name, value: cur.name as StudyType });
@@ -203,7 +245,14 @@ const SearchStudyPage = () => {
       ageMax: null,
       expectedMonth: null,
     });
+    setAge(null);
     setStartDate(new Date());
+  };
+
+  const handleClickCard = (item: StudyItem | null) => {
+    if (item) {
+      navigate(`/detail/study/${item.studyId}`);
+    }
   };
 
   const buildParams = () => {
@@ -230,11 +279,14 @@ const SearchStudyPage = () => {
 
   const handleClickSearch = () => {
     autoLoadsRef.current = 0;
+    isFetchingRef.current = false;
+    lastLoadedPageRef.current = -1;
+    paramsChangedRef.current = true;
     setStudyList([]);
     setHasMore(true);
 
-    setSubmittedParams(buildParams());
-    refetch();
+    const newParams = buildParams();
+    setSubmittedParams(newParams);
   };
 
   return (
@@ -262,7 +314,7 @@ const SearchStudyPage = () => {
             backgroundColor="var(--white-3)"
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
             onChange={handleChangeKeyword}
-          ></Input>
+          />
 
           <Button size="md" variant="secondary" radius="xsm" onClick={handleClickSearch}>
             검색하기
@@ -341,13 +393,27 @@ const SearchStudyPage = () => {
       </div>
 
       <div className={styles.cardListWrapper}>
-        {studyList.length == 0 && <span className={styles.warning}>스터디가 없습니다.</span>}
         {studyList.map(item => (
           <SearchCard
+            clickHandle={item => handleClickCard(item as StudyItem)}
             key={item.studyId}
             item={{ ...item, bannerImageUrl: item.bannerImageUrl || '' }}
           />
         ))}
+
+        {/* 로딩 상태 표시 */}
+        {isLoading && (
+          <>
+            {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <SearchCard key={index} isLoading={true} item={null} />
+            ))}
+          </>
+        )}
+
+        {/* 검색 결과가 없을 때 */}
+        {!isLoading && studyList.length === 0 && (
+          <span className={styles.warning}>스터디가 없습니다.</span>
+        )}
       </div>
       <div ref={sentinelRef} style={{ height: 1 }} />
     </div>
