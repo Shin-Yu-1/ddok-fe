@@ -1,13 +1,19 @@
 import Button from '@/components/Button/Button';
-import User from '@/features/Team/components/User/User';
+import User from '@/features/Team/components/UserRow/UserRow';
 
-import styles from './ParticipantRow.module.scss';
+import type { ApplicantType } from '../../schemas/teamApplicantsListSchema';
 
-const ParticipantRow = () => {
+import styles from './ApplicantRow.module.scss';
+
+interface ApplicantRowProps {
+  member: ApplicantType;
+}
+
+const ApplicantRow = ({ member }: ApplicantRowProps) => {
   return (
     <>
-      <div className={styles.position}>팀장</div>
-      <User />
+      <div className={styles.position}>{member.appliedPosition}</div>
+      <User user={member.user} />
       <div className={styles.actionContainer}>
         <Button
           className={styles.action}
@@ -36,4 +42,4 @@ const ParticipantRow = () => {
   );
 };
 
-export default ParticipantRow;
+export default ApplicantRow;
