@@ -1,6 +1,6 @@
 import Button from '@/components/Button/Button';
-import MemberRow from '@/features/Team/components/Member/MemberRow';
-import ParticipantRow from '@/features/Team/components/Participant/ParticipantRow';
+import MemberRow from '@/features/Team/components/MemberRow/MemberRow';
+import ParticipantRow from '@/features/Team/components/ParticipantRow/ParticipantRow';
 
 import styles from './TeamSettingPage.module.scss';
 
