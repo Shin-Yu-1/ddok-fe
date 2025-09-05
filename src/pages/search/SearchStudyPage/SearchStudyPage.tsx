@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 
 import { MagnifyingGlassIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 import { ko } from 'date-fns/locale';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import DatePicker from 'react-datepicker';
 
 import Button from '@/components/Button/Button';
@@ -11,33 +13,30 @@ import Select from '@/components/Select/Select';
 import { AGE_RANGES } from '@/constants/ageRanges';
 import { STUDY_TRAITS } from '@/constants/studyTraits';
 import { useGetApi } from '@/hooks/useGetApi';
-import type { StudyItem, StudySearchApiResponse } from '@/schemas/study.schema';
+import type { StudyItem, StudySearchApiResponse, StudyType } from '@/schemas/study.schema';
 import { useAuthStore } from '@/stores/authStore';
 import type { Pagination } from '@/types/pagination.types';
 
 import styles from './SearchStudyPage.module.scss';
 
 type FilterOption = {
-  [key: string]: string | number | null;
+  [key: string]: string | number | StudyType | null;
 };
 
-// TODO: API 연동 시 수정
 const statusOptions = [
-  { label: '전체', value: '0' },
-  { label: '모집 중', value: '1' },
-  { label: '프로젝트 진행 중', value: '2' },
-  { label: '프로젝트 종료', value: '3' },
+  { label: '전체', value: '' },
+  { label: '모집 중', value: 'RECRUITING' },
+  { label: '프로젝트 진행 중', value: 'ONGOING' },
+  { label: '프로젝트 종료', value: 'CLOSED' },
 ];
-// TODO: API 연동 시 수정
 const capacityOptions = [
   { label: '1명', value: 1 },
   { label: '2명', value: 2 },
-  { label: '2명', value: 3 },
-  { label: '3명', value: 4 },
-  { label: '4명', value: 5 },
-  { label: '5명', value: 6 },
-  { label: '6명', value: 7 },
-  { label: '7명', value: 8 },
+  { label: '3명', value: 3 },
+  { label: '4명', value: 4 },
+  { label: '5명', value: 5 },
+  { label: '6명', value: 6 },
+  { label: '7명', value: 7 },
 ];
 // TODO: API 연동 시 수정
 const modeOptions = [
@@ -60,29 +59,34 @@ const SearchStudyPage = () => {
   const { isLoggedIn } = useAuthStore();
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
   const [keyword, setKeyword] = useState('');
+  const [submittedParams, setSubmittedParams] = useState<Record<string, string | number>>({
+    page: 0,
+    size: PAGE_SIZE,
+  });
   const [filterOption, setFilterOption] = useState<FilterOption>({
     status: null, // 진행 여부
-    studyType: null, // 스터디 주제
+    type: null, // 스터디 유형
     capacity: null, // 모집 입원
     mode: null, // 진행 방식
-    age: null,
-    'age-min': null, // 희망 나이대(이상)
-    'age-max': null, // 희망 나이대(미만)
-    period: null, // 예상 기간
-    'expected-month': null, // 종료 예정일(?)
+    ageMin: null, // 희망 나이대(이상)
+    ageMax: null, // 희망 나이대(미만)
+    expectedMonth: null, // 예상 개월 수
+    startDate: null,
   });
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [age, setAge] = useState<number | null>(null);
+  const [startDate, setStartDate] = useState(new Date());
   const [studyList, setStudyList] = useState<StudyItem[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const autoLoadsRef = useRef(0);
+
   const {
     data: responseData,
     isLoading,
     refetch,
   } = useGetApi<StudySearchApiResponse>({
     url: 'api/studies/search',
-    params: { ...(keyword && { keyword }), ...pagination },
+    params: submittedParams,
   });
 
   useEffect(() => {
@@ -106,7 +110,6 @@ const SearchStudyPage = () => {
     }
   }, [responseData]);
 
-  // 무한 스크롤을 위한 Intersection Observer 설정
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -118,7 +121,6 @@ const SearchStudyPage = () => {
           autoLoadsRef.current < MAX_AUTO_LOADS
         ) {
           autoLoadsRef.current += 1;
-          // loadProjects(pagination.page + 1, false);
           refetch();
         }
       },
@@ -139,20 +141,15 @@ const SearchStudyPage = () => {
     };
   }, [hasMore, isLoading, pagination.page]);
 
-  // 초기 데이터 로드
-  // useEffect(() => {
-  //   loadProjects(1, true);
-  // }, []);
-
   /* 옵션 세팅 */
   const studyOptions = STUDY_TRAITS.reduce(
     (acc, cur) => {
-      acc.push({ label: cur.name, value: cur.id });
+      acc.push({ label: cur.name, value: cur.name as StudyType });
       return acc;
     },
-    [] as { label: string; value: number }[]
+    [] as { label: string; value: StudyType | null }[]
   );
-  studyOptions.splice(0, 0, { label: '전체', value: 0 });
+  studyOptions.splice(0, 0, { label: '전체', value: null });
 
   const ageRangeOptions = (() => {
     const options: { label: string; value: number }[] = [];
@@ -175,8 +172,19 @@ const SearchStudyPage = () => {
     setKeyword(e.target.value);
   };
 
+  const handleChangeAge = (value: number | null) => {
+    setAge(value);
+
+    const findValue = AGE_RANGES.find(item => item.id === value)?.value;
+
+    setFilterOption(prev => ({
+      ...prev,
+      ageMin: findValue ? findValue.min : null,
+      ageMax: findValue ? findValue.max : null,
+    }));
+  };
+
   const handleChangeOptionValue = (key: string, value: string | number | null) => {
-    console.log(key, value);
     setFilterOption(prev => ({
       ...prev,
       [key]: value,
@@ -187,35 +195,45 @@ const SearchStudyPage = () => {
     setKeyword('');
     setFilterOption({
       status: null,
-      position: null,
+      type: null,
       capacity: null,
       mode: null,
       age: null,
-      'age-min': null,
-      'age-max': null,
-      period: null,
-      'expected-month': null,
+      ageMin: null,
+      ageMax: null,
+      expectedMonth: null,
     });
-    setSelectedDate(new Date());
-    // 초기화 후 첫 페이지부터 다시 로드
-    autoLoadsRef.current = 0;
-    setStudyList([]); // 기존 데이터 초기화
-    setHasMore(true);
-    setPagination({ page: 1, size: PAGE_SIZE });
-    refetch();
+    setStartDate(new Date());
+  };
+
+  const buildParams = () => {
+    const validFilters = Object.entries(filterOption).reduce(
+      (acc, [key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          acc[key] = value as string | number;
+        }
+        return acc;
+      },
+      {} as Record<string, string | number>
+    );
+
+    const start = dayjs(startDate).locale('ko').format('YYYY-MM-DD');
+
+    return {
+      ...(keyword && { keyword }),
+      ...validFilters,
+      startDate: start,
+      page: 0,
+      size: PAGE_SIZE,
+    };
   };
 
   const handleClickSearch = () => {
-    // TODO: 추후 API 요청
-    console.log(keyword);
-    console.log(filterOption);
-    console.log(selectedDate);
-
-    // 검색 시 첫 페이지부터 다시 로드
     autoLoadsRef.current = 0;
-    setStudyList([]); // 기존 데이터 초기화
+    setStudyList([]);
     setHasMore(true);
-    setPagination({ page: 1, size: PAGE_SIZE });
+
+    setSubmittedParams(buildParams());
     refetch();
   };
 
@@ -265,8 +283,8 @@ const SearchStudyPage = () => {
               width={122}
               height={32}
               options={studyOptions}
-              value={filterOption.position as number | null | undefined}
-              onChange={v => handleChangeOptionValue('position', v)}
+              value={filterOption.type as StudyType | null | undefined}
+              onChange={v => handleChangeOptionValue('type', v)}
             />
             <Select
               placeholder="모집 인원"
@@ -286,25 +304,25 @@ const SearchStudyPage = () => {
             />
             <Select
               placeholder="희망 나이"
-              width={108}
+              width={114}
               height={32}
               options={ageRangeOptions}
-              value={filterOption.age as number | null | undefined}
-              onChange={v => handleChangeOptionValue('age', v)}
+              value={age as number | null | undefined}
+              onChange={v => handleChangeAge(v)}
             />
             <Select
               placeholder="예상 기간"
               width={118}
               height={32}
               options={periodOptions}
-              value={filterOption.period as number | null | undefined}
-              onChange={v => handleChangeOptionValue('period', v)}
+              value={filterOption.expectedMonth as number | null | undefined}
+              onChange={v => handleChangeOptionValue('expectedMonth', v)}
             />
             <DatePicker
               locale={ko}
               className={styles.datePicker}
-              selected={selectedDate}
-              onChange={date => setSelectedDate(date || new Date())}
+              selected={startDate}
+              onChange={date => setStartDate(date || new Date())}
               dateFormat="yyyy.MM.dd"
             />
           </div>
