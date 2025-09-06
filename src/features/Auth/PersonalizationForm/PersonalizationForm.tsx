@@ -13,6 +13,7 @@ import PersonalitySelector from '@/features/Auth/components/PersonalitySelector/
 import PositionSelector from '@/features/Auth/components/PositionSelector/PositionSelector';
 import TechStackSelector from '@/features/Auth/components/TechStackSelector/TechStackSelector';
 import { useAuthStore } from '@/stores/authStore';
+import type { Location } from '@/types/project';
 
 import styles from './PersonalizationForm.module.scss';
 
@@ -24,11 +25,7 @@ const PersonalizationForm = () => {
   const [selectedInterestPositions, setSelectedInterestPositions] = useState<number[]>([]);
   const [selectedTechStack, setSelectedTechStack] = useState<string[]>([]);
   const [locationSearch, setLocationSearch] = useState<string>('');
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
-  const [selectedCoordinates, setSelectedCoordinates] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [selectedPersonality, setSelectedPersonality] = useState<number[]>([]);
   const [birthDate, setBirthDate] = useState<string>('');
   const [activeHours, setActiveHours] = useState<{ start: string; end: string }>({
@@ -62,6 +59,8 @@ const PersonalizationForm = () => {
     selectedMainPosition !== null &&
     selectedTechStack.length > 0 &&
     selectedLocation &&
+    selectedLocation.latitude !== 0 &&
+    selectedLocation.longitude !== 0 &&
     selectedPersonality.length > 0 &&
     birthDate &&
     activeHours.start &&
@@ -84,15 +83,9 @@ const PersonalizationForm = () => {
     });
   };
 
-  // 주소와 좌표를 함께 처리하는 핸들러
-  const handleLocationSelect = (
-    address: string,
-    coordinates?: { latitude: number; longitude: number }
-  ) => {
-    setSelectedLocation(address);
-    if (coordinates) {
-      setSelectedCoordinates(coordinates);
-    }
+  // 주소와 상세 위치 정보를 함께 처리하는 핸들러
+  const handleLocationSelect = (location: Location) => {
+    setSelectedLocation(location);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -117,11 +110,17 @@ const PersonalizationForm = () => {
         mainPosition: selectedMainPosition ? getPositionName(selectedMainPosition) : '',
         subPosition: selectedInterestPositions.map(getPositionName).filter(Boolean),
         techStacks: selectedTechStack,
-        location: {
-          // 실제 좌표 사용 (카카오 지오코더 API에서 받은 값 또는 기본값)
-          latitude: selectedCoordinates?.latitude || 37.5665, // 서울 기본 좌표
-          longitude: selectedCoordinates?.longitude || 126.978,
-          address: selectedLocation || '위치 미설정',
+        location: selectedLocation || {
+          address: '위치 미설정',
+          region1depthName: '',
+          region2depthName: '',
+          region3depthName: '',
+          roadName: '',
+          mainBuildingNo: '',
+          subBuildingNo: '',
+          zoneNo: '',
+          latitude: 37.5665, // 서울 기본 좌표
+          longitude: 126.978,
         },
         traits: selectedPersonality.map(getTraitName).filter(Boolean),
         birthDate,
