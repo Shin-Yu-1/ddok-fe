@@ -49,6 +49,10 @@ const MapPage = () => {
   // 현재 페이지 상태
   const [currentPage, setCurrentPage] = useState(0);
 
+  // 필터 상태
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const [selectedFilter, setSelectedFilter] = useState<string | undefined>(undefined);
+
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
@@ -77,7 +81,9 @@ const MapPage = () => {
   } = useMapSearch(mapBounds, {
     enabled: false,
     page: currentPage,
-    pageSize: 5,
+    pageSize: 10,
+    category: selectedCategory,
+    filter: selectedFilter,
   });
 
   // 세션 스토리지에서 사용자 위치 정보 가져오기
@@ -197,6 +203,7 @@ const MapPage = () => {
   const handleMapReload = () => {
     setIsMapChanged(false);
     setCurrentPage(0); // 페이지를 첫 번째로 리셋
+    // 현재 필터 상태를 유지하면서 API 재호출
     if (mapBounds) {
       refetchMapSearch();
     }
@@ -207,6 +214,17 @@ const MapPage = () => {
     setCurrentPage(page);
     // 페이지 변경 시에는 즉시 해당 페이지 데이터를 가져옴
     refetchMapSearch();
+  };
+
+  // 필터 변경 핸들러
+  const handleFilterChange = (category?: string, filter?: string) => {
+    setSelectedCategory(category);
+    setSelectedFilter(filter);
+    setCurrentPage(0); // 필터 변경 시 첫 페이지로 리셋
+    // 필터 변경 시에는 즉시 API를 호출하여 새로운 데이터를 가져옴
+    setTimeout(() => {
+      refetchMapSearch();
+    }, 100);
   };
 
   // 지도 로드
@@ -318,6 +336,7 @@ const MapPage = () => {
             isLoading={isMapSearchLoading}
             handleItemClick={handleItemClick}
             onPageChange={handlePageChange}
+            onFilterChange={handleFilterChange}
           />
         </div>
       )}
