@@ -404,7 +404,7 @@ const SearchStudyPage = () => {
         {/* 로딩 상태 표시 */}
         {isLoading && (
           <>
-            {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+            {Array.from({ length: 2 }).map((_, index) => (
               <SearchCard key={index} isLoading={true} item={null} />
             ))}
           </>
