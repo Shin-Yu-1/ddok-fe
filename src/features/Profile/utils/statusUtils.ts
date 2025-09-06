@@ -1,4 +1,4 @@
-import type { ParticipationHistory } from '../types';
+import type { ParticipationHistory } from '@/types/user';
 
 export const getStatusText = (
   status: ParticipationHistory['status'],
