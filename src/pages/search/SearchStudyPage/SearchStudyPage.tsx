@@ -233,6 +233,16 @@ const SearchStudyPage = () => {
     }));
   };
 
+  const handleEnter: React.KeyboardEventHandler<HTMLInputElement> = e => {
+    if (e.key !== 'Enter') return;
+
+    e.preventDefault();
+
+    const raw = e.currentTarget.value;
+    setKeyword(raw.trim());
+    handleClickSearch();
+  };
+
   const handleClickReset = () => {
     setKeyword('');
     setFilterOption({
@@ -314,6 +324,7 @@ const SearchStudyPage = () => {
             backgroundColor="var(--white-3)"
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
             onChange={handleChangeKeyword}
+            onKeyDown={handleEnter}
           />
 
           <Button size="md" variant="secondary" radius="xsm" onClick={handleClickSearch}>
