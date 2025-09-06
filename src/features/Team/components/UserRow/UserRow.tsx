@@ -29,8 +29,8 @@ const User = ({ user }: UserProps) => {
             <Badge
               className={styles.mainBadge}
               mainBadge={{
-                type: user.mainBadge.type.toUpperCase() as BadgeType,
-                tier: user.mainBadge.tier.toUpperCase() as BadgeTier,
+                type: user.mainBadge.type as BadgeType,
+                tier: user.mainBadge.tier as BadgeTier,
               }}
               widthSize="13px"
             />
