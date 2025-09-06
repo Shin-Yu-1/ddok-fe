@@ -11,9 +11,7 @@ interface MapSubPanelReviewsProps {
 
 const MapSubPanelReviews: React.FC<MapSubPanelReviewsProps> = ({ cafeId }) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 10;
 
-  // API로 카페 리뷰 데이터 가져오기
   const {
     data: reviewList,
     pagination,
@@ -22,7 +20,7 @@ const MapSubPanelReviews: React.FC<MapSubPanelReviewsProps> = ({ cafeId }) => {
   } = useGetCafeReviews({
     cafeId,
     page: currentPage,
-    pageSize,
+    pageSize: 10,
   });
 
   // 페이지 변경 핸들러
