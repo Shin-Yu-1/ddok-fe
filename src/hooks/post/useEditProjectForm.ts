@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '@/api/api';
 import type {
   UpdateProjectData,
-  EditProjectResponse,
   CreateProjectResponse,
   ProjectMode,
   Location,
@@ -15,6 +14,35 @@ import type {
 
 interface UseEditProjectFormProps {
   projectId: number;
+}
+
+// 수정 페이지 조회 응답 타입
+interface EditProjectResponse {
+  status: number;
+  message: string;
+  data: {
+    projectId: number;
+    title: string;
+    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
+    bannerImageUrl: string;
+    traits: string[];
+    capacity: number;
+    applicantCount: number;
+    mode: string;
+    location: Location | null;
+    preferredAges: PreferredAges;
+    expectedMonth: number;
+    startDate: string;
+    detail: string;
+    positions: Array<{
+      position: string;
+      applied: number;
+      confirmed: number;
+      isApplied: boolean;
+      isApproved: boolean;
+      isAvailable: boolean;
+    }>;
+  };
 }
 
 export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
@@ -36,28 +64,23 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     if (editData?.data) {
       const { data } = editData;
 
-      // 위치 정보 파싱 (API 응답의 address 필드를 Location 타입으로 변환)
-      let location: Location | null = null;
-      if (data.mode === 'offline' && data.address !== 'online') {
-        // TODO: 실제로는 address를 파싱해서 Location 객체로 변환해야 함
-        // 현재는 임시로 null 처리
-        location = null;
-      }
-
       // positions 배열을 string[]로 변환
       const positions = data.positions.map(p => p.position);
+
+      // 리더 포지션 찾기 (확정된 포지션 또는 첫 번째 포지션)
+      const leaderPosition = positions.length > 0 ? positions[0] : '';
 
       setFormData({
         title: data.title,
         expectedStart: data.startDate,
         expectedMonth: data.expectedMonth,
-        mode: data.mode.toUpperCase() as ProjectMode,
-        location,
+        mode: data.mode.toLowerCase() as ProjectMode,
+        location: data.location,
         preferredAges: data.preferredAges,
         capacity: data.capacity,
         traits: data.traits,
         positions,
-        leaderPosition: data.leaderPosition,
+        leaderPosition,
         detail: data.detail,
         teamStatus: data.teamStatus,
         bannerImageUrl: data.bannerImageUrl,
@@ -96,7 +119,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
       new Blob([JSON.stringify(requestData)], { type: 'application/json' })
     );
 
-    const response = await api.put<CreateProjectResponse>(
+    const response = await api.patch<CreateProjectResponse>(
       `/api/projects/${projectId}`,
       formDataToSend,
       {
