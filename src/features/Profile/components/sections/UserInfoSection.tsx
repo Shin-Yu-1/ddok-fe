@@ -6,9 +6,11 @@ import { forwardRef } from 'react';
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
+import Thermometer from '@/components/Thermometer/Thermometer';
+import BadgeTier from '@/constants/enums/BadgeTier.enum';
+import BadgeType from '@/constants/enums/BadgeType.enum';
+import Badge from '@/features/Badge/Badge';
 import type { ProfileSectionProps } from '@/types/user';
-
-import { getTemperatureIcon } from '../../utils';
 
 import styles from './UserInfoSection.module.scss';
 
@@ -31,8 +33,6 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
         onEditIntroduction();
       }
     };
-
-    const TemperatureIcon = getTemperatureIcon(user.temperatureLevel);
 
     return (
       <section
@@ -89,35 +89,41 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
           </div>
 
           <div className={styles.rightContent}>
-            {/* 뱃지 컨테이너 - 일단 임시로 이모티콘으로 대체*/}
+            {/* 뱃지 */}
             <div className={styles.badgeContainer}>
               {user.badges.map((badge, index) => (
-                <div
+                <Badge
                   key={index}
-                  className={clsx(styles.mainBadge)}
-                  title={`${badge.type} ${badge.tier}`}
-                >
-                  🏆
-                </div>
+                  mainBadge={{
+                    type: badge.type as BadgeType,
+                    tier: badge.tier as BadgeTier,
+                  }}
+                  widthSize={28}
+                  heightSize={51}
+                  className={styles.mainBadge}
+                />
               ))}
 
               {user.abandonBadge.isGranted && (
-                <div
+                <Badge
+                  mainBadge={{ type: BadgeType.ABANDON }}
+                  abandonBadge={user.abandonBadge}
+                  widthSize={28}
+                  heightSize={51}
                   className={styles.abandonBadge}
-                  title={`포기 뱃지 ${user.abandonBadge.count}개`}
-                >
-                  ⚠️
-                </div>
+                  alt={`포기 뱃지 ${user.abandonBadge.count}개`}
+                />
               )}
             </div>
 
             {/* 온도 */}
             <div className={styles.temperatureContainer}>
               <div className={styles.temperatureDisplay}>
-                <img
-                  src={TemperatureIcon}
-                  alt={`온도 ${user.temperatureLevel}`}
-                  className={styles.temperatureIcon}
+                <Thermometer
+                  temperature={user.temperature}
+                  width={24}
+                  height={24}
+                  animated={true}
                 />
                 <span className={styles.temperature}>{user.temperature}°C</span>
               </div>

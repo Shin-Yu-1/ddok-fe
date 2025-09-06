@@ -28,7 +28,7 @@ const mockBadges: Badge[] = [
   },
   {
     type: 'complete',
-    tier: 'silver',
+    tier: 'gold',
   },
 ];
 
@@ -157,7 +157,7 @@ export const mockMyProfile: CompleteProfileInfo = {
   dmRequestPending: false,
 
   // 온도와 레벨
-  temperature: 76.0,
+  temperature: 36.5,
   temperatureLevel: getTemperatureLevel(76.0),
 
   // 뱃지
@@ -208,8 +208,8 @@ export const mockOtherProfile: CompleteProfileInfo = {
   // 뱃지
   badges: [
     {
-      type: 'leader_complete',
-      tier: 'platinum',
+      type: 'complete',
+      tier: 'silver',
     },
     {
       type: 'login',

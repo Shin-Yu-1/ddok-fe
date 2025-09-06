@@ -163,7 +163,7 @@
 
 .rightContent {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   margin-top: 8px;
 
@@ -180,28 +180,20 @@
   gap: 8px;
 }
 
-// 뱃지는 일단 임시로 넣음
+// Badge 컴포넌트를 위한 스타일
 .mainBadge,
 .abandonBadge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 20px;
-  background-color: v.$gray-1;
+  transition: transform 0.2s ease;
   cursor: default;
 
-  @include m.mobile {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+  &:hover {
+    transform: scale(1.1);
   }
-}
 
-.abandonBadge {
-  background-color: v.$red-1;
+  @include m.mobile {
+    width: 32px !important;
+    height: 32px !important;
+  }
 }
 
 .temperatureContainer {
@@ -216,17 +208,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.temperatureIcon {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-
-  @include m.mobile {
-    width: 18px;
-    height: 18px;
-  }
 }
 
 .temperature {
