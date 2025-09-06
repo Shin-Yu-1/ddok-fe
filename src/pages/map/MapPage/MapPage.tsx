@@ -8,7 +8,7 @@ import {
   ZoomControl,
 } from 'react-kakao-maps-sdk';
 
-import Button from '@/components/Button/Button';
+// import Button from '@/components/Button/Button';
 import MapCafeOverlay from '@/features/map/components/MapOverlay/MapCafeOverlay/MapCafeOverlay';
 import MapPlayerOverlay from '@/features/map/components/MapOverlay/MapPlayerOverlay/MapPlayerOverlay';
 import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOverlay/MapProjectOverlay';
@@ -57,7 +57,7 @@ const MapPage = () => {
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
   // 지도 사각 영역의 변경 여부
-  const [isMapChanged, setIsMapChanged] = useState(false);
+  //   const [isMapChanged, setIsMapChanged] = useState(false);
 
   // 최초 로드 완료 여부
   const [isInitialLoad, setIsInitialLoad] = useState(false);
@@ -81,7 +81,7 @@ const MapPage = () => {
   } = useMapSearch(mapBounds, {
     enabled: false,
     page: currentPage,
-    pageSize: 10,
+    pageSize: 5,
     category: selectedCategory,
     filter: selectedFilter,
   });
@@ -118,6 +118,20 @@ const MapPage = () => {
       }
     }
   }, [isSectionOpen, isMapPanelOpen]);
+
+  // 페이지 변경 시 API 재호출
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      refetchMapSearch();
+    }
+  }, [currentPage, refetchMapSearch, isInitialLoad, mapBounds]);
+
+  // 필터 변경 시 API 재호출
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      refetchMapSearch();
+    }
+  }, [selectedCategory, selectedFilter, refetchMapSearch, isInitialLoad, mapBounds]);
 
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
@@ -193,27 +207,26 @@ const MapPage = () => {
       }, 100);
     } else {
       // 최초 로드가 아닌 경우 지도 변경 상태만 업데이트
-      setIsMapChanged(true);
+      //   setIsMapChanged(true);
     }
 
     console.log(newMapBounds);
   };
 
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
-  const handleMapReload = () => {
-    setIsMapChanged(false);
-    setCurrentPage(0); // 페이지를 첫 번째로 리셋
-    // 현재 필터 상태를 유지하면서 API 재호출
-    if (mapBounds) {
-      refetchMapSearch();
-    }
-  };
+  //   const handleMapReload = () => {
+  //     setIsMapChanged(false);
+  //     setCurrentPage(0); // 페이지를 첫 번째로 리셋
+  //     // 현재 필터 상태를 유지하면서 API 재호출
+  //     if (mapBounds) {
+  //       refetchMapSearch();
+  //     }
+  //   };
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // 페이지 변경 시에는 즉시 해당 페이지 데이터를 가져옴
-    refetchMapSearch();
+    // useEffect에서 currentPage 변경을 감지하여 자동으로 리패치됨
   };
 
   // 필터 변경 핸들러
@@ -221,10 +234,7 @@ const MapPage = () => {
     setSelectedCategory(category);
     setSelectedFilter(filter);
     setCurrentPage(0); // 필터 변경 시 첫 페이지로 리셋
-    // 필터 변경 시에는 즉시 API를 호출하여 새로운 데이터를 가져옴
-    setTimeout(() => {
-      refetchMapSearch();
-    }, 100);
+    // useEffect에서 필터 변경을 감지하여 자동으로 리패치됨
   };
 
   // 지도 로드
@@ -313,7 +323,7 @@ const MapPage = () => {
       </div>
 
       {/* 지도 리로드 버튼 */}
-      {isMapChanged && (
+      {/* {isMapChanged && (
         <Button
           className={styles.map__reloadBtn}
           fontSize="var(--fs-xxxsmall)"
@@ -325,7 +335,7 @@ const MapPage = () => {
         >
           현 지도에서 검색
         </Button>
-      )}
+      )} */}
 
       {/* 지도 패널 */}
       {isMapPanelOpen && (
