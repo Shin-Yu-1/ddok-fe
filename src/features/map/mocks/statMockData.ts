@@ -1,4 +1,4 @@
-import type { CafeStat } from '../types/cafe';
+import type { CafeStat } from '../schemas/cafeStatSchema';
 
 /**
  * 서브 패널에서 사용할 통계 목 데이터
