@@ -55,6 +55,9 @@ const MapPage = () => {
   // 지도 사각 영역의 변경 여부
   const [isMapChanged, setIsMapChanged] = useState(false);
 
+  // 최초 로드 완료 여부
+  const [isInitialLoad, setIsInitialLoad] = useState(false);
+
   // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
   const [selectedPoint, setSelectedPoint] = useState<{
     lat: number;
@@ -72,7 +75,7 @@ const MapPage = () => {
     refetch: refetchMapSearch,
     isLoading: isMapSearchLoading,
   } = useMapSearch(mapBounds, {
-    enabled: true,
+    enabled: false,
     page: currentPage,
     pageSize: 5,
   });
@@ -164,17 +167,30 @@ const MapPage = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
     mapRef.current?.relayout();
 
-    setIsMapChanged(true);
-    setMapBounds({
+    const newMapBounds = {
       swLat: mapRef.current?.getBounds().getSouthWest().getLat() || 0,
       swLng: mapRef.current?.getBounds().getSouthWest().getLng() || 0,
       neLat: mapRef.current?.getBounds().getNorthEast().getLat() || 0,
       neLng: mapRef.current?.getBounds().getNorthEast().getLng() || 0,
       lat: mapRef.current?.getCenter().getLat() || 0,
       lng: mapRef.current?.getCenter().getLng() || 0,
-    });
+    };
 
-    console.log(mapBounds);
+    setMapBounds(newMapBounds);
+
+    // 최초 로드 시에만 API 호출
+    if (!isInitialLoad) {
+      setIsInitialLoad(true);
+      // mapBounds가 설정된 이후 API 호출
+      setTimeout(() => {
+        refetchMapSearch();
+      }, 100);
+    } else {
+      // 최초 로드가 아닌 경우 지도 변경 상태만 업데이트
+      setIsMapChanged(true);
+    }
+
+    console.log(newMapBounds);
   };
 
   // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
@@ -189,9 +205,8 @@ const MapPage = () => {
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    if (mapBounds) {
-      refetchMapSearch();
-    }
+    // 페이지 변경 시에는 즉시 해당 페이지 데이터를 가져옴
+    refetchMapSearch();
   };
 
   // 지도 로드
