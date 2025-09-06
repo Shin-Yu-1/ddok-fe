@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { useGetCafeReviews } from '../../../hooks/useGetCafeReviews';
-import { reviewsMockData } from '../../../mocks/reviewsMockData';
 import MapReviewPagination from '../MapReviewPagination/MapReviewPagination';
 
 import styles from './MapSubPanelReviews.module.scss';
@@ -32,8 +31,7 @@ const MapSubPanelReviews: React.FC<MapSubPanelReviewsProps> = ({ cafeId }) => {
     setCurrentPage(page);
   };
 
-  // API 데이터가 있으면 사용하고, 없으면 mockdata로 fallback
-  const displayReviews = reviewList || reviewsMockData?.cafeReviews || [];
+  const displayReviews = reviewList || [];
 
   // 로딩 상태
   if (isLoading) {
