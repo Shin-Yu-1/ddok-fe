@@ -70,9 +70,23 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                 )}
               </div>
 
-              {user.introduction && (
+              {user.introduction ? (
                 <div className={styles.introductionRow}>
                   <p className={styles.introduction}>{user.introduction}</p>
+                  {isEditable && (
+                    <button
+                      type="button"
+                      onClick={handleIntroductionEdit}
+                      className={styles.introductionEditButton}
+                      aria-label="자기소개 수정"
+                    >
+                      <PencilSimpleIcon size={21} weight="regular" />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className={styles.introductionRow}>
+                  <p className={styles.introduction}>등록된 자기소개가 없습니다.</p>
                   {isEditable && (
                     <button
                       type="button"

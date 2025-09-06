@@ -3,7 +3,7 @@ export interface ParticipationHistory {
   id: number;
   title: string;
   type: 'project' | 'study';
-  status: 'ongoing' | 'completed';
+  status: 'ONGOING' | 'CLOSED';
   role?: string;
   startDate: string;
   endDate?: string;
