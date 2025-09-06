@@ -14,12 +14,12 @@ import {
   type CategoryFilterOption,
   type StatusFilterOption,
 } from '../../types/common';
-import MapPagination from '../MapPagination/MapPagination';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
 import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyItem';
 
+import MapPagination from './MapPagination/MapPagination';
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
