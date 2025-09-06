@@ -16,7 +16,7 @@ interface UseEditProjectFormProps {
   projectId: number;
 }
 
-// 수정 페이지 조회 응답 타입
+// 수정 페이지 조회 응답 타입 (실제 API에 맞게 수정)
 interface EditProjectResponse {
   status: number;
   message: string;
@@ -53,8 +53,24 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
   const { data: editData, isLoading: isLoadingEdit } = useQuery({
     queryKey: ['project', 'edit', projectId],
     queryFn: async (): Promise<EditProjectResponse> => {
-      const { data } = await api.get<EditProjectResponse>(`/api/projects/${projectId}/edit`);
-      return data;
+      console.log('📥 프로젝트 수정 데이터 조회 시작');
+      console.log('Project ID:', projectId);
+      console.log('API URL:', `/api/projects/${projectId}/edit`);
+
+      try {
+        const { data } = await api.get<EditProjectResponse>(`/api/projects/${projectId}/edit`);
+
+        console.log('✅ 수정 데이터 조회 성공:');
+        console.log('Status:', data.status);
+        console.log('Message:', data.message);
+        console.log('Response Data:', JSON.stringify(data.data, null, 2));
+
+        return data;
+      } catch (error) {
+        console.error('❌ 수정 데이터 조회 실패:');
+        console.error('Error:', error);
+        throw error;
+      }
     },
     enabled: !!projectId,
   });
@@ -203,7 +219,17 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
   }, []);
 
   const updateBannerImage = useCallback((bannerImage: File | null) => {
-    setFormData(prev => (prev ? { ...prev, bannerImage } : null));
+    setFormData(prev => {
+      if (!prev) return null;
+
+      if (bannerImage === null) {
+        // 기본 이미지로 변경하는 경우: bannerImageUrl도 null로 설정
+        return { ...prev, bannerImage: null, bannerImageUrl: undefined };
+      }
+
+      // 새로운 파일 업로드하는 경우
+      return { ...prev, bannerImage };
+    });
   }, []);
 
   // 폼 유효성 검사
