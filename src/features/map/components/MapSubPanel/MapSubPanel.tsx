@@ -1,9 +1,7 @@
-import { useMemo } from 'react';
-
 import Button from '@/components/Button/Button';
 
+import { useGetCafeStat } from '../../hooks/useGetCafeStat';
 import { reviewsMockData } from '../../mocks/reviewsMockData';
-import { statMockData } from '../../mocks/statMockData';
 
 import styles from './MapSubPanel.module.scss';
 
@@ -12,15 +10,29 @@ interface MapSubPanelProps {
 }
 
 const MapSubPanel: React.FC<MapSubPanelProps> = ({ cafeId }) => {
-  // TODO: cafeId에 따라 해당하는 데이터 불러와야 함(현재는 mock data로 고정)
-  const statData = useMemo(() => {
-    console.log('Selected cafe ID:', cafeId);
-    return statMockData[cafeId - 1];
-  }, [cafeId]);
+  const { data: cafeStatResponse, isLoading, isError } = useGetCafeStat({ cafeId });
 
-  const reviewList = useMemo(() => {
-    return reviewsMockData.cafeReviews;
-  }, []);
+  const statData = cafeStatResponse?.data;
+
+  const reviewList = reviewsMockData?.cafeReviews;
+
+  // 로딩 상태 처리
+  if (isLoading) {
+    return (
+      <div className={styles.subPanel__container}>
+        <div className={styles.subPanel__loading}>로딩 중...</div>
+      </div>
+    );
+  }
+
+  // 에러 상태 처리
+  if (isError || !statData) {
+    return (
+      <div className={styles.subPanel__container}>
+        <div className={styles.subPanel__error}>데이터를 불러오는 중 오류가 발생했습니다.</div>
+      </div>
+    );
+  }
 
   // 별점 렌더링 함수
   const renderStars = (rating: number) => {
