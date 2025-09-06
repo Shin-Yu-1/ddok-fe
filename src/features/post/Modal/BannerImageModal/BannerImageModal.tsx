@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 
+import { Copy } from '@phosphor-icons/react';
+
 import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 
@@ -22,10 +24,10 @@ const BannerImageModal = ({
   onImageSelect,
   currentImageUrl,
   currentBanner,
-  initialImageUrl,
 }: BannerImageModalProps) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [copySuccess, setCopySuccess] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 모달 열릴 때 현재 상태로 초기화
@@ -41,8 +43,66 @@ const BannerImageModal = ({
         setSelectedFile(null);
         setPreviewImage(null);
       }
+      setCopySuccess('');
     }
   }, [isOpen, currentBanner, currentImageUrl]);
+
+  // 현재 상태 정보 가져오기
+  const getCurrentStatus = () => {
+    if (currentBanner) {
+      return {
+        type: 'file',
+        display: currentBanner.name,
+        copyable: `${currentBanner.name} (${(currentBanner.size / 1024).toFixed(1)}KB)`,
+      };
+    }
+
+    if (currentImageUrl) {
+      return {
+        type: 'url',
+        display: getDisplayUrl(currentImageUrl),
+        copyable: currentImageUrl,
+      };
+    }
+
+    return {
+      type: 'default',
+      display: '기본 배너 이미지',
+      copyable: '기본 배너 이미지 (서버 기본값)',
+    };
+  };
+
+  // URL을 읽기 쉽게 줄여서 표시
+  const getDisplayUrl = (url: string) => {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      const filename = pathname.split('/').pop() || pathname;
+
+      if (filename.length > 40) {
+        return `...${filename.slice(-37)}`;
+      }
+
+      return filename || url;
+    } catch {
+      return url.length > 40 ? `...${url.slice(-37)}` : url;
+    }
+  };
+
+  // 클립보드 복사
+  const handleCopyToClipboard = async () => {
+    const { copyable } = getCurrentStatus();
+
+    try {
+      await navigator.clipboard.writeText(copyable);
+      setCopySuccess('복사됨!');
+      setTimeout(() => setCopySuccess(''), 2000);
+    } catch (error) {
+      console.error('클립보드 복사 실패:', error);
+      setCopySuccess('복사 실패');
+      setTimeout(() => setCopySuccess(''), 2000);
+    }
+  };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -82,14 +142,6 @@ const BannerImageModal = ({
     onClose();
   };
 
-  const handleResetToInitial = () => {
-    // 초기 이미지로 되돌리기 (수정 모드에서 사용)
-    if (initialImageUrl) {
-      setPreviewImage(initialImageUrl);
-      setSelectedFile(null);
-    }
-  };
-
   const handleConfirm = () => {
     if (selectedFile) {
       onImageSelect(selectedFile);
@@ -100,8 +152,11 @@ const BannerImageModal = ({
   const handleModalClose = () => {
     setPreviewImage(null);
     setSelectedFile(null);
+    setCopySuccess('');
     onClose();
   };
+
+  const currentStatus = getCurrentStatus();
 
   return (
     <BaseModal
@@ -112,10 +167,31 @@ const BannerImageModal = ({
     >
       <div className={styles.container}>
         <div className={styles.uploadInfo}>
-          <div className={styles.infoLabel}>업로드 상태</div>
-          <div className={styles.infoValue}>
-            {selectedFile ? selectedFile.name : '현재: 기본 이미지'}
+          <div className={styles.infoHeader}>
+            <div className={styles.infoLabel}>현재 상태</div>
+            <button
+              className={styles.copyButton}
+              onClick={handleCopyToClipboard}
+              title="클립보드에 복사"
+            >
+              <Copy size={14} />
+              {copySuccess || '복사'}
+            </button>
           </div>
+          <div className={`${styles.infoValue} ${styles[currentStatus.type]}`}>
+            <span className={styles.statusIcon}>
+              {currentStatus.type === 'file' && '📁'}
+              {currentStatus.type === 'url' && '🔗'}
+              {currentStatus.type === 'default' && '🏞️'}
+            </span>
+            <span className={styles.statusText}>{currentStatus.display}</span>
+          </div>
+
+          {currentStatus.type === 'url' && (
+            <div className={styles.fullUrl} title={currentStatus.copyable}>
+              전체 URL: {currentStatus.copyable}
+            </div>
+          )}
         </div>
 
         {previewImage && (
@@ -137,19 +213,19 @@ const BannerImageModal = ({
           </Button>
 
           <Button variant="outline" radius="xsm" size="md" fullWidth onClick={handleUseExisting}>
-            기본 배너 이미지로 변경하기
+            서버 기본 배너로 변경하기
           </Button>
-
-          {/* 초기 이미지로 되돌리기 버튼 (수정 모드에서만) */}
-          {initialImageUrl && currentBanner && (
-            <Button variant="ghost" radius="xsm" size="md" fullWidth onClick={handleResetToInitial}>
-              원래 이미지로 되돌리기
-            </Button>
-          )}
         </div>
 
         {selectedFile && (
           <div className={styles.confirmSection}>
+            <div className={styles.selectedFileInfo}>
+              <span className={styles.selectedIcon}>📁</span>
+              <span className={styles.selectedName}>{selectedFile.name}</span>
+              <span className={styles.selectedSize}>
+                ({(selectedFile.size / 1024).toFixed(1)}KB)
+              </span>
+            </div>
             <Button variant="secondary" radius="xsm" size="md" fullWidth onClick={handleConfirm}>
               선택한 배너 이미지로 변경
             </Button>
