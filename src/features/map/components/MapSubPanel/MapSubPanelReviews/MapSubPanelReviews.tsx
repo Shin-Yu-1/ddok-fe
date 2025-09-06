@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { useGetCafeReviews } from '../../../hooks/useGetCafeReviews';
 import { reviewsMockData } from '../../../mocks/reviewsMockData';
+import MapReviewPagination from '../MapReviewPagination/MapReviewPagination';
 
-import MapReviewPagination from './MapReviewPagination.tsx';
 import styles from './MapSubPanelReviews.module.scss';
 
 interface MapSubPanelReviewsProps {
