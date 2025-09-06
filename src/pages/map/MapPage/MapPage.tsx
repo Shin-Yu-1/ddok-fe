@@ -17,7 +17,6 @@ import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { useMapSearch } from '@/features/map/hooks/useMapSearch';
 import { overlayMockData } from '@/features/map/mocks/overlayMockData';
-import { panelMockData } from '@/features/map/mocks/panelMockData';
 import type { CafeOverlayData } from '@/features/map/types/cafe';
 import type { MapBounds } from '@/features/map/types/common';
 import { MapItemCategory } from '@/features/map/types/common';
@@ -32,6 +31,12 @@ import styles from './MapPage.module.scss';
 const MapPage = () => {
   // 지도의 정보를 담는 ref
   const mapRef = useRef<kakao.maps.Map>(null);
+
+  // 사용자 위치 좌표 상태 - 기본값 서울시청으로 설정
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  }>({ lat: 37.5665, lng: 126.978 });
 
   // 패널, 서브패널, 오버레이의 열림/닫힘 상태
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
@@ -67,10 +72,30 @@ const MapPage = () => {
     refetch: refetchMapSearch,
     isLoading: isMapSearchLoading,
   } = useMapSearch(mapBounds, {
-    enabled: false, // 수동으로 호출
+    enabled: true,
     page: currentPage,
     pageSize: 20,
   });
+
+  // 세션 스토리지에서 사용자 위치 정보 가져오기
+  useEffect(() => {
+    try {
+      const userDataString = sessionStorage.getItem('user');
+      if (userDataString) {
+        const userData = JSON.parse(userDataString);
+        if (userData.location && userData.location.latitude && userData.location.longitude) {
+          setUserLocation({
+            lat: userData.location.latitude,
+            lng: userData.location.longitude,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('세션 스토리지에서 사용자 위치 정보를 가져오는 중 오류 발생:', error);
+      // 오류 발생 시 기본 위치 사용 (서울시청)
+      setUserLocation({ lat: 37.5665, lng: 126.978 });
+    }
+  }, []);
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
   useEffect(() => {
@@ -89,8 +114,8 @@ const MapPage = () => {
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
     if (!isMapPanelOpen) return;
 
-    // 클릭한 아이템 찾기
-    const items = mapSearchData || panelMockData;
+    // 클릭한 아이템 찾기 - mapSearchData가 undefined인 경우 빈 배열로 처리
+    const items = mapSearchData || [];
     const clickedItem = items.find(item => {
       if (itemType === MapItemCategory.PROJECT && 'projectId' in item)
         return item.projectId === itemId;
@@ -137,7 +162,7 @@ const MapPage = () => {
   // 지도 영역의 변경을 자동으로 감지하여 MapBounds 업데이트
   const handleMapChange = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
-    mapRef.current?.relayout();
+    // mapRef.current?.relayout();
 
     setIsMapChanged(true);
     setMapBounds({
@@ -182,7 +207,7 @@ const MapPage = () => {
           <Map
             id="map"
             className={styles.map}
-            center={{ lat: 37.5665, lng: 126.978 }}
+            center={userLocation}
             onTileLoaded={() => {
               handleMapChange();
             }}
@@ -196,23 +221,6 @@ const MapPage = () => {
               mapSearchData.map(m => (
                 <MapMarker
                   key={`marker__${m.location.latitude}-${m.location.longitude}`}
-                  position={{ lat: m.location.latitude, lng: m.location.longitude }}
-                  onClick={() => {
-                    setIsOverlayOpen(true);
-                    setSelectedPoint({
-                      lat: m.location.latitude,
-                      lng: m.location.longitude,
-                      type: m.category,
-                    });
-                  }}
-                ></MapMarker>
-              ))}
-
-            {/* API 데이터가 없는 경우 panelMockData로 표시 (테스트용, 추후 제거) */}
-            {!mapSearchData &&
-              panelMockData.map(m => (
-                <MapMarker
-                  key={`marker__mock__${m.location.latitude}-${m.location.longitude}`}
                   position={{ lat: m.location.latitude, lng: m.location.longitude }}
                   onClick={() => {
                     setIsOverlayOpen(true);
