@@ -47,10 +47,7 @@ interface TechStackApiResponse {
     totalItems: number;
   };
   items: Array<{
-    stackId: number;
-    name: string;
-    category?: string;
-    imageUrl?: string;
+    techStack: string;
   }>;
 }
 
