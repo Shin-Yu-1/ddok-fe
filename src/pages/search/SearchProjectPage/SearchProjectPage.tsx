@@ -51,7 +51,7 @@ const periodOptions = [
   { label: '5개월 이상', value: 5 },
 ];
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 6;
 const MAX_AUTO_LOADS = 5;
 
 const SearchProjectPage = () => {
@@ -400,7 +400,7 @@ const SearchProjectPage = () => {
         {/* 로딩 상태 표시 */}
         {isLoading && (
           <>
-            {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+            {Array.from({ length: 2 }).map((_, index) => (
               <SearchCard key={index} isLoading={true} item={null} />
             ))}
           </>
