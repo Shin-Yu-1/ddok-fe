@@ -73,7 +73,7 @@ const SearchStudyPage = () => {
     startDate: null,
   });
   const [age, setAge] = useState<number | null>(null);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<null | Date>(null);
   const [studyList, setStudyList] = useState<StudyItem[]>([]);
   const [hasMore, setHasMore] = useState(true);
 
@@ -246,7 +246,7 @@ const SearchStudyPage = () => {
       expectedMonth: null,
     });
     setAge(null);
-    setStartDate(new Date());
+    setStartDate(null);
   };
 
   const handleClickCard = (item: StudyItem | null) => {
@@ -266,12 +266,12 @@ const SearchStudyPage = () => {
       {} as Record<string, string | number>
     );
 
-    const start = dayjs(startDate).locale('ko').format('YYYY-MM-DD');
+    const start = startDate ? dayjs(startDate).locale('ko').format('YYYY-MM-DD') : null;
 
     return {
       ...(keyword && { keyword }),
       ...validFilters,
-      startDate: start,
+      ...(start && { startDate: start }),
       page: 0,
       size: PAGE_SIZE,
     };
@@ -379,6 +379,7 @@ const SearchStudyPage = () => {
               selected={startDate}
               onChange={date => setStartDate(date || new Date())}
               dateFormat="yyyy.MM.dd"
+              placeholderText="시작일 선택"
             />
           </div>
 
