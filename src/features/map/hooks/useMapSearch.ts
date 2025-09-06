@@ -20,7 +20,7 @@ interface UseMapSearchOptions {
  * @returns 지도 검색 결과
  */
 export const useMapSearch = (mapBounds: MapBounds | null, options: UseMapSearchOptions = {}) => {
-  const { enabled = true, page = 0, pageSize = 10, category, filter } = options;
+  const { enabled = true, page = 0, pageSize = 5, category, filter } = options;
 
   const params = mapBounds
     ? {
