@@ -8,7 +8,7 @@ export interface UserInfo {
 // 개별 뱃지 정보
 export interface Badge {
   type: 'complete' | 'leader_complete' | 'login';
-  tier: 'bronze' | 'silver' | 'gold' | 'platinum';
+  tier: 'bronze' | 'silver' | 'gold';
 }
 
 // 포기 뱃지 정보
