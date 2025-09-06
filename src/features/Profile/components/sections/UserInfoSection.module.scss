@@ -180,16 +180,46 @@
   gap: 8px;
 }
 
+// 뱃지 래퍼 - 호버 효과와 툴팁을 위한 컨테이너
+.badgeWrapper {
+  position: relative;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    z-index: 10;
+    transform: scale(1.2);
+  }
+
+  // 툴팁 스타일링 (브라우저 기본 tooltip 커스터마이징)
+  &[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    z-index: 1000;
+    padding: 6px 8px;
+    border-radius: v.$r-xxsmall;
+    font-size: v.$fs-xxxsmall;
+    font-weight: v.$fw-medium;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: v.$white-3;
+    background-color: v.$gray-1;
+    transform: translateX(-50%);
+    pointer-events: none;
+
+    @include m.mobile {
+      bottom: -30px;
+      padding: 4px 6px;
+      font-size: 10px;
+    }
+  }
+}
+
 // Badge 컴포넌트를 위한 스타일
 .mainBadge,
 .abandonBadge {
-  transition: transform 0.2s ease;
-  cursor: default;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
   @include m.mobile {
     width: 32px !important;
     height: 32px !important;

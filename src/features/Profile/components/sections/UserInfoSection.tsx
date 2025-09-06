@@ -92,27 +92,36 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
             {/* 뱃지 */}
             <div className={styles.badgeContainer}>
               {user.badges.map((badge, index) => (
-                <Badge
+                <div
                   key={index}
-                  mainBadge={{
-                    type: badge.type as BadgeType,
-                    tier: badge.tier as BadgeTier,
-                  }}
-                  widthSize={28}
-                  heightSize={51}
-                  className={styles.mainBadge}
-                />
+                  className={styles.badgeWrapper}
+                  title={`${badge.type === 'complete' ? '완주' : badge.type === 'leader_complete' ? '리더 완주' : '로그인'} 뱃지 - ${badge.tier} 등급`}
+                >
+                  <Badge
+                    mainBadge={{
+                      type: badge.type as BadgeType,
+                      tier: badge.tier as BadgeTier,
+                    }}
+                    widthSize={28}
+                    heightSize={51}
+                    className={styles.mainBadge}
+                  />
+                </div>
               ))}
 
               {user.abandonBadge.isGranted && (
-                <Badge
-                  mainBadge={{ type: BadgeType.ABANDON }}
-                  abandonBadge={user.abandonBadge}
-                  widthSize={28}
-                  heightSize={51}
-                  className={styles.abandonBadge}
-                  alt={`포기 뱃지 ${user.abandonBadge.count}개`}
-                />
+                <div
+                  className={styles.badgeWrapper}
+                  title={`포기 뱃지 - ${user.abandonBadge.count}개`}
+                >
+                  <Badge
+                    mainBadge={{ type: BadgeType.ABANDON }}
+                    abandonBadge={user.abandonBadge}
+                    widthSize={28}
+                    heightSize={51}
+                    className={styles.abandonBadge}
+                  />
+                </div>
               )}
             </div>
 
