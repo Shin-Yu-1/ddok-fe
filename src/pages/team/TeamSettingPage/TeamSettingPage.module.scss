@@ -16,6 +16,10 @@
   @include m.font-title;
 }
 
+.subtitle {
+  @include m.font-description;
+}
+
 .label {
   @include m.font-description;
 
@@ -37,7 +41,7 @@
 .participantsGrid {
   display: grid;
   align-items: center;
-  grid-template-columns: 150px 1fr 80px;
+  grid-template-columns: 120px 1fr 130px;
   gap: 20px;
 }
 
@@ -56,84 +60,8 @@
   line-height: 40px;
 }
 
-.gridLabel,
-.position,
-.member,
-.participant,
-.action {
-  margin: auto;
-  text-align: center;
-}
-
 .gridLabel {
+  margin: auto;
   font-weight: $fw-bold;
-}
-
-.position {
-  width: fit-content;
-  padding: 5px 12px;
-  border: 1px solid $gray-3;
-  border-radius: $r-small;
-  font-size: $fs-xxsmall;
-  font-weight: $fw-semibold;
-  background-color: $white-2;
-}
-
-.member,
-.participant {
-  &__item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 20px;
-    width: 450px;
-    height: 40px;
-    padding: 13px 20px;
-    border: 1px solid $gray-3;
-    border-radius: $r-small;
-    line-height: 40px;
-
-    &__left {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-
-      &__img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-      }
-
-      &__nickname {
-        font-weight: $fw-bold;
-      }
-
-      &__badges {
-        font-size: $fs-xxxsmall;
-      }
-    }
-
-    &__right {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-
-      &__position {
-        width: fit-content;
-        height: min-content;
-        margin: auto;
-        padding: 8px 14px;
-        border-radius: $r-medium;
-        font-size: $fs-xxsmall;
-        font-weight: $fw-semibold;
-        line-height: $fs-xxsmall;
-        color: $white-1;
-        background-color: $yellow-1;
-      }
-
-      &__temperature {
-        font-size: $fs-xxsmall;
-      }
-    }
-  }
+  text-align: center;
 }
