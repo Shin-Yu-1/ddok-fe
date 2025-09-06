@@ -60,6 +60,8 @@ export const MapSearchParamsSchema = z.object({
   lng: z.number(),
   page: z.number().optional().default(0),
   size: z.number().optional().default(20),
+  category: z.string().optional(),
+  filter: z.string().optional(),
 });
 
 /**
