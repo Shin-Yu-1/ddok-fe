@@ -4,21 +4,6 @@ import type { BaseMapItem } from './common';
  * 카페 관련 타입 정의
  */
 
-/** 리뷰 내 평가 태그 */
-export interface CafeReviewTag {
-  tagName: string;
-  tagCount: number;
-}
-
-/** 리뷰 전체 통계 정보 */
-export interface CafeStat {
-  cafeId: number;
-  title: string;
-  reviewCount: number;
-  cafeReviewTag: CafeReviewTag[];
-  totalRating: number;
-}
-
 /** 개별 리뷰 */
 export interface CafeReview {
   userId: number;
