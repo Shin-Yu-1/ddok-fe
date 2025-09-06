@@ -7,6 +7,13 @@ export interface Location {
   latitude: number;
   longitude: number;
   address: string;
+  region1depthName: string;
+  region2depthName: string;
+  region3depthName: string;
+  roadName: string;
+  mainBuildingNo: string;
+  subBuildingNo: string;
+  zoneNo: string;
 }
 
 /** 지도 아이템 카테고리 타입 */
@@ -22,6 +29,7 @@ export type MapItemCategory = (typeof MapItemCategory)[keyof typeof MapItemCateg
 export const TeamStatus = {
   RECRUITING: 'RECRUITING',
   ONGOING: 'ONGOING',
+  CLOSED: 'CLOSED',
 } as const;
 export type TeamStatus = (typeof TeamStatus)[keyof typeof TeamStatus];
 
