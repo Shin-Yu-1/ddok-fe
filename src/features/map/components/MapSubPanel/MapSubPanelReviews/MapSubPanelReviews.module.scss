@@ -5,6 +5,40 @@
   flex-direction: column;
   gap: 15px;
 
+  &__loading,
+  &__error,
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: $fs-xxsmall;
+    text-align: center;
+    color: $gray-2;
+  }
+
+  &__error {
+    flex-direction: column;
+    gap: 10px;
+    color: $red-1;
+  }
+
+  &__retry {
+    padding: 5px 10px;
+    border: 1px solid $red-1;
+    border-radius: $r-xxsmall;
+    font-size: $fs-xxxsmall;
+    color: $red-1;
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: $white-1;
+      background-color: $red-1;
+    }
+  }
+
   &__item {
     display: flex;
     flex-direction: row;
