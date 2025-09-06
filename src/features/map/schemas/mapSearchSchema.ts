@@ -16,7 +16,7 @@ export const PaginationSchema = z.object({
  * 지도 검색 API 데이터 스키마
  */
 export const MapSearchDataSchema = z.object({
-  items: z.array(z.any()), // MapPanelItem[]를 런타임에서 검증하기 어려우므로 any 사용
+  items: z.array(z.any()),
   pagination: PaginationSchema,
 });
 
