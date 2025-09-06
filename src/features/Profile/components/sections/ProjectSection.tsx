@@ -8,7 +8,7 @@ import clsx from 'clsx';
 
 import type { ProfileSectionProps } from '@/types/user';
 
-import { useShowMore } from '../../hooks';
+import { useInfiniteLoad } from '../../hooks';
 import { formatDateRange, getStatusText } from '../../utils';
 
 import styles from './ProjectSection.module.scss';
@@ -19,18 +19,20 @@ interface ProjectSectionProps extends ProfileSectionProps {
 
 const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
   ({ user, isEditable = false, onEdit, className }, ref) => {
-    const { showAll, handleToggleShowAll, getDisplayItems, hasMoreItems, getShowMoreText } =
-      useShowMore(3);
-
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('projects');
       }
     };
 
-    const projects = user.projects || [];
-    const displayedProjects = getDisplayItems(projects);
-    const hasMore = hasMoreItems(projects);
+    const initialProjects = user.projects || [];
+    const {
+      items: projects,
+      isLoading,
+      hasMore,
+      loadMore,
+      getShowMoreText,
+    } = useInfiniteLoad(user.userId, 'projects', initialProjects);
 
     return (
       <section
@@ -59,7 +61,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
           {projects.length > 0 ? (
             <>
               <div className={styles.projectList}>
-                {displayedProjects.map(project => (
+                {projects.map(project => (
                   <div key={project.id} className={styles.projectItem}>
                     <div className={styles.projectIcon}>📋</div>
 
@@ -85,10 +87,11 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(
                 <div className={styles.showMoreContainer}>
                   <button
                     type="button"
-                    onClick={handleToggleShowAll}
+                    onClick={loadMore}
+                    disabled={isLoading}
                     className={styles.showMoreButton}
                   >
-                    {getShowMoreText(showAll, 'project')}
+                    {getShowMoreText()}
                   </button>
                 </div>
               )}

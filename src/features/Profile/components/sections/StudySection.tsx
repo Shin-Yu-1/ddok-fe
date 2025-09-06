@@ -8,7 +8,7 @@ import clsx from 'clsx';
 
 import type { ProfileSectionProps } from '@/types/user';
 
-import { useShowMore } from '../../hooks';
+import { useInfiniteLoad } from '../../hooks';
 import { formatDateRange, getStatusText } from '../../utils';
 
 import styles from './StudySection.module.scss';
@@ -19,18 +19,20 @@ interface StudySectionProps extends ProfileSectionProps {
 
 const StudySection = forwardRef<HTMLElement, StudySectionProps>(
   ({ user, isEditable = false, onEdit, className }, ref) => {
-    const { showAll, handleToggleShowAll, getDisplayItems, hasMoreItems, getShowMoreText } =
-      useShowMore(3);
-
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('studies');
       }
     };
 
-    const studies = user.studies || [];
-    const displayedStudies = getDisplayItems(studies);
-    const hasMore = hasMoreItems(studies);
+    const initialStudies = user.studies || [];
+    const {
+      items: studies,
+      isLoading,
+      hasMore,
+      loadMore,
+      getShowMoreText,
+    } = useInfiniteLoad(user.userId, 'studies', initialStudies);
 
     return (
       <section
@@ -59,7 +61,7 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(
           {studies.length > 0 ? (
             <>
               <div className={styles.studyList}>
-                {displayedStudies.map(study => (
+                {studies.map(study => (
                   <div key={study.id} className={styles.studyItem}>
                     <div className={styles.studyIcon}>📚</div>
 
@@ -83,10 +85,11 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(
                 <div className={styles.showMoreContainer}>
                   <button
                     type="button"
-                    onClick={handleToggleShowAll}
+                    onClick={loadMore}
+                    disabled={isLoading}
                     className={styles.showMoreButton}
                   >
-                    {getShowMoreText(showAll, 'study')}
+                    {getShowMoreText()}
                   </button>
                 </div>
               )}
