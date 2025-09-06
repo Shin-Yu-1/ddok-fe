@@ -1,0 +1,135 @@
+import api from '@/api/api';
+import type { ApiResponse } from '@/types/api';
+
+// API 응답 타입들
+interface ProfileApiResponse {
+  userId: number;
+  isMine: boolean;
+  chatRoomId: number | null;
+  dmRequestPending: boolean;
+  isPublic: boolean;
+  profileImageUrl: string;
+  nickname: string;
+  temperature: number;
+  ageGroup: string;
+  mainPosition: string;
+  subPositions: string[];
+  badges: Array<{
+    type: 'complete' | 'leader_complete' | 'login';
+    tier: 'bronze' | 'silver' | 'gold';
+  }>;
+  abandonBadge: {
+    isGranted: boolean;
+    count: number;
+  };
+  activeHours: {
+    start: string;
+    end: string;
+  };
+  traits: string[];
+  content: string;
+  portfolio: Array<{
+    linkTitle: string;
+    link: string;
+  }>;
+  location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
+}
+
+interface TechStackApiResponse {
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  items: Array<{
+    stackId: number;
+    name: string;
+    category?: string;
+    imageUrl?: string;
+  }>;
+}
+
+interface StudyApiResponse {
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  items: Array<{
+    studyId: number;
+    title: string;
+    teamStatus: 'ONGOING' | 'CLOSED';
+    location: {
+      latitude: number;
+      longitude: number;
+      address: string;
+    };
+    period: {
+      start: string;
+      end: string;
+    };
+  }>;
+}
+
+interface ProjectApiResponse {
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  items: Array<{
+    projectId: number;
+    title: string;
+    teamStatus: 'ONGOING' | 'CLOSED';
+    location: {
+      latitude: number;
+      longitude: number;
+      address: string;
+    };
+    period: {
+      start: string;
+      end: string;
+    };
+  }>;
+}
+
+export const profileApi = {
+  // 프로필 상세 조회
+  getProfile: async (userId: number): Promise<ProfileApiResponse> => {
+    const response = await api.get<ApiResponse<ProfileApiResponse>>(
+      `/api/players/${userId}/profile`
+    );
+    return response.data.data;
+  },
+
+  // 기술 스택 조회
+  getTechStacks: async (userId: number, page = 0, size = 20): Promise<TechStackApiResponse> => {
+    const response = await api.get<ApiResponse<TechStackApiResponse>>(
+      `/api/players/${userId}/profile/stacks?page=${page}&size=${size}`
+    );
+    return response.data.data;
+  },
+
+  // 참여 스터디 목록 조회
+  getStudies: async (userId: number, page = 0, size = 4): Promise<StudyApiResponse> => {
+    const response = await api.get<ApiResponse<StudyApiResponse>>(
+      `/api/players/${userId}/profile/studies?page=${page}&size=${size}`
+    );
+    return response.data.data;
+  },
+
+  // 참여 프로젝트 목록 조회
+  getProjects: async (userId: number, page = 0, size = 3): Promise<ProjectApiResponse> => {
+    const response = await api.get<ApiResponse<ProjectApiResponse>>(
+      `/api/players/${userId}/profile/projects?page=${page}&size=${size}`
+    );
+    return response.data.data;
+  },
+};
