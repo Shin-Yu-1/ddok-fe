@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import type { Location } from '@/types/project';
+
 import api from './api';
 
 // 공개 API용 클라이언트 (인증 불필요)
@@ -77,11 +79,7 @@ interface PersonalizationRequest {
   mainPosition: string;
   subPosition: string[];
   techStacks: string[];
-  location: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  };
+  location: Location;
   traits: string[];
   birthDate: string;
   activeHours: {
