@@ -28,6 +28,7 @@ interface MapPanelProps {
   isLoading?: boolean;
   handleItemClick: (itemType: MapItemCategory, itemId?: number) => void;
   onPageChange?: (page: number) => void;
+  onFilterChange?: (category?: string, filter?: string) => void;
 }
 
 const MapPanel: React.FC<MapPanelProps> = ({
@@ -36,18 +37,25 @@ const MapPanel: React.FC<MapPanelProps> = ({
   isLoading,
   handleItemClick,
   onPageChange,
+  onFilterChange,
 }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<CategoryFilterOption>(
-    CATEGORY_FILTER_OPTIONS[0] // 'ALL'
+    CATEGORY_FILTER_OPTIONS[0] // 전체
   );
 
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<StatusFilterOption>(
-    STATUS_FILTER_OPTIONS[0] // 'ALL'
+    STATUS_FILTER_OPTIONS[0] // 전체
   );
 
   const handleFilterClick = (option: CategoryFilterOption) => {
     setSelectedCategoryFilter(option);
-    setSelectedStatusFilter(STATUS_FILTER_OPTIONS[0]); // 'ALL'로 리셋
+    setSelectedStatusFilter(STATUS_FILTER_OPTIONS[0]); // 전체로 리셋
+
+    // 상위 컴포넌트에 필터 변경 알림
+    if (onFilterChange) {
+      const categoryValue = option.value || undefined;
+      onFilterChange(categoryValue, undefined);
+    }
   };
 
   // 데이터 필터링 함수
@@ -176,6 +184,13 @@ const MapPanel: React.FC<MapPanelProps> = ({
                   }`}
                   onClick={() => {
                     setSelectedStatusFilter(option);
+
+                    // 상위 컴포넌트에 필터 변경 알림
+                    if (onFilterChange) {
+                      const categoryValue = selectedCategoryFilter.value || undefined;
+                      const filterValue = option.value || undefined;
+                      onFilterChange(categoryValue, filterValue);
+                    }
                   }}
                 >
                   {option.label}
