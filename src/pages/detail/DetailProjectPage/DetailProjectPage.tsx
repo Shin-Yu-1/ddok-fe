@@ -122,8 +122,8 @@ const DetailProjectPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
-              {projectData.isMine && (
-                <Button variant="primary" radius="xsm" onClick={handleEditProject}>
+              {projectData.isMine && projectData.teamStatus !== 'CLOSED' && (
+                <Button variant="secondary" radius="xsm" onClick={handleEditProject}>
                   프로젝트 수정하기
                 </Button>
               )}
