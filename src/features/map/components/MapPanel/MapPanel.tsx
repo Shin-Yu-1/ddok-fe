@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
 import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
@@ -58,29 +58,32 @@ const MapPanel: React.FC<MapPanelProps> = ({
     }
   };
 
-  // 데이터 필터링 함수
-  const filteredData = useMemo(() => {
-    const sourceData = data || [];
-    let filtered = sourceData;
+  // 데이터 필터링 함수 - 서버에서 이미 필터링된 데이터를 받으므로 클라이언트 필터링 불필요
+  // const filteredData = useMemo(() => {
+  //   const sourceData = data || [];
+  //   let filtered = sourceData;
 
-    // 1. 카테고리 필터링
-    if (selectedCategoryFilter.value) {
-      filtered = filtered.filter(item => item.category === selectedCategoryFilter.value);
-    }
+  //   // 1. 카테고리 필터링
+  //   if (selectedCategoryFilter.value) {
+  //     filtered = filtered.filter(item => item.category === selectedCategoryFilter.value);
+  //   }
 
-    // 2. 모집 상태 필터링(프로젝트와 스터디만 적용)
-    if (selectedStatusFilter.value) {
-      filtered = filtered.filter(item => {
-        if (isProject(item) || isStudy(item)) {
-          return item.teamStatus === selectedStatusFilter.value;
-        }
-        // player, cafe는 teamStatus가 없으므로 상태 필터가 적용된 경우 제외
-        return false;
-      });
-    }
+  //   // 2. 모집 상태 필터링(프로젝트와 스터디만 적용)
+  //   if (selectedStatusFilter.value) {
+  //     filtered = filtered.filter(item => {
+  //       if (isProject(item) || isStudy(item)) {
+  //         return item.teamStatus === selectedStatusFilter.value;
+  //       }
+  //       // player, cafe는 teamStatus가 없으므로 상태 필터가 적용된 경우 제외
+  //       return false;
+  //     });
+  //   }
 
-    return filtered;
-  }, [data, selectedCategoryFilter, selectedStatusFilter]);
+  //   return filtered;
+  // }, [data, selectedCategoryFilter, selectedStatusFilter]);
+
+  // 서버에서 이미 필터링된 데이터를 그대로 사용
+  const displayData = data || [];
 
   // 타입별 컴포넌트 렌더링 함수
   const renderMapItem = (item: MapPanelItem) => {
@@ -210,15 +213,15 @@ const MapPanel: React.FC<MapPanelProps> = ({
           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-2)' }}>
             검색 중...
           </div>
-        ) : filteredData.length === 0 ? (
+        ) : displayData.length === 0 ? (
           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-2)' }}>
             검색 결과가 없습니다.
           </div>
         ) : (
-          filteredData.map((item, index) => (
+          displayData.map((item, index) => (
             <div key={index}>
               {renderMapItem(item)}
-              {index < filteredData.length - 1 && (
+              {index < displayData.length - 1 && (
                 <hr className={styles.panel__list__item__divider} />
               )}
             </div>
