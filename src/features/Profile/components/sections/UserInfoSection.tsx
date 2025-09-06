@@ -95,7 +95,7 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                 <div
                   key={index}
                   className={styles.badgeWrapper}
-                  title={`${badge.type === 'complete' ? '완주' : badge.type === 'leader_complete' ? '리더 완주' : '로그인'} 뱃지 - ${badge.tier} 등급`}
+                  data-tooltip={`${badge.type === 'complete' ? '완주' : badge.type === 'leader_complete' ? '리더 완주' : '로그인'} 뱃지 - ${badge.tier} 등급`}
                 >
                   <Badge
                     mainBadge={{
@@ -112,7 +112,7 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
               {user.abandonBadge.isGranted && (
                 <div
                   className={styles.badgeWrapper}
-                  title={`포기 뱃지 - ${user.abandonBadge.count}개`}
+                  data-tooltip={`포기 뱃지 - ${user.abandonBadge.count}개`}
                 >
                   <Badge
                     mainBadge={{ type: BadgeType.ABANDON }}

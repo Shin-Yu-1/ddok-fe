@@ -191,9 +191,9 @@
     transform: scale(1.2);
   }
 
-  // 툴팁 스타일링 (브라우저 기본 tooltip 커스터마이징)
-  &[title]:hover::after {
-    content: attr(title);
+  // 툴팁 스타일링 (data-tooltip 사용)
+  &[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
     position: absolute;
     bottom: -35px;
     left: 50%;
