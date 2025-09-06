@@ -19,7 +19,6 @@ const MapSubPanelReviews: React.FC<MapSubPanelReviewsProps> = ({ cafeId }) => {
     pagination,
     isLoading,
     isError,
-    refetch,
   } = useGetCafeReviews({
     cafeId,
     page: currentPage,
@@ -33,7 +32,7 @@ const MapSubPanelReviews: React.FC<MapSubPanelReviewsProps> = ({ cafeId }) => {
 
   const displayReviews = reviewList || [];
 
-  // 로딩 상태
+  // 로딩 상태 처리
   if (isLoading) {
     return (
       <div className={styles.reviews}>
@@ -42,16 +41,11 @@ const MapSubPanelReviews: React.FC<MapSubPanelReviewsProps> = ({ cafeId }) => {
     );
   }
 
-  // 에러 상태
+  // 에러 상태 처리
   if (isError) {
     return (
       <div className={styles.reviews}>
-        <div className={styles.reviews__error}>
-          리뷰를 불러오는 중 오류가 발생했습니다.
-          <button onClick={() => refetch()} className={styles.reviews__retry}>
-            다시 시도
-          </button>
-        </div>
+        <div className={styles.reviews__error}>리뷰를 불러오는 중 오류가 발생했습니다.</div>
       </div>
     );
   }
