@@ -24,26 +24,24 @@ type FilterOption = {
   [key: string]: string | number | null;
 };
 
-const statusOptions = [
+const STATUS_OPTIONS = [
   { label: '전체', value: '' },
   { label: '모집 중', value: 'RECRUITING' },
   { label: '프로젝트 진행 중', value: 'ONGOING' },
   { label: '프로젝트 종료', value: 'CLOSED' },
 ];
-const capacityOptions = [
-  { label: '1명', value: 1 },
-  { label: '2명', value: 2 },
-  { label: '3명', value: 3 },
-  { label: '4명', value: 4 },
-  { label: '5명', value: 5 },
-  { label: '6명', value: 6 },
-  { label: '7명', value: 7 },
-];
-const modeOptions = [
+
+const CAPACITY_OPTIONS = Array.from({ length: 7 }, (_, i) => ({
+  label: `${i + 1}명`,
+  value: i + 1,
+}));
+
+const MODE_OPTIONS = [
   { label: '오프라인', value: 'offline' },
   { label: '온라인', value: 'online' },
 ];
-const periodOptions = [
+
+const PERIOD_OPTIONS = [
   { label: '1개월 이하', value: 1 },
   { label: '2개월', value: 2 },
   { label: '3개월', value: 3 },
@@ -57,6 +55,7 @@ const MAX_AUTO_LOADS = 5;
 const SearchProjectPage = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
+
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
   const [submittedParams, setSubmittedParams] = useState<Record<string, string | number>>({
     page: 0,
@@ -77,6 +76,7 @@ const SearchProjectPage = () => {
   const [startDate, setStartDate] = useState<null | Date>(null);
   const [projectList, setProjectList] = useState<ProjectItem[]>([]);
   const [hasMore, setHasMore] = useState(true);
+
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const autoLoadsRef = useRef(0);
   const isFetchingRef = useRef(false);
@@ -88,7 +88,27 @@ const SearchProjectPage = () => {
     params: submittedParams,
   });
 
-  // API 응답 처리
+  const positionOptions = [
+    { label: '전체', value: null },
+    ...POSITIONS.map(position => ({ label: position.name, value: position.name })),
+  ];
+
+  const ageRangeOptions = (() => {
+    const options: { label: string; value: number }[] = [];
+    let hasOver50 = false;
+
+    for (const range of AGE_RANGES) {
+      if (range.id < 50) {
+        options.push({ label: range.label, value: range.id });
+      } else if (!hasOver50) {
+        options.push({ label: '50대 이상', value: range.id });
+        hasOver50 = true;
+      }
+    }
+
+    return options;
+  })();
+
   useEffect(() => {
     if (!responseData?.data?.items) return;
 
@@ -107,7 +127,6 @@ const SearchProjectPage = () => {
     }
 
     setHasMore(responsePagination.currentPage < responsePagination.totalPages - 1);
-
     setPagination({
       page: responsePagination.currentPage,
       size: responsePagination.pageSize,
@@ -116,6 +135,26 @@ const SearchProjectPage = () => {
     lastLoadedPageRef.current = responsePagination.currentPage;
     isFetchingRef.current = false;
   }, [responseData]);
+
+  const ensureScrollable = useCallback(() => {
+    const listEl = document.querySelector(`.${styles.cardListWrapper}`) as HTMLElement | null;
+    const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
+    const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
+    const scrollable = isListScrollable || isPageScrollable;
+
+    if (!scrollable && !isFetchingRef.current && hasMore && autoLoadsRef.current < MAX_AUTO_LOADS) {
+      autoLoadsRef.current += 1;
+      isFetchingRef.current = true;
+
+      const nextPage = pagination.page + 1;
+      const updatedParams = {
+        ...submittedParams,
+        page: nextPage,
+      };
+
+      setSubmittedParams(updatedParams);
+    }
+  }, [hasMore, pagination.page, submittedParams]);
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -154,26 +193,6 @@ const SearchProjectPage = () => {
     return () => observer.disconnect();
   }, [hasMore, isLoading, pagination.page, submittedParams]);
 
-  const ensureScrollable = useCallback(() => {
-    const listEl = document.querySelector(`.${styles.cardListWrapper}`) as HTMLElement | null;
-    const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
-    const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
-    const scrollable = isListScrollable || isPageScrollable;
-
-    if (!scrollable && !isFetchingRef.current && hasMore && autoLoadsRef.current < MAX_AUTO_LOADS) {
-      autoLoadsRef.current += 1;
-      isFetchingRef.current = true;
-
-      const nextPage = pagination.page + 1;
-      const updatedParams = {
-        ...submittedParams,
-        page: nextPage,
-      };
-
-      setSubmittedParams(updatedParams);
-    }
-  }, [hasMore, pagination.page, submittedParams]);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       ensureScrollable();
@@ -181,31 +200,6 @@ const SearchProjectPage = () => {
 
     return () => clearTimeout(timer);
   }, [projectList, ensureScrollable]);
-
-  const positionOptions = POSITIONS.reduce(
-    (acc, cur) => {
-      acc.push({ label: cur.name, value: cur.name });
-      return acc;
-    },
-    [] as { label: string; value: string | null }[]
-  );
-  positionOptions.splice(0, 0, { label: '전체', value: null });
-
-  const ageRangeOptions = (() => {
-    const options: { label: string; value: number }[] = [];
-    let hasOver50 = false;
-
-    for (const cur of AGE_RANGES) {
-      if (cur.id < 50) {
-        options.push({ label: cur.label, value: cur.id });
-      } else if (!hasOver50) {
-        options.push({ label: '50대 이상', value: cur.id });
-        hasOver50 = true;
-      }
-    }
-
-    return options;
-  })();
 
   const handleChangeKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -218,8 +212,8 @@ const SearchProjectPage = () => {
 
     setFilterOption(prev => ({
       ...prev,
-      ageMin: findValue ? findValue.min : null,
-      ageMax: findValue ? findValue.max : null,
+      ageMin: findValue?.min ?? null,
+      ageMax: findValue?.max ?? null,
     }));
   };
 
@@ -305,6 +299,7 @@ const SearchProjectPage = () => {
           </Button>
         )}
       </div>
+
       <div className={styles.searchWrapper}>
         <div className={styles.inputWrapper}>
           <Input
@@ -326,13 +321,14 @@ const SearchProjectPage = () => {
             검색하기
           </Button>
         </div>
+
         <div className={styles.filterOptionsWrapper}>
           <div className={styles.optionsGroup}>
             <Select
               placeholder="진행 여부"
               width={154}
               height={32}
-              options={statusOptions}
+              options={STATUS_OPTIONS}
               value={filterOption.status as string | null | undefined}
               onChange={v => handleChangeOptionValue('status', v)}
             />
@@ -348,7 +344,7 @@ const SearchProjectPage = () => {
               placeholder="모집 인원"
               width={108}
               height={32}
-              options={capacityOptions}
+              options={CAPACITY_OPTIONS}
               value={filterOption.capacity as number | null | undefined}
               onChange={v => handleChangeOptionValue('capacity', v)}
             />
@@ -356,7 +352,7 @@ const SearchProjectPage = () => {
               placeholder="진행 방식"
               width={108}
               height={32}
-              options={modeOptions}
+              options={MODE_OPTIONS}
               value={filterOption.mode as string | null | undefined}
               onChange={v => handleChangeOptionValue('mode', v)}
             />
@@ -372,7 +368,7 @@ const SearchProjectPage = () => {
               placeholder="예상 기간"
               width={118}
               height={32}
-              options={periodOptions}
+              options={PERIOD_OPTIONS}
               value={filterOption.expectedMonth as number | null | undefined}
               onChange={v => handleChangeOptionValue('expectedMonth', v)}
             />
@@ -385,6 +381,7 @@ const SearchProjectPage = () => {
               placeholderText="시작일 선택"
             />
           </div>
+
           <Button
             backgroundColor="none"
             textColor="var(--gray-1)"
@@ -407,22 +404,19 @@ const SearchProjectPage = () => {
           />
         ))}
 
-        {/* 로딩 상태 표시 */}
         {isLoading && (
           <>
-            {Array.from({ length: 2 }).map((_, index) => (
+            {Array.from({ length: 2 }, (_, index) => (
               <SearchCard key={index} isLoading={true} item={null} />
             ))}
           </>
         )}
 
-        {/* 검색 결과가 없을 때 */}
         {!isLoading && projectList.length === 0 && (
           <span className={styles.warning}>프로젝트가 없습니다.</span>
         )}
       </div>
 
-      {/* 무한 스크롤을 위한 센티널 */}
       <div ref={sentinelRef} style={{ height: 1 }} />
     </div>
   );
