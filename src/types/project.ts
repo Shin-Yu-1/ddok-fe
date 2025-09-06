@@ -19,6 +19,9 @@ export interface PreferredAges {
 // 프로젝트 모드
 export type ProjectMode = 'online' | 'offline';
 
+// 프로젝트 진행 상태
+export type TeamStatus = 'RECRUITING' | 'ONGOING' | 'CLOSED';
+
 // 위치 정보
 export interface Location {
   address?: string; // 전체 주소
@@ -83,8 +86,6 @@ export interface CreateProjectData {
   bannerImage?: File | null;
 }
 
-export type TeamStatus = 'RECRUITING' | 'ONGOING' | 'CLOSED';
-
 // 프로젝트 수정 데이터 (수정 API용)
 export interface UpdateProjectData extends CreateProjectData {
   teamStatus: TeamStatus;
@@ -101,7 +102,7 @@ export interface CreateProjectResponse {
     nickname: string;
     leaderPosition: string;
     title: string;
-    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
+    teamStatus: TeamStatus;
     expectedStart: string;
     expectedMonth: number;
     mode: string;
@@ -121,7 +122,7 @@ export interface EditProjectResponse {
   message: string;
   data: {
     title: string;
-    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
+    teamStatus: TeamStatus;
     bannerImageUrl: string;
     traits: string[];
     capacity: number;
@@ -147,7 +148,7 @@ export interface DetailProjectResponse {
   data: {
     projectId: number;
     title: string;
-    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
+    teamStatus: TeamStatus;
     bannerImageUrl: string;
     traits: string[];
     capacity: number;
