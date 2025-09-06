@@ -4,7 +4,6 @@ import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import Input from '@/components/Input/Input';
 
-import { panelMockData } from '../../mocks/panelMockData';
 import type { Pagination } from '../../schemas/mapSearchSchema';
 import type { MapPanelItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
@@ -53,8 +52,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
 
   // 데이터 필터링 함수
   const filteredData = useMemo(() => {
-    // API에서 받은 데이터가 있으면 사용, 없으면 mock 데이터 사용
-    const sourceData = data || panelMockData;
+    const sourceData = data || [];
     let filtered = sourceData;
 
     // 1. 카테고리 필터링
