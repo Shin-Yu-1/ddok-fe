@@ -13,6 +13,20 @@
   background-color: $white-3;
 }
 
+.subPanel__loading,
+.subPanel__error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: $fs-xxsmall;
+  color: $gray-2;
+}
+
+.subPanel__error {
+  color: $red-1;
+}
+
 .subPanel__header {
   display: flex;
   flex-direction: row;
