@@ -1,5 +1,4 @@
 import { useGetCafeStat } from '../../hooks/useGetCafeStat';
-import { reviewsMockData } from '../../mocks/reviewsMockData';
 
 import styles from './MapSubPanel.module.scss';
 import MapSubPanelReviews from './MapSubPanelReviews/MapSubPanelReviews';
@@ -13,8 +12,6 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ cafeId }) => {
   const { data: cafeStatResponse, isLoading, isError } = useGetCafeStat({ cafeId });
 
   const statData = cafeStatResponse?.data;
-
-  const reviewList = reviewsMockData?.cafeReviews;
 
   // 로딩 상태 처리
   if (isLoading) {
@@ -46,7 +43,7 @@ const MapSubPanel: React.FC<MapSubPanelProps> = ({ cafeId }) => {
       <MapSubPanelStats statData={statData} />
 
       {/* 리뷰 리스트 */}
-      <MapSubPanelReviews reviewList={reviewList} />
+      <MapSubPanelReviews cafeId={cafeId} />
     </div>
   );
 };
