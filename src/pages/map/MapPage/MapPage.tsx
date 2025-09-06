@@ -259,7 +259,7 @@ const MapPage = () => {
             {/* 줌 레벨 컨트롤 */}
             <ZoomControl position="BOTTOMRIGHT" />
 
-            {/* 마커 - API에서 받은 데이터(mapSearchData)로 표시 */}
+            {/* 마커 */}
             {mapSearchData &&
               mapSearchData.map(m => (
                 <MapMarker
