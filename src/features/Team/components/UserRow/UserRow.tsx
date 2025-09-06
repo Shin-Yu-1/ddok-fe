@@ -25,15 +25,29 @@ const User = ({ user }: UserProps) => {
             alt="Banner"
           />
           <div className={styles.user__item__left__nickname}>{user.nickname}</div>
-          <div className={styles.user__item__left__badge}>
-            <Badge
-              className={styles.mainBadge}
-              mainBadge={{
-                type: user.mainBadge.type as BadgeType,
-                tier: user.mainBadge.tier as BadgeTier,
-              }}
-              widthSize="13px"
-            />
+          <div className={styles.user__item__left__badges}>
+            {user.mainBadge && (
+              <Badge
+                className={styles.badge}
+                mainBadge={{
+                  type: user.mainBadge.type as BadgeType,
+                  tier: user.mainBadge.tier as BadgeTier,
+                }}
+                widthSize="13px"
+              />
+            )}
+            {user.abandonBadge && (
+              <Badge
+                className={styles.badge}
+                abandonBadge={
+                  user.abandonBadge && {
+                    isGranted: user.abandonBadge.isGranted,
+                    count: user.abandonBadge.count,
+                  }
+                }
+                widthSize="13px"
+              />
+            )}
           </div>
         </div>
 
