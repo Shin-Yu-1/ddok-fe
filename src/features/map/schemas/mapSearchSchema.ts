@@ -59,7 +59,7 @@ export const MapSearchParamsSchema = z.object({
   lat: z.number(),
   lng: z.number(),
   page: z.number().optional().default(0),
-  size: z.number().optional().default(10),
+  size: z.number().optional().default(20),
 });
 
 /**
