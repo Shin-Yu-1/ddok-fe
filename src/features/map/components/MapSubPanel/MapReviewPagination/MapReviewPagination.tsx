@@ -12,7 +12,6 @@ interface MapReviewPaginationProps {
 const MapReviewPagination: React.FC<MapReviewPaginationProps> = ({ pagination, onPageChange }) => {
   const { currentPage, totalPages } = pagination;
 
-  // 페이지 번호 배열 생성 (최대 5개 페이지만 표시)
   const getVisiblePages = () => {
     const maxVisible = 5;
     const half = Math.floor(maxVisible / 2);
@@ -20,7 +19,6 @@ const MapReviewPagination: React.FC<MapReviewPaginationProps> = ({ pagination, o
     let start = Math.max(0, currentPage - half);
     const end = Math.min(totalPages - 1, start + maxVisible - 1);
 
-    // 끝에 도달한 경우 시작점 조정
     if (end - start < maxVisible - 1) {
       start = Math.max(0, end - maxVisible + 1);
     }
@@ -46,7 +44,6 @@ const MapReviewPagination: React.FC<MapReviewPaginationProps> = ({ pagination, o
     onPageChange(page);
   };
 
-  // 페이지가 1개 이하면 페이지네이션을 표시하지 않음
   if (totalPages <= 1) {
     return null;
   }
