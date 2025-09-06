@@ -214,8 +214,6 @@ const ChatList = ({ roomType }: ChatProps) => {
   }, [menuFor]);
 
   const onSearchInputHandler: React.KeyboardEventHandler<HTMLInputElement> = e => {
-    console.log(e.currentTarget.value);
-
     if (!e.currentTarget.value) {
       setSearch('');
       refetch();
