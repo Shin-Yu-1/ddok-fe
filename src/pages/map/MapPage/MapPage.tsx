@@ -74,7 +74,7 @@ const MapPage = () => {
   } = useMapSearch(mapBounds, {
     enabled: true,
     page: currentPage,
-    pageSize: 20,
+    pageSize: 5,
   });
 
   // 세션 스토리지에서 사용자 위치 정보 가져오기
@@ -162,7 +162,7 @@ const MapPage = () => {
   // 지도 영역의 변경을 자동으로 감지하여 MapBounds 업데이트
   const handleMapChange = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
-    // mapRef.current?.relayout();
+    mapRef.current?.relayout();
 
     setIsMapChanged(true);
     setMapBounds({
