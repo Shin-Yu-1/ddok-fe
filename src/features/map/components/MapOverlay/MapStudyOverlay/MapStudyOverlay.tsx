@@ -1,5 +1,5 @@
 import Button from '@/components/Button/Button';
-import type { StudyOverlayData } from '@/features/map/types/study';
+import type { StudyOverlayData } from '@/features/map/schemas/overlaySchema';
 
 import styles from '../MapOverlay.module.scss';
 

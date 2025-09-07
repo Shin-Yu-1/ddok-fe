@@ -17,12 +17,14 @@ import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { useMapSearch } from '@/features/map/hooks/useMapSearch';
 import { overlayMockData } from '@/features/map/mocks/overlayMockData';
-import type { CafeOverlayData } from '@/features/map/types/cafe';
+import type {
+  CafeOverlayData,
+  PlayerOverlayData,
+  ProjectOverlayData,
+  StudyOverlayData,
+} from '@/features/map/schemas/overlaySchema';
 import type { MapBounds } from '@/features/map/types/common';
 import { MapItemCategory } from '@/features/map/types/common';
-import type { PlayerOverlayData } from '@/features/map/types/player';
-import type { ProjectOverlayData } from '@/features/map/types/project';
-import type { StudyOverlayData } from '@/features/map/types/study';
 import Sidebar from '@/features/Sidebar/components/Sidebar';
 import { useSidebarHandlers } from '@/features/Sidebar/hooks/useSidebarHandlers';
 

@@ -1,5 +1,5 @@
 import Button from '@/components/Button/Button';
-import type { CafeOverlayData } from '@/features/map/types/cafe';
+import type { CafeOverlayData } from '@/features/map/schemas/overlaySchema';
 
 import styles from '../MapOverlay.module.scss';
 
