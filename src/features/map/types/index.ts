@@ -18,23 +18,16 @@ export type { PlayerPanelItem, PlayerMapItem } from './player';
 export type { CafePanelItem, CafeMapItem } from './cafe';
 
 // 다시 import해서 union type 생성
-import type { CafePanelItem, CafeMapItem, CafeOverlayData } from './cafe';
-import type { PlayerPanelItem, PlayerMapItem, PlayerOverlayData } from './player';
-import type { ProjectPanelItem, ProjectMapItem, ProjectOverlayData } from './project';
-import type { StudyPanelItem, StudyMapItem, StudyOverlayData } from './study';
+import type { CafePanelItem, CafeMapItem } from './cafe';
+import type { PlayerPanelItem, PlayerMapItem } from './player';
+import type { ProjectPanelItem, ProjectMapItem } from './project';
+import type { StudyPanelItem, StudyMapItem } from './study';
 
 /** 지도상의 아이템 통합 타입 */
 export type MapItem = ProjectMapItem | StudyMapItem | PlayerMapItem | CafeMapItem;
 
 /** 패널 아이템 통합 타입 */
 export type MapPanelItem = ProjectPanelItem | StudyPanelItem | PlayerPanelItem | CafePanelItem;
-
-/** 오버레이 통합 타입 */
-export type MapOverlayData =
-  | ProjectOverlayData
-  | StudyOverlayData
-  | PlayerOverlayData
-  | CafeOverlayData;
 
 // 타입 가드 함수들
 export const isProject = (item: MapPanelItem): item is ProjectPanelItem =>

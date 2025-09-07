@@ -15,22 +15,3 @@ export interface StudyMapItem extends BaseMapItem {
 export interface StudyPanelItem extends StudyMapItem {
   bannerImageUrl: string;
 }
-
-/** 스터디 오버레이 정보 */
-export interface StudyOverlayData {
-  category: string;
-  studyId: number;
-  title: string;
-  bannerImageUrl: string;
-  teamStatus: string;
-  studyType: string;
-  capacity: number;
-  mode: string;
-  address: string;
-  preferredAges: {
-    ageMin: number;
-    ageMax: number;
-  };
-  expectedMonth: number;
-  startDate: string;
-}

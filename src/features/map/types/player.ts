@@ -25,33 +25,3 @@ export interface PlayerPanelItem extends PlayerMapItem {
   temperature: number;
   profileImageUrl: string;
 }
-
-/** 플레이어 오버레이 정보 */
-export interface PlayerOverlayData {
-  category: string;
-  userId: number;
-  nickname: string;
-  profileImageUrl: string;
-  mainBadge: {
-    type: string;
-    tier: string;
-  };
-  abandonBadge: {
-    isGranted: boolean;
-    count: number;
-  };
-  mainPosition: string;
-  address: string;
-  latestProject: {
-    id: number;
-    title: string;
-    teamStatus: string;
-  };
-  latestStudy: {
-    id: number;
-    title: string;
-    teamStatus: string;
-  };
-  temperature: number;
-  isMine: boolean;
-}

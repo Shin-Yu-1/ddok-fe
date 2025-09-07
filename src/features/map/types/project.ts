@@ -15,22 +15,3 @@ export interface ProjectMapItem extends BaseMapItem {
 export interface ProjectPanelItem extends ProjectMapItem {
   bannerImageUrl: string;
 }
-
-/** 프로젝트 오버레이 정보 */
-export interface ProjectOverlayData {
-  category: string;
-  projectId: number;
-  title: string;
-  bannerImageUrl: string;
-  teamStatus: string;
-  positions: string[];
-  capacity: number;
-  mode: string;
-  address: string;
-  preferredAges: {
-    ageMin: number;
-    ageMax: number;
-  };
-  expectedMonth: number;
-  startDate: string;
-}

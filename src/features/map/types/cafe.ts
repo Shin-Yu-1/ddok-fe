@@ -14,14 +14,3 @@ export interface CafeMapItem extends BaseMapItem {
 export interface CafePanelItem extends CafeMapItem {
   bannerImageUrl: string;
 }
-
-/** 추천 장소 오버레이 정보 */
-export interface CafeOverlayData {
-  category: string;
-  cafeId: number;
-  title: string;
-  bannerImageUrl: string;
-  rating: number;
-  reviewCount: number;
-  address: string;
-}
