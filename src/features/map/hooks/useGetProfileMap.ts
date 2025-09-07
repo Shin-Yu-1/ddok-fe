@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { api } from '@/api/api';
 
+import type { MapBounds } from '../schemas/mapItemSchema';
 import type { ProfileMapResponse } from '../schemas/profileMapSchema';
-import type { MapBounds } from '../types/common';
 
 interface UseGetProfileMapParams {
   playerId: number | null;

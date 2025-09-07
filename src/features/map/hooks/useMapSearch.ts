@@ -1,8 +1,8 @@
 import { useGetApi } from '@/hooks/useGetApi';
 
+import type { MapBounds } from '../schemas/mapItemSchema';
 import type { MapSearchResponse } from '../schemas/mapSearchSchema';
 import type { MapPanelItem } from '../types';
-import type { MapBounds } from '../types/common';
 
 interface UseMapSearchOptions {
   enabled?: boolean;
