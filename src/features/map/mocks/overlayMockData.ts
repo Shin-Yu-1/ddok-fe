@@ -1,10 +1,8 @@
-import type { MapOverlayData } from '../types';
-
 /**
  * 오버레이 목 데이터
  */
 
-export const overlayMockData: MapOverlayData[] = [
+export const overlayMockData = [
   // 프로젝트
   {
     category: 'project',
