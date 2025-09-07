@@ -11,17 +11,19 @@ export const mainBadgeSchema = z.object({
   tier: z.nativeEnum(BadgeTier),
 });
 export type MainBadge = z.infer<typeof mainBadgeSchema>;
+export const abandonBadgeSchema = z.object({
+  granted: z.boolean(),
+  count: z.number(),
+});
+export type abandonBadge = z.infer<typeof abandonBadgeSchema>;
 
 export const playerSchema = z.object({
   userId: z.number(),
   category: z.string(),
   nickname: z.string(),
   profileImageUrl: z.string(),
-  mainBadge: z.array(mainBadgeSchema),
-  abandonBadge: {
-    isGranted: z.boolean(),
-    count: z.number(),
-  },
+  mainBadge: mainBadgeSchema,
+  abandonBadge: abandonBadgeSchema,
   mainPosition: z.string(),
   address: z.string(),
   temperature: z.number(),
@@ -31,10 +33,10 @@ export const playerSchema = z.object({
 });
 export type Player = z.infer<typeof playerSchema>;
 
-export const playerListSchema = z.object({
+export const playerSearchSchema = z.object({
   items: z.array(playerSchema),
   pagination: paginationSchema,
 });
 
-export const playerListApiResponseSchema = apiResponseSchema(playerListSchema);
-export type playerListApiResponse = z.infer<typeof playerListApiResponseSchema>;
+export const playerSearchApiResponseSchema = apiResponseSchema(playerSearchSchema);
+export type playerSearchApiResponse = z.infer<typeof playerSearchApiResponseSchema>;
