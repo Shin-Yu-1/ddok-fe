@@ -1,14 +1,12 @@
 import AddressSearchInput from '@/components/AddressSearchInput/AddressSearchInput';
+import type { Location } from '@/types/project';
 
 import styles from './LocationSelector.module.scss';
 
 interface LocationSelectorProps {
   locationSearch: string;
   onLocationSearchChange: (value: string) => void;
-  onLocationSelect: (
-    location: string,
-    coordinates?: { latitude: number; longitude: number }
-  ) => void;
+  onLocationSelect: (location: Location) => void;
 }
 
 const LocationSelector = ({
@@ -22,7 +20,7 @@ const LocationSelector = ({
       <AddressSearchInput
         value={locationSearch}
         onChange={onLocationSearchChange}
-        onSelect={onLocationSelect}
+        onLocationSelect={onLocationSelect}
         placeholder="주소 검색하기"
       />
     </div>
