@@ -13,7 +13,7 @@ interface BadgeProps {
   /** 메인 배지 (타입/티어) */
   mainBadge?: { type: BadgeType; tier: BadgeTier };
   /** 탈주 배지(수여 여부/횟수) – 타입이 ABANDON일 때 사용됨 */
-  abandonBadge?: { granted: boolean; count: number };
+  abandonBadge?: { isGranted: boolean; count: number };
   /** 이미지 크기(px 숫자 또는 '1.25rem' 등의 문자열). 기본 16 */
   widthSize?: number | string;
   heightSize?: number | string;
@@ -63,7 +63,7 @@ const Badge: React.FC<BadgeProps> = ({
   const src = getBadgeSrc(
     mainBadge?.type ?? BadgeType.ABANDON,
     mainBadge?.tier,
-    abandonBadge?.granted
+    abandonBadge?.isGranted
   );
 
   if (!src) return null;

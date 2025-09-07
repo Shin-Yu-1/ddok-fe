@@ -12,7 +12,7 @@ export const mainBadgeSchema = z.object({
 });
 export type MainBadge = z.infer<typeof mainBadgeSchema>;
 export const abandonBadgeSchema = z.object({
-  granted: z.boolean(),
+  isGranted: z.boolean(),
   count: z.number(),
 });
 export type abandonBadge = z.infer<typeof abandonBadgeSchema>;
