@@ -1,6 +1,8 @@
 import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import Input from '@/components/Input/Input';
+import type { Location } from '@/types/project';
+import { enhanceAddressWithKakao } from '@/utils/kakaoGeocoder';
 
 declare global {
   interface Window {
@@ -70,7 +72,7 @@ declare global {
 interface AddressSearchInputProps {
   value: string;
   onChange: (value: string) => void;
-  onSelect?: (address: string, coordinates?: { latitude: number; longitude: number }) => void;
+  onLocationSelect?: (location: Location) => void;
   placeholder?: string;
   className?: string;
 }
@@ -78,36 +80,10 @@ interface AddressSearchInputProps {
 const AddressSearchInput = ({
   value,
   onChange,
-  onSelect,
+  onLocationSelect,
   placeholder = '주소 검색하기',
   className,
 }: AddressSearchInputProps) => {
-  // 카카오 지오코더를 사용하여 주소로 좌표 검색
-  const getCoordinatesFromAddress = (
-    address: string
-  ): Promise<{ latitude: number; longitude: number } | null> => {
-    return new Promise(resolve => {
-      if (!window.kakao?.maps?.services) {
-        resolve(null);
-        return;
-      }
-
-      const geocoder = new window.kakao.maps.services.Geocoder();
-
-      geocoder.addressSearch(address, (result, status) => {
-        if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
-          const coords = {
-            latitude: parseFloat(result[0].y),
-            longitude: parseFloat(result[0].x),
-          };
-          resolve(coords);
-        } else {
-          resolve(null);
-        }
-      });
-    });
-  };
-
   const handleIconClick = () => {
     // 카카오 주소검색 API가 로드되어 있는지 확인
     if (window.daum && window.daum.Postcode) {
@@ -116,24 +92,28 @@ const AddressSearchInput = ({
           const fullAddress = data.address;
           onChange(fullAddress);
 
-          if (onSelect) {
-            // 먼저 Postcode API에서 제공하는 좌표를 확인
-            let coordinates: { latitude: number; longitude: number } | undefined;
+          if (onLocationSelect) {
+            // kakaoGeocoder를 사용하여 상세한 위치 정보 획득
+            const locationData = await enhanceAddressWithKakao(fullAddress, data.zonecode);
 
-            if (data.x && data.y) {
-              coordinates = {
-                latitude: parseFloat(data.y),
-                longitude: parseFloat(data.x),
-              };
+            if (locationData) {
+              onLocationSelect(locationData);
             } else {
-              // Postcode API에서 좌표가 없으면 지오코더 API 사용
-              const geocoderResult = await getCoordinatesFromAddress(fullAddress);
-              if (geocoderResult) {
-                coordinates = geocoderResult;
-              }
+              // kakaoGeocoder 실패 시 기본 좌표만 사용
+              const fallbackLocation: Location = {
+                address: fullAddress,
+                region1depthName: data.sido || '',
+                region2depthName: data.sigungu || '',
+                region3depthName: data.bname || '',
+                roadName: data.roadname || '',
+                mainBuildingNo: '',
+                subBuildingNo: '',
+                zoneNo: data.zonecode || '',
+                latitude: data.y ? parseFloat(data.y) : 0,
+                longitude: data.x ? parseFloat(data.x) : 0,
+              };
+              onLocationSelect(fallbackLocation);
             }
-
-            onSelect(fullAddress, coordinates);
           }
         },
         onclose: function () {},

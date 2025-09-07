@@ -1,7 +1,7 @@
 enum BadgeTier {
-  BRONZE = 'BRONZE',
-  SILVER = 'SILVER',
-  GOLD = 'GOLD',
+  BRONZE = 'bronze',
+  SILVER = 'silver',
+  GOLD = 'gold',
 }
 
 export default BadgeTier;

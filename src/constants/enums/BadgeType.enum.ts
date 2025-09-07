@@ -1,8 +1,8 @@
 enum BadgeType {
-  COMPLETE = 'COMPLETE',
-  LEADER_COMPLETE = 'LEADER_COMPLETE',
-  LOGIN = 'LOGIN',
-  ABANDON = 'ABANDON',
+  COMPLETE = 'complete',
+  LEADER_COMPLETE = 'leader_complete',
+  LOGIN = 'login',
+  ABANDON = 'abandon',
 }
 
 export default BadgeType;

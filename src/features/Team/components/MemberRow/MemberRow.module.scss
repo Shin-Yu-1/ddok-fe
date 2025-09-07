@@ -1,0 +1,38 @@
+@use '@/styles/variables' as *;
+
+.positionContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  margin: auto 0;
+  text-align: center;
+}
+
+.leader,
+.position {
+  width: fit-content;
+  margin: auto;
+  padding: 4px 12px;
+  border: 1px solid $gray-3;
+  border-radius: $r-small;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-semibold;
+  text-align: center;
+  background-color: $white-2;
+}
+
+.leader {
+  border: none;
+  color: $white-1;
+  background-color: $gray-1;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+  text-align: center;
+}
