@@ -7,3 +7,45 @@
 }
 
 @include p.post-layout-base-styles;
+
+.titleInput {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xsmall;
+  font-weight: $fw-regular;
+  background-color: $white-3;
+
+  &:focus {
+    border-color: $blue-1;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $gray-2;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: $fs-large;
+  font-weight: $fw-medium;
+  color: $gray-1;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: $fs-large;
+  font-weight: $fw-medium;
+  color: $red-1;
+}

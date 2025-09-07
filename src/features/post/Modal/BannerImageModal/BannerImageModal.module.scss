@@ -13,21 +13,90 @@
   gap: 8px;
 }
 
+.infoHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .infoLabel {
   font-size: $fs-xxsmall;
   font-weight: $fw-medium;
   color: $gray-1;
 }
 
+.copyButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  background-color: $white-3;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $blue-1;
+    color: $blue-1;
+    background-color: rgba($blue-1, 0.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 .infoValue {
-  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
   border: 1px solid $gray-3;
   border-radius: $r-xxsmall;
   font-size: $fs-xxsmall;
   font-weight: $fw-regular;
+  background-color: $white-3;
+
+  &.file {
+    border-color: rgba($green-1, 0.3);
+    background-color: rgba($green-1, 0.05);
+  }
+
+  &.url {
+    border-color: rgba($blue-1, 0.3);
+    background-color: rgba($blue-1, 0.05);
+  }
+
+  &.default {
+    border-color: rgba($gray-2, 0.3);
+    background-color: rgba($gray-4, 0.3);
+  }
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  font-size: $fs-small;
+}
+
+.statusText {
+  flex: 1;
   word-break: break-all;
   color: $black-3;
-  background-color: $gray-4;
+}
+
+.fullUrl {
+  padding: 8px 12px;
+  border: 1px solid rgba($gray-3, 0.5);
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-regular;
+  word-break: break-all;
+  color: $gray-1;
+  background-color: rgba($gray-4, 0.2);
 }
 
 .preview {
@@ -66,8 +135,41 @@
 }
 
 .confirmSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding-top: 16px;
   border-top: 1px solid $gray-4;
+}
+
+.selectedFileInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba($green-1, 0.3);
+  border-radius: $r-xxsmall;
+  background-color: rgba($green-1, 0.05);
+}
+
+.selectedIcon {
+  flex-shrink: 0;
+  font-size: $fs-small;
+}
+
+.selectedName {
+  flex: 1;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  word-break: break-all;
+  color: $black-3;
+}
+
+.selectedSize {
+  flex-shrink: 0;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-regular;
+  color: $gray-1;
 }
 
 .hiddenInput {
