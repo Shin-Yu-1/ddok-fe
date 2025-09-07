@@ -20,6 +20,10 @@ export const ProjectOverlaySchema = z.object({
   expectedMonth: z.number(),
   startDate: z.string(),
 });
+/**
+ * 프로젝트 오버레이 타입
+ */
+export type ProjectOverlayData = z.infer<typeof ProjectOverlaySchema>;
 
 /**
  * 스터디 오버레이 스키마
@@ -41,6 +45,10 @@ export const StudyOverlaySchema = z.object({
   expectedMonth: z.number(),
   startDate: z.string(),
 });
+/**
+ * 스터디 오버레이 타입
+ */
+export type StudyOverlayData = z.infer<typeof StudyOverlaySchema>;
 
 /**
  * 플레이어 오버레이 스키마
@@ -73,6 +81,10 @@ export const PlayerOverlaySchema = z.object({
   temperature: z.number(),
   isMine: z.boolean(),
 });
+/**
+ * 플레이어 오버레이 타입
+ */
+export type PlayerOverlayData = z.infer<typeof PlayerOverlaySchema>;
 
 /**
  * 추천 장소 오버레이 스키마
@@ -86,6 +98,10 @@ export const CafeOverlaySchema = z.object({
   reviewCount: z.number(),
   address: z.string(),
 });
+/**
+ * 추천 장소 오버레이 타입
+ */
+export type CafeOverlayData = z.infer<typeof CafeOverlaySchema>;
 
 /**
  * 프로젝트 오버레이 조회 API 응답 스키마
@@ -95,6 +111,10 @@ export const ProjectOverlayResponseSchema = z.object({
   message: z.string(),
   status: z.number(),
 });
+/**
+ * 프로젝트 오버레이 조회 API 응답 타입
+ */
+export type ProjectOverlayResponse = z.infer<typeof ProjectOverlayResponseSchema>;
 
 /**
  * 스터디 오버레이 조회 API 응답 스키마
@@ -104,6 +124,10 @@ export const StudyOverlayResponseSchema = z.object({
   message: z.string(),
   status: z.number(),
 });
+/**
+ * 스터디 오버레이 조회 API 응답 타입
+ */
+export type StudyOverlayResponse = z.infer<typeof StudyOverlayResponseSchema>;
 
 /**
  * 플레이어 오버레이 조회 API 응답 스키마
@@ -113,6 +137,10 @@ export const PlayerOverlayResponseSchema = z.object({
   message: z.string(),
   status: z.number(),
 });
+/**
+ * 플레이어 오버레이 조회 API 응답 타입
+ */
+export type PlayerOverlayResponse = z.infer<typeof PlayerOverlayResponseSchema>;
 
 /**
  * 추천 장소 오버레이 조회 API 응답 스키마
@@ -122,42 +150,6 @@ export const CafeOverlayResponseSchema = z.object({
   message: z.string(),
   status: z.number(),
 });
-
-/**
- * 프로젝트 오버레이 타입
- */
-export type ProjectOverlayData = z.infer<typeof ProjectOverlaySchema>;
-
-/**
- * 스터디 오버레이 타입
- */
-export type StudyOverlayData = z.infer<typeof StudyOverlaySchema>;
-
-/**
- * 플레이어 오버레이 타입
- */
-export type PlayerOverlayData = z.infer<typeof PlayerOverlaySchema>;
-
-/**
- * 추천 장소 오버레이 타입
- */
-export type CafeOverlayData = z.infer<typeof CafeOverlaySchema>;
-
-/**
- * 프로젝트 오버레이 조회 API 응답 타입
- */
-export type ProjectOverlayResponse = z.infer<typeof ProjectOverlayResponseSchema>;
-
-/**
- * 스터디 오버레이 조회 API 응답 타입
- */
-export type StudyOverlayResponse = z.infer<typeof StudyOverlayResponseSchema>;
-
-/**
- * 플레이어 오버레이 조회 API 응답 타입
- */
-export type PlayerOverlayResponse = z.infer<typeof PlayerOverlayResponseSchema>;
-
 /**
  * 추천 장소 오버레이 조회 API 응답 타입
  */

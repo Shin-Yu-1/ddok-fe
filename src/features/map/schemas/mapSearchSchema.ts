@@ -11,6 +11,10 @@ export const PaginationSchema = z.object({
   totalPages: z.number(),
   totalItems: z.number(),
 });
+/**
+ * 페이지네이션 정보 타입
+ */
+export type Pagination = z.infer<typeof PaginationSchema>;
 
 /**
  * 지도 검색 API 데이터 스키마
@@ -19,6 +23,12 @@ export const MapSearchDataSchema = z.object({
   items: z.array(z.any()),
   pagination: PaginationSchema,
 });
+/**
+ * 지도 검색 API 데이터 타입
+ */
+export type MapSearchData = z.infer<typeof MapSearchDataSchema> & {
+  items: MapPanelItem[];
+};
 
 /**
  * 지도 검색 API 응답 스키마
@@ -28,19 +38,6 @@ export const MapSearchResponseSchema = z.object({
   message: z.string(),
   status: z.number(),
 });
-
-/**
- * 페이지네이션 정보 타입
- */
-export type Pagination = z.infer<typeof PaginationSchema>;
-
-/**
- * 지도 검색 API 데이터 타입
- */
-export type MapSearchData = z.infer<typeof MapSearchDataSchema> & {
-  items: MapPanelItem[];
-};
-
 /**
  * 지도 검색 API 응답 타입
  */
@@ -63,7 +60,6 @@ export const MapSearchParamsSchema = z.object({
   category: z.string().optional(),
   filter: z.string().optional(),
 });
-
 /**
  * 지도 검색 API 요청 파라미터 타입
  */

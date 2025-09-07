@@ -9,6 +9,10 @@ export const PaginationSchema = z.object({
   totalPages: z.number(),
   totalItems: z.number(),
 });
+/**
+ * 페이지네이션 정보 타입
+ */
+export type Pagination = z.infer<typeof PaginationSchema>;
 
 /**
  * 개별 리뷰
@@ -22,6 +26,10 @@ export const CafeReviewSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
 });
+/**
+ * 개별 리뷰 타입
+ */
+export type CafeReview = z.infer<typeof CafeReviewSchema>;
 
 /**
  * 리뷰 리스트 조회 API 데이터 스키마
@@ -32,6 +40,10 @@ export const CafeReviewDataSchema = z.object({
   pagination: PaginationSchema,
   cafeReviews: z.array(CafeReviewSchema),
 });
+/**
+ * 리뷰 리스트 조회 API 데이터 타입
+ */
+export type CafeReviewData = z.infer<typeof CafeReviewDataSchema>;
 
 /**
  * 리뷰 리스트 조회 API 응답 스키마
@@ -41,22 +53,6 @@ export const CafeReviewResponseSchema = z.object({
   message: z.string(),
   status: z.number(),
 });
-
-/**
- * 페이지네이션 정보 타입
- */
-export type Pagination = z.infer<typeof PaginationSchema>;
-
-/**
- * 개별 리뷰 타입
- */
-export type CafeReview = z.infer<typeof CafeReviewSchema>;
-
-/**
- * 리뷰 리스트 조회 API 데이터 타입
- */
-export type CafeReviewData = z.infer<typeof CafeReviewDataSchema>;
-
 /**
  * 리뷰 리스트 조회 API 응답 타입
  */
