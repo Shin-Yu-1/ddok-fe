@@ -14,8 +14,9 @@ type PreferredAges = {
 };
 
 type SearchCardProps = {
-  item: ProjectItem | StudyItem;
+  item: ProjectItem | StudyItem | null;
   isLoading?: boolean;
+  clickHandle?: (item: ProjectItem | StudyItem) => void;
 };
 
 // 타입 가드
@@ -23,54 +24,8 @@ const isProjectItem = (item: ProjectItem | StudyItem): item is ProjectItem => {
   return 'projectId' in item;
 };
 
-const SearchCard = ({ item, isLoading }: SearchCardProps) => {
-  // 한글 변환
-  const getTeamStatusText = (status: TeamStatus) => {
-    switch (status) {
-      case 'RECRUITING':
-        return '모집 중';
-      case 'ONGOING':
-        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 진행 중`;
-      case 'CLOSED':
-        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 종료`;
-      default:
-        return '모집 중';
-    }
-  };
-
-  const getAddressText = (address: string) => {
-    if (address === 'online') {
-      return '온라인';
-    } else {
-      return address;
-    }
-  };
-
-  // 진행 방식에 따른 한글 변환
-  const getModeText = (mode: string) => {
-    return mode === 'offline' ? '오프라인' : '온라인';
-  };
-
-  // 희망 나이대 포맷팅
-  const getAgeRangeText = (preferredAges: PreferredAges) => {
-    if (!preferredAges) return '-';
-
-    const { ageMin, ageMax } = preferredAges;
-
-    if (ageMin && ageMax) {
-      return `${ageMin}대, ${ageMax}대`;
-    }
-    if (ageMin) return `${ageMin}대 이상`;
-    if (ageMax) return `${ageMax}대 이하`;
-    return '-';
-  };
-
-  // 시작 예정일 포맷팅
-  const formatStartDate = (dateString: string) => {
-    return dayjs(dateString).format('YYYY.MM.DD');
-  };
-
-  if (isLoading) {
+const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
+  if (isLoading || !item) {
     return (
       <div className={`${styles.cardContainer} ${styles.skeleton}`}>
         <div className={styles.bannerWrapper}>
@@ -122,8 +77,59 @@ const SearchCard = ({ item, isLoading }: SearchCardProps) => {
     );
   }
 
+  // 한글 변환
+  const getTeamStatusText = (status: TeamStatus) => {
+    switch (status) {
+      case 'RECRUITING':
+        return '모집 중';
+      case 'ONGOING':
+        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 진행 중`;
+      case 'CLOSED':
+        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 종료`;
+      default:
+        return '모집 중';
+    }
+  };
+
+  const getAddressText = (address: string) => {
+    if (address === 'online') {
+      return '온라인';
+    } else {
+      return address;
+    }
+  };
+
+  // 진행 방식에 따른 한글 변환
+  const getModeText = (mode: string) => {
+    return mode === 'offline' ? '오프라인' : '온라인';
+  };
+
+  // 희망 나이대 포맷팅
+  const getAgeRangeText = (preferredAges: PreferredAges) => {
+    if (!preferredAges) return '-';
+
+    const { ageMin, ageMax } = preferredAges;
+
+    if (ageMin && ageMax) {
+      return `${ageMin}대, ${ageMax}대`;
+    }
+    if (ageMin) return `${ageMin}대 이상`;
+    if (ageMax) return `${ageMax}대 이하`;
+    return '-';
+  };
+
+  // 시작 예정일 포맷팅
+  const formatStartDate = (dateString: string) => {
+    return dayjs(dateString).format('YYYY.MM.DD');
+  };
+
   return (
-    <div className={styles.cardContainer}>
+    <div
+      className={styles.cardContainer}
+      onClick={() => {
+        clickHandle(item);
+      }}
+    >
       <div className={styles.bannerWrapper}>
         <img src={item.bannerImageUrl || banner} alt={item.title} />
         <div className={`${styles.statusBadge} ${styles[item.teamStatus.toLowerCase()]}`}>

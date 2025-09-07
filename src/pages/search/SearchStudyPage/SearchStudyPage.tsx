@@ -38,12 +38,10 @@ const capacityOptions = [
   { label: '6명', value: 6 },
   { label: '7명', value: 7 },
 ];
-// TODO: API 연동 시 수정
 const modeOptions = [
   { label: '오프라인', value: 'offline' },
   { label: '온라인', value: 'online' },
 ];
-// TODO: API 연동 시 수정
 const periodOptions = [
   { label: '1개월 이하', value: 1 },
   { label: '2개월', value: 2 },
@@ -74,7 +72,7 @@ const SearchStudyPage = () => {
     startDate: null,
   });
   const [age, setAge] = useState<number | null>(null);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<null | Date>(null);
   const [studyList, setStudyList] = useState<StudyItem[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -92,10 +90,10 @@ const SearchStudyPage = () => {
   useEffect(() => {
     if (responseData?.data?.items) {
       setStudyList((prev: StudyItem[]) => {
-        const safeNewProjects = responseData?.data?.items || [];
+        const safeNewItems = responseData?.data?.items || [];
         const existingIds = new Set(prev.map(item => item.studyId));
-        const filteredNewProjects = safeNewProjects.filter(item => !existingIds.has(item.studyId));
-        return [...prev, ...filteredNewProjects];
+        const filteredNewItems = safeNewItems.filter(item => !existingIds.has(item.studyId));
+        return [...prev, ...filteredNewItems];
       });
     }
 
@@ -203,7 +201,8 @@ const SearchStudyPage = () => {
       ageMax: null,
       expectedMonth: null,
     });
-    setStartDate(new Date());
+    setAge(null);
+    setStartDate(null);
   };
 
   const buildParams = () => {
@@ -323,7 +322,8 @@ const SearchStudyPage = () => {
               className={styles.datePicker}
               selected={startDate}
               onChange={date => setStartDate(date || new Date())}
-              dateFormat="yyyy.MM.dd"
+              dateFormat="yyy-MM-dd"
+              placeholderText="시작일 선택"
             />
           </div>
           <Button
