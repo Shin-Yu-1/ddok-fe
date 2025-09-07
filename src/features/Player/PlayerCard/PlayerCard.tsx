@@ -14,10 +14,11 @@ import { useAuthStore } from '@/stores/authStore';
 import styles from './PlayerCard.module.scss';
 
 interface PlayerCardProps {
-  player: Player;
+  isLoading?: boolean;
+  player?: Player;
 }
 
-const PlayerCard = ({ player }: PlayerCardProps) => {
+const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -34,7 +35,7 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
 
   const sendDmRequest = useCallback(() => {
     /* TODO: API 연동 시 제거 */
-    console.log(player.nickname + ' 1:1 채팅 요청');
+    console.log(player?.nickname + ' 1:1 채팅 요청');
     closeMenu();
 
     /* TODO: API 연동 시 주석 해제 */
@@ -48,7 +49,7 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
     //     alert('DM 요청 전송 중 오류가 발생했습니다.');
     //   },
     // });
-  }, [player.nickname, closeMenu]);
+  }, [player?.nickname, closeMenu]);
 
   const menuItems = useMemo(() => {
     const items = [
@@ -81,6 +82,28 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
   const openMenu = () => {
     setIsMenuOpen(true);
   };
+
+  if (isLoading || !player) {
+    return (
+      <div className={styles.skeletonCard}>
+        <div className={styles.skeletonTemperatureWrapper}>
+          <div className={styles.skeletonThermometer}></div>
+          <div className={styles.skeletonTemperature}></div>
+          <div className={styles.skeletonButton}></div>
+        </div>
+        <div className={styles.skeletonProfileImage}></div>
+        <div className={styles.skeletonNickname}></div>
+        <div className={styles.skeletonBadgeWrapper}>
+          <div className={styles.skeletonBadge}></div>
+          <div className={styles.skeletonBadge}></div>
+        </div>
+        <div className={styles.skeletonPlayerInfo}>
+          <div className={styles.skeletonDetails}></div>
+          <div className={styles.skeletonDetails}></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.playerCard}>
@@ -119,9 +142,8 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
       </h3>
       <div className={styles.line}>
         <div className={styles.badgeWrapper}>
-          {player.mainBadge.map(badge => (
-            <Badge key={`${badge.type}${badge.tier}`} heightSize={16} mainBadge={badge} />
-          ))}
+          {player.mainBadge && <Badge heightSize={16} mainBadge={player?.mainBadge} />}
+          {player.abandonBadge && <Badge heightSize={16} abandonBadge={player?.abandonBadge} />}
         </div>
       </div>
       <div className={styles.playerInfo}>
