@@ -1,4 +1,4 @@
-import type { CafePanelItem } from '@/features/map/types';
+import type { CafePanelItem } from '@/features/map/schemas/mapItemSchema';
 
 import styles from '../MapPanelItem.module.scss';
 

@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 
 import { useGetProfileMap } from '../../hooks/useGetProfileMap';
-import type { MapBounds } from '../../types/common';
+import type { MapBounds } from '../../schemas/mapItemSchema';
 
 import styles from './ProfileMap.module.scss';
 

@@ -1,4 +1,4 @@
-import type { PlayerPanelItem } from '@/features/map/types';
+import type { PlayerPanelItem } from '@/features/map/schemas/mapItemSchema';
 
 import styles from '../MapPanelItem.module.scss';
 
