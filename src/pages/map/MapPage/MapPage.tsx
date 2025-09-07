@@ -8,7 +8,6 @@ import {
   ZoomControl,
 } from 'react-kakao-maps-sdk';
 
-// import Button from '@/components/Button/Button';
 import MapCafeOverlay from '@/features/map/components/MapOverlay/MapCafeOverlay/MapCafeOverlay';
 import MapPlayerOverlay from '@/features/map/components/MapOverlay/MapPlayerOverlay/MapPlayerOverlay';
 import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOverlay/MapProjectOverlay';
@@ -57,9 +56,6 @@ const MapPage = () => {
 
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
-
-  // 지도 사각 영역의 변경 여부
-  //   const [isMapChanged, setIsMapChanged] = useState(false);
 
   // 최초 로드 완료 여부
   const [isInitialLoad, setIsInitialLoad] = useState(false);
@@ -207,23 +203,10 @@ const MapPage = () => {
       setTimeout(() => {
         refetchMapSearch();
       }, 100);
-    } else {
-      // 최초 로드가 아닌 경우 지도 변경 상태만 업데이트
-      //   setIsMapChanged(true);
     }
 
     console.log(newMapBounds);
   };
-
-  // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
-  //   const handleMapReload = () => {
-  //     setIsMapChanged(false);
-  //     setCurrentPage(0); // 페이지를 첫 번째로 리셋
-  //     // 현재 필터 상태를 유지하면서 API 재호출
-  //     if (mapBounds) {
-  //       refetchMapSearch();
-  //     }
-  //   };
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
@@ -248,7 +231,6 @@ const MapPage = () => {
 
       <div className={styles.map__content}>
         <div className={styles.map__container}>
-          {/* TODO: 초기 로드 위치를 사용자 위치로 설정해야 함 */}
           <Map
             id="map"
             className={styles.map}
@@ -323,21 +305,6 @@ const MapPage = () => {
           </Map>
         </div>
       </div>
-
-      {/* 지도 리로드 버튼 */}
-      {/* {isMapChanged && (
-        <Button
-          className={styles.map__reloadBtn}
-          fontSize="var(--fs-xxxsmall)"
-          backgroundColor="var(--blue-1)"
-          width="fit-content"
-          height="fit-content"
-          textColor="var(--white-1)"
-          onClick={handleMapReload}
-        >
-          현 지도에서 검색
-        </Button>
-      )} */}
 
       {/* 지도 패널 */}
       {isMapPanelOpen && (
