@@ -122,7 +122,7 @@ const SearchPlayerPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${searchKeyword ? '' : styles.default}`}>
       {searchKeyword.trim() ? (
         /* searchKeyword 있을 때 */
         <>

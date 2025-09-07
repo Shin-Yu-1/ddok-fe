@@ -7,6 +7,10 @@
   user-select: none;
   place-items: center;
 
+  &.default {
+    height: 100%;
+  }
+
   // keyword 없을 때
   .searchWrapper {
     width: fit-content;
