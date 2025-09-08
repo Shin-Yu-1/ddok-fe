@@ -117,17 +117,19 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
-      title="성향 수정"
-      subtitle="본인의 성향을 선택해주세요. (최대 5개)"
+      title="본인의 성향을 선택해주세요"
+      subtitle="당신은 어떤 사람인가요? (최대 5개)"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}
     >
       <div className={styles.content}>
-        <PersonalitySelector
-          selectedPersonality={selectedPersonality}
-          onPersonalityToggle={handlePersonalityToggle}
-        />
+        <div className={styles.hiddenTitles}>
+          <PersonalitySelector
+            selectedPersonality={selectedPersonality}
+            onPersonalityToggle={handlePersonalityToggle}
+          />
+        </div>
 
         {/* 버튼 추가 */}
         <div className={styles.buttonContainer}>
@@ -137,6 +139,7 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
             disabled={!hasChanges || isUpdating}
             isLoading={isUpdating}
             fullWidth={true}
+            radius="xsm"
             height={48}
           >
             {isUpdating ? '저장 중...' : '저장'}

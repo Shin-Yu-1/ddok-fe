@@ -32,7 +32,7 @@ const TraitsSection = forwardRef<HTMLElement, TraitsSectionProps>(
       >
         <div className={styles.header}>
           <h2 id="traits-title" className={styles.title}>
-            성향
+            나 이런 사람이야 !
           </h2>
 
           {isEditable && (

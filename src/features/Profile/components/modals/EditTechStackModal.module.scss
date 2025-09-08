@@ -10,6 +10,27 @@
   }
 }
 
+.hiddenTitles {
+  h2 {
+    display: none !important;
+  }
+
+  gap: 12px;
+  padding: 16px;
+  padding-bottom: 0;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xsmall;
+}
+
+.buttonContainer {
+  width: 100%;
+  margin-top: 20px;
+
+  @include m.mobile {
+    margin-top: 16px;
+  }
+}
+
 .footer {
   display: flex;
   justify-content: flex-end;

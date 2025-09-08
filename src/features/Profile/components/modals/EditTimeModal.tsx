@@ -108,19 +108,20 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
-      title="활동 시간 수정"
-      subtitle="주로 활동하는 시간대를 설정해주세요."
+      title="활동 시간을 입력해주세요"
+      subtitle="주로 활동하는 시간대를 설정해주세요!"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}
     >
       <div className={styles.content}>
-        <ActiveTimeSelector
-          activeHours={activeHours}
-          onActiveHoursChange={handleActiveHoursChange}
-          title="주로 활동하는 시간대를 설정해주세요"
-        />
-
+        <div className={styles.hiddenTitles}>
+          <ActiveTimeSelector
+            activeHours={activeHours}
+            onActiveHoursChange={handleActiveHoursChange}
+            title="주로 활동하는 시간대를 설정해주세요"
+          />
+        </div>
         {/* 버튼 추가 */}
         <div className={styles.buttonContainer}>
           <Button
@@ -129,6 +130,7 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
             disabled={!hasChanges || !isValidTime || isUpdating}
             isLoading={isUpdating}
             fullWidth={true}
+            radius="xsm"
             height={48}
           >
             {isUpdating ? '저장 중...' : '저장'}

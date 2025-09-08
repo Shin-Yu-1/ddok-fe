@@ -103,18 +103,19 @@ const EditTechStackModal = ({ isOpen, onClose, user }: EditTechStackModalProps) 
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
-      title="기술 스택 수정"
-      subtitle="보유하고 있는 기술 스택을 선택해주세요."
+      title="기술 스택을 입력해주세요"
+      subtitle="보유하고 있는 기술 스택을 입력 후 선택해주세요!"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}
     >
       <div className={styles.content}>
-        <TechStackSelector
-          selectedTechStack={selectedTechStack}
-          onTechStackToggle={handleTechStackToggle}
-        />
-
+        <div className={styles.hiddenTitles}>
+          <TechStackSelector
+            selectedTechStack={selectedTechStack}
+            onTechStackToggle={handleTechStackToggle}
+          />
+        </div>
         {/* 버튼 추가 */}
         <div className={styles.buttonContainer}>
           <Button
