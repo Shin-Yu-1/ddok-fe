@@ -176,7 +176,7 @@ const DetailStudyPage = () => {
                 </MainSection>
 
                 {studyData.mode === 'offline' && studyData.location && (
-                  <MainSection title={'지역'} readonly>
+                  <MainSection title={'지역'}>
                     <PostLocationDisplay
                       address={studyData.location.address || ''}
                       location={studyData.location}
