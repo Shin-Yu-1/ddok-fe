@@ -112,6 +112,22 @@ const BannerImageSection = ({
     height: typeof height === 'number' ? `${height}px` : height,
   };
 
+  // 현재 상태를 정확히 파악하여 모달에 전달
+  const getCurrentImageUrl = () => {
+    // 1. 새로 선택한 파일이 있으면 undefined (파일이 우선)
+    if (bannerImage instanceof File) {
+      return undefined;
+    }
+
+    // 2. bannerImage가 URL 문자열이면 그것을 사용
+    if (typeof bannerImage === 'string') {
+      return bannerImage;
+    }
+
+    // 3. 그 외의 경우 초기 URL 사용 (Edit 페이지에서 주로 이 케이스)
+    return initialImageUrl;
+  };
+
   return (
     <div className={styles.container} style={containerStyle}>
       <div
@@ -162,9 +178,8 @@ const BannerImageSection = ({
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onImageSelect={handleImageSelect}
-          currentImageUrl={typeof bannerImage === 'string' ? bannerImage : undefined}
+          currentImageUrl={getCurrentImageUrl()}
           currentBanner={bannerImage instanceof File ? bannerImage : null}
-          initialImageUrl={initialImageUrl}
         />
       )}
     </div>
