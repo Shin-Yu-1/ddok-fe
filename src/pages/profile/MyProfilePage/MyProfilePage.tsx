@@ -1,4 +1,9 @@
 import EditIntroductionModal from '@/features/Profile/components/modals/EditIntroductionModal';
+import EditPortfolioModal from '@/features/Profile/components/modals/EditPortfolioModal';
+import EditPositionModal from '@/features/Profile/components/modals/EditPositionModal';
+import EditTechStackModal from '@/features/Profile/components/modals/EditTechStackModal';
+import EditTimeModal from '@/features/Profile/components/modals/EditTimeModal';
+import EditTraitsModal from '@/features/Profile/components/modals/EditTraitsModal';
 import ProfileView from '@/features/Profile/components/ProfileView';
 import { useProfileData, useProfileEdit } from '@/features/Profile/hooks';
 
@@ -24,10 +29,40 @@ const MyProfilePage = () => {
               onEditIntroduction={handleEditIntroduction}
             />
 
-            {/* 자기소개 수정 모달 연결 */}
+            {/* 모달들 */}
             <EditIntroductionModal
               isOpen={isModalOpen('introduction')}
               onClose={() => closeModal('introduction')}
+              user={profileData}
+            />
+
+            <EditPositionModal
+              isOpen={isModalOpen('position')}
+              onClose={() => closeModal('position')}
+              user={profileData}
+            />
+
+            <EditTraitsModal
+              isOpen={isModalOpen('traits')}
+              onClose={() => closeModal('traits')}
+              user={profileData}
+            />
+
+            <EditTimeModal
+              isOpen={isModalOpen('time')}
+              onClose={() => closeModal('time')}
+              user={profileData}
+            />
+
+            <EditPortfolioModal
+              isOpen={isModalOpen('portfolio')}
+              onClose={() => closeModal('portfolio')}
+              user={profileData}
+            />
+
+            <EditTechStackModal
+              isOpen={isModalOpen('techStack')}
+              onClose={() => closeModal('techStack')}
               user={profileData}
             />
           </>
