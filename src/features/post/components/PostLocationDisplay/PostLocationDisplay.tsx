@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { MapPin, NavigationArrow } from '@phosphor-icons/react';
+import { Map, MapMarker, CustomOverlayMap, useKakaoLoader } from 'react-kakao-maps-sdk';
 
 import type { Location } from '@/types/project';
 import { enhanceAddressWithKakao } from '@/utils/kakaoGeocoder';
@@ -20,11 +21,15 @@ const PostLocationDisplay = ({
   showMap = true,
   mapHeight = 200,
 }: PostLocationDisplayProps) => {
-  const mapRef = useRef<HTMLDivElement>(null);
+  const [isLoading, kakaoError] = useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_API_KEY,
+    libraries: ['services', 'clusterer'],
+  });
+
   const [mapInstance, setMapInstance] = useState<kakao.maps.Map | null>(null);
   const [locationData, setLocationData] = useState<Location | null>(location || null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
+  const [showInfoWindow, setShowInfoWindow] = useState(false);
 
   // 주소를 지역별로 파싱
   const parseAddress = (addr: string) => {
@@ -49,6 +54,9 @@ const PostLocationDisplay = ({
         const enhancedLocation = await enhanceAddressWithKakao(address);
         if (enhancedLocation) {
           setLocationData(enhancedLocation);
+          setMapError(null);
+        } else {
+          setMapError('위치 정보를 불러올 수 없습니다.');
         }
       } catch (error) {
         console.error('주소 정보 로드 실패:', error);
@@ -59,142 +67,185 @@ const PostLocationDisplay = ({
     loadLocationData();
   }, [address, location]);
 
-  // 카카오 지도 초기화
-  useEffect(() => {
-    if (!showMap || !locationData || !mapRef.current) return;
+  // 마커 클릭 핸들러
+  const handleMarkerClick = useCallback(() => {
+    setShowInfoWindow(true);
+  }, []);
 
-    const initializeMap = () => {
-      if (!window.kakao?.maps) {
-        setMapError('카카오 지도를 불러올 수 없습니다.');
-        return;
-      }
+  // 지정된 주소로 이동 (초기 배율 유지)
+  const moveToLocation = useCallback(() => {
+    if (mapInstance && locationData) {
+      const currentLevel = mapInstance.getLevel(); // 현재 배율 저장
+      const coords = new kakao.maps.LatLng(locationData.latitude, locationData.longitude);
 
-      // null 체크를 통과한 후이므로 non-null assertion 사용
-      const mapElement = mapRef.current!;
-
-      try {
-        const { kakao } = window;
-
-        // 지도 중심 좌표 설정
-        const coords = new kakao.maps.LatLng(locationData.latitude, locationData.longitude);
-
-        // 지도 옵션
-        const options: kakao.maps.MapOptions = {
-          center: coords,
-          level: 3, // 확대/축소 레벨
-        };
-
-        // 지도 생성
-        const map = new kakao.maps.Map(mapElement, options);
-
-        // 마커 생성
-        const marker = new kakao.maps.Marker({
-          position: coords,
-          map: map,
-        });
-
-        // 인포윈도우 생성 (주소 표시)
-        const infoWindow = new kakao.maps.InfoWindow({
-          content: `
-            <div style="
-              padding: 8px 12px; 
-              font-size: 12px; 
-              line-height: 1.4;
-              max-width: 200px;
-              word-break: keep-all;
-            ">
-              ${address}
-            </div>
-          `,
-          removable: false,
-        });
-
-        // 마커 클릭 시 인포윈도우 표시
-        kakao.maps.event.addListener(marker, 'click', () => {
-          infoWindow.open(map, marker);
-        });
-
-        setMapInstance(map);
-        setIsMapLoaded(true);
-        setMapError(null);
-      } catch (error) {
-        console.error('지도 초기화 실패:', error);
-        setMapError('지도를 불러올 수 없습니다.');
-      }
-    };
-
-    // 카카오 지도 API 로드 확인
-    if (window.kakao?.maps) {
-      initializeMap();
-    } else {
-      // 카카오 지도 API 로드 대기
-      const checkKakaoMaps = setInterval(() => {
-        if (window.kakao?.maps) {
-          clearInterval(checkKakaoMaps);
-          initializeMap();
-        }
-      }, 100);
-
-      // 5초 후 타임아웃
-      setTimeout(() => {
-        clearInterval(checkKakaoMaps);
-        if (!window.kakao?.maps) {
-          setMapError('카카오 지도 로드 타임아웃');
-        }
-      }, 5000);
-    }
-  }, [locationData, showMap, address]);
-
-  // 지도 중심 재설정 함수 (mapInstance 사용)
-  const recenterMap = () => {
-    if (mapInstance && locationData && window.kakao?.maps) {
-      const coords = new window.kakao.maps.LatLng(locationData.latitude, locationData.longitude);
       mapInstance.setCenter(coords);
+      mapInstance.setLevel(currentLevel); // 배율 유지
     }
-  };
-
-  const { region, detail } = parseAddress(address);
+  }, [mapInstance, locationData]);
 
   // 카카오맵 앱으로 길찾기
-  const handleNavigateToKakaoMap = () => {
+  const handleNavigateToKakaoMap = useCallback(() => {
     if (!locationData) return;
 
     const { latitude, longitude } = locationData;
     const kakaoMapUrl = `https://map.kakao.com/link/to/${encodeURIComponent(address)},${latitude},${longitude}`;
     window.open(kakaoMapUrl, '_blank');
-  };
+  }, [locationData, address]);
+
+  const { region, detail } = parseAddress(address);
+
+  // 카카오맵 로딩 중
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.mapSection}>
+          <div className={styles.mapLoading}>
+            <MapPin size={24} />
+            <span>카카오 지도를 로드하고 있습니다...</span>
+          </div>
+        </div>
+
+        <div className={styles.locationInfo}>
+          <div className={styles.iconSection}>
+            <MapPin size={20} color="var(--blue-1)" />
+          </div>
+          <div className={styles.addressSection}>
+            <div className={styles.region}>{region}</div>
+            {detail && <div className={styles.detail}>{detail}</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 카카오맵 로드 에러
+  if (kakaoError) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.mapSection}>
+          <div className={styles.mapError}>
+            <MapPin size={24} />
+            <span>카카오 지도를 불러올 수 없습니다.</span>
+          </div>
+        </div>
+
+        <div className={styles.locationInfo}>
+          <div className={styles.iconSection}>
+            <MapPin size={20} color="var(--blue-1)" />
+          </div>
+          <div className={styles.addressSection}>
+            <div className={styles.region}>{region}</div>
+            {detail && <div className={styles.detail}>{detail}</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 위치 데이터 로드 에러
+  if (mapError) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.mapSection}>
+          <div className={styles.mapError}>
+            <MapPin size={24} />
+            <span>{mapError}</span>
+          </div>
+        </div>
+
+        <div className={styles.locationInfo}>
+          <div className={styles.iconSection}>
+            <MapPin size={20} color="var(--blue-1)" />
+          </div>
+          <div className={styles.addressSection}>
+            <div className={styles.region}>{region}</div>
+            {detail && <div className={styles.detail}>{detail}</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 위치 데이터가 없는 경우
+  if (!locationData) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.locationInfo}>
+          <div className={styles.iconSection}>
+            <MapPin size={20} color="var(--blue-1)" />
+          </div>
+          <div className={styles.addressSection}>
+            <div className={styles.region}>{region}</div>
+            {detail && <div className={styles.detail}>{detail}</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
       {/* 지도 섹션 */}
       {showMap && (
         <div className={styles.mapSection}>
-          {mapError ? (
-            <div className={styles.mapError}>
-              <MapPin size={24} />
-              <span>{mapError}</span>
-            </div>
-          ) : (
-            <div ref={mapRef} className={styles.map} style={{ height: `${mapHeight}px` }} />
-          )}
+          <div className={styles.map} style={{ height: `${mapHeight}px` }}>
+            <Map
+              center={{
+                lat: locationData.latitude,
+                lng: locationData.longitude,
+              }}
+              level={3}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              onCreate={setMapInstance}
+            >
+              <MapMarker
+                position={{
+                  lat: locationData.latitude,
+                  lng: locationData.longitude,
+                }}
+                onClick={handleMarkerClick}
+              />
+
+              {showInfoWindow && (
+                <CustomOverlayMap
+                  position={{
+                    lat: locationData.latitude,
+                    lng: locationData.longitude,
+                  }}
+                  yAnchor={1.3}
+                >
+                  <div className={styles.infoWindow}>
+                    <div className={styles.infoContent}>{address}</div>
+                    <button
+                      className={styles.infoCloseButton}
+                      onClick={() => setShowInfoWindow(false)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                </CustomOverlayMap>
+              )}
+            </Map>
+          </div>
 
           {/* 지도 컨트롤 */}
-          {isMapLoaded && locationData && (
-            <div className={styles.mapControls}>
-              <button
-                className={styles.navigateButton}
-                onClick={handleNavigateToKakaoMap}
-                title="카카오맵에서 길찾기"
-              >
-                <NavigationArrow size={16} />
-                길찾기
-              </button>
+          <div className={styles.mapControls}>
+            <button
+              className={styles.navigateButton}
+              onClick={handleNavigateToKakaoMap}
+              title="카카오맵에서 길찾기"
+            >
+              <NavigationArrow size={16} />
+              길찾기
+            </button>
 
-              <button className={styles.recenterButton} onClick={recenterMap} title="위치 재설정">
-                <MapPin size={16} />
-              </button>
-            </div>
-          )}
+            <button className={styles.recenterButton} onClick={moveToLocation} title="위치로 이동">
+              <MapPin size={16} />
+            </button>
+          </div>
         </div>
       )}
 
@@ -210,7 +261,7 @@ const PostLocationDisplay = ({
         </div>
 
         {/* 카카오맵 링크 (지도가 없을 때) */}
-        {(!showMap || mapError) && locationData && (
+        {!showMap && (
           <button
             className={styles.mapLinkButton}
             onClick={handleNavigateToKakaoMap}

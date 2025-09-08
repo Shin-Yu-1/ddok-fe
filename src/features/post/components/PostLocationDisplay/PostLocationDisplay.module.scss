@@ -135,3 +135,82 @@
     transform: scale(1.05);
   }
 }
+
+.mapLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  font-size: var(--fs-xxsmall);
+  color: var(--gray-2);
+}
+
+// InfoWindow 관련 스타일
+.infoWindow {
+  position: relative;
+  max-width: 300px;
+  min-width: 200px;
+  border: 1px solid var(--gray-3);
+  border-radius: var(--r-xsmall);
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-top: 10px solid white;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    transform: translateX(-50%);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -11px;
+    left: 50%;
+    z-index: -1;
+    width: 0;
+    height: 0;
+    border-top: 11px solid var(--gray-3);
+    border-right: 11px solid transparent;
+    border-left: 11px solid transparent;
+    transform: translateX(-50%);
+  }
+}
+
+.infoContent {
+  padding: 12px 16px;
+  font-size: var(--fs-xxsmall);
+  line-height: 1.4;
+  word-break: keep-all;
+  color: var(--black-1);
+}
+
+.infoCloseButton {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--gray-2);
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--black-1);
+  }
+}
