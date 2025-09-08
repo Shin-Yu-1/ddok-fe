@@ -17,6 +17,7 @@ interface EditTimeModalProps {
 
 const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
   const [activeHours, setActiveHours] = useState({ start: '', end: '' });
+  const [initialActiveHours, setInitialActiveHours] = useState({ start: '', end: '' });
   const [hasChanges, setHasChanges] = useState(false);
 
   const { updateHours, isUpdating } = useProfileMutations({
@@ -39,6 +40,7 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
   const formatTimeForDisplay = (hour: string): string => {
     if (!hour) return '00:00';
     const hourNum = parseInt(hour, 10);
+    if (isNaN(hourNum)) return '00:00';
     return `${hourNum.toString().padStart(2, '0')}:00`;
   };
 
@@ -47,30 +49,33 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
     if (!timeString) return '00';
     const [hour] = timeString.split(':');
     const hourNum = parseInt(hour, 10);
+    if (isNaN(hourNum)) return '00';
     return hourNum.toString().padStart(2, '0'); // '04' 형태로 변환
   };
 
   // 모달이 열릴 때 기존 데이터로 초기화
   useEffect(() => {
     if (isOpen) {
-      const initialActiveHours = {
+      const initialHours = {
         start: formatTimeForDisplay(user.activeHours.start),
         end: formatTimeForDisplay(user.activeHours.end),
       };
-      setActiveHours(initialActiveHours);
+
+      setActiveHours(initialHours);
+      setInitialActiveHours(initialHours);
       setHasChanges(false);
     }
   }, [isOpen, user.activeHours]);
 
   // 변경사항 감지
   useEffect(() => {
-    const currentStartHour = formatTimeForApi(activeHours.start);
-    const currentEndHour = formatTimeForApi(activeHours.end);
+    if (!isOpen) return; // 모달이 닫힌 상태에서는 비교하지 않음
 
     const hasChanged =
-      currentStartHour !== user.activeHours.start || currentEndHour !== user.activeHours.end;
+      activeHours.start !== initialActiveHours.start || activeHours.end !== initialActiveHours.end;
+
     setHasChanges(hasChanged);
-  }, [activeHours, user.activeHours]);
+  }, [activeHours, initialActiveHours, isOpen]);
 
   const handleSubmit = async () => {
     if (!hasChanges || isUpdating) return;
