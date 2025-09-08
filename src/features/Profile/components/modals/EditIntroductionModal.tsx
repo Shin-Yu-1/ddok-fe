@@ -22,6 +22,9 @@ const EditIntroductionModal = ({ isOpen, onClose, user }: EditIntroductionModalP
     userId: user.userId,
     onSuccess: () => {
       onClose();
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
     },
     onError: error => {
       console.error('자기소개 수정 실패:', error);
