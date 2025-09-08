@@ -165,6 +165,16 @@ interface UpdateProfileResponse {
   };
 }
 
+// 공개/비공개 토글 응답 타입
+interface TogglePrivacyResponse {
+  userId: number;
+  nickname: string;
+  isPublic: boolean;
+  mainPosition: string;
+  traits: string[];
+  techStacks: string[];
+}
+
 export const profileApi = {
   // 프로필 상세 조회
   getProfile: async (userId: number): Promise<ProfileApiResponse> => {
@@ -195,6 +205,11 @@ export const profileApi = {
     const response = await api.get<ApiResponse<ProjectApiResponse>>(
       `/api/players/${userId}/profile/projects?page=${page}&size=${size}`
     );
+    return response.data.data;
+  },
+
+  togglePrivacy: async (): Promise<TogglePrivacyResponse> => {
+    const response = await api.patch<ApiResponse<TogglePrivacyResponse>>('/api/players/profile');
     return response.data.data;
   },
 };
