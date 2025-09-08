@@ -1,0 +1,141 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+// 테이블 스타일
+.table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  overflow: hidden;
+  background-color: $white-3;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  min-height: 50px;
+  border-bottom: 1px solid $gray-3;
+  background-color: $white-1;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  min-height: 56px;
+  border-bottom: 1px solid $gray-4;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.headerCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  text-align: center;
+  color: $gray-1;
+}
+
+.bodyCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+}
+
+// 인원 수
+.count {
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $black-3;
+}
+
+// 액션 버튼들
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 8px 12px;
+  border: 1px solid;
+  border-radius: $r-xxxxlarge;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  // 지원하기 (기본 상태)
+  &.selectable {
+    border-color: $gray-3;
+    color: $black-1;
+    background-color: $white-3;
+
+    &:hover {
+      border-color: $blue-1;
+      color: $blue-1;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // 확정 상태
+  &.confirmed {
+    border-color: $blue-1;
+    color: $white-3;
+    background-color: $blue-1;
+    cursor: default;
+  }
+
+  // 지원 취소 (빨간색)
+  &.cancel {
+    border-color: $red-1;
+    color: $red-1;
+    background-color: $white-3;
+
+    &:hover {
+      color: $white-3;
+      background-color: $red-1;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // 비활성화 상태
+  &.disabled {
+    border-color: $gray-2;
+    color: $gray-2;
+    background-color: $white-3;
+    opacity: 0.7;
+    cursor: not-allowed;
+
+    &:hover {
+      border-color: $gray-2;
+      color: $gray-2;
+      background-color: $white-3;
+    }
+  }
+}
