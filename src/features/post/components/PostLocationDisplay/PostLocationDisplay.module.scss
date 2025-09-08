@@ -1,91 +1,154 @@
 @use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
 }
 
+// 지도 섹션
 .mapSection {
   position: relative;
-  border: 1px solid $gray-4;
-  border-radius: $r-small;
-  overflow: hidden;
+  width: 100%;
+  border-radius: $r-xsmall;
 }
 
 .map {
-  position: relative;
+  box-sizing: border-box;
   width: 100%;
-  background-color: $gray-3;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  overflow: hidden;
 }
 
+// 지도 로딩 스타일
+.mapLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  color: $gray-2;
+  background-color: $white-3;
+}
+
+// 지도 에러 스타일
 .mapError {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 200px;
-  font-size: $fs-small;
-  color: $gray-2;
-  background-color: $gray-3;
-
-  svg {
-    opacity: 0.5;
-  }
+  height: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  color: $red-1;
+  background-color: $white-3;
 }
 
+// 지도 컨트롤 버튼들 컨테이너
 .mapControls {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
   display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
-.navigateButton,
-.recenterButton {
+// 길찾기 버튼 스타일
+.navigateButton {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 8px 12px;
-  border: 1px solid rgba($gray-3, 0.3);
-  border-radius: $r-xxsmall;
-  font-size: $fs-xxxsmall;
-  font-weight: $fw-medium;
-  color: $blue-1;
-  background-color: rgba($white-1, 0.95);
-  backdrop-filter: blur(4px);
+  padding: 6px 10px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  white-space: nowrap;
+  color: $gray-1;
+  background: $white-1;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   transition: all 0.2s ease;
   cursor: pointer;
 
   &:hover {
-    color: $white-1;
-    background-color: $blue-1;
-    box-shadow: 0 2px 8px rgba($blue-1, 0.2);
-    transform: translateY(-1px);
+    border-color: $gray-2;
+    color: $black-1;
+    background: $gray-4;
   }
 
-  svg {
-    flex-shrink: 0;
+  &:active {
+    transform: translateY(1px);
   }
 }
 
+// 주소로 이동 버튼 스타일
+.addressButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid $blue-1;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  white-space: nowrap;
+  color: $white-1;
+  background: $blue-1;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $blue-1;
+    background: $blue-1;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// 기존 위치 재설정 버튼
 .recenterButton {
-  min-width: auto;
-  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background: $white-1;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $gray-2;
+    background: $gray-4;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 }
 
+// 주소 정보 섹션
 .locationInfo {
-  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   padding: 16px;
-  border: 1px solid rgba($blue-1, 0.2);
+  border: 1px solid $gray-3;
   border-radius: $r-xsmall;
-  background-color: rgba($blue-1, 0.05);
+  background-color: $white-1;
 }
 
 .iconSection {
@@ -93,7 +156,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  margin-top: 2px;
+  padding: 4px;
 }
 
 .addressSection {
@@ -104,47 +167,33 @@
 }
 
 .region {
-  font-size: $fs-small;
-  font-weight: $fw-bold;
-  color: $black-3;
+  font-size: $fs-xsmall;
+  font-weight: 600;
+  line-height: 1.4;
+  color: $black-1;
 }
 
 .detail {
   font-size: $fs-xxsmall;
-  font-weight: $fw-regular;
   line-height: 1.4;
   color: $gray-1;
 }
 
+// 카카오맵 링크 버튼 (지도가 없을 때)
 .mapLinkButton {
   display: flex;
-  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  border: 1px solid rgba($blue-1, 0.3);
-  border-radius: $r-xxsmall;
-  color: $blue-1;
-  background-color: rgba($blue-1, 0.1);
-  transition: all 0.2s ease;
+  padding: 4px;
+  border: none;
+  border-radius: $r-xsmall;
+  background: none;
+  transition: background-color 0.2s ease;
   cursor: pointer;
 
   &:hover {
-    color: $white-1;
-    background-color: $blue-1;
-    transform: scale(1.05);
+    background: $gray-4;
   }
-}
-
-.mapLoading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 100%;
-  font-size: var(--fs-xxsmall);
-  color: var(--gray-2);
 }
 
 // InfoWindow 관련 스타일
@@ -152,8 +201,8 @@
   position: relative;
   max-width: 300px;
   min-width: 200px;
-  border: 1px solid var(--gray-3);
-  border-radius: var(--r-xsmall);
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
   background: white;
   box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 
@@ -178,7 +227,7 @@
     z-index: -1;
     width: 0;
     height: 0;
-    border-top: 11px solid var(--gray-3);
+    border-top: 11px solid $gray-3;
     border-right: 11px solid transparent;
     border-left: 11px solid transparent;
     transform: translateX(-50%);
@@ -187,10 +236,10 @@
 
 .infoContent {
   padding: 12px 16px;
-  font-size: var(--fs-xxsmall);
+  font-size: $fs-xxsmall;
   line-height: 1.4;
   word-break: keep-all;
-  color: var(--black-1);
+  color: $black-1;
 }
 
 .infoCloseButton {
@@ -206,11 +255,11 @@
   border: none;
   font-size: 18px;
   font-weight: bold;
-  color: var(--gray-2);
+  color: $gray-2;
   background: none;
   cursor: pointer;
 
   &:hover {
-    color: var(--black-1);
+    color: $black-1;
   }
 }

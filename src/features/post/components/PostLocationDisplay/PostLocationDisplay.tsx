@@ -31,6 +31,9 @@ const PostLocationDisplay = ({
   const [mapError, setMapError] = useState<string | null>(null);
   const [showInfoWindow, setShowInfoWindow] = useState(false);
 
+  // 초기 지도 설정값
+  const INITIAL_ZOOM_LEVEL = 3;
+
   // 주소를 지역별로 파싱
   const parseAddress = (addr: string) => {
     const parts = addr.split(' ');
@@ -72,14 +75,13 @@ const PostLocationDisplay = ({
     setShowInfoWindow(true);
   }, []);
 
-  // 지정된 주소로 이동 (초기 배율 유지)
-  const moveToLocation = useCallback(() => {
+  // 해당 주소로 이동
+  const moveToAddress = useCallback(() => {
     if (mapInstance && locationData) {
-      const currentLevel = mapInstance.getLevel(); // 현재 배율 저장
       const coords = new kakao.maps.LatLng(locationData.latitude, locationData.longitude);
 
       mapInstance.setCenter(coords);
-      mapInstance.setLevel(currentLevel); // 배율 유지
+      mapInstance.setLevel(INITIAL_ZOOM_LEVEL);
     }
   }, [mapInstance, locationData]);
 
@@ -194,10 +196,11 @@ const PostLocationDisplay = ({
                 lat: locationData.latitude,
                 lng: locationData.longitude,
               }}
-              level={3}
+              level={INITIAL_ZOOM_LEVEL}
               style={{
                 width: '100%',
                 height: '100%',
+                borderRadius: 'var(--r-xsmall)',
               }}
               onCreate={setMapInstance}
             >
@@ -229,22 +232,27 @@ const PostLocationDisplay = ({
                 </CustomOverlayMap>
               )}
             </Map>
-          </div>
 
-          {/* 지도 컨트롤 */}
-          <div className={styles.mapControls}>
-            <button
-              className={styles.navigateButton}
-              onClick={handleNavigateToKakaoMap}
-              title="카카오맵에서 길찾기"
-            >
-              <NavigationArrow size={16} />
-              길찾기
-            </button>
+            {/* 지도 위에 오버레이로 버튼 배치 */}
+            <div className={styles.mapControls}>
+              <button
+                className={styles.navigateButton}
+                onClick={handleNavigateToKakaoMap}
+                title="카카오맵에서 길찾기"
+              >
+                <NavigationArrow size={14} />
+                길찾기
+              </button>
 
-            <button className={styles.recenterButton} onClick={moveToLocation} title="위치로 이동">
-              <MapPin size={16} />
-            </button>
+              <button
+                className={styles.addressButton}
+                onClick={moveToAddress}
+                title="해당 주소로 이동"
+              >
+                <MapPin size={14} />
+                이동
+              </button>
+            </div>
           </div>
         </div>
       )}
