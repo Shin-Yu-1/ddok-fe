@@ -101,6 +101,9 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       bannerImageUrl: data.bannerImageUrl, // 기존 이미지 URL
     };
 
+    console.log('📤 API로 전송할 JSON 데이터:');
+    console.log(JSON.stringify(requestData, null, 2));
+
     formDataToSend.append(
       'request',
       new Blob([JSON.stringify(requestData)], { type: 'application/json' })
