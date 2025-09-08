@@ -124,7 +124,7 @@ interface UpdatePortfolioRequest {
 }
 
 interface UpdateStacksRequest {
-  stacks: string[];
+  techStacks: string[];
 }
 
 // 프로필 수정 응답 타입
