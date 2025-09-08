@@ -97,6 +97,74 @@ interface ProjectApiResponse {
   }>;
 }
 
+// 프로필 수정 요청 타입들
+interface UpdateContentRequest {
+  content: string;
+}
+
+interface UpdatePositionsRequest {
+  mainPosition: string;
+  subPositions: string[];
+}
+
+interface UpdateTraitsRequest {
+  traits: string[];
+}
+
+interface UpdateHoursRequest {
+  start: string;
+  end: string;
+}
+
+interface UpdatePortfolioRequest {
+  portfolio: Array<{
+    linkTitle: string;
+    link: string;
+  }>;
+}
+
+interface UpdateStacksRequest {
+  stacks: string[];
+}
+
+// 프로필 수정 응답 타입
+interface UpdateProfileResponse {
+  userId: number;
+  isMine: boolean;
+  chatRoomId: number | null;
+  dmRequestPending: boolean;
+  isPublic: boolean;
+  profileImageUrl: string;
+  nickname: string;
+  temperature: number;
+  ageGroup: string;
+  mainPosition: string;
+  subPositions: string[];
+  badges: Array<{
+    type: 'complete' | 'leader_complete' | 'login';
+    tier: 'bronze' | 'silver' | 'gold';
+  }>;
+  abandonBadge: {
+    isGranted: boolean;
+    count: number;
+  };
+  activeHours: {
+    start: string;
+    end: string;
+  };
+  traits: string[];
+  content: string;
+  portfolio: Array<{
+    linkTitle: string;
+    link: string;
+  }>;
+  location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
+}
+
 export const profileApi = {
   // 프로필 상세 조회
   getProfile: async (userId: number): Promise<ProfileApiResponse> => {
@@ -128,5 +196,61 @@ export const profileApi = {
       `/api/players/${userId}/profile/projects?page=${page}&size=${size}`
     );
     return response.data.data;
+  },
+};
+
+export const profileEditApi = {
+  // 자기소개 수정
+  updateContent: async (data: UpdateContentRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/content',
+      data
+    );
+    return response.data.data.profile;
+  },
+
+  // 포지션 수정
+  updatePositions: async (data: UpdatePositionsRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/positions',
+      data
+    );
+    return response.data.data.profile;
+  },
+
+  // 성향 수정
+  updateTraits: async (data: UpdateTraitsRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/traits',
+      data
+    );
+    return response.data.data.profile;
+  },
+
+  // 활동 시간 수정
+  updateHours: async (data: UpdateHoursRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/hours',
+      data
+    );
+    return response.data.data.profile;
+  },
+
+  // 포트폴리오 수정
+  updatePortfolio: async (data: UpdatePortfolioRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/portfolio',
+      data
+    );
+    return response.data.data.profile;
+  },
+
+  // 기술 스택 수정
+  updateStacks: async (data: UpdateStacksRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/stacks',
+      data
+    );
+    return response.data.data.profile;
   },
 };
