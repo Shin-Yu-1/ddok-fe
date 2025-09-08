@@ -140,7 +140,7 @@ export const useProfileMutations = ({ userId, onSuccess, onError }: UseProfileMu
 
   // 기술 스택 수정
   const updateStacksMutation = useMutation({
-    mutationFn: (stacks: string[]) => profileEditApi.updateStacks({ stacks }),
+    mutationFn: (techStacks: string[]) => profileEditApi.updateStacks({ techStacks }),
     onSuccess: data => {
       updateProfileData(data);
       onSuccess?.();
