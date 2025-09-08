@@ -191,7 +191,7 @@ export const profileApi = {
   },
 
   // 참여 프로젝트 목록 조회
-  getProjects: async (userId: number, page = 0, size = 3): Promise<ProjectApiResponse> => {
+  getProjects: async (userId: number, page = 0, size = 4): Promise<ProjectApiResponse> => {
     const response = await api.get<ApiResponse<ProjectApiResponse>>(
       `/api/players/${userId}/profile/projects?page=${page}&size=${size}`
     );

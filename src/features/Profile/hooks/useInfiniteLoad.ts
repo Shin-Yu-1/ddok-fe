@@ -75,7 +75,13 @@ export const useInfiniteLoad = (
     if (isLoading) {
       return type === 'studies' ? 'Loading...' : 'Loading...';
     }
-    const remaining = totalItems - items.length;
+
+    const remaining = Math.max(0, totalItems - items.length); // Math.max로 음수 방지
+
+    if (remaining === 0) {
+      return 'All items loaded';
+    }
+
     const loadCount = Math.min(remaining, 4);
     return type === 'studies'
       ? `Show ${loadCount} more studies ▼`
