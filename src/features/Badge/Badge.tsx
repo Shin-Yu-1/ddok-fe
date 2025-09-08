@@ -60,9 +60,11 @@ const Badge: React.FC<BadgeProps> = ({
   style,
   alt,
 }) => {
-  if (!mainBadge) return null;
-
-  const src = getBadgeSrc(mainBadge.type, mainBadge.tier, abandonBadge?.isGranted);
+  const src = getBadgeSrc(
+    mainBadge?.type ?? BadgeType.ABANDON,
+    mainBadge?.tier,
+    abandonBadge?.isGranted
+  );
 
   if (!src) return null;
 
@@ -76,7 +78,8 @@ const Badge: React.FC<BadgeProps> = ({
   };
 
   const defaultAlt =
-    alt ?? `${mainBadge.type}${mainBadge.tier ? ` - ${mainBadge.tier.toLowerCase()}` : ''}`;
+    alt ??
+    `${mainBadge?.type ?? BadgeType.ABANDON}${mainBadge?.tier ? ` - ${mainBadge.tier.toLowerCase()}` : ''}`;
 
   return (
     <img
