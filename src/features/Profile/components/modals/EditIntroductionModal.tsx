@@ -100,6 +100,7 @@ const EditIntroductionModal = ({ isOpen, onClose, user }: EditIntroductionModalP
             disabled={!hasChanges || isUpdating}
             isLoading={isUpdating}
             fullWidth={true}
+            radius="xsm"
             height={48}
           >
             {isUpdating ? '저장 중...' : '저장'}
