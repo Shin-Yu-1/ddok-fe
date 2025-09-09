@@ -1,0 +1,46 @@
+import ApplicantRow from '@/features/Team/components/ApplicantsGrid/ApplicantRow/ApplicantRow';
+import { useGetTeamApplicants } from '@/features/Team/hooks/useGetTeamApplicants';
+
+import styles from './ApplicantsGrid.module.scss';
+
+interface ApplicantsGridProps {
+  teamId: number;
+  page?: number;
+  size?: number;
+}
+
+const ApplicantsGrid = ({ teamId, page = 0, size = 4 }: ApplicantsGridProps) => {
+  const { data, isLoading, isError, error } = useGetTeamApplicants({
+    teamId,
+    page,
+    size,
+  });
+
+  if (isLoading) {
+    return <div className={styles.loading}>참여 희망자를 불러오는 중...</div>;
+  }
+
+  if (isError) {
+    return (
+      <div className={styles.error}>참여 희망자를 불러오는데 실패했습니다: {error?.message}</div>
+    );
+  }
+
+  if (!data?.data?.items || data.data.items.length === 0) {
+    return <div className={styles.empty}>참여 희망자가 없습니다.</div>;
+  }
+
+  return (
+    <div className={styles.applicantsGrid}>
+      <div className={styles.gridLabel}>지원 포지션</div>
+      <div className={styles.gridLabel}>멤버</div>
+      <div className={styles.gridLabel}>액션</div>
+
+      {data.data.items.map(applicant => (
+        <ApplicantRow key={applicant.applicantId} member={applicant} />
+      ))}
+    </div>
+  );
+};
+
+export default ApplicantsGrid;
