@@ -42,6 +42,13 @@
     gap: 3px;
     margin-bottom: 8px;
 
+    &__temperature {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: $fs-xxxsmall;
+    }
+
     &__action {
       display: flex;
       flex-direction: row;
