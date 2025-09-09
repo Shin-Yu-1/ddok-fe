@@ -274,21 +274,27 @@ const MapPage = () => {
             {mapSearchData &&
               mapSearchData.map(m => {
                 let id: number;
+                let uniqueKey: string;
+
                 if (m.category === MapItemCategory.PROJECT && 'projectId' in m) {
                   id = m.projectId;
+                  uniqueKey = `marker__project-${m.projectId}`;
                 } else if (m.category === MapItemCategory.STUDY && 'studyId' in m) {
                   id = m.studyId;
+                  uniqueKey = `marker__study-${m.studyId}`;
                 } else if (m.category === MapItemCategory.PLAYER && 'userId' in m) {
                   id = m.userId;
+                  uniqueKey = `marker__player-${m.userId}`;
                 } else if (m.category === MapItemCategory.CAFE && 'cafeId' in m) {
                   id = m.cafeId;
+                  uniqueKey = `marker__cafe-${m.cafeId}`;
                 } else {
                   return null;
                 }
 
                 return (
                   <MapMarker
-                    key={`marker__${m.location.latitude}-${m.location.longitude}`}
+                    key={uniqueKey}
                     position={{ lat: m.location.latitude, lng: m.location.longitude }}
                     onClick={() => {
                       setIsOverlayOpen(true);
