@@ -103,10 +103,20 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
       const isConfirmed = confirmedPosition === position.position;
       const isApplied = position.isApplied;
       const isAvailable = position.isAvailable;
+      const hasConfirmedPosition = !!confirmedPosition; // 확정된 포지션이 있는지 확인
 
       // 확정된 포지션
       if (isConfirmed) {
         return <button className={`${styles.actionButton} ${styles.confirmed}`}>확정</button>;
+      }
+
+      // 확정된 포지션이 있는 경우, 나머지 포지션들은 모두 지원 불가
+      if (hasConfirmedPosition) {
+        return (
+          <button className={`${styles.actionButton} ${styles.disabled}`} disabled>
+            지원 불가
+          </button>
+        );
       }
 
       // 지원한 포지션 (취소 가능)
