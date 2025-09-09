@@ -1,7 +1,6 @@
 import Button from '@/components/Button/Button';
 import UserRow from '@/features/Team/components/UserRow/UserRow';
-
-import type { MemberType } from '../../schemas/teamMemberSchema';
+import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
 
 import styles from './MemberRow.module.scss';
 
