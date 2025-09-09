@@ -138,7 +138,10 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
               <Button
                 key={action.type}
                 variant={action.variant}
-                size="sm"
+                size="xsm"
+                radius="xxsm"
+                fontSizePreset="xxxsmall"
+                fontWeightPreset="regular"
                 onClick={e => {
                   e.stopPropagation();
                   handleAction(action.type);
