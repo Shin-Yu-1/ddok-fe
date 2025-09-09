@@ -68,16 +68,22 @@ export const PlayerOverlaySchema = z.object({
   },
   mainPosition: z.string(),
   address: z.string(),
-  latestProject: z.object({
-    id: z.number(),
-    title: z.string(),
-    teamStatus: z.string(),
-  }),
-  latestStudy: z.object({
-    id: z.number(),
-    title: z.string(),
-    teamStatus: z.string(),
-  }),
+  latestProject: z
+    .object({
+      id: z.number(),
+      title: z.string(),
+      teamStatus: z.string(),
+    })
+    .nullable()
+    .optional(),
+  latestStudy: z
+    .object({
+      id: z.number(),
+      title: z.string(),
+      teamStatus: z.string(),
+    })
+    .nullable()
+    .optional(),
   temperature: z.number(),
   isMine: z.boolean(),
 });
