@@ -6,7 +6,7 @@ export interface ProfileImageOptions {
 }
 
 const DEFAULT_OPTIONS: ProfileImageOptions = {
-  maxSize: 5, // 5MB 임시
+  maxSize: 5, // 5MB
   allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
 };
 

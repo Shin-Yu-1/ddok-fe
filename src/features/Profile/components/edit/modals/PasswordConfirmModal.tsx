@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
 import BaseModal from '@/components/Modal/BaseModal';
+import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
 
 import styles from './PasswordConfirmModal.module.scss';
 
@@ -34,7 +34,6 @@ const PasswordConfirmModal = ({
       onClose();
     } catch (error) {
       console.error('비밀번호 확인 실패:', error);
-      // TODO: 에러 토스트 표시
     }
   };
 
@@ -52,19 +51,16 @@ const PasswordConfirmModal = ({
   return (
     <BaseModal isOpen={isOpen} onClose={handleCancel} title={title} subtitle={subtitle}>
       <div className={styles.modalContent}>
-        <Input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="현재 비밀번호를 입력해주세요"
-          width="100%"
-          height="40px"
-          border="1px solid var(--gray-3)"
-          focusBorder="1px solid var(--yellow-1)"
-          disabled={isLoading}
-          autoFocus
-        />
+        <div className={styles.inputWrapper}>
+          <PasswordInput
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="현재 비밀번호를 입력해주세요"
+            disabled={isLoading}
+            autoFocus
+          />
+        </div>
 
         <div className={styles.modalButtons}>
           <Button

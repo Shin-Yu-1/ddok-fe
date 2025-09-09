@@ -18,6 +18,41 @@ const PersonalInfoForm = ({
   onPasswordEdit,
   className,
 }: PersonalInfoFormProps) => {
+  // 전화번호 포맷팅 (010-1234-5678)
+  const formatPhoneNumber = (phone: string): string => {
+    if (!phone) return '';
+
+    // 숫자만 추출
+    const numbers = phone.replace(/\D/g, '');
+
+    // 이미 포맷된 경우 그대로 반환
+    if (phone.includes('-')) {
+      return phone;
+    }
+
+    // 포맷 적용
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  // 생년월일 포맷팅 (YYYY.MM.DD)
+  const formatBirthDate = (birthDate: string): string => {
+    if (!birthDate) return '';
+
+    // 이미 포맷된 경우 그대로 반환
+    if (birthDate.includes('.')) {
+      return birthDate;
+    }
+
+    // ISO 날짜 형식(YYYY-MM-DD)을 점으로 변경
+    if (birthDate.includes('-')) {
+      return birthDate.replace(/-/g, '.');
+    }
+
+    return birthDate;
+  };
+
   // 읽기전용 인풋 클릭 방지
   const handleReadOnlyInputEvents = (e: React.MouseEvent | React.FocusEvent) => {
     e.preventDefault();
@@ -60,7 +95,7 @@ const PersonalInfoForm = ({
         <div className={styles.fieldRow}>
           <Input
             type="text"
-            value={userInfo.birthDate}
+            value={formatBirthDate(userInfo.birthDate)}
             readOnly
             className={styles.readOnlyInput}
             width="100%"
@@ -107,7 +142,7 @@ const PersonalInfoForm = ({
       {/* 전화번호 */}
       <EditableFieldRow
         label="전화번호"
-        value={userInfo.phoneNumber}
+        value={formatPhoneNumber(userInfo.phoneNumber)}
         buttonText="전화번호 변경"
         onEdit={onPhoneEdit}
         disabled={userInfo.isSocial}

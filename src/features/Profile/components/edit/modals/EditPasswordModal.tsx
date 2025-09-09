@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import Button from '@/components/Button/Button';
-import Input from '@/components/Input/Input';
 import BaseModal from '@/components/Modal/BaseModal';
+import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
 import { changePasswordSchema } from '@/schemas/auth.schema';
 
 import styles from './EditPasswordModal.module.scss';
@@ -117,38 +117,28 @@ const EditPasswordModal = ({
         {/* 새 비밀번호 */}
         <div className={styles.inputGroup}>
           <label className={styles.inputLabel}>새 비밀번호</label>
-          <Input
-            type="password"
-            value={newPassword}
-            onChange={handleNewPasswordChange}
-            placeholder="새 비밀번호를 입력해주세요"
-            width="100%"
-            height="40px"
-            border={errors.newPassword ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
-            focusBorder={
-              errors.newPassword ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'
-            }
-            disabled={isLoading}
-          />
+          <div className={`${styles.inputWrapper} ${errors.newPassword ? styles.error : ''}`}>
+            <PasswordInput
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+              placeholder="새 비밀번호를 입력해주세요"
+              disabled={isLoading}
+            />
+          </div>
           {errors.newPassword && <p className={styles.errorMessage}>{errors.newPassword}</p>}
         </div>
 
         {/* 비밀번호 확인 */}
         <div className={styles.inputGroup}>
           <label className={styles.inputLabel}>비밀번호 확인</label>
-          <Input
-            type="password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-            placeholder="비밀번호를 다시 입력해주세요"
-            width="100%"
-            height="40px"
-            border={errors.passwordCheck ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
-            focusBorder={
-              errors.passwordCheck ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'
-            }
-            disabled={isLoading}
-          />
+          <div className={`${styles.inputWrapper} ${errors.passwordCheck ? styles.error : ''}`}>
+            <PasswordInput
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder="비밀번호를 다시 입력해주세요"
+              disabled={isLoading}
+            />
+          </div>
           {errors.passwordCheck && <p className={styles.errorMessage}>{errors.passwordCheck}</p>}
         </div>
 

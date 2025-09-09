@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { ArrowBendUpLeftIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
@@ -14,19 +14,19 @@ import { useEditMyInfo } from '@/features/Profile/hooks/useEditMyInfo';
 
 import styles from './EditMyInfoPage.module.scss';
 
+type PendingActionType = 'phone' | 'password' | 'withdraw' | null;
+
 const EditMyInfoPage = () => {
   const navigate = useNavigate();
   const {
     userInfo,
     isLoading,
-    isAuthenticated,
     updateProfileImage,
     updateNickname,
     updatePhoneNumber,
     updatePassword,
     verifyPassword,
     withdrawUser,
-    clearAuthentication,
   } = useEditMyInfo();
 
   // 모달 상태
@@ -34,26 +34,14 @@ const EditMyInfoPage = () => {
   const [showPhoneModal, setShowPhoneModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showPasswordConfirmModal, setShowPasswordConfirmModal] = useState(false);
-  const [pendingAction, setPendingAction] = useState<'phone' | 'password' | 'initial' | null>(null);
-
-  // 페이지 진입 시 초기 비밀번호 확인
-  useEffect(() => {
-    if (!isAuthenticated && !showPasswordConfirmModal) {
-      setPendingAction('initial');
-      setShowPasswordConfirmModal(true);
-    }
-  }, [isAuthenticated, showPasswordConfirmModal]);
+  const [pendingAction, setPendingAction] = useState<PendingActionType>(null);
 
   const handleBack = () => {
     navigate(-1);
   };
 
+  // 닉네임 수정 (바로 가능)
   const handleNicknameEdit = () => {
-    if (!isAuthenticated) {
-      setPendingAction('initial');
-      setShowPasswordConfirmModal(true);
-      return;
-    }
     setShowNicknameModal(true);
   };
 
@@ -67,22 +55,18 @@ const EditMyInfoPage = () => {
     }
   };
 
+  // 전화번호 수정 (소셜 로그인 시 비활성화, 비밀번호 확인 필요)
   const handlePhoneEdit = () => {
-    if (!isAuthenticated) {
-      setPendingAction('initial');
-      setShowPasswordConfirmModal(true);
-      return;
-    }
+    if (userInfo?.isSocial) return; // 소셜 로그인 시 실행하지 않음
+
     setPendingAction('phone');
     setShowPasswordConfirmModal(true);
   };
 
+  // 비밀번호 수정 (소셜 로그인 시 비활성화, 비밀번호 확인 필요)
   const handlePasswordEdit = () => {
-    if (!isAuthenticated) {
-      setPendingAction('initial');
-      setShowPasswordConfirmModal(true);
-      return;
-    }
+    if (userInfo?.isSocial) return; // 소셜 로그인 시 실행하지 않음
+
     setPendingAction('password');
     setShowPasswordConfirmModal(true);
   };
@@ -102,8 +86,10 @@ const EditMyInfoPage = () => {
         setShowPhoneModal(true);
       } else if (pendingAction === 'password') {
         setShowPasswordModal(true);
+      } else if (pendingAction === 'withdraw') {
+        // 탈퇴 진행
+        await handleWithdrawConfirm();
       }
-      // 'initial'인 경우는 단순히 인증만 하고 끝
 
       setPendingAction(null);
     } catch (error) {
@@ -114,12 +100,6 @@ const EditMyInfoPage = () => {
 
   const handlePasswordConfirmCancel = () => {
     setShowPasswordConfirmModal(false);
-
-    // 초기 인증을 거부한 경우 이전 페이지로 돌아가기
-    if (pendingAction === 'initial') {
-      navigate(-1);
-    }
-
     setPendingAction(null);
   };
 
@@ -137,10 +117,6 @@ const EditMyInfoPage = () => {
     try {
       await updatePassword(newPassword);
       setShowPasswordModal(false);
-
-      // 비밀번호 변경 후 재인증 필요 알림
-      alert('비밀번호가 변경되었습니다. 보안을 위해 다시 인증해주세요.');
-      clearAuthentication();
     } catch (error) {
       console.error('비밀번호 저장 실패:', error);
       alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
@@ -148,12 +124,6 @@ const EditMyInfoPage = () => {
   };
 
   const handleProfileImageChange = async (file: File) => {
-    if (!isAuthenticated) {
-      setPendingAction('initial');
-      setShowPasswordConfirmModal(true);
-      return;
-    }
-
     try {
       await updateProfileImage(file);
     } catch (error) {
@@ -163,28 +133,34 @@ const EditMyInfoPage = () => {
   };
 
   const handleWithdraw = async () => {
-    if (!isAuthenticated) {
-      setPendingAction('initial');
+    // 소셜 로그인이 아닌 경우 비밀번호 확인 필요
+    if (!userInfo?.isSocial) {
+      setPendingAction('withdraw');
       setShowPasswordConfirmModal(true);
       return;
     }
 
+    // 소셜 로그인인 경우 바로 탈퇴 진행
     const confirmed = window.confirm('정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
     if (confirmed) {
-      try {
-        await withdrawUser();
-        alert('회원 탈퇴가 완료되었습니다.');
-        // 탈퇴 성공 시 로그인 페이지로 이동
-        navigate('/auth/signin');
-      } catch (error) {
-        console.error('회원 탈퇴 실패:', error);
-        alert('회원 탈퇴 중 오류가 발생했습니다.');
-      }
+      await handleWithdrawConfirm();
     }
   };
 
-  // 사용자 정보가 없는 경우 로딩 또는 인증 요구
-  if (!userInfo && !showPasswordConfirmModal) {
+  const handleWithdrawConfirm = async () => {
+    try {
+      await withdrawUser();
+      alert('회원 탈퇴가 완료되었습니다.');
+      // 탈퇴 성공 시 로그인 페이지로 이동
+      navigate('/auth/signin');
+    } catch (error) {
+      console.error('회원 탈퇴 실패:', error);
+      alert('회원 탈퇴 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 사용자 정보가 없는 경우 로딩
+  if (!userInfo) {
     return (
       <main className={styles.editMyInfoPage}>
         <div className={styles.container}>
@@ -209,6 +185,20 @@ const EditMyInfoPage = () => {
     );
   }
 
+  // 비밀번호 확인 모달 제목 생성
+  const getPasswordModalSubtitle = (): string => {
+    if (pendingAction === 'withdraw') {
+      return '회원 탈퇴를 위해 현재 비밀번호를 입력해주세요.';
+    }
+    if (pendingAction === 'phone') {
+      return '전화번호 변경을 위해 현재 비밀번호를 입력해주세요.';
+    }
+    if (pendingAction === 'password') {
+      return '비밀번호 변경을 위해 현재 비밀번호를 입력해주세요.';
+    }
+    return '현재 비밀번호를 입력해주세요.';
+  };
+
   return (
     <main className={styles.editMyInfoPage}>
       <div className={styles.container}>
@@ -226,52 +216,46 @@ const EditMyInfoPage = () => {
           <h1 className={styles.title}>개인 정보 변경</h1>
         </div>
 
-        {userInfo && (
-          <>
-            {/* 프로필 이미지 및 닉네임 */}
-            <ProfileImageEditor
-              profileImageUrl={userInfo.profileImageUrl}
-              nickname={userInfo.nickname}
-              onImageChange={handleProfileImageChange}
-              onNicknameEdit={handleNicknameEdit}
-            />
+        {/* 프로필 이미지 및 닉네임 */}
+        <ProfileImageEditor
+          profileImageUrl={userInfo.profileImageUrl}
+          nickname={userInfo.nickname}
+          onImageChange={handleProfileImageChange}
+          onNicknameEdit={handleNicknameEdit}
+        />
 
-            {/* 개인정보 폼 */}
-            <PersonalInfoForm
-              userInfo={userInfo}
-              onPhoneEdit={handlePhoneEdit}
-              onPasswordEdit={handlePasswordEdit}
-            />
+        {/* 개인정보 폼 */}
+        <PersonalInfoForm
+          userInfo={userInfo}
+          onPhoneEdit={handlePhoneEdit}
+          onPasswordEdit={handlePasswordEdit}
+        />
 
-            {/* 하단 버튼 */}
-            <div className={styles.bottomSection}>
-              <label className={styles.withdrawButton}>탈퇴하기</label>
+        {/* 하단 버튼 */}
+        <div className={styles.bottomSection}>
+          <label className={styles.withdrawButton}>탈퇴하기</label>
 
-              <Button
-                variant="danger"
-                onClick={handleWithdraw}
-                disabled={isLoading}
-                className={styles.withdrawMainButton}
-                height="40px"
-                radius="xsm"
-              >
-                탈퇴하기
-              </Button>
-            </div>
-          </>
-        )}
+          <Button
+            variant="danger"
+            onClick={handleWithdraw}
+            disabled={isLoading}
+            className={styles.withdrawMainButton}
+            height="40px"
+            radius="xsm"
+          >
+            탈퇴하기
+          </Button>
+        </div>
       </div>
 
       {/* 닉네임 편집 모달 */}
-      {userInfo && (
-        <EditNicknameModal
-          isOpen={showNicknameModal}
-          onClose={() => setShowNicknameModal(false)}
-          currentNickname={userInfo.nickname}
-          onSave={handleNicknameSave}
-          isLoading={isLoading}
-        />
-      )}
+      <EditNicknameModal
+        isOpen={showNicknameModal}
+        onClose={() => setShowNicknameModal(false)}
+        currentNickname={userInfo.nickname}
+        onSave={handleNicknameSave}
+        isLoading={isLoading}
+      />
 
       {/* 비밀번호 확인 모달 */}
       <PasswordConfirmModal
@@ -280,11 +264,7 @@ const EditMyInfoPage = () => {
         onConfirm={handlePasswordConfirm}
         isLoading={isLoading}
         title="비밀번호를 입력해주세요"
-        subtitle={
-          pendingAction === 'initial'
-            ? '개인정보 확인을 위해 현재 비밀번호를 입력해주세요.'
-            : `${pendingAction === 'phone' ? '전화번호' : '비밀번호'} 변경을 위해 현재 비밀번호를 입력해주세요.`
-        }
+        subtitle={getPasswordModalSubtitle()}
       />
 
       {/* 전화번호 편집 모달 */}
