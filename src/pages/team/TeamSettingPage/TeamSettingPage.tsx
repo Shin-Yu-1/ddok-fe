@@ -1,12 +1,26 @@
+import { useParams } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
-import ApplicantRow from '@/features/Team/components/ApplicantRow/ApplicantRow';
+import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
 import MemberRow from '@/features/Team/components/MemberRow/MemberRow';
-import { teamApplicantsMockData } from '@/features/Team/mocks/teamApplicantsListMockData';
 import { teamSettingMockData } from '@/features/Team/mocks/teamSettingMockData';
 
 import styles from './TeamSettingPage.module.scss';
 
 const TeamSettingPage = () => {
+  const params = useParams();
+  const { id } = params;
+
+  const teamId = id ? parseInt(id, 10) : null;
+
+  if (!id || !teamId || isNaN(teamId)) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.error}>올바르지 않은 팀 ID입니다.</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
@@ -28,15 +42,7 @@ const TeamSettingPage = () => {
 
       <section className={styles.wrapper}>
         <div className={styles.label}>참여 희망자</div>
-        <div className={styles.participantsGrid}>
-          <div className={styles.gridLabel}>지원 포지션</div>
-          <div className={styles.gridLabel}>멤버</div>
-          <div className={styles.gridLabel}>액션</div>
-
-          {teamApplicantsMockData.items.map(member => (
-            <ApplicantRow key={member.applicantId} member={member} />
-          ))}
-        </div>
+        <ApplicantsGrid teamId={teamId} />
       </section>
 
       <section className={styles.settings}>
