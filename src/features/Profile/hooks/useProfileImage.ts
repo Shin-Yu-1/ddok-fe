@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useMemo } from 'react';
 
 export interface ProfileImageOptions {
   maxSize?: number;
@@ -15,7 +15,9 @@ export const useProfileImage = (
   options: ProfileImageOptions = DEFAULT_OPTIONS
 ) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
+
+  // useMemo로 mergedOptions를 메모이제이션
+  const mergedOptions = useMemo(() => ({ ...DEFAULT_OPTIONS, ...options }), [options]);
 
   const validateImage = useCallback(
     (file: File): string | null => {
