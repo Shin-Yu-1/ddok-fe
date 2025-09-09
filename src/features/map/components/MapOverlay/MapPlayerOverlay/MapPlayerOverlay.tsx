@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
+import type BadgeTier from '@/constants/enums/BadgeTier.enum';
+import type BadgeType from '@/constants/enums/BadgeType.enum';
+import Badge from '@/features/Badge/Badge';
 import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
@@ -82,8 +85,31 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
             </div>
             <div className={styles.overlay__info__core__header}>
               <div className={styles.overlay__info__core__title}>{player.nickname}</div>
+              <div className={styles.user__item__left__badges}>
+                {player.mainBadge && (
+                  <Badge
+                    className={styles.badge}
+                    mainBadge={{
+                      type: player.mainBadge.type as BadgeType,
+                      tier: player.mainBadge.tier as BadgeTier,
+                    }}
+                    widthSize="13px"
+                  />
+                )}
+                {player.abandonBadge && (
+                  <Badge
+                    className={styles.badge}
+                    abandonBadge={
+                      player.abandonBadge && {
+                        isGranted: player.abandonBadge.isGranted,
+                        count: player.abandonBadge.count,
+                      }
+                    }
+                    widthSize="13px"
+                  />
+                )}
+              </div>
             </div>
-            {/* TODO: 배지 표시 */}
             <div className={styles.overlay__info__core__address}>서울 마포구</div>
           </div>
           <div className={styles.overlay__info__details}>
