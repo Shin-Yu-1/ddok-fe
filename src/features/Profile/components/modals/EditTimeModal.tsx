@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
 import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import ActiveTimeSelector from '@/features/Auth/components/ActiveTimeSelector/ActiveTimeSelector';
@@ -8,6 +11,9 @@ import type { CompleteProfileInfo } from '@/types/user';
 import { useProfileMutations } from '../../hooks/useProfileMutations';
 
 import styles from './EditTimeModal.module.scss';
+
+// dayjs 플러그인 확장
+dayjs.extend(customParseFormat);
 
 interface EditTimeModalProps {
   isOpen: boolean;
@@ -36,21 +42,39 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
     },
   });
 
-  // 시간 포맷 변환 함수 (HH:mm 형식으로)
+  // 시간 포맷 변환 함수 (HH:mm 형식으로) - dayjs 사용
   const formatTimeForDisplay = (hour: string): string => {
     if (!hour) return '00:00';
+
+    // 숫자로 파싱해서 dayjs 객체 생성
     const hourNum = parseInt(hour, 10);
-    if (isNaN(hourNum)) return '00:00';
-    return `${hourNum.toString().padStart(2, '0')}:00`;
+    if (isNaN(hourNum) || hourNum < 0 || hourNum > 23) return '00:00';
+
+    // 오늘 날짜에 해당 시간을 설정
+    const time = dayjs().hour(hourNum).minute(0).second(0);
+    return time.format('HH:mm');
   };
 
-  // 시간 포맷 변환 함수 (API용 - '04' 형태로)
+  // 시간 포맷 변환 함수 (API용) - dayjs 사용
   const formatTimeForApi = (timeString: string): string => {
     if (!timeString) return '00';
-    const [hour] = timeString.split(':');
-    const hourNum = parseInt(hour, 10);
-    if (isNaN(hourNum)) return '00';
-    return hourNum.toString().padStart(2, '0'); // '04' 형태로 변환
+
+    // HH:mm 형식으로 파싱 (strict mode 사용)
+    const time = dayjs(timeString, 'HH:mm', true);
+
+    // 파싱이 실패했거나 유효하지 않은 시간인 경우
+    if (!time.isValid()) {
+      console.warn('Invalid time format:', timeString);
+      return '00';
+    }
+
+    const hour = time.hour();
+    if (hour < 0 || hour > 23) {
+      console.warn('Invalid hour range:', hour);
+      return '00';
+    }
+
+    return time.format('HH');
   };
 
   // 모달이 열릴 때 기존 데이터로 초기화
@@ -82,8 +106,6 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
 
     const startHour = formatTimeForApi(activeHours.start);
     const endHour = formatTimeForApi(activeHours.end);
-
-    console.log('시간 API 전송 데이터:', { start: startHour, end: endHour });
 
     try {
       await updateHours.mutateAsync({
