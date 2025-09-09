@@ -13,10 +13,13 @@ export const ProjectOverlaySchema = z.object({
   capacity: z.number(),
   mode: z.string(),
   address: z.string(),
-  preferredAges: z.object({
-    ageMin: z.number(),
-    ageMax: z.number(),
-  }),
+  preferredAges: z
+    .object({
+      ageMin: z.number(),
+      ageMax: z.number(),
+    })
+    .nullable()
+    .optional(),
   expectedMonth: z.number(),
   startDate: z.string(),
 });
@@ -38,10 +41,13 @@ export const StudyOverlaySchema = z.object({
   capacity: z.number(),
   mode: z.string(),
   address: z.string(),
-  preferredAges: z.object({
-    ageMin: z.number(),
-    ageMax: z.number(),
-  }),
+  preferredAges: z
+    .object({
+      ageMin: z.number(),
+      ageMax: z.number(),
+    })
+    .nullable()
+    .optional(),
   expectedMonth: z.number(),
   startDate: z.string(),
 });
@@ -58,14 +64,20 @@ export const PlayerOverlaySchema = z.object({
   userId: z.number(),
   nickname: z.string(),
   profileImageUrl: z.string(),
-  mainBadge: z.object({
-    type: z.string(),
-    tier: z.string(),
-  }),
-  abandonBadge: {
-    isGranted: z.boolean(),
-    count: z.number(),
-  },
+  mainBadge: z
+    .object({
+      type: z.string(),
+      tier: z.string(),
+    })
+    .nullable()
+    .optional(),
+  abandonBadge: z
+    .object({
+      isGranted: z.boolean(),
+      count: z.number(),
+    })
+    .nullable()
+    .optional(),
   mainPosition: z.string(),
   address: z.string(),
   latestProject: z
