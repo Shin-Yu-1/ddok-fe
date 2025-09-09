@@ -6,9 +6,10 @@ import styles from './MemberRow.module.scss';
 
 interface MemberRowProps {
   member: MemberType;
+  amILeader: boolean;
 }
 
-const MemberRow = ({ member }: MemberRowProps) => {
+const MemberRow = ({ member, amILeader }: MemberRowProps) => {
   return (
     <>
       <div className={styles.positionContainer}>
@@ -17,17 +18,19 @@ const MemberRow = ({ member }: MemberRowProps) => {
       </div>
       <UserRow user={member.user} />
       <div className={styles.actionContainer}>
-        <Button
-          className={styles.action}
-          backgroundColor="var(--gray-1)"
-          fontSize="var(--fs-xxsmall)"
-          height="28px"
-          textColor="var(--white-2)"
-          radius="xsm"
-          fontWeightPreset="regular"
-        >
-          추방
-        </Button>
+        {amILeader && member.role !== 'LEADER' ? (
+          <Button
+            className={styles.action}
+            backgroundColor="var(--gray-1)"
+            fontSize="var(--fs-xxsmall)"
+            height="28px"
+            textColor="var(--white-2)"
+            radius="xsm"
+            fontWeightPreset="regular"
+          >
+            추방
+          </Button>
+        ) : null}
       </div>
     </>
   );
