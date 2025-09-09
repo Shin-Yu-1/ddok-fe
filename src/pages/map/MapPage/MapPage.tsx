@@ -46,6 +46,7 @@ const MapPage = () => {
   // 필터 상태
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const [selectedFilter, setSelectedFilter] = useState<string | undefined>(undefined);
+  const [keyword, setKeyword] = useState<string | undefined>(undefined);
 
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
@@ -76,6 +77,7 @@ const MapPage = () => {
     pageSize: 10,
     category: selectedCategory,
     filter: selectedFilter,
+    keyword: keyword,
   });
 
   // 세션 스토리지에서 사용자 위치 정보 가져오기
@@ -123,7 +125,7 @@ const MapPage = () => {
     if (isInitialLoad && mapBounds) {
       refetchMapSearch();
     }
-  }, [selectedCategory, selectedFilter, refetchMapSearch, isInitialLoad, mapBounds]);
+  }, [selectedCategory, selectedFilter, keyword, refetchMapSearch, isInitialLoad, mapBounds]);
 
   // mapBounds 변경 시 열려있는 overlay와 subPanel 닫기
   useEffect(() => {
@@ -225,6 +227,13 @@ const MapPage = () => {
     // useEffect에서 필터 변경을 감지하여 자동으로 리패치됨
   };
 
+  // 키워드 변경 핸들러
+  const handleKeywordChange = (newKeyword: string) => {
+    setKeyword(newKeyword || undefined);
+    setCurrentPage(0); // 키워드 검색 시 첫 페이지로 리셋
+    // useEffect에서 키워드 변경을 감지하여 자동으로 리패치됨
+  };
+
   // 지도 로드
   useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
 
@@ -317,6 +326,7 @@ const MapPage = () => {
             handleItemClick={handleItemClick}
             onPageChange={handlePageChange}
             onFilterChange={handleFilterChange}
+            onKeywordChange={handleKeywordChange}
           />
         </div>
       )}

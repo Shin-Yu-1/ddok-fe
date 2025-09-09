@@ -10,17 +10,18 @@ interface UseMapSearchOptions {
   pageSize?: number;
   category?: string;
   filter?: string;
+  keyword?: string;
 }
 
 /**
  * 지도 검색을 위한 React Query 훅
  *
  * @param mapBounds - 지도의 사각형 영역 정보
- * @param options - React Query 옵션 (enabled, page, pageSize, category, filter)
+ * @param options - React Query 옵션 (enabled, page, pageSize, category, filter, keyword)
  * @returns 지도 검색 결과
  */
 export const useMapSearch = (mapBounds: MapBounds | null, options: UseMapSearchOptions = {}) => {
-  const { enabled = true, page = 0, pageSize = 5, category, filter } = options;
+  const { enabled = true, page = 0, pageSize = 5, category, filter, keyword } = options;
 
   const params = mapBounds
     ? {
@@ -34,6 +35,7 @@ export const useMapSearch = (mapBounds: MapBounds | null, options: UseMapSearchO
         size: pageSize,
         ...(category && { category }),
         ...(filter && { filter }),
+        ...(keyword && { keyword }),
       }
     : undefined;
 

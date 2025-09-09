@@ -29,6 +29,7 @@ interface MapPanelProps {
   handleItemClick: (itemType: MapItemCategory, itemId?: number) => void;
   onPageChange?: (page: number) => void;
   onFilterChange?: (category?: string, filter?: string) => void;
+  onKeywordChange?: (keyword: string) => void;
 }
 
 const MapPanel: React.FC<MapPanelProps> = ({
@@ -38,6 +39,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
   handleItemClick,
   onPageChange,
   onFilterChange,
+  onKeywordChange,
 }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<CategoryFilterOption>(
     CATEGORY_FILTER_OPTIONS[0] // 전체
@@ -46,6 +48,20 @@ const MapPanel: React.FC<MapPanelProps> = ({
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<StatusFilterOption>(
     STATUS_FILTER_OPTIONS[0] // 전체
   );
+
+  const [keyword, setKeyword] = useState<string>('');
+
+  const handleKeywordSearch = () => {
+    if (onKeywordChange) {
+      onKeywordChange(keyword);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleKeywordSearch();
+    }
+  };
 
   const handleFilterClick = (option: CategoryFilterOption) => {
     setSelectedCategoryFilter(option);
@@ -118,6 +134,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
             fontSize="var(--fs-xxsmall)"
             iconSize="var(--i-large)"
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+            placeholder="검색어를 입력하세요"
+            value={keyword}
+            onChange={e => setKeyword(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         </div>
 
