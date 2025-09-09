@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
-import MemberRow from '@/features/Team/components/MemberRow/MemberRow';
-import { teamSettingMockData } from '@/features/Team/mocks/teamSettingMockData';
+import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
+import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
 
 import styles from './TeamSettingPage.module.scss';
 
@@ -13,6 +13,16 @@ const TeamSettingPage = () => {
 
   const teamId = id ? parseInt(id, 10) : null;
 
+  // 팀 설정 정보 조회
+  const {
+    data: teamData,
+    isLoading,
+    isError,
+  } = useGetTeamSetting({
+    teamId: teamId || 0,
+    enabled: !!teamId,
+  });
+
   if (!id || !teamId || isNaN(teamId)) {
     return (
       <div className={styles.container}>
@@ -21,23 +31,32 @@ const TeamSettingPage = () => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.loading}>팀 정보를 불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (isError || !teamData?.data) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.error}>팀 정보를 불러오는데 실패했습니다.</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
-        {teamSettingMockData.teamTitle}
+        {teamData.data.teamTitle}
         <span className={styles.subtitle}> 관리 페이지</span>
       </h1>
 
       <section className={styles.wrapper}>
         <div className={styles.label}>팀원</div>
-        <div className={styles.membersGrid}>
-          <div className={styles.gridLabel}>담당 포지션</div>
-          <div className={styles.gridLabel}>멤버</div>
-          <div className={styles.gridLabel}>액션</div>
-          {teamSettingMockData.items.map(member => (
-            <MemberRow key={member.memberId} member={member} />
-          ))}
-        </div>
+        <MembersGrid members={teamData.data.items} />
       </section>
 
       <section className={styles.wrapper}>
