@@ -23,16 +23,22 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
   const config = notificationConfig[notification.type];
 
   const handleMarkAsRead = () => {
-    if (!notification.isRead) {
-      onMarkAsRead(notification.id);
-    }
+    if (!notification.isRead) onMarkAsRead(notification.id);
   };
 
   const handleAction = (actionType: NotificationAction['type']) => {
-    if (onAction) {
-      onAction(notification.id, actionType);
-    }
+    if (onAction) onAction(notification.id, actionType);
   };
+
+  const typeKey =
+    typeof notification.type === 'string'
+      ? notification.type
+      : (NotificationType as Record<string, string>)[notification.type];
+
+  const needsButtons = typeof typeKey === 'string' && typeKey.includes('REQUEST');
+
+  const actions = config.actions ?? [];
+  const showActions = (needsButtons || !!config.hasActions) && actions.length > 0;
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
@@ -41,15 +47,10 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
     const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-    if (diffInMinutes < 1) {
-      return '방금 전';
-    } else if (diffInMinutes < 60) {
-      return `${diffInMinutes}분 전`;
-    } else if (diffInHours < 24) {
-      return `${diffInHours}시간 전`;
-    } else {
-      return `${diffInDays}일 전`;
-    }
+    if (diffInMinutes < 1) return '방금 전';
+    if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+    if (diffInHours < 24) return `${diffInHours}시간 전`;
+    return `${diffInDays}일 전`;
   };
 
   const renderNotificationIcon = () => {
@@ -78,7 +79,6 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
         </div>
       );
     }
-
     if (isDMRequest) {
       return (
         <div className={styles.iconContainer}>
@@ -86,7 +86,6 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
         </div>
       );
     }
-
     if (isViolation) {
       return (
         <div className={styles.iconContainer}>
@@ -94,7 +93,6 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
         </div>
       );
     }
-
     if (isAchievement) {
       return (
         <div className={styles.iconContainer}>
@@ -102,7 +100,6 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
         </div>
       );
     }
-
     return null;
   };
 
@@ -116,7 +113,6 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
 
       {/* 메인 콘텐츠 영역 */}
       <div className={styles.mainContent}>
-        {/* 헤더: 제목 + 시간 + 안읽음 표시 */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <span className={styles.type}>{config.title}</span>
@@ -127,17 +123,18 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
           </div>
         </div>
 
-        {/* 내용 */}
         <div className={styles.content}>
           <p className={styles.message}>{notification.message}</p>
         </div>
       </div>
 
-      {/* 버튼 영역 */}
-      {config.hasActions && config.actions && (
-        <div className={styles.actionSection}>
+      <div
+        className={`${styles.actionSection} ${!showActions ? styles.hidden : ''}`}
+        aria-hidden={!showActions}
+      >
+        {showActions && (
           <div className={styles.actions}>
-            {config.actions.map(action => (
+            {actions.map(action => (
               <Button
                 key={action.type}
                 variant={action.variant}
@@ -151,8 +148,8 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
               </Button>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
