@@ -49,6 +49,7 @@
 }
 
 .sidebarButton {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,6 +89,17 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+}
+
+.notificationDot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid v.$white-1;
+  border-radius: v.$r-xxsmall;
+  background-color: v.$red-1;
 }
 
 .submenu {
@@ -147,6 +159,23 @@
   height: 1px;
   margin: 10px auto;
   background-color: v.$black-4;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unreadCount {
+  min-width: 20px;
+  padding: 4px 8px;
+  border-radius: v.$r-xsmall;
+  font-size: v.$fs-xxxsmall;
+  font-weight: v.$fw-regular;
+  text-align: center;
+  color: v.$black-4;
+  background-color: v.$yellow-1;
 }
 
 @keyframes slide-down {
