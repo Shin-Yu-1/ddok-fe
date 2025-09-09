@@ -9,7 +9,6 @@
   background-color: $white-3;
 }
 
-// TODO: 추후 이미지로 대체
 .overlay__banner {
   width: 100%;
   height: 125px;
@@ -19,6 +18,14 @@
   text-align: center;
   color: $white-1;
   background-color: $blue-1;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 }
 
 .overlay__content {
@@ -115,7 +122,6 @@
   }
 }
 
-// TODO: 추후 제거 예정
 .overlay__closeBtn {
   height: 30px;
   font-size: 10px;
