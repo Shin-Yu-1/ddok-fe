@@ -1,9 +1,14 @@
+import AchievementIconSrc from '@/assets/icons/achievement-icon.svg';
+import DMIconSrc from '@/assets/icons/dm-noti-icon.svg';
+import ProjectStudyIconSrc from '@/assets/icons/project-study-noti-icon.svg';
+import ViolationIconSrc from '@/assets/icons/violation-icon.svg';
 import Button from '@/components/Button/Button';
 
 import {
   notificationConfig,
   type Notification,
   type NotificationAction,
+  NotificationType,
 } from '../../types/notification.types';
 
 import styles from './NotificationItem.module.scss';
@@ -47,15 +52,74 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
     }
   };
 
+  const renderNotificationIcon = () => {
+    const isProjectOrStudy =
+      notification.type === NotificationType.PROJECT_JOIN_REQUEST ||
+      notification.type === NotificationType.PROJECT_JOIN_APPROVED ||
+      notification.type === NotificationType.STUDY_JOIN_REQUEST ||
+      notification.type === NotificationType.STUDY_JOIN_APPROVED;
+
+    const isDMRequest = notification.type === NotificationType.DM_REQUEST;
+
+    const isViolation =
+      notification.type === NotificationType.TEAM_LEADER_VIOLATION ||
+      notification.type === NotificationType.TEAM_MEMBER_VIOLATION;
+
+    const isAchievement = notification.type === NotificationType.ACHIEVEMENT;
+
+    if (isProjectOrStudy) {
+      return (
+        <div className={styles.iconContainer}>
+          <img
+            src={ProjectStudyIconSrc}
+            alt="프로젝트/스터디"
+            className={styles.notificationIcon}
+          />
+        </div>
+      );
+    }
+
+    if (isDMRequest) {
+      return (
+        <div className={styles.iconContainer}>
+          <img src={DMIconSrc} alt="DM 요청" className={styles.notificationIcon} />
+        </div>
+      );
+    }
+
+    if (isViolation) {
+      return (
+        <div className={styles.iconContainer}>
+          <img src={ViolationIconSrc} alt="일탈 신고" className={styles.notificationIcon} />
+        </div>
+      );
+    }
+
+    if (isAchievement) {
+      return (
+        <div className={styles.iconContainer}>
+          <img src={AchievementIconSrc} alt="업적 달성" className={styles.notificationIcon} />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div
       className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread}`}
       onClick={handleMarkAsRead}
     >
       <div className={styles.header}>
-        <span className={styles.type}>{config.title}</span>
-        <span className={styles.time}>{formatTimeAgo(notification.createdAt)}</span>
-        {!notification.isRead && <div className={styles.unreadDot} />}
+        <div className={styles.headerLeft}>
+          {renderNotificationIcon()}
+          <span className={styles.type}>{config.title}</span>
+        </div>
+        <div className={styles.headerRight}>
+          <span className={styles.time}>{formatTimeAgo(notification.createdAt)}</span>
+          {!notification.isRead && <div className={styles.unreadDot} />}
+        </div>
       </div>
 
       <div className={styles.content}>

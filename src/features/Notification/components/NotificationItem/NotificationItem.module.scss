@@ -27,6 +27,32 @@
   margin-bottom: 8px;
 }
 
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.notificationIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 .type {
   font-size: 12px;
   font-weight: 600;
