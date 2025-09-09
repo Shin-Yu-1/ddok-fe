@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
 import { useGetProjectOverlay } from '@/features/map/hooks/useGetOverlay';
 
@@ -13,6 +15,8 @@ interface ProjectOverlayProps {
 }
 
 const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }) => {
+  const nav = useNavigate();
+
   const { data: response, isLoading, isError } = useGetProjectOverlay(id);
 
   if (isLoading) {
@@ -70,6 +74,9 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
+                onClick={() => {
+                  nav(`/detail/project/${id}`);
+                }}
               >
                 상세보기
               </Button>
