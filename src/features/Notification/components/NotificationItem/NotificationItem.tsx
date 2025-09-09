@@ -111,36 +111,46 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
       className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread}`}
       onClick={handleMarkAsRead}
     >
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          {renderNotificationIcon()}
-          <span className={styles.type}>{config.title}</span>
+      {/* 아이콘 영역 */}
+      <div className={styles.iconSection}>{renderNotificationIcon()}</div>
+
+      {/* 메인 콘텐츠 영역 */}
+      <div className={styles.mainContent}>
+        {/* 헤더: 제목 + 시간 + 안읽음 표시 */}
+        <div className={styles.header}>
+          <div className={styles.headerLeft}>
+            <span className={styles.type}>{config.title}</span>
+          </div>
+          <div className={styles.headerRight}>
+            <span className={styles.time}>{formatTimeAgo(notification.createdAt)}</span>
+            {!notification.isRead && <div className={styles.unreadDot} />}
+          </div>
         </div>
-        <div className={styles.headerRight}>
-          <span className={styles.time}>{formatTimeAgo(notification.createdAt)}</span>
-          {!notification.isRead && <div className={styles.unreadDot} />}
+
+        {/* 내용 */}
+        <div className={styles.content}>
+          <p className={styles.message}>{notification.message}</p>
         </div>
       </div>
 
-      <div className={styles.content}>
-        <p className={styles.message}>{notification.message}</p>
-      </div>
-
+      {/* 버튼 영역 */}
       {config.hasActions && config.actions && (
-        <div className={styles.actions}>
-          {config.actions.map(action => (
-            <Button
-              key={action.type}
-              variant={action.variant}
-              size="sm"
-              onClick={e => {
-                e.stopPropagation();
-                handleAction(action.type);
-              }}
-            >
-              {action.label}
-            </Button>
-          ))}
+        <div className={styles.actionSection}>
+          <div className={styles.actions}>
+            {config.actions.map(action => (
+              <Button
+                key={action.type}
+                variant={action.variant}
+                size="sm"
+                onClick={e => {
+                  e.stopPropagation();
+                  handleAction(action.type);
+                }}
+              >
+                {action.label}
+              </Button>
+            ))}
+          </div>
         </div>
       )}
     </div>
