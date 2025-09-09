@@ -12,6 +12,7 @@ import { useLocation } from 'react-router-dom';
 import ChatList from '@/features/Chat/components/ChatList/ChatList';
 import ChatRoom from '@/features/Chat/components/ChatRoom/ChatRoom';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import NotificationList from '@/features/Notification/components/NotificationList/NotificationList';
 import { useChatUiStore } from '@/stores/chatUiStore';
 
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
@@ -37,7 +38,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     closeRoom();
-  }, [activeSubSection]);
+  }, [activeSubSection, closeRoom]);
 
   const chatSubButtons: SubButtonConfig[] = [
     {
@@ -90,7 +91,7 @@ const Sidebar = () => {
       case 'notification':
         return (
           <SidePanel title="수신함" {...sectionProps}>
-            <div>수신함 입니닷</div>
+            <NotificationList />
           </SidePanel>
         );
       case 'chat': {
