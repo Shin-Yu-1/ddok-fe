@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
 import { useGetStudyOverlay } from '@/features/map/hooks/useGetOverlay';
 
@@ -13,6 +15,8 @@ interface StudyOverlayProps {
 }
 
 const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) => {
+  const nav = useNavigate();
+
   const { data: response, isLoading, isError } = useGetStudyOverlay(id);
 
   if (isLoading) {
@@ -70,6 +74,9 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
+                onClick={() => {
+                  nav(`/detail/study/${id}`);
+                }}
               >
                 상세보기
               </Button>
