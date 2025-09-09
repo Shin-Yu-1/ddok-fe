@@ -29,7 +29,7 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-          개발용 닫기 버튼
+          닫기
         </div>
       </div>
     );
@@ -45,7 +45,7 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-          개발용 닫기 버튼
+          닫기
         </div>
       </div>
     );
@@ -65,9 +65,9 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
               <div className={styles.overlay__info__core__category}>스터디</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
-                fontSize="9px"
+                fontSize="10px"
                 width="fit-content"
-                height="18px"
+                height="22px"
                 backgroundColor="var(--gray-1)"
                 textColor="var(--white-3)"
                 fontWeight="var(--font-weight-regular)"
@@ -118,9 +118,8 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
         </div>
       </div>
 
-      {/* 개발 편의를 위한 닫기 버튼(임시) */}
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-        개발용 닫기 버튼
+        닫기
       </div>
     </div>
   );

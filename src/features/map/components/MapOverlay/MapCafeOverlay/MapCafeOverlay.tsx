@@ -58,7 +58,7 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-          개발용 닫기 버튼
+          닫기
         </div>
       </div>
     );
@@ -74,7 +74,7 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-          개발용 닫기 버튼
+          닫기
         </div>
       </div>
     );
@@ -90,7 +90,9 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
-            <div className={styles.overlay__info__core__category}>추천 장소</div>
+            <div className={styles.overlay__info__core__action}>
+              <div className={styles.overlay__info__core__category}>추천 장소</div>
+            </div>
             <div className={styles.overlay__info__core__header}>
               <div className={styles.overlay__info__core__title}>{cafe.title}</div>
             </div>
@@ -111,9 +113,8 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
         </div>
       </div>
 
-      {/* 개발 편의를 위한 닫기 버튼(임시) */}
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-        개발용 닫기 버튼
+        닫기
       </div>
     </div>
   );

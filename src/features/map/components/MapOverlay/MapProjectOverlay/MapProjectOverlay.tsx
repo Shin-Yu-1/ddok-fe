@@ -29,7 +29,7 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-          개발용 닫기 버튼
+          닫기
         </div>
       </div>
     );
@@ -45,7 +45,7 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-          개발용 닫기 버튼
+          닫기
         </div>
       </div>
     );
@@ -61,14 +61,13 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
-            <div className={styles.overlay__info__core__category}>프로젝트</div>
-            <div className={styles.overlay__info__core__header}>
-              <div className={styles.overlay__info__core__title}>{project.title}</div>
+            <div className={styles.overlay__info__core__action}>
+              <div className={styles.overlay__info__core__category}>프로젝트</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
-                fontSize="9px"
+                fontSize="10px"
                 width="fit-content"
-                height="18px"
+                height="22px"
                 backgroundColor="var(--gray-1)"
                 textColor="var(--white-3)"
                 fontWeight="var(--font-weight-regular)"
@@ -80,6 +79,9 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
               >
                 상세보기
               </Button>
+            </div>
+            <div className={styles.overlay__info__core__header}>
+              <div className={styles.overlay__info__core__title}>{project.title}</div>
             </div>
             <div className={styles.overlay__info__core__address}>{project.address}</div>
           </div>
@@ -118,9 +120,8 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
         </div>
       </div>
 
-      {/* 개발 편의를 위한 닫기 버튼(임시) */}
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-        개발용 닫기 버튼
+        닫기
       </div>
     </div>
   );
