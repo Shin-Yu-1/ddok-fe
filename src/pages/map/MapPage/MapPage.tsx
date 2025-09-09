@@ -73,7 +73,7 @@ const MapPage = () => {
   } = useMapSearch(mapBounds, {
     enabled: false,
     page: currentPage,
-    pageSize: 5,
+    pageSize: 10,
     category: selectedCategory,
     filter: selectedFilter,
   });
