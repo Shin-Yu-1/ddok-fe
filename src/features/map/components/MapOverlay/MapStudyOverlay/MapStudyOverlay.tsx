@@ -106,13 +106,14 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>희망 나이대</div>
-              {study.preferredAges.ageMin === 0 && study.preferredAges.ageMax === 0 ? (
-                <div className={styles.overlay__info__details__item__value}>무관</div>
-              ) : (
-                <div className={styles.overlay__info__details__item__value}>
-                  {study.preferredAges.ageMin}-{study.preferredAges.ageMax - 10}대
-                </div>
-              )}
+              <div className={styles.overlay__info__details__item__value}>
+                {!study.preferredAges ||
+                (study.preferredAges.ageMin === 0 && study.preferredAges.ageMax === 0)
+                  ? '무관'
+                  : study.preferredAges.ageMin === study.preferredAges.ageMax - 10
+                    ? `${study.preferredAges.ageMin}대`
+                    : `${study.preferredAges.ageMin}-${study.preferredAges.ageMax - 10}대`}
+              </div>
             </div>
           </div>
         </div>
