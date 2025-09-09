@@ -3,9 +3,9 @@
 
 .notificationItem {
   display: flex;
-  gap: 12px;
+  gap: 2px;
   height: 116px;
-  padding: 16px;
+  padding: 4px;
   border-bottom: 1px solid v.$gray-2;
   transition: background-color 0.2s ease;
   cursor: pointer;
@@ -106,12 +106,6 @@
 
   &:empty {
     display: none;
-  }
-
-  button {
-    padding: 4px 12px;
-    font-size: 12px;
-    white-space: nowrap;
   }
 }
 
