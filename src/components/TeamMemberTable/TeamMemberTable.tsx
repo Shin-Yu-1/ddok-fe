@@ -95,6 +95,7 @@ const TeamMemberTable = ({
                   <div className={styles.memberItem}>
                     <ProfileBar
                       userId={leader.userId}
+                      nickname={leader.nickname}
                       profileImageUrl={leader.profileImageUrl || undefined}
                       profileImageAlt={`${leader.nickname} 프로필`}
                       mainBadge={
@@ -135,6 +136,7 @@ const TeamMemberTable = ({
                       <div key={member.userId} className={styles.memberItem}>
                         <ProfileBar
                           userId={member.userId}
+                          nickname={member.nickname}
                           profileImageUrl={member.profileImageUrl || undefined}
                           profileImageAlt={`${member.nickname} 프로필`}
                           mainBadge={
@@ -222,6 +224,7 @@ const TeamMemberTable = ({
                     <div key={member.userId} className={styles.memberItem}>
                       <ProfileBar
                         userId={member.userId}
+                        nickname={member.nickname}
                         profileImageUrl={member.profileImageUrl || undefined}
                         profileImageAlt={`${member.nickname} 프로필`}
                         mainBadge={
