@@ -1,7 +1,6 @@
-import MemberRow from '@/features/Team/components/MemberRow/MemberRow';
-
 import type { MemberType } from '../../schemas/teamMemberSchema';
 
+import MemberRow from './MemberRow/MemberRow';
 import styles from './MembersGrid.module.scss';
 
 interface MembersGridProps {
