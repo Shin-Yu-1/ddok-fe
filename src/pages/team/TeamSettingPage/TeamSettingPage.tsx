@@ -56,7 +56,7 @@ const TeamSettingPage = () => {
 
       <section className={styles.wrapper}>
         <div className={styles.label}>팀원</div>
-        <MembersGrid members={teamData.data.items} />
+        <MembersGrid members={teamData.data.items} amILeader={teamData.data.isLeader} />
       </section>
 
       <section className={styles.wrapper}>
@@ -80,7 +80,7 @@ const TeamSettingPage = () => {
         </div>
 
         <div className={styles.settingItem}>
-          <div>프로젝트 종료 및 평가하기</div>
+          <div>프로젝트 종료하기</div>
           <Button
             backgroundColor="var(--black-1)"
             textColor="var(--white-3)"
@@ -88,7 +88,20 @@ const TeamSettingPage = () => {
             fontSize="var(--fs-xxsmall)"
             height="35px"
           >
-            종료 및 평가하기
+            종료하기
+          </Button>
+        </div>
+
+        <div className={styles.settingItem}>
+          <div>팀원 평가하기</div>
+          <Button
+            backgroundColor="var(--black-1)"
+            textColor="var(--white-3)"
+            radius="xsm"
+            fontSize="var(--fs-xxsmall)"
+            height="35px"
+          >
+            평가하기
           </Button>
         </div>
 
