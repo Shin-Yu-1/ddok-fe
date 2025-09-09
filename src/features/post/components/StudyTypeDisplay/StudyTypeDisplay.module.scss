@@ -1,0 +1,45 @@
+@use '@/styles/variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.typeInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba($green-1, 0.2);
+  border-radius: $r-xsmall;
+  background-color: rgba($green-1, 0.05);
+}
+
+.iconSection {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.textSection {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.typeText {
+  font-size: $fs-small;
+  font-weight: $fw-semibold;
+  color: $black-3;
+}
+
+.description {
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-regular;
+  line-height: 1.4;
+  color: $gray-1;
+}
