@@ -15,14 +15,7 @@ import MapStudyOverlay from '@/features/map/components/MapOverlay/MapStudyOverla
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
 import { useMapSearch } from '@/features/map/hooks/useMapSearch';
-import { overlayMockData } from '@/features/map/mocks/overlayMockData';
 import type { MapBounds } from '@/features/map/schemas/mapItemSchema';
-import type {
-  CafeOverlayData,
-  PlayerOverlayData,
-  ProjectOverlayData,
-  StudyOverlayData,
-} from '@/features/map/schemas/overlaySchema';
 import { MapItemCategory } from '@/features/map/types/common';
 import Sidebar from '@/features/Sidebar/components/Sidebar';
 import { useSidebarHandlers } from '@/features/Sidebar/hooks/useSidebarHandlers';
@@ -60,11 +53,12 @@ const MapPage = () => {
   // 최초 로드 완료 여부
   const [isInitialLoad, setIsInitialLoad] = useState(false);
 
-  // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
+  // 커스텀 오버레이에 전달할 마커의 좌표, 타입 및 ID
   const [selectedPoint, setSelectedPoint] = useState<{
     lat: number;
     lng: number;
-    type: string;
+    category: string;
+    id: number;
   } | null>(null);
 
   // 사이드바에서 패널 및 서브패널의 열림 상태를 가져옴
@@ -133,7 +127,7 @@ const MapPage = () => {
 
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
-    if (!isMapPanelOpen) return;
+    if (!isMapPanelOpen || !itemId) return;
 
     // 클릭한 아이템 찾기 - mapSearchData가 undefined인 경우 빈 배열로 처리
     const items = mapSearchData || [];
@@ -148,16 +142,12 @@ const MapPage = () => {
 
     // 클릭한 아이템 위치에 오버레이 표시
     if (clickedItem) {
-      //   지도 중심을 클릭한 아이템 위치로 이동
-      //   mapRef.current?.setCenter(
-      //     new kakao.maps.LatLng(clickedItem.location.latitude, clickedItem.location.longitude)
-      //   );
-
       // 패널에서 선택한 아이템에 대해 오버레이 표시
       setSelectedPoint({
         lat: clickedItem.location.latitude,
         lng: clickedItem.location.longitude,
-        type: clickedItem.category,
+        category: clickedItem.category,
+        id: itemId,
       });
       setIsOverlayOpen(true);
     }
@@ -245,57 +235,55 @@ const MapPage = () => {
 
             {/* 마커 */}
             {mapSearchData &&
-              mapSearchData.map(m => (
-                <MapMarker
-                  key={`marker__${m.location.latitude}-${m.location.longitude}`}
-                  position={{ lat: m.location.latitude, lng: m.location.longitude }}
-                  onClick={() => {
-                    setIsOverlayOpen(true);
-                    setSelectedPoint({
-                      lat: m.location.latitude,
-                      lng: m.location.longitude,
-                      type: m.category,
-                    });
-                  }}
-                ></MapMarker>
-              ))}
+              mapSearchData.map(m => {
+                let id: number;
+                if (m.category === MapItemCategory.PROJECT && 'projectId' in m) {
+                  id = m.projectId;
+                } else if (m.category === MapItemCategory.STUDY && 'studyId' in m) {
+                  id = m.studyId;
+                } else if (m.category === MapItemCategory.PLAYER && 'userId' in m) {
+                  id = m.userId;
+                } else if (m.category === MapItemCategory.CAFE && 'cafeId' in m) {
+                  id = m.cafeId;
+                } else {
+                  return null;
+                }
+
+                return (
+                  <MapMarker
+                    key={`marker__${m.location.latitude}-${m.location.longitude}`}
+                    position={{ lat: m.location.latitude, lng: m.location.longitude }}
+                    onClick={() => {
+                      setIsOverlayOpen(true);
+                      setSelectedPoint({
+                        lat: m.location.latitude,
+                        lng: m.location.longitude,
+                        category: m.category,
+                        id: id,
+                      });
+                    }}
+                  ></MapMarker>
+                );
+              })}
 
             {/* 오버레이 */}
             {isOverlayOpen && selectedPoint && (
               <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
                 {(() => {
-                  const overlayData = overlayMockData.find(
-                    data => data.category === selectedPoint.type
-                  );
-                  if (!overlayData) return null;
-
                   const commonProps = {
                     onOverlayClose: () => setIsOverlayOpen(false),
+                    id: selectedPoint.id,
                   };
 
-                  switch (selectedPoint.type) {
+                  switch (selectedPoint.category) {
                     case MapItemCategory.PROJECT:
-                      return (
-                        <MapProjectOverlay
-                          {...commonProps}
-                          project={overlayData as ProjectOverlayData}
-                        />
-                      );
+                      return <MapProjectOverlay {...commonProps} />;
                     case MapItemCategory.STUDY:
-                      return (
-                        <MapStudyOverlay {...commonProps} study={overlayData as StudyOverlayData} />
-                      );
+                      return <MapStudyOverlay {...commonProps} />;
                     case MapItemCategory.PLAYER:
-                      return (
-                        <MapPlayerOverlay
-                          {...commonProps}
-                          player={overlayData as PlayerOverlayData}
-                        />
-                      );
+                      return <MapPlayerOverlay {...commonProps} />;
                     case MapItemCategory.CAFE:
-                      return (
-                        <MapCafeOverlay {...commonProps} cafe={overlayData as CafeOverlayData} />
-                      );
+                      return <MapCafeOverlay {...commonProps} />;
                     default:
                       return null;
                   }
