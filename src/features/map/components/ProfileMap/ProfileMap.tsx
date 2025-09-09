@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
+import { CustomOverlayMap, Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 
 import { useGetProfileMap } from '../../hooks/useGetProfileMap';
 import type { MapBounds } from '../../schemas/mapItemSchema';
@@ -12,6 +12,7 @@ interface ProfileMapProps {
   location: {
     latitude: number;
     longitude: number;
+    address: string;
   };
 }
 
@@ -22,8 +23,11 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
+  // 오버레이 열림 상태
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+
   // 프로필 지도 데이터 조회
-  const { data: profileMapData, isError } = useGetProfileMap({
+  const { data: profileMapData } = useGetProfileMap({
     playerId,
     mapBounds,
     enabled: !!mapBounds && !!playerId,
@@ -32,23 +36,22 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
   // 지도가 로드된 후 mapBounds 설정
   const handleMapLoad = () => {
     if (mapRef.current) {
-      setMapBounds({
+      const newMapBounds = {
         swLat: mapRef.current.getBounds().getSouthWest().getLat(),
         swLng: mapRef.current.getBounds().getSouthWest().getLng(),
         neLat: mapRef.current.getBounds().getNorthEast().getLat(),
         neLng: mapRef.current.getBounds().getNorthEast().getLng(),
         lat: mapRef.current.getCenter().getLat(),
         lng: mapRef.current.getCenter().getLng(),
-      });
+      };
+      setMapBounds(newMapBounds);
     }
   };
 
-  useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
-
-  // 로딩 중이거나 에러 상태 처리
-  if (isError) {
-    console.error('프로필 지도 데이터를 가져오는 중 오류가 발생했습니다.');
-  }
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_API_KEY,
+    libraries: ['services'],
+  });
 
   return (
     <div className={styles.container}>
@@ -60,7 +63,32 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
         ref={mapRef}
         level={5}
         onLoad={handleMapLoad}
+        onTileLoaded={() => {
+          if (mapRef.current && !mapBounds) {
+            handleMapLoad();
+          }
+        }}
       >
+        {/* 플레이어 중심 좌표 */}
+        <MapMarker
+          position={{ lat: location.latitude, lng: location.longitude }}
+          onClick={() => {
+            setIsOverlayOpen(true);
+          }}
+        />
+
+        {/* 플레이어 중심 좌표 오버레이 */}
+        {isOverlayOpen && (
+          <CustomOverlayMap
+            position={{ lat: location.latitude, lng: location.longitude }}
+            yAnchor={2}
+          >
+            <div className={styles.overlay}>
+              <div>{location.address}</div>
+            </div>
+          </CustomOverlayMap>
+        )}
+
         {/* 마커 */}
         {profileMapData?.data &&
           profileMapData.data.map(item => (
