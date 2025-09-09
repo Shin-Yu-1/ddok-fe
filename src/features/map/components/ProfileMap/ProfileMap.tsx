@@ -81,7 +81,7 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
         {isOverlayOpen && (
           <CustomOverlayMap
             position={{ lat: location.latitude, lng: location.longitude }}
-            yAnchor={2}
+            yAnchor={2.5}
           >
             <div className={styles.overlay}>
               <div>{location.address}</div>
