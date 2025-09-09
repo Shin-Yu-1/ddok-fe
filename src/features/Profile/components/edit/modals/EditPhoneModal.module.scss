@@ -1,0 +1,69 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+
+  @include m.mobile {
+    gap: 16px;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputLabel {
+  @include m.font-text;
+
+  font-weight: v.$fw-semibold;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-small-text;
+  }
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.codeButton {
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 0 12px !important;
+  }
+}
+
+.errorMessage {
+  @include m.font-tiny-text;
+
+  margin: 0;
+  color: v.$red-1;
+
+  @include m.mobile {
+    font-size: 10px;
+  }
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
