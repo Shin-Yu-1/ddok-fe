@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ArrowLeftIcon } from '@phosphor-icons/react';
+import { ArrowBendUpLeftIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -121,7 +121,7 @@ const EditMyInfoPage = () => {
             className={styles.backButton}
             aria-label="뒤로가기"
           >
-            <ArrowLeftIcon size={24} weight="regular" />
+            <ArrowBendUpLeftIcon size={16} weight="bold" />
             돌아가기
           </button>
           <h1 className={styles.title}>개인 정보 변경</h1>
@@ -144,22 +144,15 @@ const EditMyInfoPage = () => {
 
         {/* 하단 버튼 */}
         <div className={styles.bottomSection}>
-          <button
-            type="button"
-            onClick={handleWithdraw}
-            disabled={isLoading}
-            className={styles.withdrawButton}
-          >
-            탈퇴하기
-          </button>
+          <label className={styles.withdrawButton}>탈퇴하기</label>
 
           <Button
             variant="danger"
             onClick={handleWithdraw}
             disabled={isLoading}
             className={styles.withdrawMainButton}
-            height="48px"
-            fullWidth
+            height="40px"
+            radius="xsm"
           >
             탈퇴하기
           </Button>

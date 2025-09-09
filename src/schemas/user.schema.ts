@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+const phoneNumberSchema = z
+  .string()
+  .nonempty('전화번호를 입력해주세요.')
+  .regex(/^010\d{8}$/, '010으로 시작하는 숫자 11자리를 입력해주세요.');
+
 // 닉네임 유효성 검사 스키마
 export const nicknameSchema = z
   .string()
@@ -17,7 +22,7 @@ export const userInfoSchema = z.object({
   nickname: nicknameSchema,
   birthDate: z.string(),
   email: z.string().email(),
-  phoneNumber: z.string(),
+  phoneNumber: phoneNumberSchema,
   password: z.string(),
   isSocial: z.boolean().optional(),
 });
@@ -25,6 +30,11 @@ export const userInfoSchema = z.object({
 // 닉네임 수정 요청 스키마
 export const updateNicknameRequestSchema = z.object({
   nickname: nicknameSchema,
+});
+
+// 전화번호 수정 요청 스키마
+export const updatePhoneRequestSchema = z.object({
+  phoneNumber: phoneNumberSchema,
 });
 
 // 비밀번호 확인 요청 스키마
@@ -58,7 +68,11 @@ export const verifyPasswordResponseSchema = z.object({
 // TypeScript 타입 추출
 export type UserInfo = z.infer<typeof userInfoSchema>;
 export type UpdateNicknameRequest = z.infer<typeof updateNicknameRequestSchema>;
+export type UpdatePhoneRequest = z.infer<typeof updatePhoneRequestSchema>;
 export type VerifyPasswordRequest = z.infer<typeof verifyPasswordRequestSchema>;
 export type UserInfoResponse = z.infer<typeof userInfoResponseSchema>;
 export type ProfileImageUploadResponse = z.infer<typeof profileImageUploadResponseSchema>;
 export type VerifyPasswordResponse = z.infer<typeof verifyPasswordResponseSchema>;
+
+// auth.schema.ts와 공유할 phoneNumberSchema export
+export { phoneNumberSchema };

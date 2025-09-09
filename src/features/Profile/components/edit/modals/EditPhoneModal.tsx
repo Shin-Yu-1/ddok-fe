@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import BaseModal from '@/components/Modal/BaseModal';
+import { phoneNumberSchema } from '@/schemas/user.schema';
 
 import styles from './EditPhoneModal.module.scss';
 
@@ -18,6 +19,7 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
   const [verificationCode, setVerificationCode] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   // 모달이 열릴 때 초기화
   useEffect(() => {
@@ -26,29 +28,51 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
       setVerificationCode('');
       setIsCodeSent(false);
       setIsVerified(false);
+      setPhoneError('');
     }
   }, [isOpen]);
 
-  // 전화번호 형식 검증
-  const validatePhoneNumber = (phone: string): boolean => {
-    const phoneRegex = /^010\d{8}$/;
-    return phoneRegex.test(phone.replace(/-/g, ''));
-  };
+  // Zod 스키마로 전화번호 유효성 검사 (useCallback으로 메모이제이션)
+  const validatePhoneNumber = useCallback((phone: string): boolean => {
+    try {
+      // 하이픈 제거 후 검증
+      const cleanPhone = phone.replace(/-/g, '');
+      phoneNumberSchema.parse(cleanPhone);
+      setPhoneError('');
+      return true;
+    } catch (error) {
+      if (error && typeof error === 'object' && 'issues' in error) {
+        const zodError = error as { issues: Array<{ message: string }> };
+        setPhoneError(zodError.issues[0]?.message || '올바른 전화번호를 입력해주세요.');
+      }
+      return false;
+    }
+  }, []);
 
   // 전화번호 포맷팅 (010-1234-5678)
-  const formatPhoneNumber = (value: string): string => {
+  const formatPhoneNumber = useCallback((value: string): string => {
     const numbers = value.replace(/\D/g, '');
     if (numbers.length <= 3) return numbers;
     if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
     return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
-  };
+  }, []);
 
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    setPhoneNumber(formatted);
-  };
+  const handlePhoneNumberChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formatted = formatPhoneNumber(e.target.value);
+      setPhoneNumber(formatted);
 
-  const handleSendCode = async () => {
+      // 실시간 검증
+      if (formatted) {
+        validatePhoneNumber(formatted);
+      } else {
+        setPhoneError('');
+      }
+    },
+    [formatPhoneNumber, validatePhoneNumber]
+  );
+
+  const handleSendCode = useCallback(async () => {
     if (!validatePhoneNumber(phoneNumber)) return;
 
     try {
@@ -58,9 +82,9 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
     } catch (error) {
       console.error('인증번호 발송 실패:', error);
     }
-  };
+  }, [phoneNumber, validatePhoneNumber]);
 
-  const handleVerifyCode = async () => {
+  const handleVerifyCode = useCallback(async () => {
     if (verificationCode.length !== 6) return;
 
     try {
@@ -70,9 +94,9 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
     } catch (error) {
       console.error('인증번호 확인 실패:', error);
     }
-  };
+  }, [verificationCode]);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!isVerified) return;
 
     try {
@@ -81,13 +105,14 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
     } catch (error) {
       console.error('전화번호 저장 실패:', error);
     }
-  };
+  }, [isVerified, onSave, phoneNumber, onClose]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     onClose();
-  };
+  }, [onClose]);
 
-  const isPhoneValid = validatePhoneNumber(phoneNumber);
+  // 검증 상태 계산
+  const isPhoneValid = phoneNumber && !phoneError;
   const canSendCode = isPhoneValid && !isCodeSent;
   const canVerifyCode = isCodeSent && verificationCode.length === 6 && !isVerified;
   const canSave = isVerified && !isLoading;
@@ -110,15 +135,9 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
               onChange={handlePhoneNumberChange}
               placeholder="010-1234-5678"
               width="100%"
-              height="45px"
-              border={
-                isPhoneValid || !phoneNumber ? '1px solid var(--gray-3)' : '1px solid var(--red-1)'
-              }
-              focusBorder={
-                isPhoneValid || !phoneNumber
-                  ? '1px solid var(--yellow-1)'
-                  : '1px solid var(--red-1)'
-              }
+              height="40px"
+              border={phoneError ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
+              focusBorder={phoneError ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'}
               maxLength={13}
               disabled={isCodeSent || isLoading}
             />
@@ -126,16 +145,15 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
               variant="outline"
               onClick={handleSendCode}
               disabled={!canSendCode || isLoading}
-              height="45px"
+              height="40px"
+              radius="xsm"
               padding="0 16px"
               className={styles.codeButton}
             >
               {isCodeSent ? '발송완료' : '인증번호 발송'}
             </Button>
           </div>
-          {phoneNumber && !isPhoneValid && (
-            <p className={styles.errorMessage}>올바른 전화번호 형식을 입력해주세요.</p>
-          )}
+          {phoneError && <p className={styles.errorMessage}>{phoneError}</p>}
         </div>
 
         {/* 인증번호 입력 */}
@@ -149,7 +167,7 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
                 onChange={e => setVerificationCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="6자리 인증번호"
                 width="100%"
-                height="45px"
+                height="40px"
                 border="1px solid var(--gray-3)"
                 focusBorder="1px solid var(--yellow-1)"
                 maxLength={6}
@@ -159,7 +177,8 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
                 variant="outline"
                 onClick={handleVerifyCode}
                 disabled={!canVerifyCode || isLoading}
-                height="45px"
+                height="40px"
+                radius="xsm"
                 padding="0 16px"
                 className={styles.codeButton}
               >
@@ -175,7 +194,8 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
             onClick={handleCancel}
             disabled={isLoading}
             width="48%"
-            height="45px"
+            height="40px"
+            radius="xsm"
           >
             취소
           </Button>
@@ -185,7 +205,8 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
             disabled={!canSave}
             isLoading={isLoading}
             width="48%"
-            height="45px"
+            height="40px"
+            radius="xsm"
           >
             저장
           </Button>

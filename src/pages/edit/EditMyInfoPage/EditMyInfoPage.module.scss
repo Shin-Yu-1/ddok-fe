@@ -98,6 +98,8 @@
 
   @include m.mobile {
     @include m.font-small-text;
+
+    font-weight: v.$fw-bold;
   }
 }
 

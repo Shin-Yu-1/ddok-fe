@@ -123,7 +123,7 @@ const EditPasswordModal = ({
             onChange={handleNewPasswordChange}
             placeholder="새 비밀번호를 입력해주세요"
             width="100%"
-            height="45px"
+            height="40px"
             border={errors.newPassword ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
             focusBorder={
               errors.newPassword ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'
@@ -142,7 +142,7 @@ const EditPasswordModal = ({
             onChange={handleConfirmPasswordChange}
             placeholder="비밀번호를 다시 입력해주세요"
             width="100%"
-            height="45px"
+            height="40px"
             border={errors.passwordCheck ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
             focusBorder={
               errors.passwordCheck ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'
@@ -158,7 +158,8 @@ const EditPasswordModal = ({
             onClick={handleCancel}
             disabled={isLoading}
             width="48%"
-            height="45px"
+            height="40px"
+            radius="xsm"
           >
             취소
           </Button>
@@ -168,7 +169,8 @@ const EditPasswordModal = ({
             disabled={!isFormValid || isLoading}
             isLoading={isLoading}
             width="48%"
-            height="45px"
+            height="40px"
+            radius="xsm"
           >
             저장
           </Button>
