@@ -61,9 +61,8 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
-            <div className={styles.overlay__info__core__category}>스터디</div>
-            <div className={styles.overlay__info__core__header}>
-              <div className={styles.overlay__info__core__title}>{study.title}</div>
+            <div className={styles.overlay__info__core__action}>
+              <div className={styles.overlay__info__core__category}>스터디</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
                 fontSize="9px"
@@ -80,6 +79,9 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
               >
                 상세보기
               </Button>
+            </div>
+            <div className={styles.overlay__info__core__header}>
+              <div className={styles.overlay__info__core__title}>{study.title}</div>
             </div>
             <div className={styles.overlay__info__core__address}>{study.address}</div>
           </div>
@@ -104,9 +106,13 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>희망 나이대</div>
-              <div className={styles.overlay__info__details__item__value}>
-                {study.preferredAges.ageMin}-{study.preferredAges.ageMax}대
-              </div>
+              {study.preferredAges.ageMin === 0 && study.preferredAges.ageMax === 0 ? (
+                <div className={styles.overlay__info__details__item__value}>무관</div>
+              ) : (
+                <div className={styles.overlay__info__details__item__value}>
+                  {study.preferredAges.ageMin}-{study.preferredAges.ageMax}대
+                </div>
+              )}
             </div>
           </div>
         </div>
