@@ -110,7 +110,7 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
                 <div className={styles.overlay__info__details__item__value}>무관</div>
               ) : (
                 <div className={styles.overlay__info__details__item__value}>
-                  {study.preferredAges.ageMin}-{study.preferredAges.ageMax}대
+                  {study.preferredAges.ageMin}-{study.preferredAges.ageMax - 10}대
                 </div>
               )}
             </div>

@@ -112,7 +112,7 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
                 <div className={styles.overlay__info__details__item__value}>무관</div>
               ) : (
                 <div className={styles.overlay__info__details__item__value}>
-                  {project.preferredAges.ageMin}-{project.preferredAges.ageMax}대
+                  {project.preferredAges.ageMin}-{project.preferredAges.ageMax - 10}대
                 </div>
               )}
             </div>
