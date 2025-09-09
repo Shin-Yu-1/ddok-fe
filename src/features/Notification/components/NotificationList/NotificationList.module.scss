@@ -7,26 +7,9 @@
   height: 100%;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  border-bottom: 1px solid #e9ecef;
-  background-color: #ffffff;
-}
-
-.title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333333;
-}
-
 .list {
   flex: 1;
   overflow-y: auto;
-  background-color: #ffffff;
 }
 
 .empty {
@@ -34,7 +17,7 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-  color: #999999;
+  color: v.$gray-1;
 
   p {
     margin: 0;
