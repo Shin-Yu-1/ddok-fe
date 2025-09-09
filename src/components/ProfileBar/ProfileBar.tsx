@@ -15,6 +15,8 @@ import styles from './ProfileBar.module.scss';
 interface ProfileBarProps {
   // 해당 사용자의 ID
   userId: number;
+  // 닉네임
+  nickname?: string;
   // 프로필 이미지 URL
   profileImageUrl?: string;
   // 프로필 이미지 alt 텍스트
@@ -29,9 +31,9 @@ interface ProfileBarProps {
   temperature: number;
   // DM 요청 상태
   dmRequestPending?: boolean;
-  // 사용자 정의 DM 요청 보내기 핸들러 (선택적)
+  // 사용자 정의 DM 요청 보내기 핸들러
   onSendDmRequest?: (userId: number) => void;
-  // 사용자 정의 DM 하기 핸들러 (선택적)
+  // 사용자 정의 DM 하기 핸들러
   onSendDm?: (userId: number) => void;
   // 채팅방 ID (DM이 가능한 경우)
   chatRoomId?: number | null;
@@ -41,13 +43,14 @@ interface ProfileBarProps {
 
 const ProfileBar = ({
   userId,
+  nickname,
   profileImageUrl,
   profileImageAlt = '프로필 이미지',
   mainBadge,
   abandonBadge,
-  mainPosition = '프론트엔드',
+  mainPosition,
   temperature,
-  dmRequestPending = false,
+  dmRequestPending,
   onSendDmRequest,
   onSendDm,
   chatRoomId,
@@ -143,7 +146,7 @@ const ProfileBar = ({
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
-      {/* 왼쪽 섹션: 프로필 이미지 + 뱃지 */}
+      {/* 왼쪽 섹션: 프로필 이미지 + 닉네임 + 뱃지 */}
       <div className={styles.leftSection}>
         <div
           className={styles.profileImageContainer}
@@ -163,6 +166,9 @@ const ProfileBar = ({
             <div className={styles.profileImagePlaceholder}>?</div>
           )}
         </div>
+
+        {/* 닉네임 */}
+        {nickname && <span className={styles.nickname}>{nickname}</span>}
 
         {/* 뱃지 */}
         {mainBadge && (

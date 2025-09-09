@@ -8,7 +8,7 @@
   width: 100%;
   padding: 8px 16px;
   border: 1px solid $gray-3;
-  border-radius: $r-xsmall;
+  border-radius: $r-xxsmall;
   background-color: $white-3;
 }
 
@@ -32,6 +32,15 @@
   background-color: $gray-4;
   transition: transform 0.2s ease;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: 2px solid $blue-1;
+    outline-offset: 2px;
+  }
 }
 
 .profileImage {
@@ -79,8 +88,8 @@
   align-items: center;
   padding: 4px 12px;
   border-radius: $r-xxxxlarge;
-  font-size: $fs-xxsmall;
-  font-weight: $fw-semibold;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
   white-space: nowrap;
   color: $white-3;
   background-color: $yellow-1;
@@ -124,10 +133,6 @@
     color: $black-3;
     background-color: $gray-4;
   }
-
-  &:active {
-    transform: scale(0.95);
-  }
 }
 
 // 메뉴 드롭다운
@@ -137,4 +142,8 @@
   right: 0;
   z-index: 100;
   margin-top: 4px;
+}
+
+.nickname {
+  font-size: $fs-xxxsmall;
 }
