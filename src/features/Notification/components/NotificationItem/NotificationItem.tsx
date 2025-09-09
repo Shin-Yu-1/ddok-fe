@@ -1,3 +1,5 @@
+import { BellIcon, BellRingingIcon } from '@phosphor-icons/react';
+
 import AchievementIconSrc from '@/assets/icons/achievement-icon.svg';
 import DMIconSrc from '@/assets/icons/dm-noti-icon.svg';
 import ProjectStudyIconSrc from '@/assets/icons/project-study-noti-icon.svg';
@@ -112,7 +114,6 @@ const NotificationItem = ({
   return (
     <div
       className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread} ${isFirst ? styles.firstItem : ''}`}
-      onClick={handleMarkAsRead}
     >
       {/* 아이콘 영역 */}
       <div className={styles.iconSection}>{renderNotificationIcon()}</div>
@@ -134,30 +135,44 @@ const NotificationItem = ({
         </div>
       </div>
 
-      <div
-        className={`${styles.actionSection} ${!showActions ? styles.hidden : ''}`}
-        aria-hidden={!showActions}
-      >
-        {showActions && (
-          <div className={styles.actions}>
-            {actions.map(action => (
-              <Button
-                key={action.type}
-                variant={action.variant}
-                size="xsm"
-                radius="xxsm"
-                fontSizePreset="xxxsmall"
-                fontWeightPreset="regular"
-                onClick={e => {
-                  e.stopPropagation();
-                  handleAction(action.type);
-                }}
-              >
-                {action.label}
-              </Button>
-            ))}
+      <div className={styles.actionSection}>
+        <div className={styles.bellIconContainer}>
+          <div
+            className={styles.bellIcon}
+            onClick={e => {
+              e.stopPropagation();
+              handleMarkAsRead();
+            }}
+          >
+            {notification.isRead ? (
+              <BellIcon size={16} weight="regular" />
+            ) : (
+              <BellRingingIcon size={16} weight="regular" />
+            )}
           </div>
-        )}
+        </div>
+        <div className={styles.actionButtons}>
+          {showActions && (
+            <div className={styles.actions}>
+              {actions.map(action => (
+                <Button
+                  key={action.type}
+                  variant={action.variant}
+                  size="xsm"
+                  radius="xxsm"
+                  fontSizePreset="xxxsmall"
+                  fontWeightPreset="regular"
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleAction(action.type);
+                  }}
+                >
+                  {action.label}
+                </Button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

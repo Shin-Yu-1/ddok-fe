@@ -84,29 +84,36 @@
 }
 
 .actionSection {
+  position: relative;
   display: flex;
+  flex-direction: column;
   flex-shrink: 0;
+  width: 83px;
+  height: 100%;
+}
+
+.bellIconContainer {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-left: 12px;
+  justify-content: center;
+}
 
-  &:has(.actions:empty) {
-    display: none;
-    width: 0;
-    padding-left: 0;
-  }
-
-  &.hidden {
-    display: none;
-    width: 0;
-    padding-left: 0;
-  }
+.actionButtons {
+  position: absolute;
+  right: 0;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .actions {
   display: flex;
   flex-direction: row;
-  gap: 6px;
+  gap: 4px;
 
   &:empty {
     display: none;
@@ -129,4 +136,21 @@
   height: 6px;
   border-radius: 50%;
   background-color: v.$yellow-1;
+}
+
+.bellIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: v.$gray-2;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: v.$yellow-1;
+    background-color: v.$black-4;
+  }
 }
