@@ -108,12 +108,13 @@ const NotificationList = ({ onUnreadCountChange }: NotificationListProps) => {
             <p>새로운 알림이 없습니다.</p>
           </div>
         ) : (
-          notifications.map(notification => (
+          notifications.map((notification, index) => (
             <NotificationItem
               key={notification.id}
               notification={notification}
               onMarkAsRead={handleMarkAsRead}
               onAction={handleAction}
+              isFirst={index === 0}
             />
           ))
         )}

@@ -17,9 +17,15 @@ interface NotificationItemProps {
   notification: Notification;
   onMarkAsRead: (id: string) => void;
   onAction?: (id: string, action: NotificationAction['type']) => void;
+  isFirst?: boolean;
 }
 
-const NotificationItem = ({ notification, onMarkAsRead, onAction }: NotificationItemProps) => {
+const NotificationItem = ({
+  notification,
+  onMarkAsRead,
+  onAction,
+  isFirst = false,
+}: NotificationItemProps) => {
   const config = notificationConfig[notification.type];
 
   const handleMarkAsRead = () => {
@@ -105,7 +111,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onAction }: Notification
 
   return (
     <div
-      className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread}`}
+      className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread} ${isFirst ? styles.firstItem : ''}`}
       onClick={handleMarkAsRead}
     >
       {/* 아이콘 영역 */}

@@ -17,6 +17,10 @@
   &.read {
     opacity: 0.7;
   }
+
+  &.firstItem {
+    border-top: 1px solid v.$gray-2;
+  }
 }
 
 .iconSection {
