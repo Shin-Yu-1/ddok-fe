@@ -1,13 +1,17 @@
 // 프로젝트 모집글 관련 페이지들에서 사용되는 타입 모음 파일입니다.
+import BadgeTier from '@/constants/enums/BadgeTier.enum';
+import BadgeType from '@/constants/enums/BadgeType.enum';
 import { PROJECT_DETAIL_TEMPLATE } from '@/constants/projectTemplates';
 
 // 배지 타입 정의
-export interface Badge {
-  id: number;
-  name: string;
-  description?: string;
-  imageUrl?: string;
-  color?: string;
+export interface MainBadge {
+  type: BadgeType;
+  tier: BadgeTier;
+}
+
+export interface AbandonBadge {
+  isGranted: boolean;
+  count: number;
 }
 
 // 나이대 범위
@@ -42,8 +46,8 @@ export interface UserBasicInfo {
   nickname: string;
   profileImageUrl: string;
   mainPosition: string;
-  mainBadge: Badge | null;
-  abandonBadge: Badge | null;
+  mainBadge: MainBadge | null;
+  abandonBadge: AbandonBadge | null;
   temperature: number | null;
   chatRoomId: number | null;
   dmRequestPending: boolean;
@@ -154,8 +158,8 @@ export interface DetailProjectResponse {
     capacity: number;
     applicantCount: number;
     mode: string;
-    location: Location;
-    preferredAges: PreferredAges;
+    location: Location | null;
+    preferredAges: PreferredAges | null;
     expectedMonth: number;
     startDate: string;
     detail: string;
