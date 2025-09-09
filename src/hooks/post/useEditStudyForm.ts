@@ -5,60 +5,32 @@ import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/api/api';
 import type {
-  UpdateProjectData,
-  CreateProjectResponse,
-  ProjectMode,
+  UpdateStudyData,
+  CreateStudyResponse,
+  StudyMode,
   Location,
   PreferredAges,
-} from '@/types/project';
+  EditStudyResponse,
+} from '@/types/study';
 
-interface UseEditProjectFormProps {
-  projectId: number;
+interface UseEditStudyFormProps {
+  studyId: number;
 }
 
-// 수정 페이지 조회 응답 타입 (실제 API에 맞게 수정)
-interface EditProjectResponse {
-  status: number;
-  message: string;
-  data: {
-    projectId: number;
-    title: string;
-    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
-    bannerImageUrl: string;
-    traits: string[];
-    capacity: number;
-    applicantCount: number;
-    mode: string;
-    location: Location | null;
-    preferredAges: PreferredAges;
-    expectedMonth: number;
-    startDate: string;
-    detail: string;
-    positions: Array<{
-      position: string;
-      applied: number;
-      confirmed: number;
-      isApplied: boolean;
-      isApproved: boolean;
-      isAvailable: boolean;
-    }>;
-  };
-}
-
-export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
-  const [formData, setFormData] = useState<UpdateProjectData | null>(null);
+export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
+  const [formData, setFormData] = useState<UpdateStudyData | null>(null);
   const navigate = useNavigate();
 
   // 수정 페이지 데이터 조회
   const { data: editData, isLoading: isLoadingEdit } = useQuery({
-    queryKey: ['project', 'edit', projectId],
-    queryFn: async (): Promise<EditProjectResponse> => {
-      console.log('📥 프로젝트 수정 데이터 조회 시작');
-      console.log('Project ID:', projectId);
-      console.log('API URL:', `/api/projects/${projectId}/edit`);
+    queryKey: ['study', 'edit', studyId],
+    queryFn: async (): Promise<EditStudyResponse> => {
+      console.log('📥 스터디 수정 데이터 조회 시작');
+      console.log('Study ID:', studyId);
+      console.log('API URL:', `/api/studies/${studyId}/edit`);
 
       try {
-        const { data } = await api.get<EditProjectResponse>(`/api/projects/${projectId}/edit`);
+        const { data } = await api.get<EditStudyResponse>(`/api/studies/${studyId}/edit`);
 
         console.log('✅ 수정 데이터 조회 성공:');
         console.log('Status:', data.status);
@@ -72,7 +44,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
         throw error;
       }
     },
-    enabled: !!projectId,
+    enabled: !!studyId,
   });
 
   // 조회된 데이터로 폼 초기화
@@ -80,23 +52,23 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     if (editData?.data) {
       const { data } = editData;
 
-      // positions 배열을 string[]로 변환
-      const positions = data.positions.map(p => p.position);
-
-      // 리더 포지션 찾기 (확정된 포지션 또는 첫 번째 포지션)
-      const leaderPosition = positions.length > 0 ? positions[0] : '';
+      // 위치 정보 파싱
+      let location: Location | null = null;
+      if (data.mode === 'offline') {
+        // location 필드가 있으면 사용, 없으면 null
+        location = data.location || null;
+      }
 
       setFormData({
         title: data.title,
         expectedStart: data.startDate,
         expectedMonth: data.expectedMonth,
-        mode: data.mode.toLowerCase() as ProjectMode,
-        location: data.location,
+        mode: data.mode.toLowerCase() as StudyMode,
+        location,
         preferredAges: data.preferredAges,
         capacity: data.capacity,
         traits: data.traits,
-        positions,
-        leaderPosition,
+        studyType: data.studyType,
         detail: data.detail,
         teamStatus: data.teamStatus,
         bannerImageUrl: data.bannerImageUrl,
@@ -105,8 +77,8 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     }
   }, [editData]);
 
-  // 프로젝트 수정 API 함수
-  const updateProject = async (data: UpdateProjectData): Promise<CreateProjectResponse> => {
+  // 스터디 수정 API 함수
+  const updateStudy = async (data: UpdateStudyData): Promise<CreateStudyResponse> => {
     const formDataToSend = new FormData();
 
     // 새로운 배너 이미지가 있을 때만 추가
@@ -114,7 +86,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
       formDataToSend.append('bannerImage', data.bannerImage);
     }
 
-    const requestData: Omit<UpdateProjectData, 'bannerImage'> = {
+    const requestData: Omit<UpdateStudyData, 'bannerImage'> = {
       title: data.title,
       expectedStart: data.expectedStart,
       teamStatus: data.teamStatus,
@@ -124,8 +96,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
       preferredAges: data.preferredAges,
       capacity: data.capacity,
       traits: data.traits,
-      positions: data.positions,
-      leaderPosition: data.leaderPosition,
+      studyType: data.studyType,
       detail: data.detail,
       bannerImageUrl: data.bannerImageUrl, // 기존 이미지 URL
     };
@@ -138,8 +109,8 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
       new Blob([JSON.stringify(requestData)], { type: 'application/json' })
     );
 
-    const response = await api.patch<CreateProjectResponse>(
-      `/api/projects/${projectId}`,
+    const response = await api.patch<CreateStudyResponse>(
+      `/api/studies/${studyId}`,
       formDataToSend,
       {
         headers: {
@@ -151,15 +122,15 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     return response.data;
   };
 
-  // 프로젝트 수정 뮤테이션
-  const updateProjectMutation = useMutation({
-    mutationFn: updateProject,
+  // 스터디 수정 뮤테이션
+  const updateStudyMutation = useMutation({
+    mutationFn: updateStudy,
     onSuccess: response => {
       // 성공 시 상세 페이지로 이동
-      navigate(`/detail/project/${response.data.projectId}`);
+      navigate(`/detail/study/${response.data.studyId}`);
     },
     onError: error => {
-      console.error('프로젝트 수정 실패:', error);
+      console.error('스터디 수정 실패:', error);
       // TODO: 에러 처리 (토스트 알림 등)
     },
   });
@@ -177,7 +148,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     setFormData(prev => (prev ? { ...prev, expectedMonth } : null));
   }, []);
 
-  const updateMode = useCallback((mode: ProjectMode) => {
+  const updateMode = useCallback((mode: StudyMode) => {
     setFormData(prev =>
       prev
         ? {
@@ -205,12 +176,8 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     setFormData(prev => (prev ? { ...prev, traits } : null));
   }, []);
 
-  const updatePositions = useCallback((positions: string[]) => {
-    setFormData(prev => (prev ? { ...prev, positions } : null));
-  }, []);
-
-  const updateLeaderPosition = useCallback((leaderPosition: string) => {
-    setFormData(prev => (prev ? { ...prev, leaderPosition } : null));
+  const updateStudyType = useCallback((studyType: string) => {
+    setFormData(prev => (prev ? { ...prev, studyType } : null));
   }, []);
 
   const updateDetail = useCallback((detail: string) => {
@@ -226,7 +193,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
       if (!prev) return null;
 
       if (bannerImage === null) {
-        // 기본 이미지로 변경하는 경우: bannerImageUrl도 null로 설정
+        // 기본 이미지로 변경하는 경우: bannerImageUrl도 undefined로 설정
         return { ...prev, bannerImage: null, bannerImageUrl: undefined };
       }
 
@@ -244,23 +211,21 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     if (formData.expectedMonth < 1) return false;
     if (formData.mode === 'offline' && !formData.location) return false;
     if (formData.capacity < 1 || formData.capacity > 7) return false;
-    if (formData.positions.length === 0) return false;
-    if (!formData.leaderPosition) return false;
-    if (!formData.positions.includes(formData.leaderPosition)) return false;
+    if (!formData.studyType.trim()) return false;
     if (!formData.detail.trim()) return false;
 
     return true;
   }, [formData]);
 
-  // 프로젝트 수정 실행
+  // 스터디 수정 실행
   const handleSubmit = useCallback(() => {
     if (!formData || !validateForm()) {
       console.error('폼 유효성 검사 실패');
       return;
     }
 
-    updateProjectMutation.mutate(formData);
-  }, [formData, validateForm, updateProjectMutation]);
+    updateStudyMutation.mutate(formData);
+  }, [formData, validateForm, updateStudyMutation]);
 
   return {
     formData,
@@ -273,13 +238,12 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     updatePreferredAges,
     updateCapacity,
     updateTraits,
-    updatePositions,
-    updateLeaderPosition,
+    updateStudyType,
     updateDetail,
     updateTeamStatus,
     updateBannerImage,
     handleSubmit,
-    isSubmitting: updateProjectMutation.isPending,
+    isSubmitting: updateStudyMutation.isPending,
     isValid: validateForm(),
   };
 };
