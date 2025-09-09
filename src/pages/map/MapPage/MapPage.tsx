@@ -125,6 +125,19 @@ const MapPage = () => {
     }
   }, [selectedCategory, selectedFilter, refetchMapSearch, isInitialLoad, mapBounds]);
 
+  // mapBounds 변경 시 열려있는 overlay와 subPanel 닫기
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      // overlay 닫기
+      setIsOverlayOpen(false);
+      setSelectedPoint(null);
+
+      // subPanel 닫기
+      setIsMapSubPanelOpen(false);
+      setSelectedCafeId(null);
+    }
+  }, [mapBounds, isInitialLoad]);
+
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
     if (!isMapPanelOpen || !itemId) return;
