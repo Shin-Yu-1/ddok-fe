@@ -4,6 +4,8 @@ import clsx from 'clsx';
 
 import type { ProfileViewProps, ProfileSectionType } from '@/types/user';
 
+import { useProfileToggle } from '../hooks/useProfileToggle';
+
 import styles from './ProfileView.module.scss';
 import LocationSection from './sections/LocationSection';
 import PortfolioSection from './sections/PortfolioSection';
@@ -37,6 +39,21 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
     },
     ref
   ) => {
+    // 공개/비공개 토글 훅 (항상 호출하되, 본인 프로필이 아니면 비활성화)
+    const { isProfilePublic, isToggling, handleTogglePrivacy, toggleError, isError } =
+      useProfileToggle({
+        user,
+        enabled: user.isMine, // 본인 프로필일 때만 활성화
+        onSuccess: newPrivacyState => {
+          console.log('토글 성공! 새로운 상태:', newPrivacyState ? '공개' : '비공개');
+          // TODO: 성공 토스트 표시
+        },
+        onError: error => {
+          console.error('토글 실패:', error);
+          // TODO: 에러 토스트 표시
+        },
+      });
+
     const handleSectionEdit = (sectionType: ProfileSectionType) => {
       if (isEditable && onEdit) {
         onEdit(sectionType);
@@ -51,6 +68,17 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
         </div>
       );
     }
+
+    // 비공개 프로필 메시지 컴포넌트
+    const PrivateProfileMessage = () => (
+      <div className={styles.privateProfileContainer}>
+        <div className={styles.privateProfileMessage}>
+          <h3>비공개 프로필</h3>
+          <p>이 사용자의 상세 정보는 비공개로 설정되어 있습니다.</p>
+          <p>기본 정보만 확인할 수 있습니다.</p>
+        </div>
+      </div>
+    );
 
     return (
       <div
@@ -74,14 +102,30 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
             <div className={styles.profileToggle}>
               {user.isMine ? (
                 // 본인 프로필: 공개/비공개 토글
-                <label className={styles.toggleLabel}>
-                  <span className={styles.toggleText}>프로필 공개/비공개</span>
-                  <div className={clsx(styles.toggle, user.isProfilePublic && styles.on)}>
-                    <span className={styles.toggleStatus}>
-                      {user.isProfilePublic ? 'ON' : 'OFF'}
-                    </span>
-                  </div>
-                </label>
+                <div className={styles.toggleContainer}>
+                  <label className={styles.toggleLabel}>
+                    <span className={styles.toggleText}>프로필 공개/비공개</span>
+                    <div
+                      className={clsx(
+                        styles.toggle,
+                        isProfilePublic && styles.on,
+                        isToggling && styles.loading
+                      )}
+                      onClick={handleTogglePrivacy}
+                    >
+                      <span className={styles.toggleStatus}>
+                        {isToggling ? '...' : isProfilePublic ? 'ON' : 'OFF'}
+                      </span>
+                    </div>
+                  </label>
+
+                  {/* 에러 메시지 표시 */}
+                  {isError && toggleError && (
+                    <div className={styles.errorMessage}>
+                      토글 변경에 실패했습니다. 다시 시도해주세요.
+                    </div>
+                  )}
+                </div>
               ) : (
                 // 타인 프로필: 채팅 버튼
                 <button
@@ -98,30 +142,30 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
           </div>
         </div>
 
-        {/* 2컬럼 레이아웃 - 피그마 대로(따라오는건 안 예뻐서 뺐슴니닷)*/}
-        <div className={styles.twoColumnLayout}>
-          {/* 왼쪽 컬럼 (737px) */}
-          <div className={styles.leftColumn}>
-            <LocationSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+        {/* 상세 정보 섹션 - 공개 상태에 따라 조건부 렌더링 */}
+        {isProfilePublic ? (
+          // 공개 프로필: 모든 정보 표시
+          <div className={styles.twoColumnLayout}>
+            {/* 왼쪽 컬럼 (737px) */}
+            <div className={styles.leftColumn}>
+              <LocationSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <TechStackSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <ProjectSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <StudySection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+            </div>
 
-            <TechStackSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-
-            <ProjectSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-
-            <StudySection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+            {/* 오른쪽 컬럼 (404px) */}
+            <div className={styles.rightColumn}>
+              <PositionSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <TraitsSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <TimeSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <PortfolioSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+            </div>
           </div>
-
-          {/* 오른쪽 컬럼 (404px) */}
-          <div className={styles.rightColumn}>
-            <PositionSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-
-            <TraitsSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-
-            <TimeSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-
-            <PortfolioSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-          </div>
-        </div>
+        ) : (
+          // 비공개 프로필: 비공개 메시지만 표시
+          <PrivateProfileMessage />
+        )}
       </div>
     );
   }

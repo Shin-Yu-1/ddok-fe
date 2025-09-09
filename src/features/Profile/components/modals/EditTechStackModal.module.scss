@@ -1,0 +1,42 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.content {
+  width: 100%;
+  padding: 8px 0;
+
+  @include m.mobile {
+    padding: 4px 0;
+  }
+}
+
+.hiddenTitles {
+  h2 {
+    display: none !important;
+  }
+
+  gap: 12px;
+  padding: 16px;
+  padding-bottom: 0;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xsmall;
+}
+
+.buttonContainer {
+  width: 100%;
+  margin-top: 20px;
+
+  @include m.mobile {
+    margin-top: 16px;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}

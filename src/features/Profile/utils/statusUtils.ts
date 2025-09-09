@@ -1,17 +1,15 @@
-import type { ParticipationHistory } from '../types';
+import type { ParticipationHistory } from '@/types/user';
 
 export const getStatusText = (
   status: ParticipationHistory['status'],
   type: 'project' | 'study'
 ): string => {
-  const prefix = type === 'project' ? '프로젝트' : '스터디';
-
   switch (status) {
-    case 'ongoing':
-      return `${prefix} 진행 중`;
-    case 'completed':
-      return `${prefix} 종료`;
+    case 'ONGOING':
+      return type === 'project' ? '프로젝트 진행 중' : '스터디 진행 중';
+    case 'CLOSED':
+      return type === 'project' ? '프로젝트 완료' : '스터디 완료';
     default:
-      return `${prefix} 종료`;
+      return type === 'project' ? '프로젝트 완료' : '스터디 완료';
   }
 };

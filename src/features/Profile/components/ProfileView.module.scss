@@ -101,18 +101,29 @@
   }
 }
 
+.toggleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+
+  @include m.mobile {
+    align-items: flex-start;
+  }
+}
+
 .toggleLabel {
   @include m.font-text;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   color: v.$black-4;
   cursor: pointer;
 
   @include m.mobile {
     flex-direction: row;
-    gap: 12px;
+    gap: 10px;
   }
 }
 
@@ -132,44 +143,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 28px;
-  border-radius: 14px;
+  width: 70px;
+  height: 32px;
+  border-radius: 16px;
   background-color: v.$gray-2;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 
   &.on {
     background-color: v.$blue-1;
   }
 
+  &.loading {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
   &::before {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
     background-color: v.$white-3;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
   }
 
   &.on::before {
-    transform: translateX(32px);
+    transform: translateX(38px);
   }
 
   @include m.mobile {
-    width: 50px;
-    height: 24px;
-    border-radius: 12px;
+    width: 60px;
+    height: 28px;
+    border-radius: 14px;
 
     &::before {
-      width: 20px;
-      height: 20px;
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
     }
 
     &.on::before {
-      transform: translateX(26px);
+      transform: translateX(32px);
     }
   }
 }
@@ -178,24 +198,28 @@
   @include m.font-small-text;
 
   position: absolute;
-  left: 8px;
+
+  // OFF 상태일 때 오른쪽에 표시
+  right: 12px;
   z-index: 1;
-  font-size: 10px;
-  font-weight: v.$fw-semibold;
-  color: v.$black-4;
-  transition: left 0.2s ease;
+  font-size: 11px;
+  font-weight: v.$fw-bold;
+  color: v.$white-3;
+  transition: all 0.3s ease;
 
-  @include m.mobile {
-    left: 6px;
-    font-size: 9px;
+  // ON 상태일 때 왼쪽에 표시
+  .toggle.on & {
+    right: auto;
+    left: 12px;
   }
-}
-
-.toggle.on .toggleStatus {
-  left: 38px;
 
   @include m.mobile {
-    left: 30px;
+    right: 10px;
+    font-size: 10px;
+
+    .toggle.on & {
+      left: 10px;
+    }
   }
 }
 
@@ -239,5 +263,76 @@
     @include m.font-text;
 
     padding: 8px 12px;
+  }
+}
+
+.privateProfileContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 1179px;
+  margin: 0 auto;
+  padding: 60px 20px;
+
+  @include m.mobile {
+    padding: 40px 20px;
+  }
+}
+
+.privateProfileMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 500px;
+  padding: 40px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-xsmall;
+  text-align: center;
+  background-color: v.$white-3;
+
+  h3 {
+    @include m.font-small-title;
+
+    margin: 0;
+    color: v.$black-1;
+
+    @include m.mobile {
+      @include m.font-description;
+    }
+  }
+
+  p {
+    @include m.font-text;
+
+    margin: 0;
+    line-height: 1.6;
+    color: v.$gray-1;
+
+    @include m.mobile {
+      @include m.font-small-text;
+    }
+  }
+
+  @include m.mobile {
+    gap: 12px;
+    padding: 30px 20px;
+  }
+}
+
+// 에러 메시지 스타일
+.errorMessage {
+  @include m.font-tiny-text;
+
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: v.$r-xxsmall;
+  text-align: center;
+  color: v.$red-1;
+  background-color: rgb(239 68 68 / 10%);
+
+  @include m.mobile {
+    margin-top: 6px;
+    padding: 3px 6px;
   }
 }
