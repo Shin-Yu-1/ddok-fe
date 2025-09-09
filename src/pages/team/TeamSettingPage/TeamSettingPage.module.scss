@@ -37,8 +37,7 @@
   background-color: $white-3;
 }
 
-.membersGrid,
-.participantsGrid {
+.membersGrid {
   display: grid;
   align-items: center;
   grid-template-columns: 120px 1fr 130px;
@@ -64,4 +63,10 @@
   margin: auto;
   font-weight: $fw-bold;
   text-align: center;
+}
+
+.error {
+  padding: 40px 0;
+  text-align: center;
+  color: $red-1;
 }
