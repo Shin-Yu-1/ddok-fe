@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
 import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
 
@@ -13,6 +15,8 @@ interface PlayerOverlayProps {
 }
 
 const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) => {
+  const nav = useNavigate();
+
   const { data: response, isLoading, isError } = useGetPlayerOverlay(id);
 
   if (isLoading) {
@@ -70,6 +74,9 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
+                onClick={() => {
+                  nav(`/profile/user/${id}`);
+                }}
               >
                 상세보기
               </Button>
