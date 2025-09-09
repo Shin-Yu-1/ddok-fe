@@ -185,7 +185,7 @@ const EditStudyPage = () => {
                     value={formData.teamStatus}
                     onChange={updateTeamStatus}
                     postType="study"
-                    editable={true}
+                    editable={formData.teamStatus !== 'CLOSED'}
                   />
                 </SideSection>
                 <MainSection title={'모집 인원'}>
