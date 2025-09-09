@@ -1,0 +1,86 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldLabel {
+  @include m.font-text;
+
+  font-weight: v.$fw-semibold;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-small-text;
+  }
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
+
+.readOnlyInput {
+  flex: 1;
+  color: v.$gray-1;
+
+  /* 전체 wrapper에 포커스 방지 */
+  pointer-events: none !important;
+
+  :global(.defaultInputWrapper) {
+    cursor: default !important;
+    pointer-events: none !important;
+
+    &:focus-within,
+    &:focus,
+    &:hover {
+      border: 1px solid var(--gray-3) !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  /* 내부 input 요소에도 포커스 방지 */
+  :global(.defaultInput) {
+    cursor: default !important;
+    pointer-events: none !important;
+
+    /* 선택 방지 */
+    user-select: none !important;
+    user-select: none !important;
+    user-select: none !important;
+    user-select: none !important;
+
+    &:focus,
+    &:hover,
+    &:active {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  /* 아이콘이 있는 경우에도 포커스 방지 */
+  :global(.icon) {
+    pointer-events: none !important;
+  }
+}
+
+.editButton {
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 0 12px !important;
+  }
+}
