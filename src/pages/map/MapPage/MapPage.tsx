@@ -216,6 +216,11 @@ const MapPage = () => {
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+
+    // 페이지 변경 시 열려있는 overlay 닫기
+    setIsOverlayOpen(false);
+    setSelectedPoint(null);
+
     // useEffect에서 currentPage 변경을 감지하여 자동으로 리패치됨
   };
 
@@ -224,6 +229,11 @@ const MapPage = () => {
     setSelectedCategory(category);
     setSelectedFilter(filter);
     setCurrentPage(0); // 필터 변경 시 첫 페이지로 리셋
+
+    // 필터 변경 시 열려있는 overlay 닫기
+    setIsOverlayOpen(false);
+    setSelectedPoint(null);
+
     // useEffect에서 필터 변경을 감지하여 자동으로 리패치됨
   };
 
@@ -231,6 +241,11 @@ const MapPage = () => {
   const handleKeywordChange = (newKeyword: string) => {
     setKeyword(newKeyword || undefined);
     setCurrentPage(0); // 키워드 검색 시 첫 페이지로 리셋
+
+    // 키워드 검색 시 열려있는 overlay 닫기
+    setIsOverlayOpen(false);
+    setSelectedPoint(null);
+
     // useEffect에서 키워드 변경을 감지하여 자동으로 리패치됨
   };
 
