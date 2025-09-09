@@ -1,3 +1,4 @@
+import Thermometer from '@/components/Thermometer/Thermometer';
 import type { PlayerPanelItem } from '@/features/map/schemas/mapItemSchema';
 
 import styles from '../MapPanelItem.module.scss';
@@ -18,6 +19,10 @@ const MapPanelPlayerItem: React.FC<MapPanelPlayerItemProps> = ({ player, onItemC
           <div className={styles.panel__list__item__title}>{player.nickname}</div>
           <div className={styles.panel__list__item__category}>플레이어</div>
         </div>
+      </div>
+      <div className={styles.panel__list__item__temperature}>
+        <Thermometer temperature={player.temperature} width={15} />
+        {player.temperature}℃
       </div>
     </div>
   );
