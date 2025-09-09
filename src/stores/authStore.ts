@@ -1,39 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// 사용자 정보 타입 (로그인 응답 데이터 기준)
-export interface UserInfo {
-  id: number;
-  username: string;
-  email: string;
-  nickname?: string | null;
-  profileImageUrl?: string | null;
-  isPreference?: boolean;
-  mainPosition?: string | null;
-  location?: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  } | null;
-}
+import type { ApiUserInfo, SocialLoginResponse } from '@/types/auth';
 
-export interface SignInUser {
-  accessToken: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    nickname?: string | null;
-    profileImageUrl?: string | null;
-    isPreference?: boolean;
-    mainPosition?: string | null;
-    location?: {
-      latitude: number;
-      longitude: number;
-      address: string;
-    } | null;
-  };
-}
+export type UserInfo = ApiUserInfo;
 
 // 세션스토리지에서 사용자 정보 가져오기
 const getUserFromStorage = (): UserInfo | null => {
@@ -60,12 +30,12 @@ interface AuthState {
   // 상태 조회 메서드
   getUserInfo: () => UserInfo | null;
 
-  // 상태 업데이트 메서드 (개별 훅에서 호출)
+  // 상태 업데이트 메서드
   setLoggedIn: (user: UserInfo, accessToken: string) => void;
   setLoggedOut: () => void;
-  setAuthSocialLogin: (data: SignInUser) => void;
-  updatePreference: (isPreference: boolean) => void; // 개인화 설정 완료 상태 업데이트
-  updateUserInfo: (userData: Partial<UserInfo>) => void; // 사용자 정보 부분 업데이트
+  setAuthSocialLogin: (data: SocialLoginResponse) => void;
+  updatePreference: (isPreference: boolean) => void;
+  updateUserInfo: (userData: Partial<UserInfo>) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -82,15 +52,15 @@ export const useAuthStore = create<AuthState>()(
       },
 
       // 소셜 로그인
-      setAuthSocialLogin: (data: SignInUser) => {
+      setAuthSocialLogin: (data: SocialLoginResponse) => {
         const { accessToken, user } = data;
         sessionStorage.setItem('accessToken', accessToken);
         sessionStorage.setItem('user', JSON.stringify(user));
 
-        set({ isLoggedIn: true, user: user });
+        set({ isLoggedIn: true, user });
       },
 
-      // 로그인 상태로 설정 (개별 훅에서 호출)
+      // 로그인 상태로 설정
       setLoggedIn: (user: UserInfo, accessToken: string) => {
         // 세션스토리지 저장
         sessionStorage.setItem('accessToken', accessToken);
@@ -99,11 +69,11 @@ export const useAuthStore = create<AuthState>()(
         // 상태 업데이트
         set({
           isLoggedIn: true,
-          user: user,
+          user,
         });
       },
 
-      // 로그아웃 상태로 설정 (개별 훅에서 호출)
+      // 로그아웃 상태로 설정
       setLoggedOut: () => {
         // 세션스토리지 정리
         sessionStorage.removeItem('accessToken');
@@ -162,7 +132,6 @@ export const useAuthStore = create<AuthState>()(
           return value ? JSON.parse(value) : null;
         },
         setItem: (name: string, value: unknown) => {
-          // any → unknown
           sessionStorage.setItem(name, JSON.stringify(value));
         },
         removeItem: (name: string) => {
