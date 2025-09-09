@@ -1,4 +1,3 @@
-import Button from '@/components/Button/Button';
 import { useGetCafeOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
@@ -94,19 +93,6 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
             <div className={styles.overlay__info__core__category}>추천 장소</div>
             <div className={styles.overlay__info__core__header}>
               <div className={styles.overlay__info__core__title}>{cafe.title}</div>
-              <Button
-                className={styles.overlay__info__core__detailBtn}
-                fontSize="9px"
-                width="fit-content"
-                height="18px"
-                backgroundColor="var(--gray-1)"
-                textColor="var(--white-3)"
-                fontWeight="var(--font-weight-regular)"
-                radius="xxsm"
-                padding="4px 10px"
-              >
-                상세보기
-              </Button>
             </div>
             <div className={styles.overlay__info__core__address}>{cafe.address}</div>
           </div>
