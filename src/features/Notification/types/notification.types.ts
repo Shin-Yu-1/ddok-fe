@@ -29,7 +29,7 @@ export interface Notification {
 export interface NotificationAction {
   type: 'accept' | 'reject';
   label: string;
-  variant: 'primary' | 'secondary';
+  variant: 'primary' | 'secondary' | 'outline' | 'ghost';
 }
 
 export const notificationConfig: Record<
@@ -44,7 +44,7 @@ export const notificationConfig: Record<
     title: '프로젝트 참여 승인 요청',
     hasActions: true,
     actions: [
-      { type: 'accept', label: '수락', variant: 'primary' },
+      { type: 'accept', label: '수락', variant: 'secondary' },
       { type: 'reject', label: '거절', variant: 'secondary' },
     ],
   },
@@ -56,7 +56,7 @@ export const notificationConfig: Record<
     title: '스터디 참여 승인 요청',
     hasActions: true,
     actions: [
-      { type: 'accept', label: '수락', variant: 'primary' },
+      { type: 'accept', label: '수락', variant: 'secondary' },
       { type: 'reject', label: '거절', variant: 'secondary' },
     ],
   },
@@ -68,7 +68,7 @@ export const notificationConfig: Record<
     title: 'DM 요청',
     hasActions: true,
     actions: [
-      { type: 'accept', label: '수락', variant: 'primary' },
+      { type: 'accept', label: '수락', variant: 'secondary' },
       { type: 'reject', label: '거절', variant: 'secondary' },
     ],
   },
