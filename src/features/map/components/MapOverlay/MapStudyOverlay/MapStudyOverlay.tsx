@@ -1,5 +1,5 @@
 import Button from '@/components/Button/Button';
-import type { StudyOverlayData } from '@/features/map/schemas/overlaySchema';
+import { useGetStudyOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -8,14 +8,52 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface StudyOverlayProps {
-  study: StudyOverlayData;
+  id: number;
   onOverlayClose: () => void;
 }
 
-const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ study, onOverlayClose }) => {
+const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) => {
+  const { data: response, isLoading, isError } = useGetStudyOverlay(id);
+
+  if (isLoading) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>STUDY</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>STUDY</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>데이터를 불러올 수 없습니다.</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  const study = response.data;
+
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>STUDY</div>
+      <div className={styles.overlay__banner}>
+        <img src={study.bannerImageUrl} alt="STUDY" />
+      </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>

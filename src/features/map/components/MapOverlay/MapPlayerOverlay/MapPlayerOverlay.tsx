@@ -1,5 +1,5 @@
 import Button from '@/components/Button/Button';
-import type { PlayerOverlayData } from '@/features/map/schemas/overlaySchema';
+import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -8,14 +8,52 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface PlayerOverlayProps {
-  player: PlayerOverlayData;
+  id: number;
   onOverlayClose: () => void;
 }
 
-const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ player, onOverlayClose }) => {
+const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) => {
+  const { data: response, isLoading, isError } = useGetPlayerOverlay(id);
+
+  if (isLoading) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>PLAYER</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>PLAYER</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>데이터를 불러올 수 없습니다.</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  const player = response.data;
+
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>PLAYER</div>
+      <div className={styles.overlay__banner}>
+        <img src={player.profileImageUrl} alt="PLAYER" />
+      </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
@@ -43,23 +81,25 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ player, onOverlayClose
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>대표 포지션</div>
               <div className={styles.overlay__info__details__item__value}>
-                {player.mainPosition}
+                {player.mainPosition || '없음'}
               </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>주 활동 지역</div>
-              <div className={styles.overlay__info__details__item__value}>{player.address}</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {player.address || '지역 정보 없음'}
+              </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>진행 중 프로젝트</div>
               <div className={styles.overlay__info__details__item__value}>
-                {player.latestProject.title}
+                {player.latestProject?.title || '없음'}
               </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>진행 중 스터디</div>
               <div className={styles.overlay__info__details__item__value}>
-                {player.latestStudy.title}
+                {player.latestStudy?.title || '없음'}
               </div>
             </div>
           </div>

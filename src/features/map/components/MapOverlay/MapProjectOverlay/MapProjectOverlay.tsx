@@ -1,5 +1,5 @@
 import Button from '@/components/Button/Button';
-import type { ProjectOverlayData } from '@/features/map/schemas/overlaySchema';
+import { useGetProjectOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -8,15 +8,52 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface ProjectOverlayProps {
-  project: ProjectOverlayData;
-
+  id: number;
   onOverlayClose: () => void;
 }
 
-const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ project, onOverlayClose }) => {
+const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }) => {
+  const { data: response, isLoading, isError } = useGetProjectOverlay(id);
+
+  if (isLoading) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>PROJECT</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>PROJECT</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>데이터를 불러올 수 없습니다.</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  const project = response.data;
+
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>PROJECT</div>
+      <div className={styles.overlay__banner}>
+        <img src={project.bannerImageUrl} alt="PROJECT" />
+      </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>

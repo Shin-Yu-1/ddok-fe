@@ -1,5 +1,5 @@
 import Button from '@/components/Button/Button';
-import type { CafeOverlayData } from '@/features/map/schemas/overlaySchema';
+import { useGetCafeOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -8,11 +8,13 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface CafeOverlayProps {
-  cafe: CafeOverlayData;
+  id: number;
   onOverlayClose: () => void;
 }
 
-const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ cafe, onOverlayClose }) => {
+const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
+  const { data: response, isLoading, isError } = useGetCafeOverlay(id);
+
   // 별점 렌더링 함수
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => {
@@ -47,9 +49,45 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ cafe, onOverlayClose }) =>
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>CAFE</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>CAFE</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>데이터를 불러올 수 없습니다.</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          개발용 닫기 버튼
+        </div>
+      </div>
+    );
+  }
+
+  const cafe = response.data;
+
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>CAFE</div>
+      <div className={styles.overlay__banner}>
+        <img src={cafe.bannerImageUrl} alt="CAFE" />
+      </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
