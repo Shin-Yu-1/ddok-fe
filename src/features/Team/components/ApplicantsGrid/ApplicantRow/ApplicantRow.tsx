@@ -1,7 +1,7 @@
 import Button from '@/components/Button/Button';
 import User from '@/features/Team/components/UserRow/UserRow';
 
-import type { ApplicantType } from '../../schemas/teamApplicantsListSchema';
+import type { ApplicantType } from '../../../schemas/teamApplicantsListSchema';
 
 import styles from './ApplicantRow.module.scss';
 
