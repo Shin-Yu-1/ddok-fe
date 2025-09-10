@@ -212,7 +212,7 @@ const EditProjectPage = () => {
                     value={formData.teamStatus}
                     onChange={updateTeamStatus}
                     postType="project"
-                    editable={true}
+                    editable={formData.teamStatus !== 'CLOSED'}
                   />
                 </SideSection>
                 <MainSection title={'모집 인원'}>

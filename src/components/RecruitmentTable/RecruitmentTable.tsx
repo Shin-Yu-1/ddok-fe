@@ -4,6 +4,7 @@ import { Prohibit, TrashSimple, CaretDown } from '@phosphor-icons/react';
 import { Select } from 'radix-ui';
 
 import { POSITIONS } from '@/constants/positions';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from './RecruitmentTable.module.scss';
 
@@ -48,6 +49,9 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownValue, setDropdownValue] = useState('');
 
+  // 로그인 상태 확인
+  const { isLoggedIn } = useAuthStore();
+
   // 드롭다운에서 선택 가능한 포지션 목록
   const availablePositions = useMemo(() => {
     const existingPositions = positions.map(p => p.position);
@@ -85,6 +89,15 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
     onLeaderPositionChange?.(position);
   };
 
+  // 지원하기 핸들러 (로그인 체크 포함)
+  const handleApplyWithLoginCheck = (position: string) => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+    onApply?.(position);
+  };
+
   // 액션 버튼 렌더링
   const renderActionButton = (position: RecruitmentPosition) => {
     if (pageType === 'create') {
@@ -119,12 +132,24 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
         );
       }
 
+      // 로그인하지 않은 사용자인 경우
+      if (!isLoggedIn) {
+        return (
+          <button
+            className={`${styles.actionButton} ${styles.selectable}`}
+            onClick={() => handleApplyWithLoginCheck(position.position)}
+          >
+            지원하기
+          </button>
+        );
+      }
+
       // 지원한 포지션 (취소 가능)
       if (isApplied) {
         return (
           <button
             className={`${styles.actionButton} ${styles.cancel}`}
-            onClick={() => onApply?.(position.position)}
+            onClick={() => handleApplyWithLoginCheck(position.position)}
           >
             지원 취소
           </button>
@@ -144,7 +169,7 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
       return (
         <button
           className={`${styles.actionButton} ${styles.selectable}`}
-          onClick={() => onApply?.(position.position)}
+          onClick={() => handleApplyWithLoginCheck(position.position)}
         >
           지원하기
         </button>
@@ -181,7 +206,9 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
           {(pageType === 'detail' || pageType === 'edit') && (
             <div className={styles.headerCell}>확정 인원</div>
           )}
-          <div className={styles.headerCell}>본인 포지션 선택</div>
+          <div className={styles.headerCell}>
+            {pageType === 'create' ? '본인 포지션 선택' : '지원 신청하기'}
+          </div>
           {/* detail 페이지에서는 삭제 컬럼 헤더도 숨김 */}
           {pageType !== 'detail' && <div className={styles.headerCell}>삭제</div>}
         </div>
