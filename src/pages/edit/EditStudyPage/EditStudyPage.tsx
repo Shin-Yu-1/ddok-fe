@@ -5,6 +5,7 @@ import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
+import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
 import PostCapacitySelector from '@/features/post/components/PostCapacitySelector/PostCapacitySelector';
@@ -30,6 +31,7 @@ const EditStudyPage = () => {
     updateMode,
     updateDetail,
     updateStudyType,
+    editData,
     handleSubmit,
     updatePreferredAges,
     updateTraits,
@@ -110,7 +112,6 @@ const EditStudyPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>EditStudyPage (ID: {studyId})</h1>
       <div className={styles.container}>
         <div className={styles.bannerImage}>
           <BannerImageSection
@@ -144,17 +145,17 @@ const EditStudyPage = () => {
             </div>
             <div className={styles.detailInfoSection}>
               <div className={styles.leftSection}>
+                <MainSection title={'스터디 유형'}>
+                  <PostStudyTypeSelector
+                    selectedStudyType={formData.studyType}
+                    onStudyTypeSelect={updateStudyType}
+                  />
+                </MainSection>
                 <MainSection title={'이런 분을 찾습니다!'}>
                   <PostPersonalitySelector
                     selectedPersonality={formData.traits}
                     onPersonalityToggle={handlePersonalityToggle}
                     maxSelection={5}
-                  />
-                </MainSection>
-                <MainSection title={'스터디 유형'}>
-                  <PostStudyTypeSelector
-                    selectedStudyType={formData.studyType}
-                    onStudyTypeSelect={updateStudyType}
                   />
                 </MainSection>
                 <MainSection
@@ -177,6 +178,15 @@ const EditStudyPage = () => {
                     onChange={handleDetailChange}
                     mode="editor"
                   />
+                </MainSection>
+                <MainSection title="스터디 멤버">
+                  {editData?.data && (
+                    <TeamMemberTable
+                      leader={editData.data.leader}
+                      participants={editData.data.participants || []}
+                      isStudyMode={true}
+                    />
+                  )}
                 </MainSection>
               </div>
               <div className={styles.rightSection}>
