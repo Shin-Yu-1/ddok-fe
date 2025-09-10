@@ -1,9 +1,10 @@
+import { useAuthStore } from '@/stores/authStore';
 import type { ApiResponse } from '@/types/api';
 
 import api from './api';
 
-// API 요청/응답 타입 정의
-export interface UserSettingsInfo {
+// API에서 받는 사용자 설정 정보 (개인정보 설정 전용 필드들 추가)
+export interface ApiUserSettingsInfo {
   userId: number;
   profileImageUrl: string;
   username: string;
@@ -12,9 +13,14 @@ export interface UserSettingsInfo {
   email: string;
   phoneNumber: string;
   password: string;
+}
+
+// 클라이언트에서 사용하는 사용자 설정 정보 (isSocial 포함)
+export interface UserSettingsInfo extends ApiUserSettingsInfo {
   isSocial?: boolean;
 }
 
+// 나머지 타입들
 export interface VerifyPasswordRequest {
   password: string;
 }
@@ -41,12 +47,23 @@ export interface UpdatePasswordResponse {
   passwordCheck: string;
 }
 
+// authStore에서 isSocial 정보를 가져와 병합
+const enrichWithAuthInfo = (apiData: ApiUserSettingsInfo): UserSettingsInfo => {
+  const { getUserInfo } = useAuthStore.getState();
+  const userInfo = getUserInfo();
+
+  return {
+    ...apiData,
+    isSocial: userInfo?.isSocial,
+  };
+};
+
 // 개인정보 수정 API
 export const personalInfoApi = {
   // 개인정보변경 페이지 조회 (accessToken만 필요)
   getUserSettings: async (): Promise<UserSettingsInfo> => {
-    const response = await api.get<ApiResponse<UserSettingsInfo>>('/api/me/settings');
-    return response.data.data;
+    const response = await api.get<ApiResponse<ApiUserSettingsInfo>>('/api/me/settings');
+    return enrichWithAuthInfo(response.data.data);
   },
 
   // 비밀번호 검증 및 reauthToken 발급 (accessToken만 필요)
@@ -59,15 +76,16 @@ export const personalInfoApi = {
 
   // 닉네임 수정 (accessToken만 필요)
   updateNickname: async (nickname: string): Promise<UserSettingsInfo> => {
-    const response = await api.patch<ApiResponse<UserSettingsInfo>>('/api/me/settings/nickname', {
-      nickname,
-    });
-    return response.data.data;
+    const response = await api.patch<ApiResponse<ApiUserSettingsInfo>>(
+      '/api/me/settings/nickname',
+      { nickname }
+    );
+    return enrichWithAuthInfo(response.data.data);
   },
 
   // 전화번호 변경 (accessToken + reauthToken 필요)
   updatePhone: async (phoneNumber: string, reauthToken: string): Promise<UserSettingsInfo> => {
-    const response = await api.patch<ApiResponse<UserSettingsInfo>>(
+    const response = await api.patch<ApiResponse<ApiUserSettingsInfo>>(
       '/api/me/settings/phone',
       { phoneNumber },
       {
@@ -76,7 +94,7 @@ export const personalInfoApi = {
         },
       }
     );
-    return response.data.data;
+    return enrichWithAuthInfo(response.data.data);
   },
 
   // 비밀번호 변경 (accessToken + reauthToken 필요)
