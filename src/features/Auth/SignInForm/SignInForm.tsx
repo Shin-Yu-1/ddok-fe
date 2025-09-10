@@ -42,18 +42,7 @@ export default function SignInForm() {
       const result = await signIn(data);
 
       if (result.accessToken && result.user) {
-        // 로그인 성공 - authStore에 사용자 정보 설정
-        setLoggedIn(
-          {
-            id: result.user.id,
-            username: result.user.username,
-            email: result.user.email,
-            nickname: result.user.nickname || '',
-            profileImageUrl: result.user.profileImageUrl || '',
-            isPreference: result.user.isPreference, // 개인화 설정 완료 여부 저장
-          },
-          result.accessToken
-        );
+        setLoggedIn(result.user, result.accessToken);
 
         // 리다이렉트는 SignInPage의 useEffect에서 처리됨
       }

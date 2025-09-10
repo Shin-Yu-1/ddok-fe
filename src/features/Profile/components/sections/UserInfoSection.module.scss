@@ -163,7 +163,7 @@
 
 .rightContent {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   margin-top: 8px;
 
@@ -180,28 +180,50 @@
   gap: 8px;
 }
 
-// 뱃지는 일단 임시로 넣음
-.mainBadge,
-.abandonBadge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 20px;
-  background-color: v.$gray-1;
-  cursor: default;
+// 뱃지 래퍼 - 호버 효과와 툴팁을 위한 컨테이너
+.badgeWrapper {
+  position: relative;
+  transition: transform 0.2s ease;
+  cursor: pointer;
 
-  @include m.mobile {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+  &:hover {
+    z-index: 10;
+    transform: scale(1.2);
+  }
+
+  // 툴팁 스타일링 (data-tooltip 사용)
+  &[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    z-index: 1000;
+    padding: 6px 8px;
+    border-radius: v.$r-xxsmall;
+    font-size: v.$fs-xxxsmall;
+    font-weight: v.$fw-medium;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: v.$white-3;
+    background-color: v.$gray-1;
+    transform: translateX(-50%);
+    pointer-events: none;
+
+    @include m.mobile {
+      bottom: -30px;
+      padding: 4px 6px;
+      font-size: 10px;
+    }
   }
 }
 
+// Badge 컴포넌트를 위한 스타일
+.mainBadge,
 .abandonBadge {
-  background-color: v.$red-1;
+  @include m.mobile {
+    width: 23px !important;
+    height: 44px !important;
+  }
 }
 
 .temperatureContainer {
@@ -216,17 +238,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.temperatureIcon {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-
-  @include m.mobile {
-    width: 18px;
-    height: 18px;
-  }
 }
 
 .temperature {

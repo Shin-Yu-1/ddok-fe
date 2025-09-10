@@ -22,9 +22,7 @@ const PortfolioSection = forwardRef<HTMLElement, PortfolioSectionProps>(
       }
     };
 
-    if (!user.portfolio || user.portfolio.length === 0) {
-      return null;
-    }
+    const portfolio = user.portfolio || [];
 
     return (
       <section
@@ -49,22 +47,30 @@ const PortfolioSection = forwardRef<HTMLElement, PortfolioSectionProps>(
           )}
         </div>
 
-        <div className={styles.portfolioList}>
-          {user.portfolio.map((item, index) => (
-            <div key={index} className={styles.portfolioItem}>
-              <div className={styles.portfolioInfo}>
-                <span className={styles.portfolioTitle}>[{item.linkTitle}]</span>
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.portfolioLink}
-                >
-                  {item.link}
-                </a>
-              </div>
+        <div>
+          {portfolio.length > 0 ? (
+            <div className={styles.portfolioList}>
+              {portfolio.map((item, index) => (
+                <div key={index} className={styles.portfolioItem}>
+                  <div className={styles.portfolioInfo}>
+                    <span className={styles.portfolioTitle}>[{item.linkTitle}]</span>
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.portfolioLink}
+                    >
+                      {item.link}
+                    </a>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div>
+              <p>등록된 포트폴리오가 없습니다.</p>
+            </div>
+          )}
         </div>
       </section>
     );

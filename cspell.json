@@ -23,7 +23,9 @@
     ".prettierignore"
   ],
   "words": [
+    "appkey",
     "bname",
+    "clusterer",
     "daum",
     "DDOK",
     "Dragbar",
@@ -32,6 +34,7 @@
     "findpassword",
     "kakao",
     "partialize",
+    "relayout",
     "signupcomplete",
     "xsmall",
     "xxsm",
