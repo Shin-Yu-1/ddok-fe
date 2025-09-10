@@ -24,6 +24,20 @@ export default function MainPage() {
   const userOngoingStudies = data.userOngoingStudies || [];
   const userOngoingProjects = data.userOngoingProjects || [];
 
+  // 아이콘 매핑
+  const getFeatureIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'user-match':
+        return <UserCheck size={32} weight="bold" />;
+      case 'map':
+        return <MapPin size={32} weight="bold" />;
+      case 'click':
+        return <HandTap size={32} weight="bold" />;
+      default:
+        return <UserCheck size={32} weight="bold" />;
+    }
+  };
+
   return (
     <div className={styles.mainPage}>
       {/* 히어로 섹션 */}
@@ -127,33 +141,13 @@ export default function MainPage() {
       <section className={styles.featuresSection}>
         <h2 className={styles.featuresTitle}>똑DDOK만의 특별함</h2>
         <div className={styles.featuresGrid}>
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>
-              <UserCheck size={32} weight="bold" />
+          {MAIN_COPY.features.map((feature, index) => (
+            <div key={index} className={styles.featureCard}>
+              <div className={styles.featureIcon}>{getFeatureIcon(feature.icon)}</div>
+              <h3 className={styles.featureTitle}>{feature.title}</h3>
+              <p className={styles.featureDescription}>{feature.description}</p>
             </div>
-            <h3 className={styles.featureTitle}>개성 기반 매칭</h3>
-            <p className={styles.featureDescription}>
-              기술 스택과 성향으로 나와 닮은 개발자를 찾아보세요
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>
-              <MapPin size={32} weight="bold" />
-            </div>
-            <h3 className={styles.featureTitle}>지도 기반 탐색</h3>
-            <p className={styles.featureDescription}>
-              내 주변의 스터디와 프로젝트를 한눈에 확인하세요
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.featureIcon}>
-              <HandTap size={32} weight="bold" />
-            </div>
-            <h3 className={styles.featureTitle}>원클릭 참여</h3>
-            <p className={styles.featureDescription}>복잡한 절차 없이 바로 팀에 합류할 수 있어요</p>
-          </div>
+          ))}
         </div>
       </section>
 
