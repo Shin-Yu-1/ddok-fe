@@ -126,13 +126,18 @@ export default function FindIdForm() {
 
       const result = await findEmail(findEmailData);
 
-      if (result.email) {
+      if (result && result.email) {
         // 아이디 찾기 성공 플래그를 sessionStorage에 저장
         sessionStorage.setItem('findIdSuccess', 'true');
         sessionStorage.setItem('findIdEmail', result.email);
 
+        const encodedEmail = encodeURIComponent(result.email);
+        const targetUrl = `/auth/findidcomplete?email=${encodedEmail}`;
+
         // 찾은 이메일과 함께 완료 페이지로 이동
-        navigate(`/auth/findidcomplete?email=${encodeURIComponent(result.email)}`);
+        navigate(targetUrl);
+      } else {
+        setApiErrors(prev => ({ ...prev, submit: '이메일을 찾을 수 없습니다.' }));
       }
     } catch (error) {
       console.error('이메일 찾기 실패:', getErrorMessage(error));

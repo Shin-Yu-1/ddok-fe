@@ -22,9 +22,7 @@ const TraitsSection = forwardRef<HTMLElement, TraitsSectionProps>(
       }
     };
 
-    if (!user.traits || user.traits.length === 0) {
-      return null;
-    }
+    const traits = user.traits || [];
 
     return (
       <section
@@ -34,7 +32,7 @@ const TraitsSection = forwardRef<HTMLElement, TraitsSectionProps>(
       >
         <div className={styles.header}>
           <h2 id="traits-title" className={styles.title}>
-            성향
+            나 이런 사람이야 !
           </h2>
 
           {isEditable && (
@@ -50,13 +48,19 @@ const TraitsSection = forwardRef<HTMLElement, TraitsSectionProps>(
         </div>
 
         <div>
-          <div className={styles.traitList}>
-            {user.traits.map((trait, index) => (
-              <span key={index} className={styles.traitTag}>
-                {trait}
-              </span>
-            ))}
-          </div>
+          {traits.length > 0 ? (
+            <div className={styles.traitList}>
+              {traits.map((trait, index) => (
+                <span key={index} className={styles.traitTag}>
+                  {trait}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p>등록된 성향이 없습니다.</p>
+            </div>
+          )}
         </div>
       </section>
     );

@@ -6,6 +6,7 @@ import { forwardRef } from 'react';
 import { PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
+import ProfileMap from '@/features/map/components/ProfileMap/ProfileMap';
 import type { ProfileSectionProps } from '@/types/user';
 
 import styles from './LocationSection.module.scss';
@@ -47,12 +48,13 @@ const LocationSection = forwardRef<HTMLElement, LocationSectionProps>(
 
         <div className={styles.content}>
           {/* 지도 영역 (추후 실제 지도 컴포넌트로 교체 예정) */}
-          <div className={styles.mapContainer}>
+          <ProfileMap />
+          {/* <div className={styles.mapContainer}>
             <div className={styles.mapPlaceholder}>
               <div className={styles.mapIcon}>🗺️</div>
               <p className={styles.mapText}>지도 영역</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     );

@@ -1,6 +1,5 @@
 import AddressSearchInput from '@/components/AddressSearchInput/AddressSearchInput';
 import type { Location } from '@/types/project';
-import { enhanceAddressWithKakao } from '@/utils/kakaoGeocoder';
 
 import styles from './PostLocationSelector.module.scss';
 
@@ -25,12 +24,10 @@ const formatLocationToAddress = (location: Location): string => {
 const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelectorProps) => {
   const handleLocationSearchChange = () => {
     // 단순 텍스트 변경은 처리하지 않음 (읽기 전용)
-    // AddressSearchInput이 readOnly이므로 실제로는 호출되지 않음
   };
 
-  const handleLocationSelect = async (address: string) => {
-    const location = await enhanceAddressWithKakao(address);
-    onLocationChange(location); // null이 될 수 있음 (실패 시)
+  const handleLocationSelect = async (selectedLocation: Location) => {
+    onLocationChange(selectedLocation);
   };
 
   return (
@@ -39,7 +36,7 @@ const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelect
       <AddressSearchInput
         value={location ? formatLocationToAddress(location) : ''}
         onChange={handleLocationSearchChange}
-        onSelect={handleLocationSelect}
+        onLocationSelect={handleLocationSelect}
         placeholder="주소 검색하기"
       />
 
@@ -58,5 +55,4 @@ const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelect
     </div>
   );
 };
-
 export default PostLocationSelector;

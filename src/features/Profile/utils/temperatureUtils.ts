@@ -4,8 +4,7 @@ import CoolIcon from '@/assets/icons/temperature-cool-icon.svg';
 import FreezingIcon from '@/assets/icons/temperature-freezing-icon.svg';
 import HotIcon from '@/assets/icons/temperature-hot-icon.svg';
 import WarmIcon from '@/assets/icons/temperature-warm-icon.svg';
-
-import type { TemperatureLevel } from '../types';
+import type { TemperatureLevel } from '@/types/user';
 
 export const getTemperatureLevel = (temperature: number): TemperatureLevel => {
   if (temperature <= 10) return 'freezing';
