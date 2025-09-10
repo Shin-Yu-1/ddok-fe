@@ -2,7 +2,6 @@
 
 .modalOverlay {
   position: fixed;
-  inset: 0;
   z-index: 1000;
 
   // 스크롤이 생겨도 중앙 정렬 유지
@@ -16,8 +15,7 @@
   // 스크롤 가능한 컨테이너로 설정
   overflow-y: auto;
   background: rgb(0 0 0 / 70%);
-
-  // iOS에서 스크롤 부드럽게
+  inset: 0;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -101,100 +99,4 @@
   font-weight: $fw-medium;
   color: $black-1 !important;
   background: linear-gradient(135deg, $yellow-1 0%, #f59e0b 100%);
-}
-
-// 모바일 대응
-@media (width <= 768px) {
-  .modalOverlay {
-    padding: 12px;
-  }
-
-  .modalContent {
-    max-height: calc(100vh - 24px);
-    margin: 12px 0;
-    border-radius: $r-xsmall;
-  }
-
-  .modalHeader {
-    padding: 20px;
-  }
-
-  .modalTitle {
-    font-size: $fs-small;
-  }
-
-  .modalBody {
-    padding: 20px;
-  }
-}
-
-// 작은 화면 높이 대응
-@media (height <= 600px) {
-  .modalOverlay {
-    // 작은 화면에서는 상단 정렬
-    justify-content: flex-start;
-    padding: 8px;
-    padding-top: 10px;
-  }
-
-  .modalContent {
-    max-height: calc(100vh - 20px);
-    margin: 0;
-  }
-
-  .modalHeader {
-    padding: 16px 20px;
-  }
-
-  .modalBody {
-    padding: 16px 20px;
-  }
-}
-
-// 매우 작은 화면 높이 (고배율)
-@media (height <= 400px) {
-  .modalOverlay {
-    justify-content: flex-start;
-    padding: 4px;
-    padding-top: 4px;
-  }
-
-  .modalContent {
-    max-height: calc(100vh - 8px);
-    margin: 0;
-    border-radius: $r-xxsmall;
-  }
-
-  .modalHeader {
-    padding: 12px 16px;
-  }
-
-  .modalTitle {
-    font-size: $fs-xsmall;
-  }
-
-  .modalBody {
-    padding: 12px 16px;
-  }
-}
-
-// 매우 극단적인 경우 (초고배율)
-@media (height <= 300px) {
-  .modalOverlay {
-    justify-content: flex-start;
-    padding: 2px;
-  }
-
-  .modalContent {
-    max-height: calc(100vh - 4px);
-    margin: 0;
-  }
-
-  .modalHeader {
-    padding: 8px 12px;
-  }
-
-  .modalBody {
-    padding: 8px 12px;
-  }
 }
