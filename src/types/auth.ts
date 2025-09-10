@@ -3,16 +3,16 @@
 
 // 사용자 위치 정보 타입 (API 응답 기준)
 export interface UserLocation {
+  address?: string; // 전체 주소
+  region1depthName?: string; // 시도 (예: 부산광역시)
+  region2depthName?: string; // 구군 (예: 해운대구)
+  region3depthName?: string; // 동면 (예: 우동)
+  roadName?: string; // 도로명 (예: 센텀중앙로)
+  mainBuildingNo?: string; // 주번지 (예: 90)
+  subBuildingNo?: string; // 부번지 (예: '')
+  zoneNo?: string; // 우편번호 (예: 48058)
   latitude: number;
   longitude: number;
-  address: string;
-  region1depthName: string; // "전북"
-  region2depthName: string; // "익산시"
-  region3depthName: string; // "부송동"
-  roadName: string; // "망산길"
-  mainBuildingNo: string; // "11"
-  subBuildingNo: string; // "17"
-  zoneNo: string; // "54547"
 }
 
 // API에서 받는 사용자 정보 (로그인 응답)
@@ -115,11 +115,7 @@ export interface PersonalizationRequest {
   mainPosition: string;
   subPosition: string[];
   techStacks: string[];
-  location: {
-    latitude: number;
-    longitude: number;
-    address: string;
-  };
+  location: UserLocation;
   traits: string[];
   birthDate: string;
   activeHours: {
@@ -140,11 +136,7 @@ export interface PersonalizationResponse {
     mainPosition: string;
     subPosition: string[];
     techStacks: string[];
-    location: {
-      latitude: number;
-      longitude: number;
-      address: string;
-    };
+    location: UserLocation;
     traits: string[];
     birthDate: string;
     activeHours: {
