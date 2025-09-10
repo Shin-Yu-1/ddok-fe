@@ -14,6 +14,7 @@ import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOv
 import MapStudyOverlay from '@/features/map/components/MapOverlay/MapStudyOverlay/MapStudyOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
+import { useGetMapItem } from '@/features/map/hooks/useGetMapItem';
 import { useMapSearch } from '@/features/map/hooks/useMapSearch';
 import type { MapBounds } from '@/features/map/schemas/mapItemSchema';
 import { MapItemCategory } from '@/features/map/types/common';
@@ -48,6 +49,9 @@ const MapPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string | undefined>(undefined);
   const [keyword, setKeyword] = useState<string | undefined>(undefined);
 
+  // 마커 표시용 카테고리 필터 상태 (MapPanel의 카테고리 필터와 연동)
+  const [markerCategory, setMarkerCategory] = useState<MapItemCategory | null>(null);
+
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
@@ -65,7 +69,14 @@ const MapPage = () => {
   // 사이드바에서 패널 및 서브패널의 열림 상태를 가져옴
   const { isSectionOpen } = useSidebarHandlers();
 
-  // 지도 검색 API 호출
+  // 마커 표시용 지도 아이템 API 호출 (카테고리 필터에 따라 변경)
+  const { data: mapItemData, refetch: refetchMapItem } = useGetMapItem({
+    mapBounds: mapBounds ?? undefined,
+    category: markerCategory,
+    enabled: isInitialLoad && !!mapBounds,
+  });
+
+  // 지도 검색 API 호출 (패널용 데이터 - 페이지네이션, 키워드 검색 포함)
   const {
     data: mapSearchData,
     pagination: mapSearchPagination,
@@ -127,6 +138,13 @@ const MapPage = () => {
     }
   }, [selectedCategory, selectedFilter, keyword, refetchMapSearch, isInitialLoad, mapBounds]);
 
+  // 마커 카테고리 변경 시 마커 데이터 리패치
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      refetchMapItem();
+    }
+  }, [markerCategory, refetchMapItem, isInitialLoad, mapBounds]);
+
   // mapBounds 변경 시 열려있는 overlay와 subPanel 닫기
   useEffect(() => {
     if (isInitialLoad && mapBounds) {
@@ -137,8 +155,11 @@ const MapPage = () => {
       // subPanel 닫기
       setIsMapSubPanelOpen(false);
       setSelectedCafeId(null);
+
+      // 마커 데이터 리패치
+      refetchMapItem();
     }
-  }, [mapBounds, isInitialLoad]);
+  }, [mapBounds, isInitialLoad, refetchMapItem]);
 
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
@@ -207,6 +228,7 @@ const MapPage = () => {
       // mapBounds가 설정된 이후 API 호출
       setTimeout(() => {
         refetchMapSearch();
+        refetchMapItem();
       }, 100);
     }
 
@@ -229,6 +251,13 @@ const MapPage = () => {
     setSelectedCategory(category);
     setSelectedFilter(filter);
     setCurrentPage(0); // 필터 변경 시 첫 페이지로 리셋
+
+    // 마커 카테고리도 함께 업데이트
+    if (category) {
+      setMarkerCategory(category as MapItemCategory);
+    } else {
+      setMarkerCategory(null); // 전체 선택 시 null로 설정
+    }
 
     // 필터 변경 시 열려있는 overlay 닫기
     setIsOverlayOpen(false);
@@ -271,8 +300,8 @@ const MapPage = () => {
             <ZoomControl position="BOTTOMRIGHT" />
 
             {/* 마커 */}
-            {mapSearchData &&
-              mapSearchData.map(m => {
+            {mapItemData &&
+              mapItemData.map(m => {
                 let id: number;
                 let uniqueKey: string;
 
