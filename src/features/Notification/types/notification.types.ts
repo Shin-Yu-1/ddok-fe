@@ -1,8 +1,10 @@
 export enum NotificationType {
   PROJECT_JOIN_REQUEST = 'PROJECT_JOIN_REQUEST', // 프로젝트 참여 승인 요청
   PROJECT_JOIN_APPROVED = 'PROJECT_JOIN_APPROVED', // 프로젝트 참여 희망 승인
+  PROJECT_JOIN_REJECTED = 'PROJECT_JOIN_REJECTED', // 프로젝트 참여 희망 거절
   STUDY_JOIN_REQUEST = 'STUDY_JOIN_REQUEST', // 스터디 참여 승인 요청
   STUDY_JOIN_APPROVED = 'STUDY_JOIN_APPROVED', // 스터디 참여 희망 승인
+  STUDY_JOIN_REJECTED = 'STUDY_JOIN_REJECTED', // 스터디 참여 희망 거절
   DM_REQUEST = 'DM_REQUEST', // DM 요청
   ACHIEVEMENT = 'ACHIEVEMENT', // 업적 달성
   TEAM_LEADER_VIOLATION = 'TEAM_LEADER_VIOLATION', // 팀 리더의 일탈
@@ -52,6 +54,10 @@ export const notificationConfig: Record<
     title: '프로젝트 참여 희망 승인',
     hasActions: false,
   },
+  [NotificationType.PROJECT_JOIN_REJECTED]: {
+    title: '프로젝트 참여 희망 거절',
+    hasActions: false,
+  },
   [NotificationType.STUDY_JOIN_REQUEST]: {
     title: '스터디 참여 승인 요청',
     hasActions: true,
@@ -62,6 +68,10 @@ export const notificationConfig: Record<
   },
   [NotificationType.STUDY_JOIN_APPROVED]: {
     title: '스터디 참여 희망 승인',
+    hasActions: false,
+  },
+  [NotificationType.STUDY_JOIN_REJECTED]: {
+    title: '스터디 참여 희망 거절',
     hasActions: false,
   },
   [NotificationType.DM_REQUEST]: {

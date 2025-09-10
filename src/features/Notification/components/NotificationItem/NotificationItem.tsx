@@ -65,8 +65,10 @@ const NotificationItem = ({
     const isProjectOrStudy =
       notification.type === NotificationType.PROJECT_JOIN_REQUEST ||
       notification.type === NotificationType.PROJECT_JOIN_APPROVED ||
+      notification.type === NotificationType.PROJECT_JOIN_REJECTED ||
       notification.type === NotificationType.STUDY_JOIN_REQUEST ||
-      notification.type === NotificationType.STUDY_JOIN_APPROVED;
+      notification.type === NotificationType.STUDY_JOIN_APPROVED ||
+      notification.type === NotificationType.STUDY_JOIN_REJECTED;
 
     const isDMRequest = notification.type === NotificationType.DM_REQUEST;
 

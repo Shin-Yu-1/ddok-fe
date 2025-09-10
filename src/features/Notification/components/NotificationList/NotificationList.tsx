@@ -88,6 +88,24 @@ const dummyNotifications: Notification[] = [
     teamId: 'team1',
     teamName: 'React 팀',
   },
+  {
+    id: '7',
+    type: NotificationType.PROJECT_JOIN_REJECTED,
+    message: '당신의 "Vue.js 프로젝트" 프로젝트 참여 희망 요청을 프로젝트 모집자가 거절하였습니다.',
+    isRead: false,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4시간 전
+    projectId: 'proj2',
+    projectTitle: 'Vue.js 프로젝트',
+  },
+  {
+    id: '8',
+    type: NotificationType.STUDY_JOIN_REJECTED,
+    message: '당신의 "알고리즘 스터디" 스터디 참여 희망 요청을 스터디 모집자가 거절하였습니다.',
+    isRead: false,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6), // 6시간 전
+    studyId: 'study2',
+    studyTitle: '알고리즘 스터디',
+  },
 ];
 
 interface NotificationListProps {
