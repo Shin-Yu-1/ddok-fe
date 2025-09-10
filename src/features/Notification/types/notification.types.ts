@@ -6,6 +6,8 @@ export enum NotificationType {
   STUDY_JOIN_APPROVED = 'STUDY_JOIN_APPROVED', // 스터디 참여 희망 승인
   STUDY_JOIN_REJECTED = 'STUDY_JOIN_REJECTED', // 스터디 참여 희망 거절
   DM_REQUEST = 'DM_REQUEST', // DM 요청
+  DM_APPROVED = 'DM_APPROVED', // DM 요청 승인
+  DM_REJECTED = 'DM_REJECTED', // DM 요청 거절
   ACHIEVEMENT = 'ACHIEVEMENT', // 업적 달성
   TEAM_LEADER_VIOLATION = 'TEAM_LEADER_VIOLATION', // 팀 리더의 일탈
   TEAM_MEMBER_VIOLATION = 'TEAM_MEMBER_VIOLATION', // 팀원의 일탈
@@ -88,6 +90,14 @@ export const notificationConfig: Record<
       { type: 'accept', label: '수락', variant: 'secondary' },
       { type: 'reject', label: '거절', variant: 'secondary' },
     ],
+  },
+  [NotificationType.DM_APPROVED]: {
+    title: 'DM 요청 승인',
+    hasActions: false,
+  },
+  [NotificationType.DM_REJECTED]: {
+    title: 'DM 요청 거절',
+    hasActions: false,
   },
   [NotificationType.ACHIEVEMENT]: {
     title: '업적 달성',

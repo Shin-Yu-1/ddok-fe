@@ -106,6 +106,25 @@ const dummyNotifications: Notification[] = [
     studyId: 'study2',
     studyTitle: '알고리즘 스터디',
   },
+  {
+    id: '9',
+    type: NotificationType.DM_APPROVED,
+    message:
+      '행복한 프론트님이 당신의 DM 요청을 승인하였습니다. 이제 메세지를 주고받을 수 있습니다.',
+    isRead: false,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 1), // 1시간 전
+    userId: 'user3',
+    userNickname: '행복한 프론트',
+  },
+  {
+    id: '10',
+    type: NotificationType.DM_REJECTED,
+    message: '차가운 백엔드님이 당신의 DM 요청을 거절하였습니다.',
+    isRead: false,
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8), // 8시간 전
+    userId: 'user4',
+    userNickname: '차가운 백엔드',
+  },
 ];
 
 interface NotificationListProps {

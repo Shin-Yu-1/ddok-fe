@@ -79,7 +79,10 @@ const NotificationItem = ({
       notification.type === NotificationType.STUDY_JOIN_APPROVED ||
       notification.type === NotificationType.STUDY_JOIN_REJECTED;
 
-    const isDMRequest = notification.type === NotificationType.DM_REQUEST;
+    const isDMRequest =
+      notification.type === NotificationType.DM_REQUEST ||
+      notification.type === NotificationType.DM_APPROVED ||
+      notification.type === NotificationType.DM_REJECTED;
 
     const isViolation =
       notification.type === NotificationType.TEAM_LEADER_VIOLATION ||
