@@ -1,12 +1,320 @@
 @use '@/styles/variables' as *;
-@use '@/styles/mixins' as m;
 
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
-.container {
-  width: 100%;
-  background-color: $blue-1;
+.mainPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $white-3 0%, $white-1 100%);
 }
 
-.title {
-  @include m.font-title;
+// 히어로 섹션
+.heroSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px 60px;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  margin: 0 0 20px;
+  font-size: $fs-xxxlarge;
+  font-weight: $fw-extrabold;
+  line-height: 1.2;
+  color: $black-1;
+
+  .userName {
+    color: $yellow-1;
+  }
+}
+
+.heroSubtitle {
+  margin: 0 0 40px;
+  font-size: $fs-small;
+  line-height: 1.6;
+  color: $gray-1;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.primaryButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  border-radius: $r-xsmall;
+  font-size: $fs-xsmall;
+  font-weight: $fw-semibold;
+  text-decoration: none;
+  color: $black-1;
+  background: $yellow-1;
+  box-shadow: 0 4px 14px rgb(251 191 36 / 30%);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f59e0b;
+    box-shadow: 0 6px 20px rgb(251 191 36 / 40%);
+    transform: translateY(-2px);
+  }
+}
+
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  border: 2px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xsmall;
+  font-weight: $fw-semibold;
+  text-decoration: none;
+  color: $gray-1;
+  background: transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $yellow-1;
+    color: $black-1;
+    background: $white-1;
+    transform: translateY(-2px);
+  }
+}
+
+// 서비스 소개 섹션
+.introSection {
+  padding: 80px 20px;
+  background: $white-2;
+}
+
+.introContent {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.problemSection {
+  text-align: center;
+}
+
+.problemText {
+  margin: 0;
+  font-size: $fs-xsmall;
+  line-height: 1.7;
+  color: $gray-1;
+}
+
+.solutionSection {
+  padding: 40px;
+  border-left: 4px solid $yellow-1;
+  border-radius: $r-medium;
+  background: $white-3;
+}
+
+.solutionText {
+  margin: 0 0 20px;
+  font-size: $fs-xsmall;
+  font-weight: $fw-medium;
+  line-height: 1.7;
+  color: $black-2;
+}
+
+.experienceText {
+  margin: 0;
+  font-size: $fs-xsmall;
+  line-height: 1.7;
+  color: $black-2;
+}
+
+// 주요 기능 섹션
+.featuresSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.featuresTitle {
+  margin: 0 0 60px;
+  font-size: $fs-xxlarge;
+  font-weight: $fw-bold;
+  text-align: center;
+  color: $black-1;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.featureCard {
+  padding: 40px 30px;
+  border-radius: $r-medium;
+  text-align: center;
+  background: $white-3;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 5%);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 30px rgb(251 191 36 / 15%);
+    transform: translateY(-8px);
+  }
+}
+
+.featureIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  border-radius: $r-medium;
+  color: $black-1;
+  background: linear-gradient(135deg, $yellow-1 0%, #f59e0b 100%);
+}
+
+.featureTitle {
+  margin: 0 0 16px;
+  font-size: $fs-small;
+  font-weight: $fw-semibold;
+  color: $black-1;
+}
+
+.featureDescription {
+  margin: 0;
+  font-size: $fs-xxsmall;
+  line-height: 1.6;
+  color: $gray-1;
+}
+
+// 메인 컨텐츠
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+  background: $white-3;
+}
+
+// 도깨비 이야기 섹션
+.storySection {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, $yellow-1 0%, #f59e0b 100%);
+}
+
+.storyContent {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.storyText {
+  color: $black-1;
+}
+
+.storyTitle {
+  margin: 0 0 24px;
+  font-size: $fs-xxlarge;
+  font-weight: $fw-bold;
+}
+
+.storyPreview {
+  margin: 0 0 32px;
+  font-size: $fs-xsmall;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+.storyButton {
+  padding: 14px 24px;
+  border: none;
+  border-radius: $r-xsmall;
+  font-size: $fs-xsmall;
+  font-weight: $fw-semibold;
+  color: $yellow-1;
+  background: $black-1;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: $black-2;
+    transform: translateY(-2px);
+  }
+}
+
+.storyVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ddokCharacter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  font-size: $fs-medium;
+  font-weight: $fw-bold;
+  color: $yellow-1;
+  background: $black-1;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 30%);
+}
+
+// 마지막 CTA 섹션
+.finalSection {
+  padding: 80px 20px;
+  text-align: center;
+  background: $black-1;
+}
+
+.finalContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.visionText {
+  margin: 0 0 40px;
+  font-size: $fs-xsmall;
+  line-height: 1.7;
+  color: $white-2;
+}
+
+.finalActions {
+  display: flex;
+  justify-content: center;
+}
+
+.finalPrimaryButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 32px;
+  border-radius: $r-xsmall;
+  font-size: $fs-xsmall;
+  font-weight: $fw-semibold;
+  text-decoration: none;
+  color: $black-1;
+  background: $yellow-1;
+  box-shadow: 0 4px 14px rgb(251 191 36 / 30%);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f59e0b;
+    box-shadow: 0 6px 20px rgb(251 191 36 / 40%);
+    transform: translateY(-2px);
+  }
 }
