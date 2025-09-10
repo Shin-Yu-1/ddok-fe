@@ -98,7 +98,6 @@ const DetailStudyPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>DetailStudyPage (ID: {studyIdNum})</h1>
       <div className={styles.container}>
         <div className={styles.bannerImage}>
           <BannerImageSection bannerImage={studyData.bannerImageUrl} readonly={true} />
