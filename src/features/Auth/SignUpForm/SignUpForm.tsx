@@ -11,6 +11,7 @@ import Input from '@/features/Auth/components/Input/Input';
 import PasswordInput from '@/features/Auth/components/Input/PasswordInput';
 import { signUpSchema } from '@/schemas/auth.schema';
 import type { SignUpFormValues } from '@/schemas/auth.schema';
+import type { SignUpRequest } from '@/types/auth';
 
 import styles from './SignUpForm.module.scss';
 
@@ -176,9 +177,13 @@ export default function SignUpForm() {
     clearErrors('root');
 
     try {
-      const signUpData = {
-        ...data,
+      const signUpData: SignUpRequest = {
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        passwordCheck: data.passwordCheck,
         phoneNumber: data.phoneNumber.replace(/-/g, ''), // 하이픈 제거
+        phoneCode: data.phoneCode,
       };
 
       const result = await signUp(signUpData);

@@ -8,7 +8,7 @@ export interface UserInfo {
 // 개별 뱃지 정보
 export interface Badge {
   type: 'complete' | 'leader_complete' | 'login';
-  tier: 'bronze' | 'silver' | 'gold' | 'platinum';
+  tier: 'bronze' | 'silver' | 'gold';
 }
 
 // 포기 뱃지 정보
@@ -49,8 +49,6 @@ export type TemperatureLevel =
 export interface TechStack {
   id: number;
   name: string;
-  category?: string;
-  imageUrl?: string;
 }
 
 // 프로젝트/스터디 참여 이력 (별도 API)
@@ -58,7 +56,7 @@ export interface ParticipationHistory {
   id: number;
   title: string;
   type: 'project' | 'study';
-  status: 'ongoing' | 'completed';
+  status: 'ONGOING' | 'CLOSED';
   role?: string;
   startDate: string;
   endDate?: string;
@@ -139,7 +137,8 @@ export interface ProfileInfo {
 export interface CompleteProfileInfo extends ProfileInfo {
   // 별도 API로 조회되는 데이터들
   techStacks?: TechStack[];
-  participationHistory?: ParticipationHistory[];
+  projects?: ParticipationHistory[];
+  studies?: ParticipationHistory[];
 }
 
 // API 응답 타입들

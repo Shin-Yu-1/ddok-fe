@@ -1,6 +1,19 @@
 import axios from 'axios';
 
-import type { Location } from '@/types/project';
+import type {
+  FindEmailRequest,
+  FindEmailResponse,
+  FindPasswordRequest,
+  FindPasswordResponse,
+  KakaoSignInRequest,
+  PersonalizationRequest,
+  PersonalizationResponse,
+  ResetPasswordRequest,
+  SignInApiResponse,
+  SignUpApiResponse,
+  SignUpRequest,
+  SocialLoginResponse,
+} from '@/types/auth';
 
 import api from './api';
 
@@ -15,22 +28,6 @@ interface ApiResponseDto<T = unknown> {
   status: number;
   message: string;
   data: T;
-}
-
-// 회원가입 요청 타입
-interface SignUpRequest {
-  email: string;
-  username: string;
-  password: string;
-  passwordCheck: string;
-  phoneNumber: string;
-  phoneCode: string;
-}
-
-// 회원가입 응답 타입
-interface SignUpResponse {
-  id: number;
-  username: string;
 }
 
 // 이메일 중복 확인 응답 타입
@@ -54,64 +51,9 @@ interface SignInRequest {
   password: string;
 }
 
-// 로그인 응답 타입
-interface SignInResponse {
-  accessToken: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    nickname?: string | null;
-    profileImageUrl?: string | null;
-    isPreference: boolean;
-    location: unknown;
-    mainPosition: unknown;
-  };
-}
-
 // 기술 스택 검색 응답 타입
 interface TechStackSearchResponse {
   techStacks: string[]; // 실제 API는 문자열 배열을 반환
-}
-
-// 개인화 설정 요청 타입
-interface PersonalizationRequest {
-  mainPosition: string;
-  subPosition: string[];
-  techStacks: string[];
-  location: Location;
-  traits: string[];
-  birthDate: string;
-  activeHours: {
-    start: string;
-    end: string;
-  };
-}
-
-// 개인화 설정 응답 타입
-interface PersonalizationResponse {
-  id: number;
-  username: string;
-  email: string;
-  nickname?: string;
-  profileImageUrl?: string;
-  mainPosition?: string;
-  preferences?: {
-    mainPosition: string;
-    subPosition: string[];
-    techStacks: string[];
-    location: {
-      latitude: number;
-      longitude: number;
-      address: string;
-    };
-    traits: string[];
-    birthDate: string;
-    activeHours: {
-      start: string;
-      end: string;
-    };
-  };
 }
 
 // 이메일 중복 확인
@@ -158,20 +100,14 @@ export const verifyPhoneCode = async (
 };
 
 // 회원가입
-export const signUp = async (signUpData: SignUpRequest): Promise<SignUpResponse> => {
-  const response = await publicApi.post<ApiResponseDto<SignUpResponse>>(
-    '/api/auth/signup',
-    signUpData
-  );
+export const signUp = async (signUpData: SignUpRequest): Promise<SignUpApiResponse['data']> => {
+  const response = await publicApi.post<SignUpApiResponse>('/api/auth/signup', signUpData);
   return response.data.data;
 };
 
 // 로그인
-export const signIn = async (signInData: SignInRequest): Promise<SignInResponse> => {
-  const response = await publicApi.post<ApiResponseDto<SignInResponse>>(
-    '/api/auth/signin',
-    signInData
-  );
+export const signIn = async (signInData: SignInRequest): Promise<SignInApiResponse['data']> => {
+  const response = await publicApi.post<SignInApiResponse>('/api/auth/signin', signInData);
   return response.data.data;
 };
 
@@ -194,43 +130,6 @@ export const submitPersonalization = async (
   );
   return response.data.data;
 };
-
-// 이메일 찾기 요청 타입
-interface FindEmailRequest {
-  username: string;
-  phoneNumber: string;
-  phoneCode: string;
-}
-
-// 이메일 찾기 응답 타입
-interface FindEmailResponse {
-  email: string;
-}
-
-// 비밀번호 찾기 요청 타입
-interface FindPasswordRequest {
-  username: string;
-  email: string;
-  phoneNumber: string;
-  phoneCode: string;
-}
-
-// 비밀번호 찾기 응답 타입
-interface FindPasswordResponse {
-  reauthToken: string;
-}
-
-// 비밀번호 재설정 요청 타입
-interface ResetPasswordRequest {
-  newPassword: string;
-  passwordCheck: string;
-}
-
-// 카카오 로그인 요청 타입
-interface KakaoSignInRequest {
-  authorizationCode: string;
-  redirectUri: string;
-}
 
 // 이메일 찾기
 export const findEmail = async (findEmailData: FindEmailRequest): Promise<FindEmailResponse> => {
@@ -265,8 +164,10 @@ export const resetPassword = async (
 };
 
 // 카카오 로그인 (authorizationCode 방식)
-export const signInWithKakao = async (kakaoData: KakaoSignInRequest): Promise<SignInResponse> => {
-  const response = await publicApi.post<ApiResponseDto<SignInResponse>>(
+export const signInWithKakao = async (
+  kakaoData: KakaoSignInRequest
+): Promise<SocialLoginResponse> => {
+  const response = await publicApi.post<ApiResponseDto<SocialLoginResponse>>(
     '/api/auth/signin/kakao',
     kakaoData
   );

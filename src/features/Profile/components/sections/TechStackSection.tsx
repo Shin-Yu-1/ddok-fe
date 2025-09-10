@@ -27,13 +27,9 @@ const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
       }
     };
 
-    if (!user.techStacks || user.techStacks.length === 0) {
-      return null;
-    }
-
-    // 처음에는 8개만 표시, "Show more tools" 클릭시 전체 표시
-    const displayedTechStacks = getDisplayItems(user.techStacks);
-    const hasMore = hasMoreItems(user.techStacks);
+    const techStacks = user.techStacks || [];
+    const displayedTechStacks = getDisplayItems(techStacks);
+    const hasMore = hasMoreItems(techStacks);
 
     return (
       <section
@@ -59,19 +55,31 @@ const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
         </div>
 
         <div>
-          <div className={styles.techStackGrid}>
-            {displayedTechStacks.map(tech => (
-              <div key={tech.id} className={styles.techStackItem}>
-                <span className={styles.techName}>{tech.name}</span>
+          {techStacks.length > 0 ? (
+            <>
+              <div className={styles.techStackGrid}>
+                {displayedTechStacks.map(tech => (
+                  <div key={tech.id} className={styles.techStackItem}>
+                    <span className={styles.techName}>{tech.name}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {hasMore && (
-            <div className={styles.showMoreContainer}>
-              <button type="button" onClick={handleToggleShowAll} className={styles.showMoreButton}>
-                {getShowMoreText(showAll, 'tools')}
-              </button>
+              {hasMore && (
+                <div className={styles.showMoreContainer}>
+                  <button
+                    type="button"
+                    onClick={handleToggleShowAll}
+                    className={styles.showMoreButton}
+                  >
+                    {getShowMoreText(showAll, 'tools')}
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div>
+              <p>등록된 기술 스택이 없습니다.</p>
             </div>
           )}
         </div>

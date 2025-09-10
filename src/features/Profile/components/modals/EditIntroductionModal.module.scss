@@ -1,0 +1,84 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.content {
+  width: 100%;
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-xsmall;
+  font-size: v.$fs-xsmall;
+  line-height: 1.5;
+  color: v.$black-1;
+  background-color: v.$white-3;
+  transition: border-color 0.2s ease;
+  resize: vertical;
+
+  &:focus {
+    border-color: v.$yellow-1;
+    outline: none;
+  }
+
+  &::placeholder {
+    color: v.$gray-2;
+  }
+
+  &:disabled {
+    color: v.$gray-2;
+    background-color: v.$gray-4;
+    cursor: not-allowed;
+  }
+
+  @include m.mobile {
+    min-height: 100px;
+    padding: 10px;
+    font-size: v.$fs-xxsmall;
+  }
+}
+
+.charCount {
+  @include m.font-tiny-text;
+
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 2px 4px;
+  border-radius: v.$r-xxsmall;
+  color: v.$gray-1;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    right: 6px;
+    bottom: 6px;
+    font-size: 10px;
+  }
+}
+
+.buttonContainer {
+  width: 100%;
+  margin-top: 16px;
+
+  @include m.mobile {
+    margin-top: 12px;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
