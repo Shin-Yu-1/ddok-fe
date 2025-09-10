@@ -1,20 +1,21 @@
 @use '@/styles/variables' as *;
 
 .mainPage {
+  width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, $white-3 0%, $white-1 100%);
 }
 
 // 히어로 섹션
 .heroSection {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 80px 20px 60px;
   text-align: center;
 }
 
 .heroContent {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -42,16 +43,16 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 60px; // 통계 카드와의 간격
+  margin-bottom: 60px;
 }
 
-// 통계 카드 섹션 추가
+// 통계 카드 섹션
 .statsCards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 32px;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -156,7 +157,7 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -195,7 +196,7 @@
 
 // 주요 기능 섹션
 .featuresSection {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 80px 20px;
 }
@@ -258,10 +259,121 @@
 
 // 메인 컨텐츠
 .mainContent {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 80px 20px;
   background: $white-3;
+}
+
+// 2열 레이아웃 (로그인 시)
+.contentTwoColumn {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 3fr 2fr;
+  gap: 80px;
+}
+
+// 1열 레이아웃 (비로그인 시)
+.contentSingleColumn {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+// 개인 섹션 (왼쪽)
+.personalSection {
+  padding: 40px;
+  border-radius: $r-large;
+  color: $black-1;
+  background: linear-gradient(135deg, $yellow-1 0%, #f59e0b 100%);
+  box-shadow: 0 8px 30px rgb(251 191 36 / 20%);
+
+  // MainSection 내부 스타일 오버라이드
+  :global(.section) {
+    margin-bottom: 40px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :global(.title) {
+    color: $black-1;
+  }
+
+  :global(.subtitle) {
+    color: $black-1;
+    opacity: 0.8;
+  }
+
+  :global(.viewAllLink) {
+    color: $black-1;
+
+    &:hover {
+      color: $black-2;
+    }
+  }
+
+  :global(.emptyMessage) {
+    color: $black-1;
+    opacity: 0.8;
+  }
+}
+
+// 전체 섹션 (오른쪽)
+.globalSection {
+  padding: 40px;
+  border-radius: $r-large;
+  background: $white-1;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 5%);
+
+  :global(.section) {
+    margin-bottom: 40px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// 섹션 헤더
+.sectionHeader {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-size: $fs-large;
+  font-weight: $fw-bold;
+  color: inherit;
+}
+
+.sectionSubtitle {
+  margin: 0;
+  font-size: $fs-xxsmall;
+  color: inherit;
+  opacity: 0.8;
+}
+
+// 개인 섹션이 비어있을 때
+.emptyPersonalSection {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.emptyMessage {
+  margin: 0 0 24px;
+  font-size: $fs-xsmall;
+  color: $black-1;
+  opacity: 0.8;
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
 }
 
 // 도깨비 이야기 섹션
@@ -275,7 +387,7 @@
   align-items: center;
   grid-template-columns: 2fr 1fr;
   gap: 60px;
-  max-width: 1000px;
+  max-width: 1200px; // 1000px → 1200px로 증가
   margin: 0 auto;
 }
 
@@ -341,7 +453,7 @@
 }
 
 .finalContent {
-  max-width: 800px;
+  max-width: 900px; // 800px → 900px로 증가
   margin: 0 auto;
 }
 

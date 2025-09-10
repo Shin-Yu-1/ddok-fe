@@ -159,68 +159,133 @@ export default function MainPage() {
 
       {/* 스터디/프로젝트 섹션 */}
       <main className={styles.mainContent}>
-        {/* 로그인한 사용자의 참여중인 데이터 우선 표시 */}
-        {isLoggedIn && userOngoingStudies.length > 0 && (
-          <MainSection
-            title="내가 참여중인 스터디"
-            subtitle="현재 참여하고 있는 스터디들입니다"
-            items={userOngoingStudies}
-            viewAllLink="/profile/my"
-            isLoading={isLoading}
-            emptyMessage="참여중인 스터디가 없습니다"
-          />
+        {isLoggedIn ? (
+          /* 로그인한 사용자: 2열 레이아웃 */
+          <div className={styles.contentTwoColumn}>
+            {/* 왼쪽 열: 전체 스터디/프로젝트 */}
+            <div className={styles.globalSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>전체 활동</h2>
+                <p className={styles.sectionSubtitle}>다양한 스터디와 프로젝트에 참여해보세요</p>
+              </div>
+
+              <MainSection
+                title="진행중인 스터디"
+                items={ongoingStudies}
+                viewAllLink="/search/study"
+                isLoading={isLoading}
+                emptyMessage="현재 진행중인 스터디가 없습니다"
+              />
+
+              <MainSection
+                title="모집중인 스터디"
+                items={recruitingStudies}
+                viewAllLink="/search/study"
+                isLoading={isLoading}
+                emptyMessage="현재 모집중인 스터디가 없습니다"
+              />
+
+              <MainSection
+                title="진행중인 프로젝트"
+                items={ongoingProjects}
+                viewAllLink="/search/project"
+                isLoading={isLoading}
+                emptyMessage="현재 진행중인 프로젝트가 없습니다"
+              />
+
+              <MainSection
+                title="모집중인 프로젝트"
+                items={recruitingProjects}
+                viewAllLink="/search/project"
+                isLoading={isLoading}
+                emptyMessage="현재 모집중인 프로젝트가 없습니다"
+              />
+            </div>
+
+            {/* 오른쪽 열: 나의 스터디/프로젝트 */}
+            <div className={styles.personalSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>나의 활동</h2>
+                <p className={styles.sectionSubtitle}>현재 참여하고 있는 활동들을 확인하세요</p>
+              </div>
+
+              {userOngoingStudies.length > 0 && (
+                <MainSection
+                  title="참여중인 스터디"
+                  items={userOngoingStudies}
+                  viewAllLink="/profile/my"
+                  isLoading={isLoading}
+                  emptyMessage="참여중인 스터디가 없습니다"
+                />
+              )}
+
+              {userOngoingProjects.length > 0 && (
+                <MainSection
+                  title="참여중인 프로젝트"
+                  items={userOngoingProjects}
+                  viewAllLink="/profile/my"
+                  isLoading={isLoading}
+                  emptyMessage="참여중인 프로젝트가 없습니다"
+                />
+              )}
+
+              {userOngoingStudies.length === 0 && userOngoingProjects.length === 0 && (
+                <div className={styles.emptyPersonalSection}>
+                  <p className={styles.emptyMessage}>아직 참여중인 활동이 없습니다</p>
+                  <div className={styles.emptyActions}>
+                    <Link to="/create/study" className={styles.primaryButton}>
+                      <BookOpen size={16} weight="bold" />
+                      <span>스터디 만들기</span>
+                    </Link>
+                    <Link to="/create/project" className={styles.primaryButton}>
+                      <Code size={16} weight="bold" />
+                      <span>프로젝트 만들기</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* 비로그인 사용자: 기존 1열 레이아웃 */
+          <div className={styles.contentSingleColumn}>
+            <MainSection
+              title="진행중인 스터디"
+              subtitle="지금 활발히 진행되고 있는 스터디들입니다"
+              items={ongoingStudies}
+              viewAllLink="/search/study"
+              isLoading={isLoading}
+              emptyMessage="현재 진행중인 스터디가 없습니다"
+            />
+
+            <MainSection
+              title="모집중인 스터디"
+              subtitle="새로운 멤버를 찾고 있는 스터디들입니다"
+              items={recruitingStudies}
+              viewAllLink="/search/study"
+              isLoading={isLoading}
+              emptyMessage="현재 모집중인 스터디가 없습니다"
+            />
+
+            <MainSection
+              title="진행중인 프로젝트"
+              subtitle="지금 활발히 진행되고 있는 프로젝트들입니다"
+              items={ongoingProjects}
+              viewAllLink="/search/project"
+              isLoading={isLoading}
+              emptyMessage="현재 진행중인 프로젝트가 없습니다"
+            />
+
+            <MainSection
+              title="모집중인 프로젝트"
+              subtitle="새로운 팀원을 찾고 있는 프로젝트들입니다"
+              items={recruitingProjects}
+              viewAllLink="/search/project"
+              isLoading={isLoading}
+              emptyMessage="현재 모집중인 프로젝트가 없습니다"
+            />
+          </div>
         )}
-
-        {isLoggedIn && userOngoingProjects.length > 0 && (
-          <MainSection
-            title="내가 참여중인 프로젝트"
-            subtitle="현재 참여하고 있는 프로젝트들입니다"
-            items={userOngoingProjects}
-            viewAllLink="/profile/my"
-            isLoading={isLoading}
-            emptyMessage="참여중인 프로젝트가 없습니다"
-          />
-        )}
-
-        {/* 진행중인 스터디 섹션 */}
-        <MainSection
-          title="진행중인 스터디"
-          subtitle="지금 활발히 진행되고 있는 스터디들입니다"
-          items={ongoingStudies}
-          viewAllLink="/search/study"
-          isLoading={isLoading}
-          emptyMessage="현재 진행중인 스터디가 없습니다"
-        />
-
-        {/* 모집중인 스터디 섹션 */}
-        <MainSection
-          title="모집중인 스터디"
-          subtitle="새로운 멤버를 찾고 있는 스터디들입니다"
-          items={recruitingStudies}
-          viewAllLink="/search/study"
-          isLoading={isLoading}
-          emptyMessage="현재 모집중인 스터디가 없습니다"
-        />
-
-        {/* 진행중인 프로젝트 섹션 */}
-        <MainSection
-          title="진행중인 프로젝트"
-          subtitle="지금 활발히 진행되고 있는 프로젝트들입니다"
-          items={ongoingProjects}
-          viewAllLink="/search/project"
-          isLoading={isLoading}
-          emptyMessage="현재 진행중인 프로젝트가 없습니다"
-        />
-
-        {/* 모집중인 프로젝트 섹션 */}
-        <MainSection
-          title="모집중인 프로젝트"
-          subtitle="새로운 팀원을 찾고 있는 프로젝트들입니다"
-          items={recruitingProjects}
-          viewAllLink="/search/project"
-          isLoading={isLoading}
-          emptyMessage="현재 모집중인 프로젝트가 없습니다"
-        />
       </main>
 
       {/* 도깨비 이야기 섹션 */}
