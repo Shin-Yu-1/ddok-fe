@@ -20,8 +20,8 @@ import type {
 const MAIN_PAGE_LIMITS = {
   STUDIES: 3, // 전체 스터디 조회 개수
   PROJECTS: 3, // 전체 프로젝트 조회 개수
-  USER_STUDIES: 4, // 사용자 스터디 조회 개수
-  USER_PROJECTS: 4, // 사용자 프로젝트 조회 개수
+  USER_STUDIES: 2, // 사용자 스터디 조회 개수
+  USER_PROJECTS: 2, // 사용자 프로젝트 조회 개수
 } as const;
 
 // 스터디 아이템을 카드 아이템으로 변환
