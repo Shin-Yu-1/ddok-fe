@@ -16,7 +16,13 @@ export default function MainPage() {
   const { isLoggedIn, user } = useAuthStore();
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
-  const { ongoingStudies, recruitingStudies, ongoingProjects, recruitingProjects } = data;
+  // 안전하게 데이터 추출
+  const ongoingStudies = data.ongoingStudies || [];
+  const recruitingStudies = data.recruitingStudies || [];
+  const ongoingProjects = data.ongoingProjects || [];
+  const recruitingProjects = data.recruitingProjects || [];
+  const userOngoingStudies = data.userOngoingStudies || [];
+  const userOngoingProjects = data.userOngoingProjects || [];
 
   return (
     <div className={styles.mainPage}>
@@ -42,11 +48,11 @@ export default function MainPage() {
               <>
                 <Link to="/create/study" className={styles.primaryButton}>
                   <BookOpen size={20} weight="bold" />
-                  <span>스터디 만들기</span>
+                  <span>새로운 스터디 만들기</span>
                 </Link>
                 <Link to="/create/project" className={styles.primaryButton}>
                   <Code size={20} weight="bold" />
-                  <span>프로젝트 만들기</span>
+                  <span>새로운 프로젝트 만들기</span>
                 </Link>
                 <Link to="/map" className={styles.secondaryButton}>
                   <MapPin size={20} weight="bold" />
@@ -74,9 +80,7 @@ export default function MainPage() {
               <BookOpen size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>
-                {recruitingStudies.length > 0 ? `${recruitingStudies.length}` : '0'}
-              </div>
+              <div className={styles.statsNumber}>{recruitingStudies.length}</div>
               <div className={styles.statsLabel}>모집중인 스터디</div>
             </div>
           </div>
@@ -86,9 +90,7 @@ export default function MainPage() {
               <Code size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>
-                {recruitingProjects.length > 0 ? `${recruitingProjects.length}` : '0'}
-              </div>
+              <div className={styles.statsNumber}>{recruitingProjects.length}</div>
               <div className={styles.statsLabel}>모집중인 프로젝트</div>
             </div>
           </div>
@@ -99,11 +101,9 @@ export default function MainPage() {
             </div>
             <div className={styles.statsContent}>
               <div className={styles.statsNumber}>
-                {ongoingStudies.length + ongoingProjects.length > 0
-                  ? `${ongoingStudies.length + ongoingProjects.length}`
-                  : '0'}
+                {ongoingStudies.length + ongoingProjects.length}
               </div>
-              <div className={styles.statsLabel}>진행중인 팀</div>
+              <div className={styles.statsLabel}>진행중인 전체 팀</div>
             </div>
           </div>
         </div>
@@ -159,6 +159,29 @@ export default function MainPage() {
 
       {/* 스터디/프로젝트 섹션 */}
       <main className={styles.mainContent}>
+        {/* 로그인한 사용자의 참여중인 데이터 우선 표시 */}
+        {isLoggedIn && userOngoingStudies.length > 0 && (
+          <MainSection
+            title="내가 참여중인 스터디"
+            subtitle="현재 참여하고 있는 스터디들입니다"
+            items={userOngoingStudies}
+            viewAllLink="/profile/my"
+            isLoading={isLoading}
+            emptyMessage="참여중인 스터디가 없습니다"
+          />
+        )}
+
+        {isLoggedIn && userOngoingProjects.length > 0 && (
+          <MainSection
+            title="내가 참여중인 프로젝트"
+            subtitle="현재 참여하고 있는 프로젝트들입니다"
+            items={userOngoingProjects}
+            viewAllLink="/profile/my"
+            isLoading={isLoading}
+            emptyMessage="참여중인 프로젝트가 없습니다"
+          />
+        )}
+
         {/* 진행중인 스터디 섹션 */}
         <MainSection
           title="진행중인 스터디"
