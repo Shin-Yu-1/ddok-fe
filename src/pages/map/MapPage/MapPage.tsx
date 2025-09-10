@@ -333,6 +333,16 @@ const MapPage = () => {
                         category: m.category,
                         id: id,
                       });
+
+                      // cafe 마커 클릭 시 MapSubPanel도 열기
+                      if (m.category === MapItemCategory.CAFE && 'cafeId' in m) {
+                        setSelectedCafeId(m.cafeId);
+                        setIsMapSubPanelOpen(true);
+                      } else {
+                        // cafe가 아닌 경우 서브패널 닫기
+                        setIsMapSubPanelOpen(false);
+                        setSelectedCafeId(null);
+                      }
                     }}
                   ></MapMarker>
                 );
