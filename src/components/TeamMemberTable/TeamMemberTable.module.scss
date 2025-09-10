@@ -1,0 +1,125 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  width: 100%;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+
+  // overflow: hidden;
+  background-color: $white-3;
+}
+
+// 테이블 헤더
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  border-bottom: 1px solid $gray-3;
+  background-color: $white-1;
+  border-top-left-radius: $r-xsmall;
+  border-top-right-radius: $r-xsmall;
+}
+
+.headerCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  text-align: center;
+  color: $gray-1;
+}
+
+// 테이블 바디
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  border-bottom: 1px solid $gray-4;
+
+  &:last-child {
+    border-bottom: none;
+
+    .positionCell {
+      border-bottom-left-radius: $r-small;
+    }
+
+    .memberCell {
+      border-bottom-right-radius: $r-small;
+    }
+  }
+}
+
+// 포지션 셀
+.positionCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background-color: $white-3; // 기본 배경과 동일
+}
+
+// RecruitmentTable과 동일한 포지션 태그
+.positionTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xxxxlarge;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  background-color: $white-3;
+}
+
+// 팀장 버튼 (리더 전용)
+.leaderButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border: 1px solid $black-1;
+  border-radius: $r-xxxxlarge;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  color: $white-1;
+  background-color: $black-1;
+  cursor: default;
+}
+
+// 멤버 셀
+.memberCell {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: $white-3; // 기본 배경과 동일
+}
+
+.membersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.memberItem {
+  width: 100%;
+
+  // ProfileBar가 전체 너비를 차지하도록
+  > * {
+    width: 100%;
+  }
+}

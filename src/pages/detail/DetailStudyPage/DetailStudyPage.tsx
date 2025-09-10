@@ -5,6 +5,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { StudyRecruitmentTable } from '@/components/StudyRecruitmentTable';
+import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeDisplay from '@/features/post/components/AgeRangeDisplay/AgeRangeDisplay';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
 import PostCapacityDisplay from '@/features/post/components/PostCapacityDisplay/PostCapacityDisplay';
@@ -95,6 +96,44 @@ const DetailStudyPage = () => {
     }
   };
 
+  // TeamMemberTable용 데이터 변환
+  const convertToTeamMember = (member: {
+    userId: number;
+    nickname: string;
+    profileImageUrl: string;
+    mainPosition: string;
+    mainBadge: { type: string; tier: string } | null;
+    abandonBadge: { isGranted: boolean; count: number } | null;
+    temperature: number | null;
+    isMine: boolean;
+    chatRoomId: number | null;
+    dmRequestPending: boolean;
+  }) => ({
+    userId: member.userId,
+    nickname: member.nickname,
+    profileImageUrl: member.profileImageUrl,
+    mainPosition: member.mainPosition || '스터디원',
+    mainBadge: member.mainBadge
+      ? {
+          type: member.mainBadge.type,
+          tier: member.mainBadge.tier,
+        }
+      : null,
+    abandonBadge: member.abandonBadge || null,
+    temperature: member.temperature,
+    decidedPosition: '스터디원', // 스터디에서는 모두 동일한 포지션
+    isMine: member.isMine,
+    chatRoomId: member.chatRoomId,
+    dmRequestPending: member.dmRequestPending,
+  });
+
+  const teamLeader = {
+    ...convertToTeamMember(studyData.leader),
+    decidedPosition: '스터디장', // 리더는 스터디장으로 표시
+  };
+
+  const teamParticipants = studyData.participants?.map(convertToTeamMember) || [];
+
   return (
     <>
       <h1 className={styles.title}>DetailStudyPage (ID: {studyIdNum})</h1>
@@ -113,7 +152,7 @@ const DetailStudyPage = () => {
             </div>
 
             <div className={styles.nameSection}>
-              <MainSection title={studyData.title} readonly />
+              <SideSection title={studyData.title} readonly />
             </div>
 
             <div className={styles.detailInfoSection}>
@@ -140,6 +179,15 @@ const DetailStudyPage = () => {
 
                 <MainSection title={'스터디 상세'}>
                   <MarkdownEditor value={studyData.detail} mode="viewer" height={900} />
+                </MainSection>
+
+                {/* 팀 멤버 테이블 - 스터디장과 스터디원들을 표시 */}
+                <MainSection title="스터디 멤버">
+                  <TeamMemberTable
+                    leader={teamLeader}
+                    participants={teamParticipants}
+                    isStudyMode={true}
+                  />
                 </MainSection>
               </div>
 
