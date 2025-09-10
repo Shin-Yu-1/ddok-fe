@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import { useGetProjectOverlay } from '@/features/map/hooks/useGetOverlay';
+import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -55,6 +56,16 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
 
   return (
     <div className={styles.overlay__container}>
+      {project.teamStatus &&
+        (project.teamStatus === TeamStatus.RECRUITING ? (
+          <div className={`${styles.teamStatus} ${styles.teamStatus__recruiting}`}>
+            {MAP_ITEM_STATUS_LABELS.RECRUITING}
+          </div>
+        ) : (
+          <div className={`${styles.teamStatus} ${styles.teamStatus__ongoing}`}>
+            {MAP_ITEM_STATUS_LABELS.ONGOING}
+          </div>
+        ))}
       <div className={styles.overlay__banner}>
         <img src={project.bannerImageUrl} alt="PROJECT" />
       </div>

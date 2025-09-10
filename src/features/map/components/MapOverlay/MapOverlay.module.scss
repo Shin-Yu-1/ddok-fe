@@ -9,6 +9,28 @@
   background-color: $white-3;
 }
 
+.teamStatus {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: fit-content;
+  height: fit-content;
+  padding: 3px 7px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+
+  &__recruiting {
+    font-weight: $fw-bold;
+    color: $white-3;
+    background-color: $green-1;
+  }
+
+  &__ongoing {
+    // border: 1px solid $gray-1;
+    background-color: $white-3;
+  }
+}
+
 .overlay__banner {
   width: 100%;
   height: 125px;
