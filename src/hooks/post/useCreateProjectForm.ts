@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/api/api';
+import { useAuthStore } from '@/stores/authStore';
 import type {
   CreateProjectData,
   CreateProjectResponse,
@@ -16,6 +17,20 @@ import { initialFormData } from '@/types/project';
 export const useCreateProjectForm = () => {
   const [formData, setFormData] = useState<CreateProjectData>(initialFormData);
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+
+  // 컴포넌트 마운트 시 사용자의 메인 포지션을 자동으로 추가
+  useEffect(() => {
+    if (user?.mainPosition && formData.positions.length === 0) {
+      const userMainPosition = user.mainPosition;
+
+      setFormData(prev => ({
+        ...prev,
+        positions: [userMainPosition],
+        leaderPosition: userMainPosition,
+      }));
+    }
+  }, [user, formData.positions.length]);
 
   // 프로젝트 생성 API 함수
   const createProject = async (data: CreateProjectData): Promise<CreateProjectResponse> => {
