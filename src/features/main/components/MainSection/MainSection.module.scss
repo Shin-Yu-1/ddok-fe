@@ -1,0 +1,149 @@
+.section {
+  margin-bottom: 48px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.titleContainer {
+  flex: 1;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+.viewAllLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #3b82f6;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    color: #2563eb;
+    transform: translateX(2px);
+  }
+}
+
+.content {
+  width: 100%;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.emptyContainer {
+  padding: 60px 20px;
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
+  text-align: center;
+  background-color: #f9fafb;
+}
+
+.emptyMessage {
+  margin: 0;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+// 로딩 스켈레톤 스타일
+.loadingContainer {
+  width: 100%;
+}
+
+.loadingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.skeletonCard {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonBanner {
+  width: 100%;
+  height: 160px;
+  background-color: #e5e7eb;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.skeletonTitle {
+  width: 80%;
+  height: 20px;
+  border-radius: 4px;
+  background-color: #e5e7eb;
+}
+
+.skeletonTags {
+  display: flex;
+  gap: 6px;
+}
+
+.skeletonTag {
+  width: 60px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: #e5e7eb;
+}
+
+.skeletonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeletonInfoLine {
+  width: 100%;
+  height: 16px;
+  border-radius: 4px;
+  background-color: #e5e7eb;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
