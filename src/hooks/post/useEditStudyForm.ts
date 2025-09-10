@@ -236,6 +236,7 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
     updateMode,
     updateLocation,
     updatePreferredAges,
+    editData,
     updateCapacity,
     updateTraits,
     updateStudyType,

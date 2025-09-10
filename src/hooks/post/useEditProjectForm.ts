@@ -10,39 +10,11 @@ import type {
   ProjectMode,
   Location,
   PreferredAges,
+  EditProjectResponse,
 } from '@/types/project';
 
 interface UseEditProjectFormProps {
   projectId: number;
-}
-
-// 수정 페이지 조회 응답 타입 (실제 API에 맞게 수정)
-interface EditProjectResponse {
-  status: number;
-  message: string;
-  data: {
-    projectId: number;
-    title: string;
-    teamStatus: 'RECRUITING' | 'ONGOING' | 'CLOSED';
-    bannerImageUrl: string;
-    traits: string[];
-    capacity: number;
-    applicantCount: number;
-    mode: string;
-    location: Location | null;
-    preferredAges: PreferredAges;
-    expectedMonth: number;
-    startDate: string;
-    detail: string;
-    positions: Array<{
-      position: string;
-      applied: number;
-      confirmed: number;
-      isApplied: boolean;
-      isApproved: boolean;
-      isAvailable: boolean;
-    }>;
-  };
 }
 
 export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
@@ -279,6 +251,7 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     updateTeamStatus,
     updateBannerImage,
     handleSubmit,
+    editData,
     isSubmitting: updateProjectMutation.isPending,
     isValid: validateForm(),
   };
