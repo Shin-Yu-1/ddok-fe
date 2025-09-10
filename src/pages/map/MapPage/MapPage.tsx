@@ -67,7 +67,7 @@ const MapPage = () => {
   } | null>(null);
 
   // 사이드바에서 패널 및 서브패널의 열림 상태를 가져옴
-  const { isSectionOpen } = useSidebarHandlers();
+  const { isSectionOpen, openSection } = useSidebarHandlers();
 
   // 마커 표시용 지도 아이템 API 호출 (카테고리 필터에 따라 변경)
   const { data: mapItemData, refetch: refetchMapItem } = useGetMapItem({
@@ -336,6 +336,10 @@ const MapPage = () => {
 
                       // cafe 마커 클릭 시 MapSubPanel도 열기
                       if (m.category === MapItemCategory.CAFE && 'cafeId' in m) {
+                        // MapPanel이 닫혀있으면 먼저 열기
+                        if (!isMapPanelOpen) {
+                          openSection('map');
+                        }
                         setSelectedCafeId(m.cafeId);
                         setIsMapSubPanelOpen(true);
                       } else {
