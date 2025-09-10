@@ -17,8 +17,15 @@ export interface Notification {
   message: string;
   isRead: boolean;
   createdAt: Date;
+
+  actorUserId?: string;
+  actorNickname?: string;
+  actorTemperature?: number;
+
+  /** 하위호환용(서버에서 아직 userId/userNickname을 주는 경우 대비) */
   userId?: string;
   userNickname?: string;
+
   projectId?: string;
   projectTitle?: string;
   studyId?: string;

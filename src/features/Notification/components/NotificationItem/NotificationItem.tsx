@@ -42,13 +42,9 @@ const NotificationItem = ({
 
   // 알림 클릭 시 프로필 페이지로 이동
   const handleNotificationClick = () => {
-    // 읽음 처리
     handleMarkAsRead();
-
-    // userId가 있는 경우 프로필 페이지로 이동
-    if (notification.userId) {
-      navigate(`/profile/user/${notification.userId}`);
-    }
+    const actorId = notification.actorUserId ?? notification.userId;
+    if (actorId) navigate(`/profile/user/${actorId}`);
   };
 
   const typeKey =

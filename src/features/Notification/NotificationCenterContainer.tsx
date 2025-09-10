@@ -12,9 +12,17 @@ type ServerPayload = {
   type: string;
   message: string;
   isRead?: boolean;
-  createdAt: string; // ISO string
+  createdAt: string;
+
+  // actor 필드
+  actorUserId?: string;
+  actorNickname?: string;
+  actorTemperature?: number | string;
+
+  // 하위호환
   userId?: string;
   userNickname?: string;
+
   projectId?: string;
   projectTitle?: string;
   studyId?: string;
@@ -25,15 +33,24 @@ type ServerPayload = {
 };
 
 function toFrontModel(p: ServerPayload): Notification {
+  const actorUserId = p.actorUserId ?? p.userId;
+  const actorNickname = p.actorNickname ?? p.userNickname;
+
   return {
     id: p.id,
-    // 서버에서 온 문자열이 enum 키와 동일하다고 가정
     type: p.type as Notification['type'],
     message: p.message,
     isRead: !!p.isRead,
     createdAt: new Date(p.createdAt),
-    userId: p.userId,
-    userNickname: p.userNickname,
+
+    actorUserId,
+    actorNickname,
+    actorTemperature:
+      typeof p.actorTemperature === 'string' ? parseFloat(p.actorTemperature) : p.actorTemperature,
+
+    userId: actorUserId,
+    userNickname: actorNickname,
+
     projectId: p.projectId,
     projectTitle: p.projectTitle,
     studyId: p.studyId,
