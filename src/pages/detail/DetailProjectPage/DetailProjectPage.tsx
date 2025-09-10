@@ -5,6 +5,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { DetailRecruitmentTable } from '@/components/RecruitmentTable';
+import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeDisplay from '@/features/post/components/AgeRangeDisplay/AgeRangeDisplay';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
 import PostCapacityDisplay from '@/features/post/components/PostCapacityDisplay/PostCapacityDisplay';
@@ -98,9 +99,8 @@ const DetailProjectPage = () => {
       </div>
     );
   }
-  const handlePositionAction = (position: string) => {
-    if (!projectData) return;
 
+  const handlePositionAction = (position: string) => {
     const positionData = projectData.positions.find(p => p.position === position);
 
     if (positionData?.isApplied) {
@@ -119,6 +119,7 @@ const DetailProjectPage = () => {
         <div className={styles.bannerImage}>
           <BannerImageSection bannerImage={projectData.bannerImageUrl} readonly={true} />
         </div>
+
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
@@ -130,7 +131,7 @@ const DetailProjectPage = () => {
             </div>
 
             <div className={styles.nameSection}>
-              <MainSection title={projectData.title} readonly />
+              <SideSection title={projectData.title} readonly />
             </div>
 
             <div className={styles.detailInfoSection}>
@@ -150,6 +151,14 @@ const DetailProjectPage = () => {
                 <MainSection title={'프로젝트 상세'}>
                   <MarkdownEditor value={projectData.detail} mode="viewer" height={900} />
                 </MainSection>
+
+                {/* 팀 멤버 테이블 - 리더와 팀원을 포지션별로 통합 표시 */}
+                <MainSection title="팀 멤버">
+                  <TeamMemberTable
+                    leader={projectData.leader}
+                    participants={projectData.participants || []}
+                  />
+                </MainSection>
               </div>
 
               <div className={styles.rightSection}>
@@ -168,7 +177,7 @@ const DetailProjectPage = () => {
                     confirmedCount={projectData.positions.reduce(
                       (sum, pos) => sum + pos.confirmed,
                       0
-                    )} // 전체 확정 인원 계산
+                    )}
                   />
                 </MainSection>
 
@@ -188,7 +197,7 @@ const DetailProjectPage = () => {
                 </MainSection>
 
                 {projectData.mode === 'offline' && projectData.location?.address && (
-                  <MainSection title={'지역'}>
+                  <MainSection title={'지역'} readonly>
                     <PostLocationDisplay
                       address={projectData.location.address}
                       location={projectData.location}

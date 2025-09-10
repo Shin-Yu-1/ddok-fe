@@ -58,10 +58,18 @@ export default function KakaoCallbackPage() {
             profileImageUrl: result.user.profileImageUrl || null,
             isPreference: result.user.isPreference,
             mainPosition: result.user.mainPosition as string | null,
+            isSocial: result.user.isSocial,
             location: result.user.location as {
               latitude: number;
               longitude: number;
               address: string;
+              region1depthName: string; // "전북"
+              region2depthName: string; // "익산시"
+              region3depthName: string; // "부송동"
+              roadName: string; // "망산길"
+              mainBuildingNo: string; // "11"
+              subBuildingNo: string; // "17"
+              zoneNo: string; // "54547"
             } | null,
           },
         });
