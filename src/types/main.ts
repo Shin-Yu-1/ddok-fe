@@ -12,7 +12,21 @@ export type TeamStatus = 'RECRUITING' | 'ONGOING' | 'CLOSED';
 // 스터디/프로젝트 모드
 export type Mode = 'online' | 'offline';
 
-// 스터디 아이템 타입
+// 위치 정보 (공통)
+export interface Location {
+  address: string;
+  region1depthName?: string;
+  region2depthName?: string;
+  region3depthName?: string;
+  roadName?: string;
+  mainBuildingNo?: string;
+  subBuildingNo?: string;
+  zoneNo?: string;
+  latitude: number;
+  longitude: number;
+}
+
+// 스터디 아이템 타입 (전체 목록용)
 export interface StudyItem {
   studyId: number;
   title: string;
@@ -27,7 +41,7 @@ export interface StudyItem {
   startDate: string;
 }
 
-// 프로젝트 아이템 타입
+// 프로젝트 아이템 타입 (전체 목록용)
 export interface ProjectItem {
   projectId: number;
   title: string;
@@ -40,6 +54,32 @@ export interface ProjectItem {
   preferredAges: PreferredAges;
   expectedMonth: number;
   startDate: string;
+}
+
+// 사용자 참여 스터디 아이템
+export interface UserStudyItem {
+  studyId: number;
+  teamId: number;
+  title: string;
+  teamStatus: TeamStatus;
+  location: Location;
+  period: {
+    start: string;
+    end: string;
+  };
+}
+
+// 사용자 참여 프로젝트 아이템
+export interface UserProjectItem {
+  projectId: number;
+  teamId: number;
+  title: string;
+  teamStatus: TeamStatus;
+  location: Location;
+  period: {
+    start: string;
+    end: string;
+  };
 }
 
 // 페이지네이션 정보
@@ -70,6 +110,26 @@ export interface ProjectListResponse {
   };
 }
 
+// 사용자 참여 스터디 API 응답
+export interface UserStudiesResponse {
+  status: number;
+  message: string;
+  data: {
+    pagination: Pagination;
+    items: UserStudyItem[];
+  };
+}
+
+// 사용자 참여 프로젝트 API 응답
+export interface UserProjectsResponse {
+  status: number;
+  message: string;
+  data: {
+    pagination: Pagination;
+    items: UserProjectItem[];
+  };
+}
+
 // 통합 카드 아이템 타입 (스터디와 프로젝트 공통)
 export interface CardItem {
   id: number;
@@ -77,16 +137,33 @@ export interface CardItem {
   title: string;
   teamStatus: TeamStatus;
   bannerImageUrl: string;
-  capacity: number;
+  capacity?: number;
   mode: Mode;
   address: string;
-  preferredAges: PreferredAges;
-  expectedMonth: number;
+  preferredAges?: PreferredAges;
+  expectedMonth?: number;
   startDate: string;
   // 스터디 전용
   studyType?: string;
   // 프로젝트 전용
   positions?: string[];
+}
+
+// 사용자 참여 카드 아이템 (개인화 데이터용)
+export interface UserCardItem {
+  id: number;
+  type: 'study' | 'project';
+  title: string;
+  teamStatus: TeamStatus;
+  bannerImageUrl: string;
+  mode: Mode;
+  address: string;
+  startDate: string;
+  teamId: number;
+  period: {
+    start: string;
+    end: string;
+  };
 }
 
 // 메인 페이지 섹션별 데이터
@@ -97,6 +174,9 @@ export interface MainPageData {
   recruitingStudies: CardItem[];
   ongoingProjects: CardItem[];
   recruitingProjects: CardItem[];
+  // 사용자 개인화 데이터 (로그인 시)
+  userOngoingStudies?: UserCardItem[];
+  userOngoingProjects?: UserCardItem[];
 }
 
 // API 요청 파라미터
