@@ -96,44 +96,6 @@ const DetailStudyPage = () => {
     }
   };
 
-  // TeamMemberTable용 데이터 변환
-  const convertToTeamMember = (member: {
-    userId: number;
-    nickname: string;
-    profileImageUrl: string;
-    mainPosition: string;
-    mainBadge: { type: string; tier: string } | null;
-    abandonBadge: { isGranted: boolean; count: number } | null;
-    temperature: number | null;
-    isMine: boolean;
-    chatRoomId: number | null;
-    dmRequestPending: boolean;
-  }) => ({
-    userId: member.userId,
-    nickname: member.nickname,
-    profileImageUrl: member.profileImageUrl,
-    mainPosition: member.mainPosition || '스터디원',
-    mainBadge: member.mainBadge
-      ? {
-          type: member.mainBadge.type,
-          tier: member.mainBadge.tier,
-        }
-      : null,
-    abandonBadge: member.abandonBadge || null,
-    temperature: member.temperature,
-    decidedPosition: '스터디원', // 스터디에서는 모두 동일한 포지션
-    isMine: member.isMine,
-    chatRoomId: member.chatRoomId,
-    dmRequestPending: member.dmRequestPending,
-  });
-
-  const teamLeader = {
-    ...convertToTeamMember(studyData.leader),
-    decidedPosition: '스터디장', // 리더는 스터디장으로 표시
-  };
-
-  const teamParticipants = studyData.participants?.map(convertToTeamMember) || [];
-
   return (
     <>
       <h1 className={styles.title}>DetailStudyPage (ID: {studyIdNum})</h1>
@@ -184,8 +146,8 @@ const DetailStudyPage = () => {
                 {/* 팀 멤버 테이블 - 스터디장과 스터디원들을 표시 */}
                 <MainSection title="스터디 멤버">
                   <TeamMemberTable
-                    leader={teamLeader}
-                    participants={teamParticipants}
+                    leader={studyData.leader}
+                    participants={studyData.participants || []}
                     isStudyMode={true}
                   />
                 </MainSection>
