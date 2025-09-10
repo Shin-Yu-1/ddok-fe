@@ -29,23 +29,6 @@
   }
 }
 
-.inputRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.codeButton {
-  flex-shrink: 0;
-  white-space: nowrap;
-
-  @include m.mobile {
-    @include m.font-small-text;
-
-    padding: 0 12px !important;
-  }
-}
-
 .errorMessage {
   @include m.font-tiny-text;
 

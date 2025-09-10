@@ -16,23 +16,17 @@ interface EditPhoneModalProps {
 
 const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhoneModalProps) => {
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
   const [phoneError, setPhoneError] = useState('');
 
   // 모달이 열릴 때 초기화
   useEffect(() => {
     if (isOpen) {
       setPhoneNumber('');
-      setVerificationCode('');
-      setIsCodeSent(false);
-      setIsVerified(false);
       setPhoneError('');
     }
   }, [isOpen]);
 
-  // Zod 스키마로 전화번호 유효성 검사 (useCallback으로 메모이제이션)
+  // Zod 스키마로 전화번호 유효성 검사
   const validatePhoneNumber = useCallback((phone: string): boolean => {
     try {
       // 하이픈 제거 후 검증
@@ -72,32 +66,8 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
     [formatPhoneNumber, validatePhoneNumber]
   );
 
-  const handleSendCode = useCallback(async () => {
-    if (!validatePhoneNumber(phoneNumber)) return;
-
-    try {
-      // TODO: 인증번호 발송 API 호출
-      console.log('인증번호 발송:', phoneNumber);
-      setIsCodeSent(true);
-    } catch (error) {
-      console.error('인증번호 발송 실패:', error);
-    }
-  }, [phoneNumber, validatePhoneNumber]);
-
-  const handleVerifyCode = useCallback(async () => {
-    if (verificationCode.length !== 6) return;
-
-    try {
-      // TODO: 인증번호 확인 API 호출
-      console.log('인증번호 확인:', verificationCode);
-      setIsVerified(true);
-    } catch (error) {
-      console.error('인증번호 확인 실패:', error);
-    }
-  }, [verificationCode]);
-
   const handleSave = useCallback(async () => {
-    if (!isVerified) return;
+    if (!validatePhoneNumber(phoneNumber)) return;
 
     try {
       await onSave(phoneNumber);
@@ -105,7 +75,7 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
     } catch (error) {
       console.error('전화번호 저장 실패:', error);
     }
-  }, [isVerified, onSave, phoneNumber, onClose]);
+  }, [phoneNumber, validatePhoneNumber, onSave, onClose]);
 
   const handleCancel = useCallback(() => {
     onClose();
@@ -113,80 +83,33 @@ const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhon
 
   // 검증 상태 계산
   const isPhoneValid = phoneNumber && !phoneError;
-  const canSendCode = isPhoneValid && !isCodeSent;
-  const canVerifyCode = isCodeSent && verificationCode.length === 6 && !isVerified;
-  const canSave = isVerified && !isLoading;
+  const canSave = isPhoneValid && !isLoading;
 
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
       title="전화번호를 변경해주세요"
-      subtitle="새로운 전화번호를 입력하고 인증을 완료해주세요."
+      subtitle="새로운 전화번호를 입력해주세요."
     >
       <div className={styles.modalContent}>
         {/* 전화번호 입력 */}
         <div className={styles.inputGroup}>
           <label className={styles.inputLabel}>새 전화번호</label>
-          <div className={styles.inputRow}>
-            <Input
-              type="tel"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
-              placeholder="010-1234-5678"
-              width="100%"
-              height="40px"
-              border={phoneError ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
-              focusBorder={phoneError ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'}
-              maxLength={13}
-              disabled={isCodeSent || isLoading}
-            />
-            <Button
-              variant="outline"
-              onClick={handleSendCode}
-              disabled={!canSendCode || isLoading}
-              height="40px"
-              radius="xsm"
-              padding="0 16px"
-              className={styles.codeButton}
-            >
-              {isCodeSent ? '발송완료' : '인증번호 발송'}
-            </Button>
-          </div>
+          <Input
+            type="tel"
+            value={phoneNumber}
+            onChange={handlePhoneNumberChange}
+            placeholder="010-1234-5678"
+            width="100%"
+            height="40px"
+            border={phoneError ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
+            focusBorder={phoneError ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'}
+            maxLength={13}
+            disabled={isLoading}
+          />
           {phoneError && <p className={styles.errorMessage}>{phoneError}</p>}
         </div>
-
-        {/* 인증번호 입력 */}
-        {isCodeSent && (
-          <div className={styles.inputGroup}>
-            <label className={styles.inputLabel}>인증번호</label>
-            <div className={styles.inputRow}>
-              <Input
-                type="text"
-                value={verificationCode}
-                onChange={e => setVerificationCode(e.target.value.replace(/\D/g, ''))}
-                placeholder="6자리 인증번호"
-                width="100%"
-                height="40px"
-                border="1px solid var(--gray-3)"
-                focusBorder="1px solid var(--yellow-1)"
-                maxLength={6}
-                disabled={isVerified || isLoading}
-              />
-              <Button
-                variant="outline"
-                onClick={handleVerifyCode}
-                disabled={!canVerifyCode || isLoading}
-                height="40px"
-                radius="xsm"
-                padding="0 16px"
-                className={styles.codeButton}
-              >
-                {isVerified ? '인증완료' : '인증확인'}
-              </Button>
-            </div>
-          </div>
-        )}
 
         <div className={styles.modalButtons}>
           <Button
