@@ -1,4 +1,5 @@
 import { BellIcon, BellRingingIcon } from '@phosphor-icons/react';
+import { useNavigate } from 'react-router-dom';
 
 import AchievementIconSrc from '@/assets/icons/achievement-icon.svg';
 import DMIconSrc from '@/assets/icons/dm-noti-icon.svg';
@@ -28,6 +29,7 @@ const NotificationItem = ({
   onAction,
   isFirst = false,
 }: NotificationItemProps) => {
+  const navigate = useNavigate();
   const config = notificationConfig[notification.type];
 
   const handleMarkAsRead = () => {
@@ -36,6 +38,17 @@ const NotificationItem = ({
 
   const handleAction = (actionType: NotificationAction['type']) => {
     if (onAction) onAction(notification.id, actionType);
+  };
+
+  // 알림 클릭 시 프로필 페이지로 이동
+  const handleNotificationClick = () => {
+    // 읽음 처리
+    handleMarkAsRead();
+
+    // userId가 있는 경우 프로필 페이지로 이동
+    if (notification.userId) {
+      navigate(`/profile/user/${notification.userId}`);
+    }
   };
 
   const typeKey =
@@ -115,7 +128,9 @@ const NotificationItem = ({
 
   return (
     <div
-      className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread} ${isFirst ? styles.firstItem : ''}`}
+      className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread} ${isFirst ? styles.firstItem : ''} ${notification.userId ? styles.clickable : ''}`}
+      onClick={notification.userId ? handleNotificationClick : undefined}
+      style={{ cursor: notification.userId ? 'pointer' : 'default' }}
     >
       {/* 아이콘 영역 */}
       <div className={styles.iconSection}>{renderNotificationIcon()}</div>
