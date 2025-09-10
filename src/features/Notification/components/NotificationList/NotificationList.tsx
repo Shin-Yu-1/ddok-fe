@@ -70,34 +70,40 @@ const dummyNotifications: Notification[] = [
 ];
 
 interface NotificationListProps {
+  items?: Notification[];
   onUnreadCountChange?: (count: number) => void;
+  onMarkAsRead?: (id: string) => void;
+  onAction?: (id: string, action: NotificationAction['type']) => void;
 }
 
-const NotificationList = ({ onUnreadCountChange }: NotificationListProps) => {
-  const [notifications, setNotifications] = useState<Notification[]>(dummyNotifications);
+const NotificationList = ({
+  items,
+  onUnreadCountChange,
+  onMarkAsRead,
+  onAction,
+}: NotificationListProps) => {
+  const [notifications, setNotifications] = useState<Notification[]>(items ?? dummyNotifications);
+
+  // 외부 items가 들어오면 교체
+  useEffect(() => {
+    if (items) setNotifications(items);
+  }, [items]);
 
   const handleMarkAsRead = (id: string) => {
-    setNotifications(prev =>
-      prev.map(notification =>
-        notification.id === id ? { ...notification, isRead: true } : notification
-      )
-    );
+    if (onMarkAsRead) return onMarkAsRead(id);
+    setNotifications(prev => prev.map(n => (n.id === id ? { ...n, isRead: true } : n)));
   };
 
   const handleAction = (id: string, action: NotificationAction['type']) => {
-    console.log(`알림 ${id}에 대해 ${action} 액션 실행`);
-    // 실제 API 호출 로직이 들어갈 곳
-
-    // 임시로 해당 알림을 읽음 처리
+    if (onAction) onAction(id, action);
+    // 내부용 임시 처리
     handleMarkAsRead(id);
   };
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
   useEffect(() => {
-    if (onUnreadCountChange) {
-      onUnreadCountChange(unreadCount);
-    }
+    onUnreadCountChange?.(unreadCount);
   }, [unreadCount, onUnreadCountChange]);
 
   return (
