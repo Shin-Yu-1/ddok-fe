@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 import type { ProfileSectionType } from '@/types/user';
 
 import { useProfileModals, type ModalType } from './useProfileModals';
 
 export const useProfileEdit = () => {
+  const navigate = useNavigate();
   const { openModal, closeModal, isModalOpen } = useProfileModals();
 
   const handleEdit = (sectionType: ProfileSectionType) => {
@@ -30,7 +33,8 @@ export const useProfileEdit = () => {
   };
 
   const handleEditPersonalInfo = () => {
-    console.log('비밀번호 확인 모달 → 개인정보 수정 페이지');
+    console.log('개인정보 수정 페이지로 이동');
+    navigate('/profile/my/edit');
   };
 
   const handleEditIntroduction = () => {

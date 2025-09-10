@@ -1,0 +1,35 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+
+  @include m.mobile {
+    font-size: 10px;
+  }
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
+
+.errorMessage {
+  @include m.font-tiny-text;
+
+  margin: 0;
+  color: v.$red-1;
+
+  @include m.mobile {
+    gap: 12px;
+  }
+}
