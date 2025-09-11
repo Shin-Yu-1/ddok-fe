@@ -12,6 +12,7 @@
   margin: 0 auto;
   padding: 80px 20px 60px;
   text-align: center;
+  background: linear-gradient(135deg, $white-3 0%, $yellow-1 100%);
 }
 
 .heroContent {
@@ -260,10 +261,19 @@
 // 메인 컨텐츠
 .mainContent {
   width: 100%;
-  max-width: 2000px;
   margin: 0 auto;
   padding: 80px 20px;
   background: $white-3;
+
+  // 비로그인 시 최대 너비 제한
+  &:has(.contentSingleColumn) {
+    max-width: 1050px;
+  }
+
+  // 로그인 시 더 넓은 레이아웃
+  &:has(.contentTwoColumn) {
+    max-width: 2000px;
+  }
 }
 
 // 2열 레이아웃 (로그인 시)
@@ -387,7 +397,7 @@
   align-items: center;
   grid-template-columns: 2fr 1fr;
   gap: 60px;
-  max-width: 1200px; // 1000px → 1200px로 증가
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -453,7 +463,7 @@
 }
 
 .finalContent {
-  max-width: 900px; // 800px → 900px로 증가
+  max-width: 900px;
   margin: 0 auto;
 }
 

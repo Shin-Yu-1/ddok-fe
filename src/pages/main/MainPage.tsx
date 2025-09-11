@@ -68,7 +68,7 @@ export default function MainPage() {
                   <Code size={20} weight="bold" />
                   <span>새로운 프로젝트 만들기</span>
                 </Link>
-                <Link to="/map" className={styles.secondaryButton}>
+                <Link to="/map" className={styles.primaryButton}>
                   <MapPin size={20} weight="bold" />
                   <span>지도로 탐색하기</span>
                 </Link>
@@ -79,7 +79,7 @@ export default function MainPage() {
                   <Users size={20} weight="bold" />
                   <span>시작하기</span>
                 </Link>
-                <Link to="/search/study" className={styles.secondaryButton}>
+                <Link to="/search/study" className={styles.primaryButton}>
                   <span>둘러보기</span>
                 </Link>
               </>
@@ -94,7 +94,7 @@ export default function MainPage() {
               <BookOpen size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>{recruitingStudies.length}</div>
+              <div className={styles.statsNumber}>{data.stats.recruitingStudiesCount}</div>
               <div className={styles.statsLabel}>모집중인 스터디</div>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function MainPage() {
               <Code size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>{recruitingProjects.length}</div>
+              <div className={styles.statsNumber}>{data.stats.recruitingProjectsCount}</div>
               <div className={styles.statsLabel}>모집중인 프로젝트</div>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function MainPage() {
             </div>
             <div className={styles.statsContent}>
               <div className={styles.statsNumber}>
-                {ongoingStudies.length + ongoingProjects.length}
+                {data.stats.ongoingStudiesCount + data.stats.ongoingProjectsCount}
               </div>
               <div className={styles.statsLabel}>진행중인 전체 팀</div>
             </div>
