@@ -1,5 +1,4 @@
-import Button from '@/components/Button/Button';
-import type { CafeOverlayData } from '@/features/map/types/cafe';
+import { useGetCafeOverlay } from '@/features/map/hooks/useGetOverlay';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -8,11 +7,13 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface CafeOverlayProps {
-  cafe: CafeOverlayData;
+  id: number;
   onOverlayClose: () => void;
 }
 
-const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ cafe, onOverlayClose }) => {
+const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
+  const { data: response, isLoading, isError } = useGetCafeOverlay(id);
+
   // 별점 렌더링 함수
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => {
@@ -47,28 +48,53 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ cafe, onOverlayClose }) =>
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>CAFE</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          닫기
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>CAFE</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>데이터를 불러올 수 없습니다.</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          닫기
+        </div>
+      </div>
+    );
+  }
+
+  const cafe = response.data;
+
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>CAFE</div>
+      <div className={styles.overlay__banner}>
+        <img src={cafe.bannerImageUrl} alt="CAFE" />
+      </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
-            <div className={styles.overlay__info__core__category}>추천 장소</div>
+            <div className={styles.overlay__info__core__action}>
+              <div className={styles.overlay__info__core__category}>추천 장소</div>
+            </div>
             <div className={styles.overlay__info__core__header}>
               <div className={styles.overlay__info__core__title}>{cafe.title}</div>
-              <Button
-                className={styles.overlay__info__core__detailBtn}
-                fontSize="9px"
-                width="fit-content"
-                height="18px"
-                backgroundColor="var(--gray-1)"
-                textColor="var(--white-3)"
-                fontWeight="var(--font-weight-regular)"
-                radius="xxsm"
-                padding="4px 10px"
-              >
-                상세보기
-              </Button>
             </div>
             <div className={styles.overlay__info__core__address}>{cafe.address}</div>
           </div>
@@ -87,9 +113,8 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ cafe, onOverlayClose }) =>
         </div>
       </div>
 
-      {/* 개발 편의를 위한 닫기 버튼(임시) */}
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-        개발용 닫기 버튼
+        닫기
       </div>
     </div>
   );

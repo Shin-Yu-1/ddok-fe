@@ -8,7 +8,7 @@ const AuthLayout = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Header variant="logo-only" />
+        <Header />
       </div>
       <main className={styles.content}>
         <Outlet />

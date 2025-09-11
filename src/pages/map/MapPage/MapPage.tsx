@@ -8,22 +8,16 @@ import {
   ZoomControl,
 } from 'react-kakao-maps-sdk';
 
-// import Button from '@/components/Button/Button';
 import MapCafeOverlay from '@/features/map/components/MapOverlay/MapCafeOverlay/MapCafeOverlay';
 import MapPlayerOverlay from '@/features/map/components/MapOverlay/MapPlayerOverlay/MapPlayerOverlay';
 import MapProjectOverlay from '@/features/map/components/MapOverlay/MapProjectOverlay/MapProjectOverlay';
 import MapStudyOverlay from '@/features/map/components/MapOverlay/MapStudyOverlay/MapStudyOverlay';
 import MapPanel from '@/features/map/components/MapPanel/MapPanel';
 import MapSubPanel from '@/features/map/components/MapSubPanel/MapSubPanel';
+import { useGetMapItem } from '@/features/map/hooks/useGetMapItem';
 import { useMapSearch } from '@/features/map/hooks/useMapSearch';
-import { overlayMockData } from '@/features/map/mocks/overlayMockData';
-import { panelMockData } from '@/features/map/mocks/panelMockData';
-import type { CafeOverlayData } from '@/features/map/types/cafe';
-import type { MapBounds } from '@/features/map/types/common';
+import type { MapBounds } from '@/features/map/schemas/mapItemSchema';
 import { MapItemCategory } from '@/features/map/types/common';
-import type { PlayerOverlayData } from '@/features/map/types/player';
-import type { ProjectOverlayData } from '@/features/map/types/project';
-import type { StudyOverlayData } from '@/features/map/types/study';
 import Sidebar from '@/features/Sidebar/components/Sidebar';
 import { useSidebarHandlers } from '@/features/Sidebar/hooks/useSidebarHandlers';
 
@@ -32,6 +26,12 @@ import styles from './MapPage.module.scss';
 const MapPage = () => {
   // 지도의 정보를 담는 ref
   const mapRef = useRef<kakao.maps.Map>(null);
+
+  // 사용자 위치 좌표 상태 - 기본값 서울시청으로 설정
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  }>({ lat: 37.5665, lng: 126.978 });
 
   // 패널, 서브패널, 오버레이의 열림/닫힘 상태
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
@@ -44,33 +44,72 @@ const MapPage = () => {
   // 현재 페이지 상태
   const [currentPage, setCurrentPage] = useState(0);
 
+  // 필터 상태
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const [selectedFilter, setSelectedFilter] = useState<string | undefined>(undefined);
+  const [keyword, setKeyword] = useState<string | undefined>(undefined);
+
+  // 마커 표시용 카테고리 필터 상태 (MapPanel의 카테고리 필터와 연동)
+  const [markerCategory, setMarkerCategory] = useState<MapItemCategory | null>(null);
+
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
-  // 지도 사각 영역의 변경 여부
-  //   const [isMapChanged, setIsMapChanged] = useState(false);
+  // 최초 로드 완료 여부
+  const [isInitialLoad, setIsInitialLoad] = useState(false);
 
-  // 커스텀 오버레이에 전달할 마커의 좌표 및 타입
+  // 커스텀 오버레이에 전달할 마커의 좌표, 타입 및 ID
   const [selectedPoint, setSelectedPoint] = useState<{
     lat: number;
     lng: number;
-    type: string;
+    category: string;
+    id: number;
   } | null>(null);
 
   // 사이드바에서 패널 및 서브패널의 열림 상태를 가져옴
-  const { isSectionOpen } = useSidebarHandlers();
+  const { isSectionOpen, openSection } = useSidebarHandlers();
 
-  // 지도 검색 API 호출
+  // 마커 표시용 지도 아이템 API 호출 (카테고리 필터에 따라 변경)
+  const { data: mapItemData, refetch: refetchMapItem } = useGetMapItem({
+    mapBounds: mapBounds ?? undefined,
+    category: markerCategory,
+    enabled: isInitialLoad && !!mapBounds,
+  });
+
+  // 지도 검색 API 호출 (패널용 데이터 - 페이지네이션, 키워드 검색 포함)
   const {
     data: mapSearchData,
     pagination: mapSearchPagination,
     refetch: refetchMapSearch,
     isLoading: isMapSearchLoading,
   } = useMapSearch(mapBounds, {
-    enabled: false, // 수동으로 호출
+    enabled: false,
     page: currentPage,
-    pageSize: 10,
+    pageSize: 5,
+    category: selectedCategory,
+    filter: selectedFilter,
+    keyword: keyword,
   });
+
+  // 세션 스토리지에서 사용자 위치 정보 가져오기
+  useEffect(() => {
+    try {
+      const userDataString = sessionStorage.getItem('user');
+      if (userDataString) {
+        const userData = JSON.parse(userDataString);
+        if (userData.location && userData.location.latitude && userData.location.longitude) {
+          setUserLocation({
+            lat: userData.location.latitude,
+            lng: userData.location.longitude,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('세션 스토리지에서 사용자 위치 정보를 가져오는 중 오류 발생:', error);
+      // 오류 발생 시 기본 위치 사용 (서울시청)
+      setUserLocation({ lat: 37.5665, lng: 126.978 });
+    }
+  }, []);
 
   // Sidebar의 map 섹션 상태에 따라 MapPanel 상태 동기화
   useEffect(() => {
@@ -85,12 +124,49 @@ const MapPage = () => {
     }
   }, [isSectionOpen, isMapPanelOpen]);
 
+  // 페이지 변경 시 API 재호출
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      refetchMapSearch();
+    }
+  }, [currentPage, refetchMapSearch, isInitialLoad, mapBounds]);
+
+  // 필터 변경 시 API 재호출
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      refetchMapSearch();
+    }
+  }, [selectedCategory, selectedFilter, keyword, refetchMapSearch, isInitialLoad, mapBounds]);
+
+  // 마커 카테고리 변경 시 마커 데이터 리패치
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      refetchMapItem();
+    }
+  }, [markerCategory, refetchMapItem, isInitialLoad, mapBounds]);
+
+  // mapBounds 변경 시 열려있는 overlay와 subPanel 닫기
+  useEffect(() => {
+    if (isInitialLoad && mapBounds) {
+      // overlay 닫기
+      setIsOverlayOpen(false);
+      setSelectedPoint(null);
+
+      // subPanel 닫기
+      setIsMapSubPanelOpen(false);
+      setSelectedCafeId(null);
+
+      // 마커 데이터 리패치
+      refetchMapItem();
+    }
+  }, [mapBounds, isInitialLoad, refetchMapItem]);
+
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
-    if (!isMapPanelOpen) return;
+    if (!isMapPanelOpen || !itemId) return;
 
-    // 클릭한 아이템 찾기
-    const items = mapSearchData || panelMockData;
+    // 클릭한 아이템 찾기 - mapSearchData가 undefined인 경우 빈 배열로 처리
+    const items = mapSearchData || [];
     const clickedItem = items.find(item => {
       if (itemType === MapItemCategory.PROJECT && 'projectId' in item)
         return item.projectId === itemId;
@@ -102,16 +178,12 @@ const MapPage = () => {
 
     // 클릭한 아이템 위치에 오버레이 표시
     if (clickedItem) {
-      //   지도 중심을 클릭한 아이템 위치로 이동
-      //   mapRef.current?.setCenter(
-      //     new kakao.maps.LatLng(clickedItem.location.latitude, clickedItem.location.longitude)
-      //   );
-
       // 패널에서 선택한 아이템에 대해 오버레이 표시
       setSelectedPoint({
         lat: clickedItem.location.latitude,
         lng: clickedItem.location.longitude,
-        type: clickedItem.category,
+        category: clickedItem.category,
+        id: itemId,
       });
       setIsOverlayOpen(true);
     }
@@ -139,36 +211,79 @@ const MapPage = () => {
     // 변경된 뷰포트로 지도 영역 크기 동적 변경
     mapRef.current?.relayout();
 
-    // setIsMapChanged(true);
-    setMapBounds({
+    const newMapBounds = {
       swLat: mapRef.current?.getBounds().getSouthWest().getLat() || 0,
       swLng: mapRef.current?.getBounds().getSouthWest().getLng() || 0,
       neLat: mapRef.current?.getBounds().getNorthEast().getLat() || 0,
       neLng: mapRef.current?.getBounds().getNorthEast().getLng() || 0,
       lat: mapRef.current?.getCenter().getLat() || 0,
       lng: mapRef.current?.getCenter().getLng() || 0,
-    });
-  };
+    };
 
-  // 지도 리로드 버튼 클릭 시, 현재 영역 정보를 기반으로 데이터를 불러옴
-  //   const handleMapReload = () => {
-  //     setIsMapChanged(false);
-  //     setCurrentPage(0); // 페이지를 첫 번째로 리셋
-  //     if (mapBounds) {
-  //       refetchMapSearch();
-  //     }
-  //   };
+    setMapBounds(newMapBounds);
+
+    // 최초 로드 시에만 API 호출
+    if (!isInitialLoad) {
+      setIsInitialLoad(true);
+      // mapBounds가 설정된 이후 API 호출
+      setTimeout(() => {
+        refetchMapSearch();
+        refetchMapItem();
+      }, 100);
+    }
+
+    console.log(newMapBounds);
+  };
 
   // 페이지 변경 핸들러
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    if (mapBounds) {
-      refetchMapSearch();
+
+    // 페이지 변경 시 열려있는 overlay 닫기
+    setIsOverlayOpen(false);
+    setSelectedPoint(null);
+
+    // useEffect에서 currentPage 변경을 감지하여 자동으로 리패치됨
+  };
+
+  // 필터 변경 핸들러
+  const handleFilterChange = (category?: string, filter?: string) => {
+    setSelectedCategory(category);
+    setSelectedFilter(filter);
+    setCurrentPage(0); // 필터 변경 시 첫 페이지로 리셋
+
+    // 마커 카테고리도 함께 업데이트
+    if (category) {
+      setMarkerCategory(category as MapItemCategory);
+    } else {
+      setMarkerCategory(null); // 전체 선택 시 null로 설정
     }
+
+    // 필터 변경 시 열려있는 overlay 닫기
+    setIsOverlayOpen(false);
+    setSelectedPoint(null);
+
+    // useEffect에서 필터 변경을 감지하여 자동으로 리패치됨
+  };
+
+  // 키워드 변경 핸들러
+  const handleKeywordChange = (newKeyword: string) => {
+    setKeyword(newKeyword || undefined);
+    setCurrentPage(0); // 키워드 검색 시 첫 페이지로 리셋
+
+    // 키워드 검색 시 열려있는 overlay 닫기
+    setIsOverlayOpen(false);
+    setSelectedPoint(null);
+
+    // useEffect에서 키워드 변경을 감지하여 자동으로 리패치됨
   };
 
   // 지도 로드
-  useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_API_KEY,
+    // TODO: clusterer 라이브러리는 실제로 사용되는 곳이 없으므로 나중에 제거가 필요함
+    libraries: ['services', 'clusterer'],
+  });
 
   return (
     <div className={styles.container}>
@@ -176,11 +291,10 @@ const MapPage = () => {
 
       <div className={styles.map__content}>
         <div className={styles.map__container}>
-          {/* TODO: 초기 로드 위치를 사용자 위치로 설정해야 함 */}
           <Map
             id="map"
             className={styles.map}
-            center={{ lat: 37.5665, lng: 126.978 }}
+            center={userLocation}
             onTileLoaded={() => {
               handleMapChange();
             }}
@@ -189,76 +303,77 @@ const MapPage = () => {
             {/* 줌 레벨 컨트롤 */}
             <ZoomControl position="BOTTOMRIGHT" />
 
-            {/* 마커 - API에서 받은 데이터(mapSearchData)로 표시 */}
-            {mapSearchData &&
-              mapSearchData.map(m => (
-                <MapMarker
-                  key={`marker__${m.location.latitude}-${m.location.longitude}`}
-                  position={{ lat: m.location.latitude, lng: m.location.longitude }}
-                  onClick={() => {
-                    setIsOverlayOpen(true);
-                    setSelectedPoint({
-                      lat: m.location.latitude,
-                      lng: m.location.longitude,
-                      type: m.category,
-                    });
-                  }}
-                ></MapMarker>
-              ))}
+            {/* 마커 */}
+            {mapItemData &&
+              mapItemData.map(m => {
+                let id: number;
+                let uniqueKey: string;
 
-            {/* API 데이터가 없는 경우 panelMockData로 표시 (테스트용, 추후 제거) */}
-            {(!mapSearchData || mapSearchData.length === 0) &&
-              panelMockData.map(m => (
-                <MapMarker
-                  key={`marker__mock__${m.location.latitude}-${m.location.longitude}`}
-                  position={{ lat: m.location.latitude, lng: m.location.longitude }}
-                  onClick={() => {
-                    setIsOverlayOpen(true);
-                    setSelectedPoint({
-                      lat: m.location.latitude,
-                      lng: m.location.longitude,
-                      type: m.category,
-                    });
-                  }}
-                ></MapMarker>
-              ))}
+                if (m.category === MapItemCategory.PROJECT && 'projectId' in m) {
+                  id = m.projectId;
+                  uniqueKey = `marker__project-${m.projectId}`;
+                } else if (m.category === MapItemCategory.STUDY && 'studyId' in m) {
+                  id = m.studyId;
+                  uniqueKey = `marker__study-${m.studyId}`;
+                } else if (m.category === MapItemCategory.PLAYER && 'userId' in m) {
+                  id = m.userId;
+                  uniqueKey = `marker__player-${m.userId}`;
+                } else if (m.category === MapItemCategory.CAFE && 'cafeId' in m) {
+                  id = m.cafeId;
+                  uniqueKey = `marker__cafe-${m.cafeId}`;
+                } else {
+                  return null;
+                }
+
+                return (
+                  <MapMarker
+                    key={uniqueKey}
+                    position={{ lat: m.location.latitude, lng: m.location.longitude }}
+                    onClick={() => {
+                      setIsOverlayOpen(true);
+                      setSelectedPoint({
+                        lat: m.location.latitude,
+                        lng: m.location.longitude,
+                        category: m.category,
+                        id: id,
+                      });
+
+                      // cafe 마커 클릭 시 MapSubPanel도 열기
+                      if (m.category === MapItemCategory.CAFE && 'cafeId' in m) {
+                        // MapPanel이 닫혀있으면 먼저 열기
+                        if (!isMapPanelOpen) {
+                          openSection('map');
+                        }
+                        setSelectedCafeId(m.cafeId);
+                        setIsMapSubPanelOpen(true);
+                      } else {
+                        // cafe가 아닌 경우 서브패널 닫기
+                        setIsMapSubPanelOpen(false);
+                        setSelectedCafeId(null);
+                      }
+                    }}
+                  ></MapMarker>
+                );
+              })}
 
             {/* 오버레이 */}
             {isOverlayOpen && selectedPoint && (
               <CustomOverlayMap position={selectedPoint} yAnchor={1.13}>
                 {(() => {
-                  const overlayData = overlayMockData.find(
-                    data => data.category === selectedPoint.type
-                  );
-                  if (!overlayData) return null;
-
                   const commonProps = {
                     onOverlayClose: () => setIsOverlayOpen(false),
+                    id: selectedPoint.id,
                   };
 
-                  switch (selectedPoint.type) {
+                  switch (selectedPoint.category) {
                     case MapItemCategory.PROJECT:
-                      return (
-                        <MapProjectOverlay
-                          {...commonProps}
-                          project={overlayData as ProjectOverlayData}
-                        />
-                      );
+                      return <MapProjectOverlay {...commonProps} />;
                     case MapItemCategory.STUDY:
-                      return (
-                        <MapStudyOverlay {...commonProps} study={overlayData as StudyOverlayData} />
-                      );
+                      return <MapStudyOverlay {...commonProps} />;
                     case MapItemCategory.PLAYER:
-                      return (
-                        <MapPlayerOverlay
-                          {...commonProps}
-                          player={overlayData as PlayerOverlayData}
-                        />
-                      );
+                      return <MapPlayerOverlay {...commonProps} />;
                     case MapItemCategory.CAFE:
-                      return (
-                        <MapCafeOverlay {...commonProps} cafe={overlayData as CafeOverlayData} />
-                      );
+                      return <MapCafeOverlay {...commonProps} />;
                     default:
                       return null;
                   }
@@ -269,21 +384,6 @@ const MapPage = () => {
         </div>
       </div>
 
-      {/* 지도 리로드 버튼 */}
-      {/* {isMapChanged && (
-        <Button
-          className={styles.map__reloadBtn}
-          fontSize="var(--fs-xxxsmall)"
-          backgroundColor="var(--blue-1)"
-          width="fit-content"
-          height="fit-content"
-          textColor="var(--white-1)"
-          onClick={handleMapReload}
-        >
-          현 지도에서 검색
-        </Button>
-      )} */}
-
       {/* 지도 패널 */}
       {isMapPanelOpen && (
         <div className={styles.map__panelContainer}>
@@ -293,6 +393,8 @@ const MapPage = () => {
             isLoading={isMapSearchLoading}
             handleItemClick={handleItemClick}
             onPageChange={handlePageChange}
+            onFilterChange={handleFilterChange}
+            onKeywordChange={handleKeywordChange}
           />
         </div>
       )}

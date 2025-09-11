@@ -164,7 +164,6 @@ const CreateProjectPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>CreateProjectPage</h1>
       <div className={styles.container}>
         <div className={styles.bannerImage}>
           <BannerImageSection
