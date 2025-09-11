@@ -18,10 +18,10 @@ import type {
 
 // 메인 페이지 데이터 조회 개수 상수
 const MAIN_PAGE_LIMITS = {
-  ALL_DATA: 100, // 전체 데이터 조회 개수 (통계 + 표시용)
-  DISPLAY_LIMIT: 3, // 각 섹션별 표시 개수
+  DISPLAY_SIZE: 50, // 전체 데이터 조회 개수(표시용)
   USER_STUDIES: 2, // 사용자 스터디 조회 개수
   USER_PROJECTS: 2, // 사용자 프로젝트 조회 개수
+  DISPLAY_LIMIT: 3, // 각 섹션별 표시 개수
 } as const;
 
 // 통계 데이터 타입
@@ -94,20 +94,19 @@ const transformUserProjectToCard = (project: UserProjectItem): UserCardItem => (
 
 // 전체 데이터 조회 (통계 + 표시용 통합)
 const fetchAllData = async () => {
-  const [studiesResponse, projectsResponse] = await Promise.all([
+  const [studiesDisplayResponse, projectsDisplayResponse] = await Promise.all([
     api.get<StudyListResponse>('/api/studies', {
-      params: { page: 0, size: MAIN_PAGE_LIMITS.ALL_DATA },
+      params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
     }),
     api.get<ProjectListResponse>('/api/projects', {
-      params: { page: 0, size: MAIN_PAGE_LIMITS.ALL_DATA },
+      params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
     }),
   ]);
 
-  // API 응답 구조에 따라 데이터 추출
-  const studies = studiesResponse.data.data.items || [];
-  const projects = projectsResponse.data.data.items || [];
+  // 표시용 데이터 추출 및 변환
+  const studies = studiesDisplayResponse.data.data.items || [];
+  const projects = projectsDisplayResponse.data.data.items || [];
 
-  // 스터디와 프로젝트를 CardItem으로 변환
   const allStudies: CardItem[] = studies.map(transformStudyToCard);
   const allProjects: CardItem[] = projects.map(transformProjectToCard);
 
@@ -117,11 +116,11 @@ const fetchAllData = async () => {
   const recruitingProjects = allProjects.filter(project => project.teamStatus === 'RECRUITING');
   const ongoingProjects = allProjects.filter(project => project.teamStatus === 'ONGOING');
 
-  // 통계 데이터
+  // 필터링된 결과의 길이로 통계 계산
   const stats: StatsData = {
     recruitingStudiesCount: recruitingStudies.length,
-    recruitingProjectsCount: recruitingProjects.length,
     ongoingStudiesCount: ongoingStudies.length,
+    recruitingProjectsCount: recruitingProjects.length,
     ongoingProjectsCount: ongoingProjects.length,
   };
 
@@ -143,18 +142,51 @@ const fetchAllData = async () => {
 
 // 사용자 참여 스터디 조회
 const fetchUserStudies = async (userId: number): Promise<UserStudiesResponse> => {
-  const { data } = await api.get<UserStudiesResponse>(`/api/players/${userId}/profile/studies`, {
-    params: { page: 0, size: MAIN_PAGE_LIMITS.USER_STUDIES },
-  });
-  return data;
+  try {
+    const { data } = await api.get<UserStudiesResponse>(`/api/players/${userId}/profile/studies`, {
+      params: { page: 0, size: MAIN_PAGE_LIMITS.USER_STUDIES },
+    });
+    return data;
+  } catch (error: unknown) {
+    // 404는 정상 상황이므로 빈 응답 반환
+    if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
+      return {
+        status: 200,
+        message: 'No studies found',
+        data: {
+          pagination: { currentPage: 0, pageSize: 0, totalPages: 0, totalItems: 0 },
+          items: [],
+        },
+      };
+    }
+    throw error;
+  }
 };
 
 // 사용자 참여 프로젝트 조회
 const fetchUserProjects = async (userId: number): Promise<UserProjectsResponse> => {
-  const { data } = await api.get<UserProjectsResponse>(`/api/players/${userId}/profile/projects`, {
-    params: { page: 0, size: MAIN_PAGE_LIMITS.USER_PROJECTS },
-  });
-  return data;
+  try {
+    const { data } = await api.get<UserProjectsResponse>(
+      `/api/players/${userId}/profile/projects`,
+      {
+        params: { page: 0, size: MAIN_PAGE_LIMITS.USER_PROJECTS },
+      }
+    );
+    return data;
+  } catch (error: unknown) {
+    // 404는 정상 상황이므로 빈 응답 반환
+    if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
+      return {
+        status: 200,
+        message: 'No projects found',
+        data: {
+          pagination: { currentPage: 0, pageSize: 0, totalPages: 0, totalItems: 0 },
+          items: [],
+        },
+      };
+    }
+    throw error;
+  }
 };
 
 // 메인 페이지 데이터 훅
@@ -169,8 +201,6 @@ export const useMainData = () => {
   } = useQuery({
     queryKey: ['main-data'],
     queryFn: fetchAllData,
-    staleTime: 5 * 60 * 1000, // 5분
-    gcTime: 10 * 60 * 1000, // 10분
   });
 
   // 사용자 참여 스터디 조회 (로그인한 경우에만)
@@ -182,8 +212,6 @@ export const useMainData = () => {
     queryKey: ['user-studies', user?.id],
     queryFn: () => fetchUserStudies(user!.id),
     enabled: isLoggedIn && !!user?.id,
-    staleTime: 3 * 60 * 1000, // 3분
-    gcTime: 10 * 60 * 1000, // 10분
   });
 
   // 사용자 참여 프로젝트 조회 (로그인한 경우에만)
@@ -195,8 +223,6 @@ export const useMainData = () => {
     queryKey: ['user-projects', user?.id],
     queryFn: () => fetchUserProjects(user!.id),
     enabled: isLoggedIn && !!user?.id,
-    staleTime: 3 * 60 * 1000, // 3분
-    gcTime: 10 * 60 * 1000, // 10분
   });
 
   // 사용자 개인 데이터 변환
