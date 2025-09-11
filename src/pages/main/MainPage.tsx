@@ -60,13 +60,13 @@ export default function MainPage() {
           <div className={styles.heroActions}>
             {isLoggedIn ? (
               <>
-                <Link to="/create/study" className={styles.primaryButton}>
-                  <BookOpen size={20} weight="bold" />
-                  <span>새로운 스터디 만들기</span>
-                </Link>
                 <Link to="/create/project" className={styles.primaryButton}>
                   <Code size={20} weight="bold" />
                   <span>새로운 프로젝트 만들기</span>
+                </Link>
+                <Link to="/create/study" className={styles.primaryButton}>
+                  <BookOpen size={20} weight="bold" />
+                  <span>새로운 스터디 만들기</span>
                 </Link>
                 <Link to="/map" className={styles.primaryButton}>
                   <MapPin size={20} weight="bold" />
@@ -79,8 +79,8 @@ export default function MainPage() {
                   <Users size={20} weight="bold" />
                   <span>시작하기</span>
                 </Link>
-                <Link to="/search/study" className={styles.primaryButton}>
-                  <span>둘러보기</span>
+                <Link to="/ranking" className={styles.primaryButton}>
+                  <span>랭킹 보기</span>
                 </Link>
               </>
             )}
@@ -162,21 +162,12 @@ export default function MainPage() {
                 <h2 className={styles.sectionTitle}>전체 활동</h2>
                 <p className={styles.sectionSubtitle}>다양한 스터디와 프로젝트에 참여해보세요</p>
               </div>
-
               <MainSection
-                title="진행중인 스터디"
-                items={ongoingStudies}
-                viewAllLink="/search/study"
+                title="모집중인 프로젝트"
+                items={recruitingProjects}
+                viewAllLink="/search/project"
                 isLoading={isLoading}
-                emptyMessage="현재 진행중인 스터디가 없습니다"
-              />
-
-              <MainSection
-                title="모집중인 스터디"
-                items={recruitingStudies}
-                viewAllLink="/search/study"
-                isLoading={isLoading}
-                emptyMessage="현재 모집중인 스터디가 없습니다"
+                emptyMessage="현재 모집중인 프로젝트가 없습니다"
               />
 
               <MainSection
@@ -188,11 +179,19 @@ export default function MainPage() {
               />
 
               <MainSection
-                title="모집중인 프로젝트"
-                items={recruitingProjects}
-                viewAllLink="/search/project"
+                title="모집중인 스터디"
+                items={recruitingStudies}
+                viewAllLink="/search/study"
                 isLoading={isLoading}
-                emptyMessage="현재 모집중인 프로젝트가 없습니다"
+                emptyMessage="현재 모집중인 스터디가 없습니다"
+              />
+
+              <MainSection
+                title="진행중인 스터디"
+                items={ongoingStudies}
+                viewAllLink="/search/study"
+                isLoading={isLoading}
+                emptyMessage="현재 진행중인 스터디가 없습니다"
               />
             </div>
 
@@ -203,37 +202,35 @@ export default function MainPage() {
                 <p className={styles.sectionSubtitle}>현재 참여하고 있는 활동들을 확인하세요</p>
               </div>
 
-              {userOngoingStudies.length > 0 && (
-                <MainSection
-                  title="참여중인 스터디"
-                  items={userOngoingStudies}
-                  viewAllLink="/profile/my"
-                  isLoading={isLoading}
-                  emptyMessage="참여중인 스터디가 없습니다"
-                />
-              )}
+              <MainSection
+                title="참여중인 프로젝트"
+                items={userOngoingProjects}
+                viewAllLink="/profile/my"
+                isLoading={isLoading}
+                emptyMessage="참여중인 프로젝트가 없습니다"
+                isUserSection={true}
+              />
 
-              {userOngoingProjects.length > 0 && (
-                <MainSection
-                  title="참여중인 프로젝트"
-                  items={userOngoingProjects}
-                  viewAllLink="/profile/my"
-                  isLoading={isLoading}
-                  emptyMessage="참여중인 프로젝트가 없습니다"
-                />
-              )}
+              <MainSection
+                title="참여중인 스터디"
+                items={userOngoingStudies}
+                viewAllLink="/profile/my"
+                isLoading={isLoading}
+                emptyMessage="참여중인 스터디가 없습니다"
+                isUserSection={true}
+              />
 
               {userOngoingStudies.length === 0 && userOngoingProjects.length === 0 && (
                 <div className={styles.emptyPersonalSection}>
-                  <p className={styles.emptyMessage}>아직 참여중인 활동이 없습니다</p>
+                  <p className={styles.emptyMessage}>새로운 활동을 시작해보세요!</p>
                   <div className={styles.emptyActions}>
-                    <Link to="/create/study" className={styles.primaryButton}>
-                      <BookOpen size={16} weight="bold" />
-                      <span>스터디 만들기</span>
-                    </Link>
                     <Link to="/create/project" className={styles.primaryButton}>
                       <Code size={16} weight="bold" />
                       <span>프로젝트 만들기</span>
+                    </Link>
+                    <Link to="/create/study" className={styles.primaryButton}>
+                      <BookOpen size={16} weight="bold" />
+                      <span>스터디 만들기</span>
                     </Link>
                   </div>
                 </div>

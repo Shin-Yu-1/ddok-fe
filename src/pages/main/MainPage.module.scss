@@ -295,8 +295,8 @@
   padding: 40px;
   border-radius: $r-large;
   color: $black-1;
-  background: linear-gradient(135deg, $yellow-1 0%, #f59e0b 100%);
-  box-shadow: 0 8px 30px rgb(251 191 36 / 20%);
+  background: linear-gradient(135deg, $yellow-1 0%, 100%);
+  box-shadow: 0 4px 20px rgb(0 0 0 / 5%);
 
   // MainSection 내부 스타일 오버라이드
   :global(.section) {
