@@ -281,6 +281,7 @@ const MapPage = () => {
   // 지도 로드
   useKakaoLoader({
     appkey: import.meta.env.VITE_KAKAO_API_KEY,
+    // TODO: clusterer 라이브러리는 실제로 사용되는 곳이 없으므로 나중에 제거가 필요함
     libraries: ['services', 'clusterer'],
   });
 
