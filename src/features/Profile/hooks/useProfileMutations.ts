@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { profileEditApi } from '@/api/profileApi';
+import type { Location } from '@/types/project';
 import type { CompleteProfileInfo } from '@/types/user';
 
 interface UseProfileMutationsProps {
@@ -148,6 +149,16 @@ export const useProfileMutations = ({ userId, onSuccess, onError }: UseProfileMu
     onError,
   });
 
+  // 주활동지 수정
+  const updateLocationMutation = useMutation({
+    mutationFn: (location: Location) => profileEditApi.updateLocation({ location }),
+    onSuccess: data => {
+      updateProfileData(data);
+      onSuccess?.();
+    },
+    onError,
+  });
+
   return {
     updateContent: updateContentMutation,
     updatePositions: updatePositionsMutation,
@@ -155,6 +166,7 @@ export const useProfileMutations = ({ userId, onSuccess, onError }: UseProfileMu
     updateHours: updateHoursMutation,
     updatePortfolio: updatePortfolioMutation,
     updateStacks: updateStacksMutation,
+    updateLocation: updateLocationMutation,
 
     // 로딩 상태들
     isUpdating:
@@ -163,6 +175,7 @@ export const useProfileMutations = ({ userId, onSuccess, onError }: UseProfileMu
       updateTraitsMutation.isPending ||
       updateHoursMutation.isPending ||
       updatePortfolioMutation.isPending ||
-      updateStacksMutation.isPending,
+      updateStacksMutation.isPending ||
+      updateLocationMutation.isPending,
   };
 };
