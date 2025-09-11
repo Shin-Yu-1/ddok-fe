@@ -27,8 +27,8 @@ type FilterOption = {
 const STATUS_OPTIONS = [
   { label: '전체', value: '' },
   { label: '모집 중', value: 'RECRUITING' },
-  { label: '프로젝트 진행 중', value: 'ONGOING' },
-  { label: '프로젝트 종료', value: 'CLOSED' },
+  { label: '스터디 진행 중', value: 'ONGOING' },
+  { label: '스터디 종료', value: 'CLOSED' },
 ];
 
 const CAPACITY_OPTIONS = Array.from({ length: 7 }, (_, i) => ({
@@ -218,6 +218,7 @@ const SearchStudyPage = () => {
   };
 
   const handleChangeOptionValue = (key: string, value: string | number | null) => {
+    console.log(key, value);
     setFilterOption(prev => ({
       ...prev,
       [key]: value,
@@ -328,7 +329,7 @@ const SearchStudyPage = () => {
           <div className={styles.optionsGroup}>
             <Select
               placeholder="진행 여부"
-              width={154}
+              width={140}
               height={32}
               options={STATUS_OPTIONS}
               value={filterOption.status as string | null | undefined}
