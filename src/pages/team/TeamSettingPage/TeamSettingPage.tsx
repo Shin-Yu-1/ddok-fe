@@ -7,9 +7,11 @@ import type { EvaluationData } from '@/constants/evaluation';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
 import EvaluateModal from '@/features/Team/components/EvaluateModal/EvaluateModal';
 import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
+import RemoveModal from '@/features/Team/components/RemoveModal/RemoveModal';
 import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
 import WithdrawModal from '@/features/Team/components/WithdrawModal/WithdrawModal';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
+import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
 
 import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
@@ -25,6 +27,7 @@ const TeamSettingPage = () => {
   const [isSelectMemberModalOpen, setIsSelectMemberModalOpen] = useState(false);
   const [isEvaluateModalOpen, setIsEvaluateModalOpen] = useState(false);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
 
   const teamId = id ? parseInt(id, 10) : null;
@@ -45,6 +48,12 @@ const TeamSettingPage = () => {
 
   // 하차 API 호출
   const withdrawMutation = useWithdrawFromTeam(teamId || 0, currentMemberId || 0);
+
+  // 삭제 API 호출
+  const removeMutation = useRemoveTeam(
+    teamData?.data.teamType || 'PROJECT',
+    teamData?.data.recruitmentId || 0
+  );
 
   // 403 에러 체크 및 이전 페이지로 이동
   useEffect(() => {
@@ -110,6 +119,34 @@ const TeamSettingPage = () => {
 
   const closeWithdrawModal = () => {
     setIsWithdrawModalOpen(false);
+  };
+
+  // 삭제 관련 핸들러
+  const handleRemoveClick = () => {
+    setIsRemoveModalOpen(true);
+  };
+
+  const handleRemoveConfirm = (confirmText: string) => {
+    if (!teamData?.data.recruitmentId) return;
+
+    removeMutation.mutate(
+      { confirmText },
+      {
+        onSuccess: () => {
+          alert('프로젝트/스터디가 삭제되었습니다.');
+          setIsRemoveModalOpen(false);
+          navigate('/map'); // 지도 페이지로 이동
+        },
+        onError: error => {
+          console.error('삭제 실패:', error);
+          alert('삭제 처리 중 오류가 발생했습니다.');
+        },
+      }
+    );
+  };
+
+  const closeRemoveModal = () => {
+    setIsRemoveModalOpen(false);
   };
 
   if (!id || !teamId || isNaN(teamId)) {
@@ -228,6 +265,7 @@ const TeamSettingPage = () => {
               radius="xsm"
               fontSize="var(--fs-xxsmall)"
               height="35px"
+              onClick={handleRemoveClick}
             >
               삭제하기
             </Button>
@@ -257,6 +295,14 @@ const TeamSettingPage = () => {
         onClose={closeWithdrawModal}
         onConfirm={handleWithdrawConfirm}
         isLoading={withdrawMutation.isPending}
+      />
+
+      {/* 삭제 모달 */}
+      <RemoveModal
+        isOpen={isRemoveModalOpen}
+        onClose={closeRemoveModal}
+        onConfirm={handleRemoveConfirm}
+        isLoading={removeMutation.isPending}
       />
     </div>
   );
