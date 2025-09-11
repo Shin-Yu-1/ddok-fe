@@ -13,7 +13,7 @@ const SearchLayout = () => {
 
   return (
     <div className={styles.layoutContainer}>
-      <Header variant={isLoggedIn ? 'user' : 'guest'} />
+      <Header />
       <SubHeader />
       {isLoggedIn && <Sidebar />}
       <div className={`${styles.contentContainer} ${isLoggedIn ? styles.moveRight : ''}`}>
