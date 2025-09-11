@@ -27,8 +27,8 @@ export const UserSchema = z.object({
   mainPosition: z.string(),
   chatRoomId: z.number().nullable(),
   dmRequestPending: z.boolean(),
-  mainBadge: MainBadgeSchema,
-  abandonBadge: AbandonBadgeSchema,
+  mainBadge: MainBadgeSchema.nullable(),
+  abandonBadge: AbandonBadgeSchema.nullable(),
 });
 
 /**

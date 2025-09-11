@@ -1,5 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
-import type { ProjectOverlayData } from '@/features/map/types/project';
+import { useGetProjectOverlay } from '@/features/map/hooks/useGetOverlay';
+import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -8,34 +11,88 @@ import styles from '../MapOverlay.module.scss';
  */
 
 interface ProjectOverlayProps {
-  project: ProjectOverlayData;
-
+  id: number;
   onOverlayClose: () => void;
 }
 
-const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ project, onOverlayClose }) => {
+const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }) => {
+  const nav = useNavigate();
+
+  const { data: response, isLoading, isError } = useGetProjectOverlay(id);
+
+  if (isLoading) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>PROJECT</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>로딩 중...</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          닫기
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className={styles.overlay__container}>
+        <div className={styles.overlay__banner}>PROJECT</div>
+        <div className={styles.overlay__content}>
+          <div className={styles.overlay__info}>
+            <div>데이터를 불러올 수 없습니다.</div>
+          </div>
+        </div>
+        <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
+          닫기
+        </div>
+      </div>
+    );
+  }
+
+  const project = response.data;
+
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>PROJECT</div>
+      {project.teamStatus &&
+        (project.teamStatus === TeamStatus.RECRUITING ? (
+          <div className={`${styles.teamStatus} ${styles.teamStatus__recruiting}`}>
+            {MAP_ITEM_STATUS_LABELS.RECRUITING}
+          </div>
+        ) : (
+          <div className={`${styles.teamStatus} ${styles.teamStatus__ongoing}`}>
+            {MAP_ITEM_STATUS_LABELS.ONGOING}
+          </div>
+        ))}
+      <div className={styles.overlay__banner}>
+        <img src={project.bannerImageUrl} alt="PROJECT" />
+      </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
           <div className={styles.overlay__info__core}>
-            <div className={styles.overlay__info__core__category}>프로젝트</div>
-            <div className={styles.overlay__info__core__header}>
-              <div className={styles.overlay__info__core__title}>{project.title}</div>
+            <div className={styles.overlay__info__core__action}>
+              <div className={styles.overlay__info__core__category}>프로젝트</div>
               <Button
                 className={styles.overlay__info__core__detailBtn}
-                fontSize="9px"
+                fontSize="10px"
                 width="fit-content"
-                height="18px"
+                height="22px"
                 backgroundColor="var(--gray-1)"
                 textColor="var(--white-3)"
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
+                onClick={() => {
+                  nav(`/detail/project/${id}`);
+                }}
               >
                 상세보기
               </Button>
+            </div>
+            <div className={styles.overlay__info__core__header}>
+              <div className={styles.overlay__info__core__title}>{project.title}</div>
             </div>
             <div className={styles.overlay__info__core__address}>{project.address}</div>
           </div>
@@ -63,16 +120,20 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ project, onOverlayCl
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>희망 나이대</div>
               <div className={styles.overlay__info__details__item__value}>
-                {project.preferredAges.ageMin}-{project.preferredAges.ageMax}대
+                {!project.preferredAges ||
+                (project.preferredAges.ageMin === 0 && project.preferredAges.ageMax === 0)
+                  ? '무관'
+                  : project.preferredAges.ageMin === project.preferredAges.ageMax - 10
+                    ? `${project.preferredAges.ageMin}대`
+                    : `${project.preferredAges.ageMin}-${project.preferredAges.ageMax - 10}대`}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 개발 편의를 위한 닫기 버튼(임시) */}
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
-        개발용 닫기 버튼
+        닫기
       </div>
     </div>
   );

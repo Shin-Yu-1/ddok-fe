@@ -1,6 +1,6 @@
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
-import type { Pagination } from '../../schemas/mapSearchSchema';
+import type { Pagination } from '../../../schemas/mapSearchSchema';
 
 import styles from './MapPagination.module.scss';
 

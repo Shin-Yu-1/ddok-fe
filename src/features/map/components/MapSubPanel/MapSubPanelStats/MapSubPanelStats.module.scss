@@ -1,0 +1,65 @@
+@use '@/styles/variables' as *;
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    line-height: 30px;
+
+    &__title {
+      font-size: $fs-xxsmall;
+      font-weight: $fw-semibold;
+    }
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 12px;
+    line-height: 12px;
+
+    &__rating {
+      display: flex;
+      flex-direction: row;
+      gap: 3px;
+      font-size: $fs-xxxsmall;
+      font-weight: $fw-bold;
+      color: $black-1;
+
+      &__stars {
+        svg {
+          width: 12px;
+          height: 12px;
+          fill: $yellow-1;
+        }
+      }
+    }
+
+    &__reviewCount {
+      font-size: 9px;
+      font-weight: $fw-regular;
+      color: $gray-1;
+    }
+  }
+
+  &__chart {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: $fs-xxxsmall;
+
+    &__tag {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}

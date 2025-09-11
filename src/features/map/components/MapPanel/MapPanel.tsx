@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
 import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import Input from '@/components/Input/Input';
 
-import { panelMockData } from '../../mocks/panelMockData';
 import type { Pagination } from '../../schemas/mapSearchSchema';
 import type { MapPanelItem } from '../../types';
 import { isProject, isStudy, isPlayer, isCafe } from '../../types';
@@ -15,12 +14,12 @@ import {
   type CategoryFilterOption,
   type StatusFilterOption,
 } from '../../types/common';
-import MapPagination from '../MapPagination/MapPagination';
 import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
 import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
 import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
 import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyItem';
 
+import MapPagination from './MapPagination/MapPagination';
 import styles from './MapPanel.module.scss';
 
 interface MapPanelProps {
@@ -29,6 +28,8 @@ interface MapPanelProps {
   isLoading?: boolean;
   handleItemClick: (itemType: MapItemCategory, itemId?: number) => void;
   onPageChange?: (page: number) => void;
+  onFilterChange?: (category?: string, filter?: string) => void;
+  onKeywordChange?: (keyword: string) => void;
 }
 
 const MapPanel: React.FC<MapPanelProps> = ({
@@ -37,44 +38,43 @@ const MapPanel: React.FC<MapPanelProps> = ({
   isLoading,
   handleItemClick,
   onPageChange,
+  onFilterChange,
+  onKeywordChange,
 }) => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<CategoryFilterOption>(
-    CATEGORY_FILTER_OPTIONS[0] // 'ALL'
+    CATEGORY_FILTER_OPTIONS[0] // 전체
   );
 
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<StatusFilterOption>(
-    STATUS_FILTER_OPTIONS[0] // 'ALL'
+    STATUS_FILTER_OPTIONS[0] // 전체
   );
+
+  const [keyword, setKeyword] = useState<string>('');
+
+  const handleKeywordSearch = () => {
+    if (onKeywordChange) {
+      onKeywordChange(keyword);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleKeywordSearch();
+    }
+  };
 
   const handleFilterClick = (option: CategoryFilterOption) => {
     setSelectedCategoryFilter(option);
-    setSelectedStatusFilter(STATUS_FILTER_OPTIONS[0]); // 'ALL'로 리셋
+    setSelectedStatusFilter(STATUS_FILTER_OPTIONS[0]); // 전체로 리셋
+
+    // 상위 컴포넌트에 필터 변경 알림
+    if (onFilterChange) {
+      const categoryValue = option.value || undefined;
+      onFilterChange(categoryValue, undefined);
+    }
   };
 
-  // 데이터 필터링 함수
-  const filteredData = useMemo(() => {
-    // API에서 받은 데이터가 있으면 사용, 없으면 mock 데이터 사용
-    const sourceData = data || panelMockData;
-    let filtered = sourceData;
-
-    // 1. 카테고리 필터링
-    if (selectedCategoryFilter.value) {
-      filtered = filtered.filter(item => item.category === selectedCategoryFilter.value);
-    }
-
-    // 2. 모집 상태 필터링(프로젝트와 스터디만 적용)
-    if (selectedStatusFilter.value) {
-      filtered = filtered.filter(item => {
-        if (isProject(item) || isStudy(item)) {
-          return item.teamStatus === selectedStatusFilter.value;
-        }
-        // player, cafe는 teamStatus가 없으므로 상태 필터가 적용된 경우 제외
-        return false;
-      });
-    }
-
-    return filtered;
-  }, [data, selectedCategoryFilter, selectedStatusFilter]);
+  const displayData = data || [];
 
   // 타입별 컴포넌트 렌더링 함수
   const renderMapItem = (item: MapPanelItem) => {
@@ -134,6 +134,10 @@ const MapPanel: React.FC<MapPanelProps> = ({
             fontSize="var(--fs-xxsmall)"
             iconSize="var(--i-large)"
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+            placeholder="검색어를 입력하세요"
+            value={keyword}
+            onChange={e => setKeyword(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         </div>
 
@@ -178,6 +182,13 @@ const MapPanel: React.FC<MapPanelProps> = ({
                   }`}
                   onClick={() => {
                     setSelectedStatusFilter(option);
+
+                    // 상위 컴포넌트에 필터 변경 알림
+                    if (onFilterChange) {
+                      const categoryValue = selectedCategoryFilter.value || undefined;
+                      const filterValue = option.value || undefined;
+                      onFilterChange(categoryValue, filterValue);
+                    }
                   }}
                 >
                   {option.label}
@@ -197,15 +208,15 @@ const MapPanel: React.FC<MapPanelProps> = ({
           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-2)' }}>
             검색 중...
           </div>
-        ) : filteredData.length === 0 ? (
+        ) : displayData.length === 0 ? (
           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-2)' }}>
             검색 결과가 없습니다.
           </div>
         ) : (
-          filteredData.map((item, index) => (
+          displayData.map((item, index) => (
             <div key={index}>
               {renderMapItem(item)}
-              {index < filteredData.length - 1 && (
+              {index < displayData.length - 1 && (
                 <hr className={styles.panel__list__item__divider} />
               )}
             </div>
