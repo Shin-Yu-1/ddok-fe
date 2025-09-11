@@ -18,7 +18,7 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm, isLoading = false }: Withdr
   const [confirmText, setConfirmText] = useState('');
 
   const handleSubmit = () => {
-    if (confirmText === '하차합니다') {
+    if (confirmText === '하차합니다.') {
       onConfirm(confirmText);
     }
   };
@@ -28,7 +28,7 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm, isLoading = false }: Withdr
     onClose();
   };
 
-  const isConfirmEnabled = confirmText === '하차합니다';
+  const isConfirmEnabled = confirmText === '하차합니다.';
 
   if (!isOpen) return null;
 
@@ -40,13 +40,14 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm, isLoading = false }: Withdr
           <div className={styles.headerContent}>
             <h2 className={styles.title}>정말로 하차하시겠습니까?</h2>
             <Button
-              backgroundColor="var(--white-3)"
+              backgroundColor="transparent"
               width={24}
               height={24}
               padding="0px"
               onClick={handleClose}
+              style={{ flexShrink: 0 }}
             >
-              <X size={16} weight="light" color="var(--black-1)" />
+              <X size={24} weight="light" color="var(--black-1)" />
             </Button>
           </div>
           <p className={styles.subtitle}>중도 하차할 경우, 탈주자 뱃지를 부여 받습니다.</p>
@@ -54,12 +55,12 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm, isLoading = false }: Withdr
 
         {/* Content */}
         <div className={styles.content}>
-          <p className={styles.inputLabel}>'하차합니다'를 입력해주세요</p>
+          <p className={styles.inputLabel}>'하차합니다.'를 입력해주세요</p>
           <Input
             value={confirmText}
             onChange={e => setConfirmText(e.target.value)}
-            placeholder="하차합니다"
-            width="100%"
+            placeholder="하차합니다."
+            width="540px"
             height={37}
             radius={10}
             border="1px solid var(--gray-3)"
@@ -74,11 +75,11 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm, isLoading = false }: Withdr
           <Button
             backgroundColor={isConfirmEnabled ? 'var(--red-1)' : 'var(--gray-3)'}
             textColor="var(--white-3)"
-            width="100%"
+            width={540}
             height={45}
             radius="xsm"
             fontSize="var(--fs-small)"
-            fontWeight="600"
+            fontWeight="500"
             onClick={handleSubmit}
             disabled={!isConfirmEnabled || isLoading}
             isLoading={isLoading}
