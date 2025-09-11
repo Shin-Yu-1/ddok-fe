@@ -140,6 +140,7 @@ const SearchPlayerPage = () => {
               leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
               onChange={onChangeHandle}
               onKeyDown={onKeyDownHandle}
+              disabled={isResponseLoading}
             />
           </div>
 
@@ -173,6 +174,7 @@ const SearchPlayerPage = () => {
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
             onChange={onChangeHandle}
             onKeyDown={onKeyDownHandle}
+            disabled={isResponseLoading}
           />
           <div className={styles.infoWrapper}>
             <WarningCircleIcon />
