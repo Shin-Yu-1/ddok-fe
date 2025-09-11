@@ -115,7 +115,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                 />
               )}
             </div>
-            <div className={styles.overlay__info__core__address}>서울 마포구</div>
+            <div className={styles.overlay__info__core__address}>{player.address}</div>
           </div>
           <div className={styles.overlay__info__details}>
             <div className={styles.overlay__info__details__item}>
