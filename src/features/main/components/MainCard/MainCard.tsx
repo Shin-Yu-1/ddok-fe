@@ -114,6 +114,14 @@ export default function MainCard({ item }: MainCardProps) {
     return `약 ${remainingMonths}개월 남음`;
   };
 
+  // 희망 나이대 표시 텍스트 생성
+  const getPreferredAgesText = () => {
+    if (!preferredAges) {
+      return '연령 무관';
+    }
+    return `${preferredAges.ageMin}~${preferredAges.ageMax}대`;
+  };
+
   const progress = getProgress();
   const remainingInfo = getRemainingInfo();
   const estimatedEndDate = getEstimatedEndDate();
@@ -189,14 +197,10 @@ export default function MainCard({ item }: MainCardProps) {
               </div>
             )}
 
-            {preferredAges && (
-              <div className={styles.infoLine}>
-                <span className={styles.infoLabel}>희망 나이대</span>
-                <span className={styles.infoValue}>
-                  {preferredAges.ageMin}~{preferredAges.ageMax}대
-                </span>
-              </div>
-            )}
+            <div className={styles.infoLine}>
+              <span className={styles.infoLabel}>희망 나이대</span>
+              <span className={styles.infoValue}>{getPreferredAgesText()}</span>
+            </div>
 
             {expectedMonth && (
               <div className={styles.infoLine}>
