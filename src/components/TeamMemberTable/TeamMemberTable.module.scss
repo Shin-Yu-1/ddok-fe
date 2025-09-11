@@ -45,7 +45,6 @@
 .tableRow {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  border-bottom: 1px solid $gray-4;
 
   &:last-child {
     border-bottom: none;
