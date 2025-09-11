@@ -128,7 +128,12 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
           </div>
         )}
       </div>
-      <div className={styles.profileImage}>
+      <div
+        className={styles.profileImage}
+        onClick={() => {
+          navigate(`/profile/user/${player.userId}`);
+        }}
+      >
         <img src={player.profileImageUrl} alt={`${player.nickname} 프로필`} />
       </div>
       <h3
