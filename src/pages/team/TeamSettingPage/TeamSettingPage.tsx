@@ -237,7 +237,8 @@ const TeamSettingPage = () => {
           </div>
         )}
 
-        {/* 평가하기 버튼: 모든 멤버에 대해 teamStatus가 CLOSED일 때 보임 */}
+        {/* 평가하기 버튼: teamStatus가 종료 상태일 때 보임 */}
+        {/* {teamData.data.teamStatus !== 'CLOSED' && ( */}
         {teamData.data.teamStatus === 'CLOSED' && (
           <div className={styles.settingItem}>
             <div>팀원 평가하기</div>
