@@ -47,6 +47,17 @@ const LocationSection = forwardRef<HTMLElement, LocationSectionProps>(
         </div>
 
         <div className={styles.content}>
+          {/* 주활동지 정보 텍스트 */}
+          {user.location && (
+            <div>
+              <p className={styles.locationText}>
+                {user.location.address
+                  ? user.location.address.split(' ').slice(0, 3).join(' ')
+                  : '위치 정보 없음'}
+              </p>
+            </div>
+          )}
+
           {/* 지도 영역 */}
           <ProfileMap playerId={user.userId} location={user.location} />
         </div>
