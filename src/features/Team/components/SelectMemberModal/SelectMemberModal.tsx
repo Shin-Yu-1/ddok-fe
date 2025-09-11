@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { X } from '@phosphor-icons/react';
+
 import Button from '@/components/Button/Button';
 import User from '@/features/Team/components/UserRow/UserRow';
 
@@ -52,9 +54,16 @@ const SelectMemberModal = ({
           <div className={styles.headerContent}>
             <div className={styles.titleSection}>
               <h2 className={styles.title}>평가할 팀원 선택</h2>
-              <button className={styles.closeButton} onClick={handleClose}>
-                <span className={styles.closeIcon}>×</span>
-              </button>
+              <Button
+                backgroundColor="transparent"
+                width={24}
+                height={24}
+                padding="0px"
+                onClick={handleClose}
+                style={{ flexShrink: 0 }}
+              >
+                <X size={24} weight="light" color="var(--black-1)" />
+              </Button>
             </div>
             <p className={styles.subtitle}>평가하고 싶은 팀원을 선택해주세요.</p>
           </div>
@@ -75,12 +84,6 @@ const SelectMemberModal = ({
                   onClick={() => handleMemberSelect(member)}
                 >
                   <User user={member.user} />
-                  <div className={styles.memberInfo}>
-                    <span className={styles.position}>{member.decidedPosition}</span>
-                    <span className={styles.role}>
-                      {member.role === 'LEADER' ? '리더' : '멤버'}
-                    </span>
-                  </div>
                 </div>
               ))}
             </div>
@@ -94,9 +97,8 @@ const SelectMemberModal = ({
               onClick={handleClose}
               backgroundColor="var(--gray-2)"
               textColor="var(--black-1)"
-              radius="md"
-              fontSize="var(--fs-small)"
-              height="40px"
+              radius="sm"
+              fontSize="var(--fs-xsmall)"
               className={styles.cancelButton}
             >
               취소
@@ -105,9 +107,8 @@ const SelectMemberModal = ({
               onClick={handleConfirm}
               backgroundColor="var(--blue-1)"
               textColor="var(--white-3)"
-              radius="md"
-              fontSize="var(--fs-small)"
-              height="40px"
+              radius="sm"
+              fontSize="var(--fs-xsmall)"
               className={styles.confirmButton}
               disabled={!selectedMember}
             >

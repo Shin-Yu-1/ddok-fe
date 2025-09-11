@@ -3,16 +3,16 @@
 
 .overlay {
   position: fixed;
-  inset: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgb(0 0 0 / 50%);
+  inset: 0;
 }
 
 .modal {
-  width: 500px;
+  width: 650px;
   max-height: 80vh;
   border-radius: 10px;
   overflow-y: auto;
@@ -67,7 +67,7 @@
 .subtitle {
   margin: 0;
   font-size: 14px;
-  color: $gray-4;
+  color: $black-3;
 }
 
 .content {
@@ -91,19 +91,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 15px;
-  border: 2px solid $gray-2;
-  border-radius: 8px;
+  border-radius: $r-small;
   transition: all 0.2s ease;
   cursor: pointer;
 
   &:hover {
-    border-color: $blue-1;
-    background-color: rgb(74 144 226 / 5%);
+    background-color: rgb(30 88 154 / 5%);
   }
 
   &.selected {
-    border-color: $blue-1;
-    background-color: rgb(74 144 226 / 10%);
+    background-color: rgb(30 88 154 / 5%);
   }
 }
 
