@@ -125,6 +125,7 @@ export interface EditProjectResponse {
   status: number;
   message: string;
   data: {
+    projectId: number;
     title: string;
     teamStatus: TeamStatus;
     bannerImageUrl: string;
@@ -132,17 +133,15 @@ export interface EditProjectResponse {
     capacity: number;
     applicantCount: number;
     mode: string;
-    address: string;
+    location: Location | null;
     preferredAges: PreferredAges;
     expectedMonth: number;
     startDate: string;
     detail: string;
-    leaderPosition: string;
-    positions: Array<{
-      position: string;
-      applied: number;
-      confirmed: number;
-    }>;
+    positions: ProjectPosition[];
+    leader: ProjectLeader;
+    participants: ProjectParticipant[];
+    isMine: boolean;
   };
 }
 

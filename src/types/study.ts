@@ -21,6 +21,19 @@ export interface PreferredAges {
   ageMax: number;
 }
 
+export interface UserBasicInfo {
+  userId: number;
+  nickname: string;
+  profileImageUrl: string;
+  mainPosition: string;
+  mainBadge: MainBadge | null;
+  abandonBadge: AbandonBadge | null;
+  temperature: number | null;
+  isMine: boolean;
+  chatRoomId: number | null;
+  dmRequestPending: boolean;
+}
+
 // 스터디 모드
 export type StudyMode = 'online' | 'offline';
 
@@ -90,20 +103,24 @@ export interface EditStudyResponse {
   status: number;
   message: string;
   data: {
+    studyId: number;
     title: string;
+    studyType: string;
+    isMine: boolean;
     teamStatus: TeamStatus;
     bannerImageUrl: string;
     traits: string[];
     capacity: number;
     applicantCount: number;
     mode: string;
-    address: string | null;
     location?: Location | null;
-    preferredAges: PreferredAges;
+    preferredAges: PreferredAges | null;
     expectedMonth: number;
     startDate: string;
     detail: string;
-    studyType: string;
+    leader: UserBasicInfo;
+    participants: UserBasicInfo[];
+    participantsCount: number;
   };
 }
 
@@ -126,30 +143,8 @@ export interface DetailStudyResponse {
     expectedMonth: number;
     startDate: string;
     detail: string;
-    leader: {
-      userId: number;
-      nickname: string;
-      profileImageUrl: string;
-      mainPosition: string;
-      mainBadge: MainBadge | null;
-      abandonBadge: AbandonBadge | null;
-      temperature: number | null;
-      chatRoomId: number | null;
-      isMine: boolean;
-      dmRequestPending: boolean;
-    };
-    participants: Array<{
-      userId: number;
-      nickname: string;
-      profileImageUrl: string;
-      mainPosition: string;
-      mainBadge: MainBadge | null;
-      abandonBadge: AbandonBadge | null;
-      temperature: number | null;
-      chatRoomId: number | null;
-      isMine: boolean;
-      dmRequestPending: boolean;
-    }>;
+    leader: UserBasicInfo;
+    participants: UserBasicInfo[];
     participantsCount: number;
     isApplied: boolean;
     isApproved: boolean;

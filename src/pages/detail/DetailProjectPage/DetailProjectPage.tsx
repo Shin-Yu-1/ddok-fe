@@ -114,7 +114,6 @@ const DetailProjectPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>DetailProjectPage (ID: {projectIdNum})</h1>
       <div className={styles.container}>
         <div className={styles.bannerImage}>
           <BannerImageSection bannerImage={projectData.bannerImageUrl} readonly={true} />
