@@ -48,40 +48,44 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps
   };
 
   const handleApprove = () => {
-    approveApplicant.mutate(undefined, {
-      onSuccess: () => {
-        console.log('참여 희망자 수락 성공');
-        // 팀 설정 데이터와 참여 희망자 목록을 새로고침
-        queryClient.invalidateQueries({
-          queryKey: ['getApi', `/api/teams/${teamId}/members`],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['getApi', `/api/teams/${teamId}/applicants`],
-        });
-      },
-      onError: error => {
-        console.error('참여 희망자 수락 실패:', error);
-        const errorMessage = getErrorMessage(error, '참여 희망자 수락에 실패했습니다.');
-        alert(errorMessage);
-      },
-    });
+    if (window.confirm(`${member.user.nickname}님을 멤버로 수락하시겠습니까?`)) {
+      approveApplicant.mutate(undefined, {
+        onSuccess: () => {
+          console.log('참여 희망자 수락 성공');
+          // 팀 설정 데이터와 참여 희망자 목록을 새로고침
+          queryClient.invalidateQueries({
+            queryKey: ['getApi', `/api/teams/${teamId}/members`],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['getApi', `/api/teams/${teamId}/applicants`],
+          });
+        },
+        onError: error => {
+          console.error('참여 희망자 수락 실패:', error);
+          const errorMessage = getErrorMessage(error, '참여 희망자 수락에 실패했습니다.');
+          alert(errorMessage);
+        },
+      });
+    }
   };
 
   const handleReject = () => {
-    rejectApplicant.mutate(undefined, {
-      onSuccess: () => {
-        console.log('참여 희망자 거절 성공');
-        // 참여 희망자 목록만 새로고침 (거절의 경우 팀원 목록은 변경되지 않음)
-        queryClient.invalidateQueries({
-          queryKey: ['getApi', `/api/teams/${teamId}/applicants`],
-        });
-      },
-      onError: error => {
-        console.error('참여 희망자 거절 실패:', error);
-        const errorMessage = getErrorMessage(error, '참여 희망자 거절에 실패했습니다.');
-        alert(errorMessage);
-      },
-    });
+    if (window.confirm(`${member.user.nickname}님의 참여 신청을 거절하시겠습니까?`)) {
+      rejectApplicant.mutate(undefined, {
+        onSuccess: () => {
+          console.log('참여 희망자 거절 성공');
+          // 참여 희망자 목록만 새로고침 (거절의 경우 팀원 목록은 변경되지 않음)
+          queryClient.invalidateQueries({
+            queryKey: ['getApi', `/api/teams/${teamId}/applicants`],
+          });
+        },
+        onError: error => {
+          console.error('참여 희망자 거절 실패:', error);
+          const errorMessage = getErrorMessage(error, '참여 희망자 거절에 실패했습니다.');
+          alert(errorMessage);
+        },
+      });
+    }
   };
 
   return (
