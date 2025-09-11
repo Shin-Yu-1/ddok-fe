@@ -137,7 +137,7 @@ const SearchPlayerPage = () => {
               border="1px solid var(--gray-2)"
               focusBorder="1px solid var(--gray-2)"
               backgroundColor="var(--white-3)"
-              leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+              leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
               onChange={onChangeHandle}
               onKeyDown={onKeyDownHandle}
             />
