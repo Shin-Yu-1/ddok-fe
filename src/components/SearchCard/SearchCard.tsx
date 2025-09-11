@@ -131,7 +131,9 @@ const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
     <div
       className={styles.cardContainer}
       onClick={() => {
-        clickHandle(item);
+        if (clickHandle) {
+          clickHandle(item);
+        }
       }}
     >
       <div className={styles.bannerWrapper}>
