@@ -1,0 +1,26 @@
+@use '@/styles/variables' as *;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.hiddenTitles {
+  p {
+    display: none !important;
+  }
+
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid $gray-2;
+  border-radius: $r-xsmall;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 8px;
+}

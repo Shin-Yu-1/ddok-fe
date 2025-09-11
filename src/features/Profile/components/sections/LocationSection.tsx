@@ -16,7 +16,7 @@ interface LocationSectionProps extends ProfileSectionProps {
 }
 
 const LocationSection = forwardRef<HTMLElement, LocationSectionProps>(
-  ({ isEditable = false, onEdit, className }, ref) => {
+  ({ user, isEditable = false, onEdit, className }, ref) => {
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('location');
@@ -47,14 +47,19 @@ const LocationSection = forwardRef<HTMLElement, LocationSectionProps>(
         </div>
 
         <div className={styles.content}>
-          {/* 지도 영역 (추후 실제 지도 컴포넌트로 교체 예정) */}
-          <ProfileMap />
-          {/* <div className={styles.mapContainer}>
-            <div className={styles.mapPlaceholder}>
-              <div className={styles.mapIcon}>🗺️</div>
-              <p className={styles.mapText}>지도 영역</p>
+          {/* 주활동지 정보 텍스트 */}
+          {user.location && (
+            <div>
+              <p className={styles.locationText}>
+                {user.location.address
+                  ? user.location.address.split(' ').slice(0, 3).join(' ')
+                  : '위치 정보 없음'}
+              </p>
             </div>
-          </div> */}
+          )}
+
+          {/* 지도 영역 */}
+          <ProfileMap playerId={user.userId} location={user.location} />
         </div>
       </section>
     );

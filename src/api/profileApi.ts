@@ -1,5 +1,6 @@
 import api from '@/api/api';
 import type { ApiResponse } from '@/types/api';
+import type { Location } from '@/types/project';
 
 // API 응답 타입들
 interface ProfileApiResponse {
@@ -125,6 +126,10 @@ interface UpdatePortfolioRequest {
 
 interface UpdateStacksRequest {
   techStacks: string[];
+}
+
+interface UpdateLocationRequest {
+  location: Location;
 }
 
 // 프로필 수정 응답 타입
@@ -264,6 +269,15 @@ export const profileEditApi = {
   updateStacks: async (data: UpdateStacksRequest): Promise<UpdateProfileResponse> => {
     const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
       '/api/players/profile/stacks',
+      data
+    );
+    return response.data.data.profile;
+  },
+
+  // 주활동지 수정
+  updateLocation: async (data: UpdateLocationRequest): Promise<UpdateProfileResponse> => {
+    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+      '/api/players/profile/location',
       data
     );
     return response.data.data.profile;

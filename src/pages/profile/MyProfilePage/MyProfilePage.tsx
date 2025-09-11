@@ -1,4 +1,5 @@
 import EditIntroductionModal from '@/features/Profile/components/modals/EditIntroductionModal';
+import EditLocationModal from '@/features/Profile/components/modals/EditLocationModal';
 import EditPortfolioModal from '@/features/Profile/components/modals/EditPortfolioModal';
 import EditPositionModal from '@/features/Profile/components/modals/EditPositionModal';
 import EditTechStackModal from '@/features/Profile/components/modals/EditTechStackModal';
@@ -33,6 +34,12 @@ const MyProfilePage = () => {
             <EditIntroductionModal
               isOpen={isModalOpen('introduction')}
               onClose={() => closeModal('introduction')}
+              user={profileData}
+            />
+
+            <EditLocationModal
+              isOpen={isModalOpen('location')}
+              onClose={() => closeModal('location')}
               user={profileData}
             />
 
