@@ -145,7 +145,7 @@ const MapPage = () => {
     }
   }, [markerCategory, refetchMapItem, isInitialLoad, mapBounds]);
 
-  // mapBounds 변경 시 열려있는 overlay와 subPanel 닫기
+  // mapBounds 변경 시 열려있는 overlay와 subPanel 닫기 및 페이지네이션 초기화
   useEffect(() => {
     if (isInitialLoad && mapBounds) {
       // overlay 닫기
@@ -156,10 +156,16 @@ const MapPage = () => {
       setIsMapSubPanelOpen(false);
       setSelectedCafeId(null);
 
+      // 페이지네이션 초기화
+      setCurrentPage(0);
+
       // 마커 데이터 리패치
       refetchMapItem();
+
+      // 지도 영역 변경 시 검색 결과도 리페치
+      refetchMapSearch();
     }
-  }, [mapBounds, isInitialLoad, refetchMapItem]);
+  }, [mapBounds, isInitialLoad, refetchMapItem, refetchMapSearch]);
 
   // 패널의 아이템 클릭 시, 패널 혹은 서브패널의 열고 닫힘 및 오버레이 표시
   const handleItemClick = (itemType: MapItemCategory, itemId?: number) => {
