@@ -8,7 +8,9 @@ import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/Applicants
 import EvaluateModal from '@/features/Team/components/EvaluateModal/EvaluateModal';
 import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
 import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
+import WithdrawModal from '@/features/Team/components/WithdrawModal/WithdrawModal';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
+import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
 
 import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
 
@@ -22,6 +24,7 @@ const TeamSettingPage = () => {
   // 모달 상태 관리
   const [isSelectMemberModalOpen, setIsSelectMemberModalOpen] = useState(false);
   const [isEvaluateModalOpen, setIsEvaluateModalOpen] = useState(false);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
 
   const teamId = id ? parseInt(id, 10) : null;
@@ -35,6 +38,13 @@ const TeamSettingPage = () => {
     teamId: teamId || 0,
     enabled: !!teamId,
   });
+
+  // 현재 사용자의 memberId 찾기
+  const currentUserMember = teamData?.data.items.find(member => member.isMine);
+  const currentMemberId = currentUserMember?.memberId;
+
+  // 하차 API 호출
+  const withdrawMutation = useWithdrawFromTeam(teamId || 0, currentMemberId || 0);
 
   // 403 에러 체크 및 이전 페이지로 이동
   useEffect(() => {
@@ -72,6 +82,34 @@ const TeamSettingPage = () => {
   const closeEvaluateModal = () => {
     setIsEvaluateModalOpen(false);
     setSelectedMember(null);
+  };
+
+  // 하차 관련 핸들러
+  const handleWithdrawClick = () => {
+    setIsWithdrawModalOpen(true);
+  };
+
+  const handleWithdrawConfirm = (confirmText: string) => {
+    if (!teamId || !currentMemberId) return;
+
+    withdrawMutation.mutate(
+      { confirmText },
+      {
+        onSuccess: () => {
+          alert('프로젝트에서 하차했습니다.');
+          setIsWithdrawModalOpen(false);
+          navigate('/'); // 메인 페이지로 이동
+        },
+        onError: error => {
+          console.error('하차 실패:', error);
+          alert('하차 처리 중 오류가 발생했습니다.');
+        },
+      }
+    );
+  };
+
+  const closeWithdrawModal = () => {
+    setIsWithdrawModalOpen(false);
   };
 
   if (!id || !teamId || isNaN(teamId)) {
@@ -138,14 +176,15 @@ const TeamSettingPage = () => {
               radius="xsm"
               fontSize="var(--fs-xxsmall)"
               height="35px"
+              onClick={handleWithdrawClick}
             >
               하차하기
             </Button>
           </div>
         )}
 
-        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 진행중이 아닐 때만 보임 */}
-        {teamData.data.isLeader && teamData.data.teamStatus !== 'ONGOING' && (
+        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 종료되지 않았을 때만 보임 */}
+        {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
             <div>프로젝트 종료하기</div>
             <Button
@@ -210,6 +249,14 @@ const TeamSettingPage = () => {
         onClose={closeEvaluateModal}
         memberName={selectedMember?.user.nickname || '팀원'}
         onSubmit={handleEvaluateSubmit}
+      />
+
+      {/* 하차 모달 */}
+      <WithdrawModal
+        isOpen={isWithdrawModalOpen}
+        onClose={closeWithdrawModal}
+        onConfirm={handleWithdrawConfirm}
+        isLoading={withdrawMutation.isPending}
       />
     </div>
   );
