@@ -1,0 +1,142 @@
+import { useState, useEffect, useCallback } from 'react';
+
+import Button from '@/components/Button/Button';
+import Input from '@/components/Input/Input';
+import BaseModal from '@/components/Modal/BaseModal';
+import { phoneNumberSchema } from '@/schemas/user.schema';
+
+import styles from './EditPhoneModal.module.scss';
+
+interface EditPhoneModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (phoneNumber: string) => void | Promise<void>;
+  isLoading?: boolean;
+}
+
+const EditPhoneModal = ({ isOpen, onClose, onSave, isLoading = false }: EditPhoneModalProps) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  // 모달이 열릴 때 초기화
+  useEffect(() => {
+    if (isOpen) {
+      setPhoneNumber('');
+      setPhoneError('');
+    }
+  }, [isOpen]);
+
+  // Zod 스키마로 전화번호 유효성 검사
+  const validatePhoneNumber = useCallback((phone: string): boolean => {
+    try {
+      // 하이픈 제거 후 검증
+      const cleanPhone = phone.replace(/-/g, '');
+      phoneNumberSchema.parse(cleanPhone);
+      setPhoneError('');
+      return true;
+    } catch (error) {
+      if (error && typeof error === 'object' && 'issues' in error) {
+        const zodError = error as { issues: Array<{ message: string }> };
+        setPhoneError(zodError.issues[0]?.message || '올바른 전화번호를 입력해주세요.');
+      }
+      return false;
+    }
+  }, []);
+
+  // 전화번호 포맷팅 (010-1234-5678)
+  const formatPhoneNumber = useCallback((value: string): string => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  }, []);
+
+  const handlePhoneNumberChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formatted = formatPhoneNumber(e.target.value);
+      setPhoneNumber(formatted);
+
+      // 실시간 검증
+      if (formatted) {
+        validatePhoneNumber(formatted);
+      } else {
+        setPhoneError('');
+      }
+    },
+    [formatPhoneNumber, validatePhoneNumber]
+  );
+
+  const handleSave = useCallback(async () => {
+    if (!validatePhoneNumber(phoneNumber)) return;
+
+    try {
+      await onSave(phoneNumber);
+      onClose();
+    } catch (error) {
+      console.error('전화번호 저장 실패:', error);
+    }
+  }, [phoneNumber, validatePhoneNumber, onSave, onClose]);
+
+  const handleCancel = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  // 검증 상태 계산
+  const isPhoneValid = phoneNumber && !phoneError;
+  const canSave = isPhoneValid && !isLoading;
+
+  return (
+    <BaseModal
+      isOpen={isOpen}
+      onClose={handleCancel}
+      title="전화번호를 변경해주세요"
+      subtitle="새로운 전화번호를 입력해주세요."
+    >
+      <div className={styles.modalContent}>
+        {/* 전화번호 입력 */}
+        <div className={styles.inputGroup}>
+          <label className={styles.inputLabel}>새 전화번호</label>
+          <Input
+            type="tel"
+            value={phoneNumber}
+            onChange={handlePhoneNumberChange}
+            placeholder="010-1234-5678"
+            width="100%"
+            height="40px"
+            border={phoneError ? '1px solid var(--red-1)' : '1px solid var(--gray-3)'}
+            focusBorder={phoneError ? '1px solid var(--red-1)' : '1px solid var(--yellow-1)'}
+            maxLength={13}
+            disabled={isLoading}
+          />
+          {phoneError && <p className={styles.errorMessage}>{phoneError}</p>}
+        </div>
+
+        <div className={styles.modalButtons}>
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isLoading}
+            width="48%"
+            height="40px"
+            radius="xsm"
+          >
+            취소
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleSave}
+            disabled={!canSave}
+            isLoading={isLoading}
+            width="48%"
+            height="40px"
+            radius="xsm"
+          >
+            저장
+          </Button>
+        </div>
+      </div>
+    </BaseModal>
+  );
+};
+
+export default EditPhoneModal;

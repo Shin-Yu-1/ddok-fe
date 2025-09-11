@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useAuthStore } from '@/stores/authStore';
+
 import styles from './StudyRecruitmentTable.module.scss';
 
 export interface StudyRecruitmentTableProps {
@@ -28,6 +30,18 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
   isMine,
   onApply,
 }) => {
+  // 로그인 상태 확인
+  const { isLoggedIn } = useAuthStore();
+
+  // 지원하기 핸들러 (로그인 체크 포함)
+  const handleApplyWithLoginCheck = () => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+    onApply?.();
+  };
+
   // 액션 버튼 렌더링
   const renderActionButton = () => {
     // 본인 스터디인 경우 또는 승인된 상태
@@ -38,7 +52,10 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
     // 지원한 상태
     if (isApplied) {
       return (
-        <button className={`${styles.actionButton} ${styles.cancel}`} onClick={onApply}>
+        <button
+          className={`${styles.actionButton} ${styles.cancel}`}
+          onClick={handleApplyWithLoginCheck}
+        >
           지원 취소
         </button>
       );
@@ -53,9 +70,12 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
       );
     }
 
-    // 지원 가능한 상태
+    // 지원 가능한 상태 (로그인 여부와 관계없이 버튼은 보이지만 클릭 시 체크)
     return (
-      <button className={`${styles.actionButton} ${styles.selectable}`} onClick={onApply}>
+      <button
+        className={`${styles.actionButton} ${styles.selectable}`}
+        onClick={handleApplyWithLoginCheck}
+      >
         지원하기
       </button>
     );
@@ -69,7 +89,7 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
         <div className={styles.tableHeader}>
           <div className={styles.headerCell}>지원 인원</div>
           <div className={styles.headerCell}>확정 인원</div>
-          <div className={styles.headerCell}>비고</div>
+          <div className={styles.headerCell}>지원 신청하기</div>
         </div>
 
         {/* 바디 */}
