@@ -119,7 +119,17 @@ export default function MainCard({ item }: MainCardProps) {
     if (!preferredAges) {
       return '연령 무관';
     }
-    return `${preferredAges.ageMin}~${preferredAges.ageMax}대`;
+
+    const { ageMin, ageMax } = preferredAges;
+
+    const minDecade = Math.floor(ageMin / 10) * 10;
+    const maxDecade = Math.floor((ageMax - 1) / 10) * 10;
+
+    if (minDecade === maxDecade) {
+      return `${minDecade}대`;
+    }
+
+    return `${minDecade}~${maxDecade}대`;
   };
 
   const progress = getProgress();

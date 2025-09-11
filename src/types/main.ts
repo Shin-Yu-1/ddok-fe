@@ -2,8 +2,8 @@
 
 // 나이대 범위
 export interface PreferredAges {
-  ageMin: number | null;
-  ageMax: number | null;
+  ageMin: number;
+  ageMax: number;
 }
 
 // 전체 리스트용 팀 상태 (모집부터 완료까지 모든 상태)
