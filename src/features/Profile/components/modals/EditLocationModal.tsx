@@ -108,8 +108,12 @@ const EditLocationModal = ({ isOpen, onClose, user }: EditLocationModalProps) =>
       disableEscapeClose={hasChanges}
     >
       <div className={styles.content}>
-        <PostLocationSelector location={selectedLocation} onLocationChange={handleLocationChange} />
-
+        <div className={styles.hiddenTitles}>
+          <PostLocationSelector
+            location={selectedLocation}
+            onLocationChange={handleLocationChange}
+          />
+        </div>
         <div className={styles.buttonContainer}>
           <Button
             variant={hasChanges ? 'secondary' : 'ghost'}

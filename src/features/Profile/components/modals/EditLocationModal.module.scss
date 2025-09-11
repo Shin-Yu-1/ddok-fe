@@ -7,6 +7,17 @@
   width: 100%;
 }
 
+.hiddenTitles {
+  p {
+    display: none !important;
+  }
+
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid $gray-2;
+  border-radius: $r-xsmall;
+}
+
 .buttonContainer {
   display: flex;
   justify-content: center;
