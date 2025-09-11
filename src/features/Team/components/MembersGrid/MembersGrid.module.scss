@@ -1,0 +1,23 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.membersGrid {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 120px 1fr 130px;
+  gap: 20px;
+}
+
+.gridLabel {
+  margin: auto;
+  padding: 8px 0;
+  font-weight: $fw-bold;
+  text-align: center;
+  color: $black-1;
+}
+
+.empty {
+  padding: 40px 0;
+  text-align: center;
+  color: $gray-3;
+}
