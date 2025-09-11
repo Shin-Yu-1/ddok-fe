@@ -174,6 +174,12 @@ export interface MainPageData {
   recruitingStudies: CardItem[];
   ongoingProjects: CardItem[];
   recruitingProjects: CardItem[];
+  stats: {
+    recruitingStudiesCount: number;
+    recruitingProjectsCount: number;
+    ongoingStudiesCount: number;
+    ongoingProjectsCount: number;
+  };
   // 사용자 개인화 데이터 (로그인 시)
   userOngoingStudies?: UserCardItem[];
   userOngoingProjects?: UserCardItem[];
