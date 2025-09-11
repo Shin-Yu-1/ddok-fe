@@ -283,6 +283,7 @@ const SearchProjectPage = () => {
     paramsChangedRef.current = true;
     setProjectList([]);
     setHasMore(true);
+    setPagination(prev => ({ ...prev, page: 0 }));
 
     const newParams = buildParams();
     setSubmittedParams(newParams);
@@ -312,7 +313,7 @@ const SearchProjectPage = () => {
             border="1px solid var(--gray-2)"
             focusBorder="1px solid var(--gray-2)"
             backgroundColor="var(--white-3)"
-            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+            leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
             onChange={handleChangeKeyword}
             onKeyDown={handleEnter}
           />
