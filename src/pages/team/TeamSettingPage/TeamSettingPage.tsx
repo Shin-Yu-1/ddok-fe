@@ -177,7 +177,7 @@ const TeamSettingPage = () => {
   return (
     <div className={styles.container}>
       <button className={styles.backButton} onClick={() => navigate(-1)}>
-        <ArrowUUpLeftIcon size={24} weight="bold" />
+        <ArrowUUpLeftIcon size={20} weight="bold" />
       </button>
 
       <h1 className={styles.title}>
