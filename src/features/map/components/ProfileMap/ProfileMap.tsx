@@ -98,6 +98,7 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
             />
           ))}
       </Map>
+      <div className={styles.blocker}></div>
     </div>
   );
 };
