@@ -297,7 +297,14 @@ const SearchStudyPage = () => {
         <h1 className={styles.title}>스터디</h1>
 
         {isLoggedIn && (
-          <Button size="md" variant="secondary" radius="xsm">
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={() => {
+              navigate('/create/study');
+            }}
+          >
             모집글 작성하기
           </Button>
         )}

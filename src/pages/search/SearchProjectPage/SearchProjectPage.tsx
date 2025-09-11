@@ -295,7 +295,14 @@ const SearchProjectPage = () => {
         <h1 className={styles.title}>프로젝트</h1>
 
         {isLoggedIn && (
-          <Button size="md" variant="secondary" radius="xsm">
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={() => {
+              navigate('/create/project');
+            }}
+          >
             모집글 작성하기
           </Button>
         )}
