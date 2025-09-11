@@ -133,7 +133,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
             focusBorder="1px solid var(--gray-2)"
             fontSize="var(--fs-xxsmall)"
             iconSize="var(--i-large)"
-            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+            leftIcon={<MagnifyingGlassIcon size="20" weight="light" />}
             placeholder="검색어를 입력하세요"
             value={keyword}
             onChange={e => setKeyword(e.target.value)}
