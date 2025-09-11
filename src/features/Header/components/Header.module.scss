@@ -57,6 +57,22 @@
 .button {
   border-width: 1px;
   border-color: transparent;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: v.$black-1;
+    background-color: v.$yellow-1;
+  }
+}
+
+.buttonLogout {
+  border-width: 1px;
+  border-color: transparent;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+  }
 }
 
 .userProfile {
@@ -100,9 +116,18 @@
   white-space: nowrap;
   color: v.$black-4;
 
+  .userProfile:hover & {
+    font-weight: v.$fw-medium;
+    color: v.$black-1;
+  }
+
   @include m.mobile {
     @include m.font-text;
 
     font-weight: v.$fw-regular;
+
+    .userProfile:hover & {
+      font-weight: v.$fw-medium;
+    }
   }
 }
