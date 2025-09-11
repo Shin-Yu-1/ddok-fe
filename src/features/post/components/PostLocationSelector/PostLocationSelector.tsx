@@ -6,6 +6,7 @@ import styles from './PostLocationSelector.module.scss';
 interface PostLocationSelectorProps {
   location: Location | null;
   onLocationChange: (location: Location | null) => void;
+  type?: 'project' | 'study';
 }
 
 // Location 객체를 주소 문자열로 변환하는 유틸 함수
@@ -21,7 +22,11 @@ const formatLocationToAddress = (location: Location): string => {
   return parts.join(' ');
 };
 
-const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelectorProps) => {
+const PostLocationSelector = ({
+  location,
+  onLocationChange,
+  type = 'project',
+}: PostLocationSelectorProps) => {
   const handleLocationSearchChange = () => {
     // 단순 텍스트 변경은 처리하지 않음 (읽기 전용)
   };
@@ -30,9 +35,15 @@ const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelect
     onLocationChange(selectedLocation);
   };
 
+  const getLocationMessage = () => {
+    return type === 'study'
+      ? '스터디를 진행할 지역을 선택해주세요'
+      : '프로젝트를 진행할 지역을 선택해주세요';
+  };
+
   return (
     <div className={styles.container}>
-      <p className={styles.sectionSubtitle}>프로젝트를 진행할 지역을 선택해주세요</p>
+      <p className={styles.sectionSubtitle}>{getLocationMessage()}</p>
       <AddressSearchInput
         value={location ? formatLocationToAddress(location) : ''}
         onChange={handleLocationSearchChange}
@@ -55,4 +66,5 @@ const PostLocationSelector = ({ location, onLocationChange }: PostLocationSelect
     </div>
   );
 };
+
 export default PostLocationSelector;
