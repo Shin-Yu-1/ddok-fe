@@ -17,6 +17,8 @@ export interface StudyRecruitmentTableProps {
   isApproved: boolean;
   // 현재 사용자가 스터디 리더인지
   isMine: boolean;
+  // 스터디 상태 ('RECRUITING' | 'ONGOING' | 'CLOSED')
+  status: 'RECRUITING' | 'ONGOING' | 'CLOSED';
   // 지원하기/취소 핸들러
   onApply?: () => void;
 }
@@ -28,6 +30,7 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
   isApplied,
   isApproved,
   isMine,
+  status,
   onApply,
 }) => {
   // 로그인 상태 확인
@@ -42,6 +45,18 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
     onApply?.();
   };
 
+  // 스터디 상태별 메시지 반환
+  const getStatusMessage = () => {
+    switch (status) {
+      case 'ONGOING':
+        return '진행 중';
+      case 'CLOSED':
+        return '종료됨';
+      default:
+        return null;
+    }
+  };
+
   // 액션 버튼 렌더링
   const renderActionButton = () => {
     // 본인 스터디인 경우 또는 승인된 상태
@@ -49,7 +64,17 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
       return <button className={`${styles.actionButton} ${styles.confirmed}`}>확정</button>;
     }
 
-    // 지원한 상태
+    // 모집중이 아닌 경우
+    if (status !== 'RECRUITING') {
+      const message = getStatusMessage();
+      return (
+        <button className={`${styles.actionButton} ${styles.disabled}`} disabled>
+          {message}
+        </button>
+      );
+    }
+
+    // 지원한 상태 (모집중일 때만)
     if (isApplied) {
       return (
         <button
@@ -70,7 +95,7 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
       );
     }
 
-    // 지원 가능한 상태 (로그인 여부와 관계없이 버튼은 보이지만 클릭 시 체크)
+    // 지원 가능한 상태 (모집중이고 로그인 여부와 관계없이 버튼은 보이지만 클릭 시 체크)
     return (
       <button
         className={`${styles.actionButton} ${styles.selectable}`}
