@@ -67,7 +67,14 @@ useEffect(() => {
     const hasChanged =
       selectedLocation.latitude !== user.location.latitude ||
       selectedLocation.longitude !== user.location.longitude ||
-      selectedLocation.address !== user.location.address;
+      selectedLocation.address !== user.location.address ||
+      selectedLocation.region1depthName !== user.location.region1depthName ||
+      selectedLocation.region2depthName !== user.location.region2depthName ||
+      selectedLocation.region3depthName !== user.location.region3depthName ||
+      selectedLocation.roadName !== user.location.roadName ||
+      selectedLocation.mainBuildingNo !== user.location.mainBuildingNo ||
+      selectedLocation.subBuildingNo !== user.location.subBuildingNo ||
+      selectedLocation.zoneNo !== user.location.zoneNo;
 
     setHasChanges(hasChanged);
   }, [selectedLocation, user.location]);
