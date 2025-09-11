@@ -111,10 +111,14 @@ const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
     const { ageMin, ageMax } = preferredAges;
 
     if (ageMin && ageMax) {
-      return `${ageMin}대, ${ageMax}대`;
+      const result: string[] = [];
+      for (let age = ageMin; age < ageMax; age += 10) {
+        result.push(`${age}대`);
+      }
+      return result.join(', ');
     }
     if (ageMin) return `${ageMin}대 이상`;
-    if (ageMax) return `${ageMax}대 이하`;
+    if (ageMax) return `${ageMax - 10}대 이하`;
     return '-';
   };
 
@@ -127,7 +131,9 @@ const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
     <div
       className={styles.cardContainer}
       onClick={() => {
-        clickHandle(item);
+        if (clickHandle) {
+          clickHandle(item);
+        }
       }}
     >
       <div className={styles.bannerWrapper}>
