@@ -12,9 +12,10 @@ import styles from './ApplicantRow.module.scss';
 interface ApplicantRowProps {
   member: ApplicantType;
   teamId: number;
+  amILeader: boolean;
 }
 
-const ApplicantRow = ({ member, teamId }: ApplicantRowProps) => {
+const ApplicantRow = ({ member, teamId, amILeader }: ApplicantRowProps) => {
   const queryClient = useQueryClient();
 
   const approveApplicant = useApproveApplicant({
@@ -64,32 +65,36 @@ const ApplicantRow = ({ member, teamId }: ApplicantRowProps) => {
       <div className={styles.position}>{member.appliedPosition}</div>
       <User user={member.user} />
       <div className={styles.actionContainer}>
-        <Button
-          className={styles.action}
-          backgroundColor="var(--blue-1)"
-          fontSize="var(--fs-xxsmall)"
-          height="28px"
-          textColor="var(--white-2)"
-          radius="xsm"
-          fontWeightPreset="regular"
-          onClick={handleApprove}
-          disabled={approveApplicant.isPending}
-        >
-          {approveApplicant.isPending ? '처리 중...' : '수락'}
-        </Button>
-        <Button
-          className={styles.action}
-          backgroundColor="var(--gray-1)"
-          fontSize="var(--fs-xxsmall)"
-          height="28px"
-          textColor="var(--white-2)"
-          radius="xsm"
-          fontWeightPreset="regular"
-          onClick={handleReject}
-          disabled={rejectApplicant.isPending}
-        >
-          {rejectApplicant.isPending ? '처리 중...' : '거절'}
-        </Button>
+        {amILeader ? (
+          <>
+            <Button
+              className={styles.action}
+              backgroundColor="var(--blue-1)"
+              fontSize="var(--fs-xxsmall)"
+              height="28px"
+              textColor="var(--white-2)"
+              radius="xsm"
+              fontWeightPreset="regular"
+              onClick={handleApprove}
+              disabled={approveApplicant.isPending}
+            >
+              {approveApplicant.isPending ? '처리 중...' : '수락'}
+            </Button>
+            <Button
+              className={styles.action}
+              backgroundColor="var(--gray-1)"
+              fontSize="var(--fs-xxsmall)"
+              height="28px"
+              textColor="var(--white-2)"
+              radius="xsm"
+              fontWeightPreset="regular"
+              onClick={handleReject}
+              disabled={rejectApplicant.isPending}
+            >
+              {rejectApplicant.isPending ? '처리 중...' : '거절'}
+            </Button>
+          </>
+        ) : null}
       </div>
     </>
   );

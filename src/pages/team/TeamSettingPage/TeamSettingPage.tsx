@@ -1,9 +1,16 @@
+import { useState } from 'react';
+
 import { useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
+import type { EvaluationData } from '@/constants/evaluation';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
+import EvaluateModal from '@/features/Team/components/EvaluateModal/EvaluateModal';
 import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
+import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
+
+import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
 
 import styles from './TeamSettingPage.module.scss';
 
@@ -11,9 +18,13 @@ const TeamSettingPage = () => {
   const params = useParams();
   const { id } = params;
 
+  // 모달 상태 관리
+  const [isSelectMemberModalOpen, setIsSelectMemberModalOpen] = useState(false);
+  const [isEvaluateModalOpen, setIsEvaluateModalOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
+
   const teamId = id ? parseInt(id, 10) : null;
 
-  // 팀 설정 정보 조회
   const {
     data: teamData,
     isLoading,
@@ -22,6 +33,30 @@ const TeamSettingPage = () => {
     teamId: teamId || 0,
     enabled: !!teamId,
   });
+
+  const handleEvaluateSubmit = (evaluationData: EvaluationData) => {
+    console.log('평가 데이터:', evaluationData);
+    console.log('평가 대상:', selectedMember?.user.nickname);
+    // TODO: 평가 데이터 API 전송 로직 추가
+  };
+
+  const openSelectMemberModal = () => {
+    setIsSelectMemberModalOpen(true);
+  };
+
+  const closeSelectMemberModal = () => {
+    setIsSelectMemberModalOpen(false);
+  };
+
+  const handleMemberSelect = (member: MemberType) => {
+    setSelectedMember(member);
+    setIsEvaluateModalOpen(true);
+  };
+
+  const closeEvaluateModal = () => {
+    setIsEvaluateModalOpen(false);
+    setSelectedMember(null);
+  };
 
   if (!id || !teamId || isNaN(teamId)) {
     return (
@@ -56,12 +91,16 @@ const TeamSettingPage = () => {
 
       <section className={styles.wrapper}>
         <div className={styles.label}>팀원</div>
-        <MembersGrid members={teamData.data.items} amILeader={teamData.data.isLeader} />
+        <MembersGrid
+          members={teamData.data.items}
+          amILeader={teamData.data.isLeader}
+          teamId={teamId}
+        />
       </section>
 
       <section className={styles.wrapper}>
         <div className={styles.label}>참여 희망자</div>
-        <ApplicantsGrid teamId={teamId} />
+        <ApplicantsGrid teamId={teamId} amILeader={teamData.data.isLeader} />
       </section>
 
       <section className={styles.settings}>
@@ -69,6 +108,7 @@ const TeamSettingPage = () => {
         <div className={styles.settingItem}>
           <div>프로젝트 중도 하차하기</div>
           <Button
+            className={styles.leaveBtn}
             backgroundColor="var(--black-1)"
             textColor="var(--white-3)"
             radius="xsm"
@@ -82,6 +122,7 @@ const TeamSettingPage = () => {
         <div className={styles.settingItem}>
           <div>프로젝트 종료하기</div>
           <Button
+            className={styles.closureBtn}
             backgroundColor="var(--black-1)"
             textColor="var(--white-3)"
             radius="xsm"
@@ -95,11 +136,13 @@ const TeamSettingPage = () => {
         <div className={styles.settingItem}>
           <div>팀원 평가하기</div>
           <Button
+            className={styles.evaluateBtn}
             backgroundColor="var(--black-1)"
             textColor="var(--white-3)"
             radius="xsm"
             fontSize="var(--fs-xxsmall)"
             height="35px"
+            onClick={openSelectMemberModal}
           >
             평가하기
           </Button>
@@ -108,6 +151,7 @@ const TeamSettingPage = () => {
         <div className={styles.settingItem}>
           <div>프로젝트 삭제하기</div>
           <Button
+            className={styles.deleteBtn}
             backgroundColor="var(--gray-4)"
             radius="xsm"
             fontSize="var(--fs-xxsmall)"
@@ -117,6 +161,22 @@ const TeamSettingPage = () => {
           </Button>
         </div>
       </section>
+
+      {/* 팀원 선택 모달 */}
+      <SelectMemberModal
+        isOpen={isSelectMemberModalOpen}
+        onClose={closeSelectMemberModal}
+        members={teamData.data.items}
+        onSelectMember={handleMemberSelect}
+      />
+
+      {/* 평가 모달 */}
+      <EvaluateModal
+        isOpen={isEvaluateModalOpen}
+        onClose={closeEvaluateModal}
+        memberName={selectedMember?.user.nickname || '팀원'}
+        onSubmit={handleEvaluateSubmit}
+      />
     </div>
   );
 };

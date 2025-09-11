@@ -5,11 +5,12 @@ import styles from './ApplicantsGrid.module.scss';
 
 interface ApplicantsGridProps {
   teamId: number;
+  amILeader: boolean;
   page?: number;
   size?: number;
 }
 
-const ApplicantsGrid = ({ teamId, page = 0, size = 4 }: ApplicantsGridProps) => {
+const ApplicantsGrid = ({ teamId, amILeader, page = 0, size = 4 }: ApplicantsGridProps) => {
   const { data, isLoading, isError, error } = useGetTeamApplicants({
     teamId,
     page,
@@ -37,7 +38,12 @@ const ApplicantsGrid = ({ teamId, page = 0, size = 4 }: ApplicantsGridProps) => 
       <div className={styles.gridLabel}>액션</div>
 
       {data.data.items.map(applicant => (
-        <ApplicantRow key={applicant.applicantId} member={applicant} teamId={teamId} />
+        <ApplicantRow
+          key={applicant.applicantId}
+          member={applicant}
+          teamId={teamId}
+          amILeader={amILeader}
+        />
       ))}
     </div>
   );
