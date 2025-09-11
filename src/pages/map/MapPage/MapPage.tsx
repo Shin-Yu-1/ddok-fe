@@ -279,7 +279,10 @@ const MapPage = () => {
   };
 
   // 지도 로드
-  useKakaoLoader({ appkey: import.meta.env.VITE_KAKAO_API_KEY, libraries: ['services'] });
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_KAKAO_API_KEY,
+    libraries: ['services', 'clusterer'],
+  });
 
   return (
     <div className={styles.container}>
