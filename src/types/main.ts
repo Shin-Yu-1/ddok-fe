@@ -2,8 +2,8 @@
 
 // 나이대 범위
 export interface PreferredAges {
-  ageMin: number;
-  ageMax: number;
+  ageMin: number | null;
+  ageMax: number | null;
 }
 
 // 전체 리스트용 팀 상태 (모집부터 완료까지 모든 상태)
@@ -39,7 +39,7 @@ export interface StudyItem {
   mode: Mode;
   address: string;
   studyType: string;
-  preferredAges: PreferredAges;
+  preferredAges: PreferredAges | null;
   expectedMonth: number;
   startDate: string;
 }
@@ -54,7 +54,7 @@ export interface ProjectItem {
   capacity: number;
   mode: Mode;
   address: string;
-  preferredAges: PreferredAges;
+  preferredAges: PreferredAges | null;
   expectedMonth: number;
   startDate: string;
 }
@@ -143,7 +143,7 @@ export interface CardItem {
   capacity?: number;
   mode: Mode;
   address: string;
-  preferredAges?: PreferredAges;
+  preferredAges?: PreferredAges | null;
   expectedMonth?: number;
   startDate: string;
   // 스터디 전용
