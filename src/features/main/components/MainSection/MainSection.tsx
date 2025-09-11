@@ -2,17 +2,19 @@ import { CaretRight } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 import MainCard from '@/features/main/components/MainCard/MainCard';
-import type { CardItem } from '@/types/main';
+import UserCard from '@/features/main/components/UserCard/UserCard';
+import type { CardItem, UserCardItem } from '@/types/main';
 
 import styles from './MainSection.module.scss';
 
 interface MainSectionProps {
   title: string;
   subtitle?: string;
-  items: CardItem[];
+  items: CardItem[] | UserCardItem[];
   viewAllLink?: string;
   isLoading?: boolean;
   emptyMessage?: string;
+  isUserSection?: boolean; // 사용자 섹션인지 구분하는 prop
 }
 
 export default function MainSection({
@@ -22,6 +24,7 @@ export default function MainSection({
   viewAllLink,
   isLoading = false,
   emptyMessage = '등록된 항목이 없습니다.',
+  isUserSection = false,
 }: MainSectionProps) {
   if (isLoading) {
     return (
@@ -78,10 +81,18 @@ export default function MainSection({
             <p className={styles.emptyMessage}>{emptyMessage}</p>
           </div>
         ) : (
-          <div className={styles.cardGrid}>
-            {items.map(item => (
-              <MainCard key={`${item.type}-${item.id}`} item={item} />
-            ))}
+          <div className={`${styles.cardGrid} ${isUserSection ? styles.userCardGrid : ''}`}>
+            {items.map(item => {
+              if (isUserSection) {
+                // 사용자 섹션에서는 UserCard 사용
+                return (
+                  <UserCard key={`user-${item.type}-${item.id}`} item={item as UserCardItem} />
+                );
+              } else {
+                // 일반 섹션에서는 MainCard 사용
+                return <MainCard key={`${item.type}-${item.id}`} item={item as CardItem} />;
+              }
+            })}
           </div>
         )}
       </div>
