@@ -74,7 +74,7 @@ export default function KakaoCallbackPage() {
           },
         });
 
-        navigate(result.user.isPreference ? '/map' : '/personalization', {
+        navigate(result.user.isPreference ? '/main' : '/personalization', {
           replace: true,
         });
       } catch (apiError) {
