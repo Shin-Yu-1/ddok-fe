@@ -181,7 +181,7 @@ const TeamSettingPage = () => {
       </h1>
 
       <section className={styles.wrapper}>
-        <div className={styles.label}>팀원</div>
+        <div className={styles.label}>멤버</div>
         <MembersGrid
           teamType={teamData.data.teamType}
           members={teamData.data.items}
