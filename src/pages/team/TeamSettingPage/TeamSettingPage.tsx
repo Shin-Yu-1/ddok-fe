@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import type { EvaluationData } from '@/constants/evaluation';
@@ -16,6 +16,7 @@ import styles from './TeamSettingPage.module.scss';
 
 const TeamSettingPage = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const { id } = params;
 
   // 모달 상태 관리
@@ -29,10 +30,25 @@ const TeamSettingPage = () => {
     data: teamData,
     isLoading,
     isError,
+    error,
   } = useGetTeamSetting({
     teamId: teamId || 0,
     enabled: !!teamId,
   });
+
+  // 403 에러 체크 및 이전 페이지로 이동
+  useEffect(() => {
+    if (isError && error) {
+      if (
+        typeof error === 'object' &&
+        'response' in error &&
+        (error as { response?: { status?: number } }).response?.status === 403
+      ) {
+        alert('해당 팀에 접근할 권한이 없습니다.');
+        navigate(-1); // 이전 페이지로 이동
+      }
+    }
+  }, [isError, error, navigate]);
 
   const handleEvaluateSubmit = (evaluationData: EvaluationData) => {
     console.log('평가 데이터:', evaluationData);
