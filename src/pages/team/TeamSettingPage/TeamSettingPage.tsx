@@ -105,61 +105,74 @@ const TeamSettingPage = () => {
 
       <section className={styles.settings}>
         <div className={styles.label}>프로젝트 관련 설정</div>
-        <div className={styles.settingItem}>
-          <div>프로젝트 중도 하차하기</div>
-          <Button
-            className={styles.leaveBtn}
-            backgroundColor="var(--black-1)"
-            textColor="var(--white-3)"
-            radius="xsm"
-            fontSize="var(--fs-xxsmall)"
-            height="35px"
-          >
-            하차하기
-          </Button>
-        </div>
 
-        <div className={styles.settingItem}>
-          <div>프로젝트 종료하기</div>
-          <Button
-            className={styles.closureBtn}
-            backgroundColor="var(--black-1)"
-            textColor="var(--white-3)"
-            radius="xsm"
-            fontSize="var(--fs-xxsmall)"
-            height="35px"
-          >
-            종료하기
-          </Button>
-        </div>
+        {/* 하차하기 버튼: 내가 leader가 아니고, teamStatus가 종료되지 않았을 때만 보임 */}
+        {!teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
+          <div className={styles.settingItem}>
+            <div>프로젝트 중도 하차하기</div>
+            <Button
+              className={styles.leaveBtn}
+              backgroundColor="var(--black-1)"
+              textColor="var(--white-3)"
+              radius="xsm"
+              fontSize="var(--fs-xxsmall)"
+              height="35px"
+            >
+              하차하기
+            </Button>
+          </div>
+        )}
 
-        <div className={styles.settingItem}>
-          <div>팀원 평가하기</div>
-          <Button
-            className={styles.evaluateBtn}
-            backgroundColor="var(--black-1)"
-            textColor="var(--white-3)"
-            radius="xsm"
-            fontSize="var(--fs-xxsmall)"
-            height="35px"
-            onClick={openSelectMemberModal}
-          >
-            평가하기
-          </Button>
-        </div>
+        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 진행중이 아닐 때만 보임 */}
+        {teamData.data.isLeader && teamData.data.teamStatus !== 'ONGOING' && (
+          <div className={styles.settingItem}>
+            <div>프로젝트 종료하기</div>
+            <Button
+              className={styles.closureBtn}
+              backgroundColor="var(--black-1)"
+              textColor="var(--white-3)"
+              radius="xsm"
+              fontSize="var(--fs-xxsmall)"
+              height="35px"
+            >
+              종료하기
+            </Button>
+          </div>
+        )}
 
-        <div className={styles.settingItem}>
-          <div>프로젝트 삭제하기</div>
-          <Button
-            className={styles.deleteBtn}
-            backgroundColor="var(--gray-4)"
-            radius="xsm"
-            fontSize="var(--fs-xxsmall)"
-            height="35px"
-          >
-            삭제하기
-          </Button>
-        </div>
+        {/* 평가하기 버튼: 모든 멤버에 대해 teamStatus가 CLOSED일 때 보임 */}
+        {teamData.data.teamStatus === 'CLOSED' && (
+          <div className={styles.settingItem}>
+            <div>팀원 평가하기</div>
+            <Button
+              className={styles.evaluateBtn}
+              backgroundColor="var(--black-1)"
+              textColor="var(--white-3)"
+              radius="xsm"
+              fontSize="var(--fs-xxsmall)"
+              height="35px"
+              onClick={openSelectMemberModal}
+            >
+              평가하기
+            </Button>
+          </div>
+        )}
+
+        {/* 프로젝트 삭제하기 버튼: 내가 leader일 때만 */}
+        {teamData.data.isLeader && (
+          <div className={styles.settingItem}>
+            <div>프로젝트 삭제하기</div>
+            <Button
+              className={styles.deleteBtn}
+              backgroundColor="var(--gray-4)"
+              radius="xsm"
+              fontSize="var(--fs-xxsmall)"
+              height="35px"
+            >
+              삭제하기
+            </Button>
+          </div>
+        )}
       </section>
 
       {/* 팀원 선택 모달 */}
