@@ -37,7 +37,7 @@ const ApplicantsGrid = ({ teamId, page = 0, size = 4 }: ApplicantsGridProps) => 
       <div className={styles.gridLabel}>액션</div>
 
       {data.data.items.map(applicant => (
-        <ApplicantRow key={applicant.applicantId} member={applicant} />
+        <ApplicantRow key={applicant.applicantId} member={applicant} teamId={teamId} />
       ))}
     </div>
   );
