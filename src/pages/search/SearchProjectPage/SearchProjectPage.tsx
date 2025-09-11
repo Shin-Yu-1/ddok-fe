@@ -325,7 +325,13 @@ const SearchProjectPage = () => {
             onKeyDown={handleEnter}
           />
 
-          <Button size="md" variant="secondary" radius="xsm" onClick={handleClickSearch}>
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={handleClickSearch}
+            disabled={isLoading}
+          >
             검색하기
           </Button>
         </div>
