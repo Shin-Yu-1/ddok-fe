@@ -445,14 +445,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
   border-radius: 50%;
-  font-size: $fs-medium;
-  font-weight: $fw-bold;
-  color: $yellow-1;
-  background: $black-1;
+  overflow: hidden;
   box-shadow: 0 8px 30px rgb(0 0 0 / 30%);
+}
+
+.ddokMascot {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 }
 
 // 마지막 CTA 섹션

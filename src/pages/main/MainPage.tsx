@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Plus, Users, Code, BookOpen, MapPin, UserCheck, HandTap } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
+import DDOKMascot from '@/assets/images/DDOK/DDOK-Mascot.svg';
 import { MAIN_COPY, DDOK_STORY_PREVIEW } from '@/constants/mainContent';
 import DdokStoryModal from '@/features/main/components/DdokStoryModal/DdokStoryModal';
 import MainSection from '@/features/main/components/MainSection/MainSection';
@@ -290,7 +291,9 @@ export default function MainPage() {
             </button>
           </div>
           <div className={styles.storyVisual}>
-            <div className={styles.ddokCharacter}>똑DDOK</div>
+            <div className={styles.ddokCharacter}>
+              <img src={DDOKMascot} alt="똑DDOK 마스코트" className={styles.ddokMascot} />
+            </div>
           </div>
         </div>
       </section>
