@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { CustomOverlayMap, Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 
 import { useGetProfileMap } from '../../hooks/useGetProfileMap';
 import type { MapBounds } from '../../schemas/mapItemSchema';
@@ -22,9 +22,6 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
 
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
-
-  // 오버레이 열림 상태
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   // 프로필 지도 데이터 조회
   const { data: profileMapData } = useGetProfileMap({
@@ -72,22 +69,11 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
         {/* 플레이어 중심 좌표 */}
         <MapMarker
           position={{ lat: location.latitude, lng: location.longitude }}
-          onClick={() => {
-            setIsOverlayOpen(true);
+          image={{
+            src: '/src/assets/images/DDOK/DDOK-Mascot.svg',
+            size: { width: 40, height: 40 },
           }}
         />
-
-        {/* 플레이어 중심 좌표 오버레이 */}
-        {isOverlayOpen && (
-          <CustomOverlayMap
-            position={{ lat: location.latitude, lng: location.longitude }}
-            yAnchor={2.5}
-          >
-            <div className={styles.overlay}>
-              <div>{location.address}</div>
-            </div>
-          </CustomOverlayMap>
-        )}
 
         {/* 마커 */}
         {profileMapData?.data &&
