@@ -37,18 +37,17 @@ const EditLocationModal = ({ isOpen, onClose, user }: EditLocationModalProps) =>
   });
 
   // 모달이 열릴 때 기존 데이터로 초기화
-  useEffect(() => {
+useEffect(() => {
     if (isOpen && user.location) {
-      // user.location을 Location 타입으로 변환
       const initialLocation: Location = {
-        address: user.location.address,
-        region1depthName: '',
-        region2depthName: '',
-        region3depthName: '',
-        roadName: '',
-        mainBuildingNo: '',
-        subBuildingNo: '',
-        zoneNo: '',
+        address: user.location.address || '',
+        region1depthName: user.location.region1depthName || '',
+        region2depthName: user.location.region2depthName || '',
+        region3depthName: user.location.region3depthName || '',
+        roadName: user.location.roadName || '',
+        mainBuildingNo: user.location.mainBuildingNo || '',
+        subBuildingNo: user.location.subBuildingNo || '',
+        zoneNo: user.location.zoneNo || '',
         latitude: user.location.latitude,
         longitude: user.location.longitude,
       };
