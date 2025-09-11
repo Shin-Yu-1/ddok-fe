@@ -393,7 +393,7 @@ const SearchStudyPage = () => {
               className={styles.datePicker}
               selected={startDate}
               onChange={date => setStartDate(date || new Date())}
-              dateFormat="yyy-MM-dd"
+              dateFormat="yyyy.MM.dd"
               placeholderText="시작일 선택"
             />
           </div>

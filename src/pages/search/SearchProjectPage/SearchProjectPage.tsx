@@ -391,7 +391,7 @@ const SearchProjectPage = () => {
               className={styles.datePicker}
               selected={startDate}
               onChange={date => setStartDate(date || new Date())}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="yyyy.MM.dd"
               placeholderText="시작일 선택"
             />
           </div>
