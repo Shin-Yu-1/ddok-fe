@@ -111,6 +111,12 @@ export const signIn = async (signInData: SignInRequest): Promise<SignInApiRespon
   return response.data.data;
 };
 
+// 로그아웃 - 새로 추가
+export const signOut = async (): Promise<null> => {
+  const response = await api.post<ApiResponseDto<null>>('/api/auth/signout');
+  return response.data.data;
+};
+
 // 기술 스택 검색
 export const searchTechStacks = async (keyword?: string): Promise<string[]> => {
   const url = keyword

@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
-export type ModalType = 'introduction' | 'position' | 'traits' | 'time' | 'portfolio' | 'techStack';
+export type ModalType =
+  | 'introduction'
+  | 'position'
+  | 'traits'
+  | 'time'
+  | 'portfolio'
+  | 'techStack'
+  | 'location';
 
 interface ModalState {
   [key: string]: boolean;
@@ -14,6 +21,7 @@ export const useProfileModals = () => {
     time: false,
     portfolio: false,
     techStack: false,
+    location: false,
   });
 
   const openModal = (modalType: ModalType) => {
@@ -38,6 +46,7 @@ export const useProfileModals = () => {
       time: false,
       portfolio: false,
       techStack: false,
+      location: false,
     });
   };
 

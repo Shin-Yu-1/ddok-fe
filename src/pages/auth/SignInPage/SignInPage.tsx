@@ -17,7 +17,7 @@ export default function SignInPage() {
       if (!user.isPreference) {
         navigate('/personalization', { replace: true });
       } else {
-        navigate('/map', { replace: true });
+        navigate('/main', { replace: true });
       }
     }
   }, [isLoggedIn, user, navigate]);

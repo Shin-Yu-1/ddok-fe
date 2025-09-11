@@ -13,10 +13,8 @@ const PersonalitySelector = ({
 }: PersonalitySelectorProps) => {
   return (
     <div className={styles.section}>
-      <h2 className={styles.sectionTitle}>당신의 성향을 선택해주세요</h2>
-      <p className={styles.sectionSubtitle}>
-        어떤 사람들과 일/공부하는 것을 선호 하시나요? (최대 5개)
-      </p>
+      <h2 className={styles.sectionTitle}>본인의 성향을 선택해주세요</h2>
+      <p className={styles.sectionSubtitle}>당신은 어떤 사람인가요? (최대 5개)</p>
       <PersonalityGrid
         selectedPersonality={selectedPersonality}
         onPersonalityToggle={onPersonalityToggle}

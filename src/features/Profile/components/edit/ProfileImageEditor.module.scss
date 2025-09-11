@@ -1,0 +1,111 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.profileSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid v.$gray-3;
+
+  @include m.mobile {
+    gap: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+  }
+}
+
+.profileInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profileImageContainer {
+  position: relative;
+}
+
+.profileImage {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  @include m.mobile {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.imageEditButton {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid v.$white-3;
+  border-radius: 50%;
+  color: v.$white-3;
+  background-color: v.$black-3;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  @include m.mobile {
+    right: 4px;
+    bottom: 4px;
+    width: 24px;
+    height: 24px;
+    border-width: 1px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+.profileLabel {
+  @include m.font-description;
+
+  font-weight: v.$fw-semibold;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-sub-description;
+  }
+}
+
+.nicknameEditButton {
+  @include m.font-text;
+
+  padding: 8px 16px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xsmall;
+  font-weight: v.$fw-medium;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border-color: v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 6px 12px;
+  }
+}

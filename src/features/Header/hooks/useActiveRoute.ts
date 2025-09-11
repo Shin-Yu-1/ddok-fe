@@ -4,6 +4,7 @@ export const useActiveRoute = () => {
   const { pathname } = useLocation();
 
   const activeStates = {
+    main: pathname === '/main',
     map: pathname === '/map',
     project: pathname.includes('/project'),
     study: pathname.includes('/study'),

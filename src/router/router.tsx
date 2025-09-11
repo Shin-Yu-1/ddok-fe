@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '@/App';
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout';
+import MainLayout from '@/layouts/MainLayout/MainLayout';
 import MapLayout from '@/layouts/MapLayout/MapLayout';
 import PersonalizationLayout from '@/layouts/PersonalizationLayout/PersonalizationLayout';
 import PostLayout from '@/layouts/PostLayout/PostLayout';
@@ -27,6 +28,7 @@ import EditMyInfoPage from '@/pages/edit/EditMyInfoPage/EditMyInfoPage';
 import EditProjectPage from '@/pages/edit/EditProjectPage/EditProjectPage';
 import EditStudyPage from '@/pages/edit/EditStudyPage/EditStudyPage';
 import IntroPage from '@/pages/intro/IntroPage/IntroPage';
+import MainPage from '@/pages/main/MainPage';
 import MapPage from '@/pages/map/MapPage/MapPage';
 import PersonalizationPage from '@/pages/personalization/PersonalizationPage/PersonalizationPage';
 import MyProfilePage from '@/pages/profile/MyProfilePage/MyProfilePage';
@@ -48,8 +50,20 @@ export const router = createBrowserRouter([
         index: true,
         element: <DevPage />,
       },
+      // {
+      //   index: true,
+      //   element: <MainPage />,
+      // },
       {
-        //TODO: 추후 개발 완료 시 index:true로 변경 필요
+        element: <MainLayout />,
+        children: [
+          {
+            path: 'main', // '/main' 경로
+            element: <MainPage />,
+          },
+        ],
+      },
+      {
         // index: true,
         path: '/intro',
         element: <IntroPage />,

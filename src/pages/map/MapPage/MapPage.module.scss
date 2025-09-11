@@ -11,15 +11,20 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  width: 100%;
-  height: calc(100vh - 97px);
+  width: calc(100% - 47px);
+  height: calc(100vh - 96px);
+  margin-left: 47px;
 
   @include m.tablet {
-    height: calc(100vh - 97px);
+    width: calc(100% - 42px);
+    height: calc(100vh - 96px);
+    margin-left: 42px;
   }
 
   @include m.mobile {
+    width: calc(100% - 37px);
     height: calc(100vh - 81px);
+    margin-left: 37px;
   }
 }
 

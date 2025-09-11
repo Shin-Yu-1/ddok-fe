@@ -6,6 +6,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { EditRecruitmentTable } from '@/components/RecruitmentTable';
+import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeSelector from '@/features/post/components/AgeRangeSelector/AgeRangeSelector';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
 import PostCapacitySelector from '@/features/post/components/PostCapacitySelector/PostCapacitySelector';
@@ -40,6 +41,7 @@ const EditProjectPage = () => {
     updateExpectedMonth,
     updateBannerImage,
     updateTeamStatus,
+    editData,
     isValid,
     isSubmitting,
   } = useEditProjectForm({ projectId });
@@ -135,7 +137,6 @@ const EditProjectPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>EditProjectPage (ID: {projectId})</h1>
       <div className={styles.container}>
         <div className={styles.bannerImage}>
           <BannerImageSection
@@ -205,6 +206,15 @@ const EditProjectPage = () => {
                     mode="editor"
                   />
                 </MainSection>
+                <MainSection title="팀 멤버">
+                  {editData?.data && (
+                    <TeamMemberTable
+                      leader={editData.data.leader}
+                      participants={editData.data.participants || []}
+                      isStudyMode={false}
+                    />
+                  )}
+                </MainSection>
               </div>
               <div className={styles.rightSection}>
                 <SideSection title={'진행 상태'}>
@@ -212,7 +222,7 @@ const EditProjectPage = () => {
                     value={formData.teamStatus}
                     onChange={updateTeamStatus}
                     postType="project"
-                    editable={true}
+                    editable={formData.teamStatus !== 'CLOSED'}
                   />
                 </SideSection>
                 <MainSection title={'모집 인원'}>

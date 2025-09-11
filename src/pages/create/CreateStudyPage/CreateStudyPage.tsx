@@ -134,7 +134,6 @@ const CreateStudyPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>CreateStudyPage</h1>
       <div className={styles.container}>
         <div className={styles.bannerImage}>
           <BannerImageSection

@@ -10,7 +10,7 @@ const PersonalizationLayout = () => {
     <ProtectedRoute requirePreference={false}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <Header variant="logo-only" />
+          <Header />
         </div>
         <Outlet />
       </div>

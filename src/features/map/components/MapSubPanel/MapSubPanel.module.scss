@@ -9,8 +9,24 @@
   height: 100%;
   padding: 20px;
   border-right: 1px solid $gray-1;
+  overflow: scroll;
+  overflow: hidden;
   color: $black-4;
   background-color: $white-3;
+}
+
+.subPanel__loading,
+.subPanel__error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: $fs-xxsmall;
+  color: $gray-2;
+}
+
+.subPanel__error {
+  color: $red-1;
 }
 
 .subPanel__header {
@@ -26,135 +42,9 @@
 
   &__category {
     width: fit-content;
-    padding: 3px 10px;
+    padding: 3px 7px;
     border-radius: $r-xxsmall;
     font-size: $fs-xxxsmall;
     background-color: $gray-4;
-  }
-}
-
-.subPanel__stats {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  &__header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 30px;
-    line-height: 30px;
-
-    &__title {
-      font-size: $fs-xxsmall;
-      font-weight: $fw-semibold;
-    }
-  }
-
-  &__summary {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 12px;
-    line-height: 12px;
-
-    &__rating {
-      display: flex;
-      flex-direction: row;
-      gap: 3px;
-      font-size: $fs-xxxsmall;
-      font-weight: $fw-bold;
-      color: $black-1;
-
-      &__stars {
-        svg {
-          width: 12px;
-          height: 12px;
-          fill: $yellow-1;
-        }
-      }
-    }
-
-    &__reviewCount {
-      font-size: 9px;
-      font-weight: $fw-regular;
-      color: $gray-1;
-    }
-  }
-
-  &__chart {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: $fs-xxxsmall;
-
-    &__tag {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-}
-
-.subPanel__reviews {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-
-  &__item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    padding: 5px 0;
-    border-radius: $r-xsmall;
-
-    &:hover {
-      background-color: $white-2;
-    }
-
-    &__profileImg {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    &__left {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      width: calc(100% - 40px);
-
-      &__nickname {
-        font-size: $fs-xxsmall;
-        font-weight: $fw-regular;
-        color: $black-2;
-      }
-
-      &__reviews {
-        display: flex;
-        gap: 5px;
-        flex-flow: row wrap;
-
-        &__tag {
-          display: inline-block;
-          width: fit-content;
-          padding: 2px 5px;
-          border: 1px solid $gray-3;
-          border-radius: $r-xxsmall;
-          font-size: $fs-xxxsmall;
-          white-space: nowrap;
-          color: $black-4;
-        }
-      }
-    }
   }
 }

@@ -1,34 +1,19 @@
 import ProfileBar from '@/components/ProfileBar/ProfileBar';
 import BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
+import type { UserBasicInfo } from '@/types/study';
 
 import styles from './TeamMemberTable.module.scss';
 
-interface TeamMember {
-  userId: number;
-  nickname: string;
-  profileImageUrl?: string | null;
-  mainPosition?: string | null;
-  mainBadge?: {
-    type: string;
-    tier: string;
-  } | null;
-  abandonBadge?: {
-    isGranted: boolean;
-    count: number;
-  } | null;
-  temperature: number | null;
+interface TeamMember extends UserBasicInfo {
   decidedPosition: string;
-  isMine: boolean;
-  chatRoomId: number | null;
-  dmRequestPending: boolean;
 }
 
 interface TeamMemberTableProps {
-  /** 프로젝트 리더 */
-  leader: TeamMember;
+  /** 프로젝트 리더 또는 스터디장 */
+  leader: TeamMember | UserBasicInfo;
   /** 팀원들 */
-  participants: TeamMember[];
+  participants: (TeamMember | UserBasicInfo)[];
   /** 테이블 제목 */
   title?: string;
   /** 외부 스타일 클래스 */
@@ -173,7 +158,7 @@ const TeamMemberTable = ({
   }
 
   // 기존 프로젝트 모드 로직
-  const allMembers = [leader, ...participants];
+  const allMembers = [leader, ...participants] as TeamMember[];
 
   // 포지션별로 그룹화
   const membersByPosition = allMembers.reduce(

@@ -32,7 +32,8 @@
     align-items: flex-start;
     box-sizing: border-box;
     width: 100%;
-    min-width: 1132px;
+
+    // min-width: 1132px;
     margin-bottom: 100px;
 
     @media (width >= 1150px) {
@@ -45,7 +46,7 @@
     flex-direction: column;
     align-items: center;
     gap: 22px 0;
-    width: 1132px;
+    width: 60%;
     height: fit-content;
 
     // background-color: $yellow-1;
@@ -71,18 +72,17 @@
 
   .detailInfoSection {
     display: flex;
-    justify-content: space-between;
-    gap: 0 auto;
+    gap: 40px;
     width: 100%;
     height: fit-content;
   }
 
   .leftSection {
     display: flex;
+    flex: 7;
     flex-direction: column;
     align-items: center;
     gap: 25px 0;
-    width: 700px;
     height: fit-content;
 
     // background-color: $gray-1;
@@ -90,10 +90,10 @@
 
   .rightSection {
     display: flex;
+    flex: 4;
     flex-direction: column;
     align-items: center;
     gap: 25px 0;
-    width: 400px;
     height: fit-content;
 
     // background-color: #db20db;

@@ -19,6 +19,11 @@ const SubHeader = forwardRef<HTMLElement, SubHeaderProps>(({ className }, ref) =
 
   const navItems = [
     {
+      label: '메인',
+      isActive: activeStates.main,
+      onclick: handlers.handleMainClick,
+    },
+    {
       label: '지도',
       isActive: activeStates.map,
       onclick: handlers.handleMapClick,
