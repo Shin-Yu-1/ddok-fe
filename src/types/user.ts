@@ -31,9 +31,16 @@ export interface PortfolioItem {
 
 // 위치 정보
 export interface LocationInfo {
+  address?: string; // 전체 주소
+  region1depthName?: string; // 시도 (예: 부산광역시)
+  region2depthName?: string; // 구군 (예: 해운대구)
+  region3depthName?: string; // 동면 (예: 우동)
+  roadName?: string; // 도로명 (예: 센텀중앙로)
+  mainBuildingNo?: string; // 주번지 (예: 90)
+  subBuildingNo?: string; // 부번지 (예: '')
+  zoneNo?: string; // 우편번호 (예: 48058)
   latitude: number;
   longitude: number;
-  address: string;
 }
 
 // 온도 구간 타입
@@ -54,12 +61,13 @@ export interface TechStack {
 // 프로젝트/스터디 참여 이력 (별도 API)
 export interface ParticipationHistory {
   id: number;
+  teamId: number;
   title: string;
   type: 'project' | 'study';
   status: 'ONGOING' | 'CLOSED';
   role?: string;
   startDate: string;
-  endDate?: string;
+  endDate?: string | null;
   imageUrl?: string;
   description?: string;
 }

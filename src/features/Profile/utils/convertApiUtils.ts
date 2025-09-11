@@ -61,6 +61,7 @@ type StudyApiResponse = {
   };
   items: Array<{
     studyId: number;
+    teamId: number;
     title: string;
     teamStatus: 'ONGOING' | 'CLOSED';
     location: {
@@ -70,7 +71,7 @@ type StudyApiResponse = {
     };
     period: {
       start: string;
-      end: string;
+      end: string | null;
     };
   }>;
 };
@@ -84,6 +85,7 @@ type ProjectApiResponse = {
   };
   items: Array<{
     projectId: number;
+    teamId: number;
     title: string;
     teamStatus: 'ONGOING' | 'CLOSED';
     location: {
@@ -93,7 +95,7 @@ type ProjectApiResponse = {
     };
     period: {
       start: string;
-      end: string;
+      end: string | null;
     };
   }>;
 };
@@ -114,6 +116,7 @@ export const convertApiToProfile = (
   // 스터디 이력 변환
   const studies: ParticipationHistory[] = studiesResponse.items.map(study => ({
     id: study.studyId,
+    teamId: study.teamId,
     title: study.title,
     type: 'study' as const,
     status: study.teamStatus,
@@ -124,6 +127,7 @@ export const convertApiToProfile = (
   // 프로젝트 이력 변환
   const projects: ParticipationHistory[] = projectsResponse.items.map(project => ({
     id: project.projectId,
+    teamId: project.teamId,
     title: project.title,
     type: 'project' as const,
     status: project.teamStatus,

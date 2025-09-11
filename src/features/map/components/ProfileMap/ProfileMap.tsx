@@ -10,9 +10,16 @@ import styles from './ProfileMap.module.scss';
 interface ProfileMapProps {
   playerId: number;
   location: {
+    address?: string; // 전체 주소
+    region1depthName?: string; // 시도 (예: 부산광역시)
+    region2depthName?: string; // 구군 (예: 해운대구)
+    region3depthName?: string; // 동면 (예: 우동)
+    roadName?: string; // 도로명 (예: 센텀중앙로)
+    mainBuildingNo?: string; // 주번지 (예: 90)
+    subBuildingNo?: string; // 부번지 (예: '')
+    zoneNo?: string; // 우편번호 (예: 48058)
     latitude: number;
     longitude: number;
-    address: string;
   };
 }
 
