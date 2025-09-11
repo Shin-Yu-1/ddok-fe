@@ -6,8 +6,11 @@ export interface PreferredAges {
   ageMax: number;
 }
 
-// 팀 상태
+// 전체 리스트용 팀 상태 (모집부터 완료까지 모든 상태)
 export type TeamStatus = 'RECRUITING' | 'ONGOING' | 'CLOSED';
+
+// 사용자 참여용 팀 상태 (참여 후 상태만)
+export type UserTeamStatus = 'ONGOING' | 'CLOSED';
 
 // 스터디/프로젝트 모드
 export type Mode = 'online' | 'offline';
@@ -61,7 +64,7 @@ export interface UserStudyItem {
   studyId: number;
   teamId: number;
   title: string;
-  teamStatus: TeamStatus;
+  teamStatus: UserTeamStatus;
   location: Location;
   period: {
     start: string;
@@ -74,7 +77,7 @@ export interface UserProjectItem {
   projectId: number;
   teamId: number;
   title: string;
-  teamStatus: TeamStatus;
+  teamStatus: UserTeamStatus;
   location: Location;
   period: {
     start: string;
@@ -154,7 +157,7 @@ export interface UserCardItem {
   id: number;
   type: 'study' | 'project';
   title: string;
-  teamStatus: TeamStatus;
+  teamStatus: UserTeamStatus;
   bannerImageUrl: string;
   mode: Mode;
   address: string;
