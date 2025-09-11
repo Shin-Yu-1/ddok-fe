@@ -6,7 +6,10 @@ const DevPage: React.FC = () => {
   const categories = {
     intro: {
       title: '🏠 메인',
-      routes: [{ path: '/intro', name: '인트로 페이지(개발 완료 후 / 사용)' }],
+      routes: [
+        // { path: '/intro', name: '인트로 페이지(개발 완료 후 / 사용)' },
+        { path: '/main', name: '메인 페이지' },
+      ],
     },
     auth: {
       title: '🔐 인증',
@@ -66,6 +69,10 @@ const DevPage: React.FC = () => {
         // { path: '/team/1', name: '팀 페이지 (예시 ID: 1)' },
         { path: '/team/1/setting', name: '팀 관리 페이지 (예시 ID: 1)' },
       ],
+    },
+    ranking: {
+      title: '⭐ 랭킹',
+      routes: [{ path: '/ranking', name: '랭킹' }],
     },
     etc: {
       title: '🛠️ 기타',
