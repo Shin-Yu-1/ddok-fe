@@ -19,11 +19,7 @@ const User = ({ user }: UserProps) => {
     <div className={styles.user}>
       <div className={styles.user__item}>
         <div className={styles.user__item__left}>
-          <img
-            className={styles.user__item__left__img}
-            src="/src/assets/images/avatar.png"
-            alt="Banner"
-          />
+          <img className={styles.user__item__left__img} src={user.profileImageUrl} alt="Banner" />
           <div className={styles.user__item__left__nickname}>{user.nickname}</div>
           <div className={styles.user__item__left__badges}>
             {user.mainBadge && (
