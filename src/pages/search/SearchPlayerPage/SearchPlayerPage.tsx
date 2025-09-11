@@ -149,6 +149,12 @@ const SearchPlayerPage = () => {
             ))}
           </div>
 
+          {playerList.length <= 0 && (
+            <div className={styles.emptyItemWrapper}>
+              <span>해당되는 플레이어가 없네요. 다른 키워드로 검색해보세요.</span>
+            </div>
+          )}
+
           <div ref={sentinelRef} style={{ height: 1 }} />
         </>
       ) : (
