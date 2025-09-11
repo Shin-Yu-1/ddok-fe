@@ -8,12 +8,13 @@ import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
 import styles from './MemberRow.module.scss';
 
 interface MemberRowProps {
+  teamType: string;
   member: MemberType;
   amILeader: boolean;
   teamId: number;
 }
 
-const MemberRow = ({ member, amILeader, teamId }: MemberRowProps) => {
+const MemberRow = ({ teamType, member, amILeader, teamId }: MemberRowProps) => {
   const queryClient = useQueryClient();
 
   const expelMember = useExpelMember({
@@ -42,7 +43,7 @@ const MemberRow = ({ member, amILeader, teamId }: MemberRowProps) => {
     <>
       <div className={styles.positionContainer}>
         {member.role === 'LEADER' ? <div className={styles.leader}>팀장</div> : null}
-        <div className={styles.position}>{member.decidedPosition}</div>
+        {teamType === 'PROJECT' && <div className={styles.position}>{member.decidedPosition}</div>}
       </div>
       <UserRow user={member.user} />
       <div className={styles.actionContainer}>

@@ -6,6 +6,11 @@
   grid-template-columns: 120px 1fr 200px;
   gap: 20px 16px;
   width: 100%;
+
+  // STUDY 타입일 때는 2개 컬럼만 사용 (지원 포지션 제외)
+  &.study {
+    grid-template-columns: 1fr 200px;
+  }
 }
 
 .gridLabel {

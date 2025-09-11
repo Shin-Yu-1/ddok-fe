@@ -4,13 +4,20 @@ import { useGetTeamApplicants } from '@/features/Team/hooks/useGetTeamApplicants
 import styles from './ApplicantsGrid.module.scss';
 
 interface ApplicantsGridProps {
+  teamType: string;
   teamId: number;
   amILeader: boolean;
   page?: number;
   size?: number;
 }
 
-const ApplicantsGrid = ({ teamId, amILeader, page = 0, size = 4 }: ApplicantsGridProps) => {
+const ApplicantsGrid = ({
+  teamType,
+  teamId,
+  amILeader,
+  page = 0,
+  size = 4,
+}: ApplicantsGridProps) => {
   const { data, isLoading, isError, error } = useGetTeamApplicants({
     teamId,
     page,
@@ -32,13 +39,14 @@ const ApplicantsGrid = ({ teamId, amILeader, page = 0, size = 4 }: ApplicantsGri
   }
 
   return (
-    <div className={styles.applicantsGrid}>
-      <div className={styles.gridLabel}>지원 포지션</div>
+    <div className={`${styles.applicantsGrid} ${teamType === 'STUDY' ? styles.study : ''}`}>
+      {teamType === 'PROJECT' && <div className={styles.gridLabel}>지원 포지션</div>}
       <div className={styles.gridLabel}>멤버</div>
       <div className={styles.gridLabel}>액션</div>
 
       {data.data.items.map(applicant => (
         <ApplicantRow
+          teamType={teamType}
           key={applicant.applicantId}
           member={applicant}
           teamId={teamId}

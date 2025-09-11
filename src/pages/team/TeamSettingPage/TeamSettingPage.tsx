@@ -92,6 +92,7 @@ const TeamSettingPage = () => {
       <section className={styles.wrapper}>
         <div className={styles.label}>팀원</div>
         <MembersGrid
+          teamType={teamData.data.teamType}
           members={teamData.data.items}
           amILeader={teamData.data.isLeader}
           teamId={teamId}
@@ -100,7 +101,11 @@ const TeamSettingPage = () => {
 
       <section className={styles.wrapper}>
         <div className={styles.label}>참여 희망자</div>
-        <ApplicantsGrid teamId={teamId} amILeader={teamData.data.isLeader} />
+        <ApplicantsGrid
+          teamType={teamData.data.teamType}
+          teamId={teamId}
+          amILeader={teamData.data.isLeader}
+        />
       </section>
 
       <section className={styles.settings}>

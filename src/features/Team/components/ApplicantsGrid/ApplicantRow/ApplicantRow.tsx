@@ -10,12 +10,13 @@ import type { ApplicantType } from '../../../schemas/teamApplicantsListSchema';
 import styles from './ApplicantRow.module.scss';
 
 interface ApplicantRowProps {
+  teamType: string;
   member: ApplicantType;
   teamId: number;
   amILeader: boolean;
 }
 
-const ApplicantRow = ({ member, teamId, amILeader }: ApplicantRowProps) => {
+const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps) => {
   const queryClient = useQueryClient();
 
   const approveApplicant = useApproveApplicant({
@@ -62,7 +63,7 @@ const ApplicantRow = ({ member, teamId, amILeader }: ApplicantRowProps) => {
   };
   return (
     <>
-      <div className={styles.position}>{member.appliedPosition}</div>
+      {teamType === 'PROJECT' && <div className={styles.position}>{member.appliedPosition}</div>}
       <User user={member.user} />
       <div className={styles.actionContainer}>
         {amILeader ? (

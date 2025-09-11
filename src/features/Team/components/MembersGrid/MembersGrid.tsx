@@ -4,12 +4,13 @@ import MemberRow from './MemberRow/MemberRow';
 import styles from './MembersGrid.module.scss';
 
 interface MembersGridProps {
+  teamType: string;
   members: MemberType[];
   amILeader: boolean;
   teamId: number;
 }
 
-const MembersGrid = ({ members, amILeader, teamId }: MembersGridProps) => {
+const MembersGrid = ({ teamType, members, amILeader, teamId }: MembersGridProps) => {
   if (!members || members.length === 0) {
     return <div className={styles.empty}>팀원이 없습니다.</div>;
   }
@@ -21,7 +22,13 @@ const MembersGrid = ({ members, amILeader, teamId }: MembersGridProps) => {
       <div className={styles.gridLabel}>액션</div>
 
       {members.map(member => (
-        <MemberRow key={member.memberId} member={member} amILeader={amILeader} teamId={teamId} />
+        <MemberRow
+          teamType={teamType}
+          key={member.memberId}
+          member={member}
+          amILeader={amILeader}
+          teamId={teamId}
+        />
       ))}
     </div>
   );
