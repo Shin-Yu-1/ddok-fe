@@ -29,6 +29,24 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps
     applicationId: member.applicantId,
   });
 
+  // 에러 메시지 추출 함수
+  const getErrorMessage = (error: unknown, defaultMessage: string): string => {
+    if (error && typeof error === 'object') {
+      // Axios 에러 구조에서 메시지 추출
+      if ('response' in error) {
+        const response = (error as { response?: { data?: { message?: string } } }).response;
+        if (response?.data?.message) {
+          return response.data.message;
+        }
+      }
+      // 일반적인 에러 메시지
+      if ('message' in error) {
+        return (error as { message: string }).message;
+      }
+    }
+    return defaultMessage;
+  };
+
   const handleApprove = () => {
     approveApplicant.mutate(undefined, {
       onSuccess: () => {
@@ -43,6 +61,8 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps
       },
       onError: error => {
         console.error('참여 희망자 수락 실패:', error);
+        const errorMessage = getErrorMessage(error, '참여 희망자 수락에 실패했습니다.');
+        alert(errorMessage);
       },
     });
   };
@@ -58,9 +78,12 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps
       },
       onError: error => {
         console.error('참여 희망자 거절 실패:', error);
+        const errorMessage = getErrorMessage(error, '참여 희망자 거절에 실패했습니다.');
+        alert(errorMessage);
       },
     });
   };
+
   return (
     <>
       {teamType === 'PROJECT' && <div className={styles.position}>{member.appliedPosition}</div>}
