@@ -14,7 +14,7 @@ export const useProfileEdit = () => {
     // 섹션 타입을 모달 타입으로 매핑
     const modalMapping: Record<ProfileSectionType, ModalType | null> = {
       userInfo: null, // 별도 처리
-      location: null, // 아직 구현 안됨
+      location: 'location',
       position: 'position',
       traits: 'traits',
       time: 'time',

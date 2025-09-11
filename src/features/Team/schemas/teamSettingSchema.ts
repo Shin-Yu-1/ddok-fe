@@ -19,6 +19,7 @@ export const TeamSettingSchema = z.object({
   teamId: z.number(),
   teamType: z.enum(['PROJECT', 'STUDY']),
   teamTitle: z.string(),
+  teamStatus: z.enum(['RECRUITING', 'ONGOING', 'CLOSED']),
   recruitmentId: z.number(),
   isLeader: z.boolean(),
   items: z.array(MemberSchema),

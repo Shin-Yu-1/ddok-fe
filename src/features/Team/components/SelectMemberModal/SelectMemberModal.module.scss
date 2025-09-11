@@ -1,0 +1,153 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.overlay {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 50%);
+  inset: 0;
+}
+
+.modal {
+  width: 650px;
+  max-height: 80vh;
+  border-radius: 10px;
+  overflow-y: auto;
+  background-color: $white-3;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
+}
+
+.header {
+  padding: 20px 30px 15px;
+  border-bottom: 1px solid $gray-2;
+  border-radius: 10px 10px 0 0;
+  background-color: $white-3;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: $black-1;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.closeIcon {
+  font-size: 18px;
+  line-height: 1;
+  color: $black-1;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: $black-3;
+}
+
+.content {
+  padding: 20px 30px;
+}
+
+.empty {
+  padding: 40px 0;
+  text-align: center;
+  color: $gray-3;
+}
+
+.memberList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: $r-small;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(30 88 154 / 5%);
+  }
+
+  &.selected {
+    background-color: rgb(30 88 154 / 5%);
+  }
+}
+
+.memberInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.position {
+  font-size: 14px;
+  font-weight: 600;
+  color: $black-1;
+}
+
+.role {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: $gray-4;
+  background-color: $gray-1;
+}
+
+.footer {
+  padding: 15px 30px 20px;
+  border-top: 1px solid $gray-2;
+  border-radius: 0 0 10px 10px;
+  background-color: $white-3;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancelButton {
+  min-width: 80px !important;
+}
+
+.confirmButton {
+  min-width: 100px !important;
+
+  &:disabled {
+    color: $gray-3 !important;
+    background-color: $gray-2 !important;
+    cursor: not-allowed;
+  }
+}

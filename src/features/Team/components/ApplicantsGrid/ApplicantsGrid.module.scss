@@ -1,0 +1,38 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.applicantsGrid {
+  display: grid;
+  grid-template-columns: 120px 1fr 200px;
+  gap: 20px 16px;
+  width: 100%;
+
+  // STUDY 타입일 때는 2개 컬럼만 사용 (지원 포지션 제외)
+  &.study {
+    grid-template-columns: 1fr 200px;
+  }
+}
+
+.gridLabel {
+  margin: auto;
+  font-weight: $fw-bold;
+  text-align: center;
+}
+
+.loading {
+  padding: 40px 0;
+  text-align: center;
+  color: $gray-3;
+}
+
+.error {
+  padding: 40px 0;
+  text-align: center;
+  color: $red-1;
+}
+
+.empty {
+  padding: 40px 0;
+  text-align: center;
+  color: $gray-3;
+}

@@ -1,0 +1,177 @@
+.section {
+  margin-bottom: 48px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.titleContainer {
+  flex: 1;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+.viewAllLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: #3b82f6;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #1d4ed8;
+    background-color: #eff6ff;
+  }
+}
+
+.content {
+  min-height: 200px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+// 사용자 카드 전용 그리드 (더 넓은 카드를 위해)
+.userCardGrid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.emptyContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+.emptyMessage {
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
+  color: #6b7280;
+}
+
+// 로딩 스켈레톤 스타일들
+.loadingContainer {
+  min-height: 200px;
+}
+
+.loadingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+
+  @media (width <= 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.skeletonCard {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+.skeletonBanner {
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(90deg, #f0f0f0 25%, rgb(255 255 255 / 50%) 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.skeletonTitle {
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, rgb(255 255 255 / 50%) 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonTags {
+  display: flex;
+  gap: 6px;
+}
+
+.skeletonTag {
+  width: 60px;
+  height: 24px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, rgb(255 255 255 / 50%) 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeletonInfoLine {
+  height: 16px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, rgb(255 255 255 / 50%) 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+
+  &:last-child {
+    width: 80%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}

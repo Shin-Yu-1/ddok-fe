@@ -37,7 +37,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     closeRoom();
-  }, [activeSubSection]);
+  }, [activeSubSection, closeRoom]);
 
   const chatSubButtons: SubButtonConfig[] = [
     {
