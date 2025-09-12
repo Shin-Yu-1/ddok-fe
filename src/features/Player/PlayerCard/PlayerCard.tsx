@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { DotsThreeVerticalIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon, ChatCircleIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -76,14 +76,14 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
     const isDisabled = getChatButtonDisabled();
     const items = [
       {
-        icon: <PaperPlaneTiltIcon />,
+        icon: player?.chatRoomId ? <ChatCircleIcon /> : <PaperPlaneTiltIcon />,
         name: getChatButtonText(),
         onClick: isDisabled ? undefined : sendDmRequest, // 비활성화 상태일 때는 클릭 이벤트 자체를 제거
       },
     ];
 
     return items;
-  }, [getChatButtonText, getChatButtonDisabled, sendDmRequest]);
+  }, [player?.chatRoomId, getChatButtonText, getChatButtonDisabled, sendDmRequest]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
