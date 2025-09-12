@@ -46,7 +46,10 @@
     width: 89px;
     height: 89px;
     border-radius: 50%;
-    cursor: pointer;
+
+    &.cursor {
+      cursor: pointer;
+    }
 
     img {
       width: inherit;
@@ -62,7 +65,10 @@
   .nickname {
     margin-top: 10px;
     font-weight: $fw-semibold;
-    cursor: pointer;
+
+    &.cursor {
+      cursor: pointer;
+    }
   }
 
   .line {
