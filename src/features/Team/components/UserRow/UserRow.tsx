@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { DotsThreeVertical } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import Thermometer from '@/components/Thermometer/Thermometer';
@@ -100,7 +100,7 @@ const User = ({ user }: UserProps) => {
           {!isCurrentUser && (
             <div className={styles.dropdownContainer} ref={dropdownRef}>
               <Button width="12" padding="0" onClick={handleDropdownToggle}>
-                <DotsThreeVertical size={20} />
+                <DotsThreeVerticalIcon size={20} />
               </Button>
               {isDropdownOpen && (
                 <div className={styles.dropdown}>
