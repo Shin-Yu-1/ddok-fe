@@ -303,6 +303,7 @@ const TeamSettingPage = () => {
           members={teamData.data.items}
           amILeader={teamData.data.isLeader}
           teamId={teamId}
+          teamStatus={teamData.data.teamStatus}
         />
       </section>
 
