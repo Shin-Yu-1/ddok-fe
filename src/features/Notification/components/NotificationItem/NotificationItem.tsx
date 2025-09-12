@@ -166,7 +166,7 @@ const NotificationItem = ({
                     handleMarkAsRead();
                   }
             }
-            style={{ cursor: notification.isRead ? 'default' : 'pointer' }}
+            style={{ cursor: notification.isRead ? 'not-allowed' : 'pointer' }}
           >
             {notification.isRead ? (
               <BellIcon size={16} weight="regular" />
