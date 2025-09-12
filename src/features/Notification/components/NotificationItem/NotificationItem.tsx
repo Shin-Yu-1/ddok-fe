@@ -157,11 +157,16 @@ const NotificationItem = ({
       <div className={styles.actionSection}>
         <div className={styles.bellIconContainer}>
           <div
-            className={styles.bellIcon}
-            onClick={e => {
-              e.stopPropagation();
-              handleMarkAsRead();
-            }}
+            className={`${styles.bellIcon} ${notification.isRead ? styles.disabled : ''}`}
+            onClick={
+              notification.isRead
+                ? undefined
+                : e => {
+                    e.stopPropagation();
+                    handleMarkAsRead();
+                  }
+            }
+            style={{ cursor: notification.isRead ? 'default' : 'pointer' }}
           >
             {notification.isRead ? (
               <BellIcon size={16} weight="regular" />

@@ -156,4 +156,13 @@
     color: v.$yellow-1;
     background-color: v.$black-4;
   }
+
+  &.disabled {
+    cursor: default;
+
+    &:hover {
+      color: v.$gray-2;
+      background-color: transparent;
+    }
+  }
 }
