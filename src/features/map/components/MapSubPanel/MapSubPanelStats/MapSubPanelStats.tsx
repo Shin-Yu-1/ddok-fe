@@ -73,7 +73,7 @@ const MapSubPanelStats: React.FC<MapSubPanelStatsProps> = ({ statData, cafeId, o
           fontSize="var(--fs-xxxsmall)"
           backgroundColor="var(--blue-1)"
           textColor="var(--white-3)"
-          height="25px"
+          height="30px"
           onClick={handleReviewButtonClick}
         >
           후기 작성
