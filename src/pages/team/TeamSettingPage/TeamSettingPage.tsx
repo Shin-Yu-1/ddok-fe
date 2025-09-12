@@ -5,17 +5,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import type { EvaluationData } from '@/constants/evaluation';
+import { EVALUATION_CRITERIA_LIST } from '@/constants/evaluation';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
 import EvaluateModal from '@/features/Team/components/EvaluateModal/EvaluateModal';
+import EvaluationResultModal from '@/features/Team/components/EvaluationResultModal/EvaluationResultModal';
 import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
 import RemoveModal from '@/features/Team/components/RemoveModal/RemoveModal';
 import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
 import WithdrawModal from '@/features/Team/components/WithdrawModal/WithdrawModal';
+import { useCloseTeam } from '@/features/Team/hooks/useCloseTeam';
+import { useGetEvaluationItems } from '@/features/Team/hooks/useGetEvaluationItems';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
 import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
+import { useSubmitEvaluation } from '@/features/Team/hooks/useSubmitEvaluation';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
-
-import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
+import type {
+  SubmitEvaluationScore,
+  EvaluationScore,
+} from '@/features/Team/schemas/teamEvaluationSchema';
+import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
 
 import styles from './TeamSettingPage.module.scss';
 
@@ -27,12 +35,15 @@ const TeamSettingPage = () => {
   // 모달 상태 관리
   const [isSelectMemberModalOpen, setIsSelectMemberModalOpen] = useState(false);
   const [isEvaluateModalOpen, setIsEvaluateModalOpen] = useState(false);
+  const [isViewEvaluationModalOpen, setIsViewEvaluationModalOpen] = useState(false); // 평가 조회 모달
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
+  const [selectedMemberScores, setSelectedMemberScores] = useState<EvaluationScore[]>([]); // 선택된 멤버의 평가 점수
 
   const teamId = id ? parseInt(id, 10) : null;
 
+  // 팀 정보 가져오기
   const {
     data: teamData,
     isLoading,
@@ -43,6 +54,12 @@ const TeamSettingPage = () => {
     enabled: !!teamId,
   });
 
+  // 평가 데이터 가져오기 (팀이 종료된 상태이고 모달이 열렸을 때만)
+  const { data: evaluationData } = useGetEvaluationItems({
+    teamId: teamId || 0,
+    enabled: !!teamId && teamData?.data.teamStatus === 'CLOSED' && isSelectMemberModalOpen,
+  });
+
   // 현재 사용자의 memberId 찾기
   const currentUserMember = teamData?.data.items.find(member => member.isMine);
   const currentMemberId = currentUserMember?.memberId;
@@ -50,13 +67,19 @@ const TeamSettingPage = () => {
   // 하차 API 호출
   const withdrawMutation = useWithdrawFromTeam(teamId || 0, currentMemberId || 0);
 
+  // 종료 API 호출
+  const closeMutation = useCloseTeam();
+
+  // 평가 제출 API 호출
+  const submitEvaluationMutation = useSubmitEvaluation();
+
   // 삭제 API 호출
   const removeMutation = useRemoveTeam(
     teamData?.data.teamType || 'PROJECT',
     teamData?.data.recruitmentId || 0
   );
 
-  // 403 에러 체크 및 이전 페이지로 이동
+  // 권한 에러 체크 및 이전 페이지로 이동
   useEffect(() => {
     if (isError && error) {
       if (
@@ -70,10 +93,48 @@ const TeamSettingPage = () => {
     }
   }, [isError, error, navigate]);
 
-  const handleEvaluateSubmit = (evaluationData: EvaluationData) => {
-    console.log('평가 데이터:', evaluationData);
-    console.log('평가 대상:', selectedMember?.user.nickname);
-    // TODO: 평가 데이터 API 전송 로직 추가
+  const handleEvaluateSubmit = (userEvaluationData: EvaluationData) => {
+    if (!selectedMember || !teamData?.data.teamId || !userEvaluationData) {
+      console.error('필수 데이터가 누락되었습니다.');
+      return;
+    }
+
+    if (!evaluationData?.data.evaluationId) {
+      console.error('평가 ID가 없습니다.');
+      return;
+    }
+
+    // EvaluationData를 SubmitEvaluationRequest 형태로 변환
+    const scores: SubmitEvaluationScore[] = EVALUATION_CRITERIA_LIST.map((criteria, index) => ({
+      itemId: index + 1, // 평가 항목 ID (1~5)
+      score: userEvaluationData[criteria] || 1, // null인 경우 기본값 1
+    }));
+
+    const submitData = {
+      targetUserId: selectedMember.user.userId,
+      scores,
+    };
+
+    submitEvaluationMutation.mutate(
+      {
+        teamId: teamData.data.teamId,
+        evaluationId: evaluationData.data.evaluationId,
+        evaluationData: submitData,
+      },
+      {
+        onSuccess: () => {
+          alert(`${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`);
+          setIsEvaluateModalOpen(false);
+          setSelectedMember(null);
+          // 평가 데이터 새로고침을 위해 페이지 새로고침
+          window.location.reload();
+        },
+        onError: error => {
+          console.error('평가 제출 실패:', error);
+          alert('평가 제출 중 오류가 발생했습니다.');
+        },
+      }
+    );
   };
 
   const openSelectMemberModal = () => {
@@ -85,6 +146,19 @@ const TeamSettingPage = () => {
   };
 
   const handleMemberSelect = (member: MemberType) => {
+    // 평가 데이터가 있다면 해당 멤버의 평가 상태를 확인
+    if (evaluationData?.data.items) {
+      const evaluationMember = evaluationData.data.items.find(
+        item => item.memberId === member.memberId
+      );
+      if (evaluationMember) {
+        console.log(`${member.user.nickname} 평가 상태:`, {
+          isEvaluated: evaluationMember.isEvaluated,
+          scores: evaluationMember.scores,
+        });
+      }
+    }
+
     setSelectedMember(member);
     setIsEvaluateModalOpen(true);
   };
@@ -92,6 +166,19 @@ const TeamSettingPage = () => {
   const closeEvaluateModal = () => {
     setIsEvaluateModalOpen(false);
     setSelectedMember(null);
+  };
+
+  // 평가 조회 관련 핸들러
+  const handleViewEvaluation = (member: MemberType, scores: EvaluationScore[]) => {
+    setSelectedMember(member);
+    setSelectedMemberScores(scores);
+    setIsViewEvaluationModalOpen(true);
+  };
+
+  const closeViewEvaluationModal = () => {
+    setIsViewEvaluationModalOpen(false);
+    setSelectedMember(null);
+    setSelectedMemberScores([]);
   };
 
   // 하차 관련 핸들러
@@ -120,6 +207,32 @@ const TeamSettingPage = () => {
 
   const closeWithdrawModal = () => {
     setIsWithdrawModalOpen(false);
+  };
+
+  // 종료 관련 핸들러
+  const handleCloseClick = () => {
+    if (!teamData?.data.teamId) return;
+
+    const confirmMessage = `정말로 ${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}를 종료하시겠습니까?`;
+
+    if (confirm(confirmMessage)) {
+      closeMutation.mutate(
+        { teamId: teamData.data.teamId },
+        {
+          onSuccess: () => {
+            alert(
+              `${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}가 종료되었습니다.`
+            );
+            // 페이지 새로고침 또는 상태 업데이트
+            window.location.reload();
+          },
+          onError: error => {
+            console.error('종료 실패:', error);
+            alert('종료 처리 중 오류가 발생했습니다.');
+          },
+        }
+      );
+    }
   };
 
   // 삭제 관련 핸들러
@@ -178,12 +291,34 @@ const TeamSettingPage = () => {
     <div className={styles.container}>
       <button className={styles.backButton} onClick={() => navigate(-1)}>
         <ArrowUUpLeftIcon size={20} weight="bold" />
+        <span>돌아가기</span>
       </button>
 
-      <h1 className={styles.title}>
-        {teamData.data.teamTitle}
-        <span className={styles.subtitle}> 관리 페이지</span>
-      </h1>
+      <div className={styles.header}>
+        {/* 팀 이름 */}
+        <h1 className={styles.title}>
+          {teamData.data.teamTitle}
+          <span className={styles.subtitle}> 관리 페이지</span>
+        </h1>
+
+        {/* 프로젝트 진행 상태 */}
+        <div
+          className={`${styles.teamStatus} ${
+            teamData.data.teamStatus === 'RECRUITING'
+              ? styles.recruiting
+              : teamData.data.teamStatus === 'ONGOING'
+                ? styles.ongoing
+                : styles.closed
+          }`}
+        >
+          {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}{' '}
+          {teamData.data.teamStatus === 'RECRUITING'
+            ? '모집 중'
+            : teamData.data.teamStatus === 'ONGOING'
+              ? '진행 중'
+              : '종료'}
+        </div>
+      </div>
 
       <section className={styles.wrapper}>
         <div className={styles.label}>멤버</div>
@@ -192,6 +327,7 @@ const TeamSettingPage = () => {
           members={teamData.data.items}
           amILeader={teamData.data.isLeader}
           teamId={teamId}
+          teamStatus={teamData.data.teamStatus}
         />
       </section>
 
@@ -201,12 +337,12 @@ const TeamSettingPage = () => {
           teamType={teamData.data.teamType}
           teamId={teamId}
           amILeader={teamData.data.isLeader}
+          teamStatus={teamData.data.teamStatus}
         />
       </section>
 
       <section className={styles.settings}>
         <div className={styles.label}>프로젝트 관련 설정</div>
-
         {/* 하차하기 버튼: 내가 leader가 아니고, teamStatus가 종료되지 않았을 때만 보임 */}
         {!teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
@@ -225,8 +361,8 @@ const TeamSettingPage = () => {
           </div>
         )}
 
-        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 종료되지 않았을 때만 보임 */}
-        {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
+        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 진행 중일 때만 보임 */}
+        {teamData.data.isLeader && teamData.data.teamStatus === 'ONGOING' && (
           <div className={styles.settingItem}>
             <div>프로젝트 종료하기</div>
             <Button
@@ -236,14 +372,15 @@ const TeamSettingPage = () => {
               radius="xsm"
               fontSize="var(--fs-xxsmall)"
               height="35px"
+              onClick={handleCloseClick}
+              disabled={closeMutation.isPending}
             >
-              종료하기
+              {closeMutation.isPending ? '종료 중...' : '종료하기'}
             </Button>
           </div>
         )}
 
         {/* 평가하기 버튼: teamStatus가 종료 상태일 때 보임 */}
-        {/* {teamData.data.teamStatus !== 'CLOSED' && ( */}
         {teamData.data.teamStatus === 'CLOSED' && (
           <div className={styles.settingItem}>
             <div>팀원 평가하기</div>
@@ -261,8 +398,8 @@ const TeamSettingPage = () => {
           </div>
         )}
 
-        {/* 프로젝트 삭제하기 버튼: 내가 leader일 때만 */}
-        {teamData.data.isLeader && (
+        {/* 프로젝트 삭제하기 버튼: 내가 leader이고, teamStatus가 종료되지 않았을 때만 */}
+        {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
             <div>프로젝트 삭제하기</div>
             <Button
@@ -283,8 +420,18 @@ const TeamSettingPage = () => {
       <SelectMemberModal
         isOpen={isSelectMemberModalOpen}
         onClose={closeSelectMemberModal}
-        members={teamData.data.items}
+        members={teamData?.data.items || []}
         onSelectMember={handleMemberSelect}
+        onViewEvaluation={handleViewEvaluation}
+        evaluationMembers={evaluationData?.data.items}
+      />
+
+      {/* 평가 조회 모달 */}
+      <EvaluationResultModal
+        isOpen={isViewEvaluationModalOpen}
+        onClose={closeViewEvaluationModal}
+        member={selectedMember}
+        scores={selectedMemberScores}
       />
 
       {/* 평가 모달 */}
