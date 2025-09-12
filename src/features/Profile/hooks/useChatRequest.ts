@@ -1,13 +1,31 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { createDmRequest } from '@/api/chat';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import { useSidebarState } from '@/features/Sidebar/hooks/useSidebarState';
+import type { ChatListItem } from '@/schemas/chat.schema';
 import { useChatUiStore } from '@/stores/chatUiStore';
 import type { CompleteProfileInfo } from '@/types/user';
 
 interface UseChatRequestOptions {
   onSuccess?: () => void;
 }
+
+// 프로필 정보로부터 ChatListItem 생성
+const createChatListItemFromProfile = (user: CompleteProfileInfo): ChatListItem => {
+  return {
+    roomId: user.chatRoomId!,
+    roomType: ChatRoomType.PRIVATE,
+    isPinned: false,
+    otherUser: {
+      id: user.userId,
+      nickname: user.nickname,
+      profileImage: user.profileImage || null,
+      temperature: user.temperature,
+    },
+    updatedAt: new Date().toISOString(),
+  };
+};
 
 export const useChatRequest = (
   user?: CompleteProfileInfo | null,
@@ -16,57 +34,43 @@ export const useChatRequest = (
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [localDmRequestPending, setLocalDmRequestPending] = useState(false);
+  const { setActiveSection, setActiveSubSection } = useSidebarState();
   const { openRoom } = useChatUiStore();
 
-  const handleChatRequest = async () => {
-    if (!user) return;
+  const handleChatRequest = useCallback(async () => {
+    if (!user?.userId) return;
 
-    if (user.chatRoomId) {
-      // 이미 채팅방이 있는 경우 - 채팅방 사이드바 열기
-      console.log('기존 채팅방으로 이동:', user.chatRoomId);
+    setIsLoading(true);
+    setError(null);
 
-      // ChatListItem 형태로 변환하여 채팅방 열기
-      const chatRoom = {
-        roomId: user.chatRoomId,
-        roomType: ChatRoomType.PRIVATE as const,
-        isPinned: false,
-        otherUser: {
-          id: user.userId,
-          nickname: user.nickname || '사용자',
-          profileImage: user.profileImage || null,
-          temperature: user.temperature || 36.5,
-        },
-        updatedAt: new Date().toISOString(),
-      };
+    try {
+      // 채팅방이 존재하는지 확인
+      if (user.chatRoomId) {
+        // 사이드바 상태를 직접 설정하여 채팅 섹션과 개인 채팅을 한번에 활성화
+        setActiveSection('chat');
+        setActiveSubSection('personal-chat');
 
-      openRoom(chatRoom);
-    } else if (user.dmRequestPending || localDmRequestPending) {
-      // 채팅 요청 대기 중
-      console.log('채팅 요청 대기 중...');
-    } else {
-      // 새로운 채팅 요청 보내기
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        console.log('채팅 요청 보내기:', user.userId);
-        const result = await createDmRequest(user.userId.toString());
-
-        console.log('채팅 요청 성공:', result);
-
-        // 로컬 상태를 즉시 업데이트하여 UI 반영
-        setLocalDmRequestPending(true);
-
-        // 성공 시 콜백 호출
-        options?.onSuccess?.();
-      } catch (err) {
-        console.error('채팅 요청 실패:', err);
-        setError('채팅 요청에 실패했습니다. 다시 시도해주세요.');
-      } finally {
-        setIsLoading(false);
+        // 사이드바 상태가 업데이트된 후 채팅방을 열도록 지연
+        setTimeout(() => {
+          const chatItem = createChatListItemFromProfile(user);
+          openRoom(chatItem);
+        }, 50);
+        return;
       }
+
+      // 채팅방이 없으면 채팅 요청 생성
+      await createDmRequest(user.userId.toString());
+      setLocalDmRequestPending(true);
+
+      // 옵션에서 성공 콜백이 있으면 실행
+      options?.onSuccess?.();
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '채팅 요청에 실패했습니다.';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [user, setActiveSection, setActiveSubSection, openRoom, options]);
 
   const getChatButtonText = (): string => {
     if (!user) return '채팅하기';
