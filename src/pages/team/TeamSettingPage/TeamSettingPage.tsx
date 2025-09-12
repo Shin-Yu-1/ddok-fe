@@ -192,6 +192,7 @@ const TeamSettingPage = () => {
                 : styles.closed
           }`}
         >
+          {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}{' '}
           {teamData.data.teamStatus === 'RECRUITING'
             ? '모집 중'
             : teamData.data.teamStatus === 'ONGOING'
