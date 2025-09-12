@@ -57,6 +57,9 @@ const NotificationItem = ({
   const actions = config.actions ?? [];
   const showActions = (needsButtons || !!config.hasActions) && actions.length > 0;
 
+  // 프로필 이동 가능 여부 체크
+  const hasUserInfo = !!(notification.actorUserId ?? notification.userId);
+
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
     const diffInMs = now.getTime() - date.getTime();
@@ -127,9 +130,9 @@ const NotificationItem = ({
 
   return (
     <div
-      className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread} ${isFirst ? styles.firstItem : ''} ${notification.userId ? styles.clickable : ''}`}
-      onClick={notification.userId ? handleNotificationClick : undefined}
-      style={{ cursor: notification.userId ? 'pointer' : 'default' }}
+      className={`${styles.notificationItem} ${notification.isRead ? styles.read : styles.unread} ${isFirst ? styles.firstItem : ''} ${hasUserInfo ? styles.clickable : ''}`}
+      onClick={hasUserInfo ? handleNotificationClick : undefined}
+      style={{ cursor: hasUserInfo ? 'pointer' : 'default' }}
     >
       {/* 아이콘 영역 */}
       <div className={styles.iconSection}>{renderNotificationIcon()}</div>
