@@ -10,6 +10,14 @@
 .list {
   flex: 1;
   overflow-y: auto;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 }
 
 .empty {
