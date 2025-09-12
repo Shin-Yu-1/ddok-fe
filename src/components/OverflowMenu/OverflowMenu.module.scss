@@ -34,6 +34,16 @@
       background-color: $white-1;
     }
 
+    &.disabled {
+      color: $gray-2;
+      opacity: 0.6;
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
     .icon {
       width: $i-medium;
       height: $i-medium;

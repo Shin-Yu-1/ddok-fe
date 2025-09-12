@@ -19,7 +19,11 @@ const OverflowMenu = forwardRef<HTMLDivElement, menuProps>(
       <div ref={ref} className={styles.overflowMenuWrapper} style={position}>
         <ul className={styles.menuList}>
           {menuItems?.map(item => (
-            <li key={item.name} className={styles.itemWrapper} onClick={item.onClick}>
+            <li
+              key={item.name}
+              className={`${styles.itemWrapper} ${!item.onClick ? styles.disabled : ''}`}
+              onClick={item.onClick}
+            >
               {item.icon && <span className={styles.icon}>{item.icon}</span>}
               <span className={styles.name}>{item.name}</span>
             </li>

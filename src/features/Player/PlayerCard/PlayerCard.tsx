@@ -78,7 +78,7 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
       {
         icon: <PaperPlaneTiltIcon />,
         name: getChatButtonText(),
-        onClick: isDisabled ? undefined : sendDmRequest,
+        onClick: isDisabled ? undefined : sendDmRequest, // 비활성화 상태일 때는 클릭 이벤트 자체를 제거
       },
     ];
 
