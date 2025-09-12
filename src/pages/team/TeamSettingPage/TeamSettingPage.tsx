@@ -374,8 +374,8 @@ const TeamSettingPage = () => {
           </div>
         )}
 
-        {/* 프로젝트 삭제하기 버튼: 내가 leader일 때만 */}
-        {teamData.data.isLeader && (
+        {/* 프로젝트 삭제하기 버튼: 내가 leader이고, teamStatus가 종료되지 않았을 때만 */}
+        {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
             <div>프로젝트 삭제하기</div>
             <Button
