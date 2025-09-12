@@ -1,4 +1,5 @@
 @use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
 
 .cardContainer {
   width: 100%;
@@ -168,30 +169,4 @@
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200px 100%;
   animation: shimmer 1.5s infinite;
-}
-
-// 반응형 처리
-@media (width <= 768px) {
-  .cardContainer {
-    max-width: 100%;
-  }
-
-  .infoGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 24px;
-  }
-
-  .infoWrapper {
-    box-sizing: border-box;
-    padding: 12px 31px;
-  }
-
-  .title {
-    margin-bottom: 12px;
-    font-size: $fs-small;
-    font-weight: $fw-bold;
-    line-height: 1.3;
-    color: $black-1;
-  }
 }
