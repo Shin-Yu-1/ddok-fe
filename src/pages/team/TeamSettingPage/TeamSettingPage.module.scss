@@ -85,7 +85,9 @@
   }
 
   &.closed {
-    background-color: $red-1;
+    border: 1px solid $gray-2;
+    color: $black-4;
+    background-color: $white-3;
   }
 }
 
