@@ -19,12 +19,11 @@ import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
 import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
 import { useSubmitEvaluation } from '@/features/Team/hooks/useSubmitEvaluation';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
-
 import type {
   SubmitEvaluationScore,
   EvaluationScore,
-} from '../../../features/Team/schemas/teamEvaluationSchema';
-import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
+} from '@/features/Team/schemas/teamEvaluationSchema';
+import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
 
 import styles from './TeamSettingPage.module.scss';
 
