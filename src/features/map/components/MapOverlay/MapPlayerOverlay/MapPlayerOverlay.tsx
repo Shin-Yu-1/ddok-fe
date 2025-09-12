@@ -49,7 +49,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltipPosition({
-      x: rect.left - rect.width,
+      x: rect.left - rect.width / 2,
       y: rect.top - 45,
     });
 
