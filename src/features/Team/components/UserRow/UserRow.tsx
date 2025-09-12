@@ -1,4 +1,4 @@
-import { DotsThreeVertical } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import Thermometer from '@/components/Thermometer/Thermometer';
@@ -54,7 +54,7 @@ const User = ({ user }: UserProps) => {
             {user.temperature}℃
           </div>
           <Button width="12" padding="0">
-            <DotsThreeVertical size={20} />
+            <DotsThreeVerticalIcon size={20} />
           </Button>
         </div>
       </div>
