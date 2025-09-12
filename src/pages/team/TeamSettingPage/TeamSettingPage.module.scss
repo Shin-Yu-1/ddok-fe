@@ -112,6 +112,8 @@
 }
 
 .backButton {
+  display: flex;
+  gap: 10px;
   width: fit-content;
   color: $black-4;
   cursor: pointer;

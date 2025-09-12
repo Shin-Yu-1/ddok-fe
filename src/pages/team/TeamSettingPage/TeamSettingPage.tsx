@@ -292,6 +292,7 @@ const TeamSettingPage = () => {
     <div className={styles.container}>
       <button className={styles.backButton} onClick={() => navigate(-1)}>
         <ArrowUUpLeftIcon size={20} weight="bold" />
+        <span>돌아가기</span>
       </button>
 
       <div className={styles.header}>
