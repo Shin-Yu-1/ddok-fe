@@ -294,10 +294,6 @@ const TeamSettingPage = () => {
         <ArrowUUpLeftIcon size={20} weight="bold" />
       </button>
 
-      <h1 className={styles.title}>
-        {teamData.data.teamTitle}
-        <span className={styles.subtitle}> 관리 페이지</span>
-      </h1>
       <div className={styles.header}>
         {/* 팀 이름 */}
         <h1 className={styles.title}>
