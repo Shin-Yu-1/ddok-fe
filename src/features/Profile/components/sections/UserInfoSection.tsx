@@ -116,8 +116,8 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                       type: badge.type as BadgeType,
                       tier: badge.tier as BadgeTier,
                     }}
-                    widthSize={28}
-                    heightSize={51}
+                    widthSize={55}
+                    heightSize={55}
                     className={styles.mainBadge}
                   />
                 </div>
@@ -131,8 +131,8 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                   <Badge
                     mainBadge={{ type: BadgeType.ABANDON }}
                     abandonBadge={user.abandonBadge}
-                    widthSize={28}
-                    heightSize={51}
+                    widthSize={55}
+                    heightSize={55}
                     className={styles.abandonBadge}
                   />
                 </div>

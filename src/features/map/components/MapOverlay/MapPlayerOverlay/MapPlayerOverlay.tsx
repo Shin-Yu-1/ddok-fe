@@ -99,7 +99,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                     type: player.mainBadge.type as BadgeType,
                     tier: player.mainBadge.tier as BadgeTier,
                   }}
-                  widthSize="13px"
+                  widthSize="20px"
                 />
               )}
               {player.abandonBadge && (
@@ -111,7 +111,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                       count: player.abandonBadge.count,
                     }
                   }
-                  widthSize="13px"
+                  widthSize="20px"
                 />
               )}
             </div>
