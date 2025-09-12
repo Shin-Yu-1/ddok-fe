@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ArrowBendUpLeftIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
+import { getErrorMessage } from '@/api/auth';
 import Button from '@/components/Button/Button';
 import EditNicknameModal from '@/features/Profile/components/edit/modals/EditNicknameModal';
 import EditPasswordModal from '@/features/Profile/components/edit/modals/EditPasswordModal';
@@ -45,13 +46,15 @@ const EditMyInfoPage = () => {
     setShowNicknameModal(true);
   };
 
+  // 백엔드 에러 메시지 처리 추가
   const handleNicknameSave = async (nickname: string) => {
     try {
       await updateNickname(nickname);
       setShowNicknameModal(false);
     } catch (error) {
       console.error('닉네임 저장 실패:', error);
-      alert('닉네임 변경에 실패했습니다. 다시 시도해주세요.');
+      const errorMessage = getErrorMessage(error);
+      alert(errorMessage);
     }
   };
 
@@ -94,7 +97,8 @@ const EditMyInfoPage = () => {
       setPendingAction(null);
     } catch (error) {
       console.error('비밀번호 확인 실패:', error);
-      alert('비밀번호 확인 중 오류가 발생했습니다.');
+      const errorMessage = getErrorMessage(error);
+      alert(errorMessage);
     }
   };
 
@@ -109,7 +113,8 @@ const EditMyInfoPage = () => {
       setShowPhoneModal(false);
     } catch (error) {
       console.error('전화번호 저장 실패:', error);
-      alert('전화번호 변경에 실패했습니다. 다시 시도해주세요.');
+      const errorMessage = getErrorMessage(error);
+      alert(errorMessage);
     }
   };
 
@@ -119,7 +124,8 @@ const EditMyInfoPage = () => {
       setShowPasswordModal(false);
     } catch (error) {
       console.error('비밀번호 저장 실패:', error);
-      alert('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+      const errorMessage = getErrorMessage(error);
+      alert(errorMessage);
     }
   };
 
@@ -128,7 +134,8 @@ const EditMyInfoPage = () => {
       await updateProfileImage(file);
     } catch (error) {
       console.error('프로필 이미지 변경 실패:', error);
-      alert('프로필 이미지 변경에 실패했습니다. 다시 시도해주세요.');
+      const errorMessage = getErrorMessage(error);
+      alert(errorMessage);
     }
   };
 
@@ -155,7 +162,8 @@ const EditMyInfoPage = () => {
       navigate('/auth/signin');
     } catch (error) {
       console.error('회원 탈퇴 실패:', error);
-      alert('회원 탈퇴 중 오류가 발생했습니다.');
+      const errorMessage = getErrorMessage(error);
+      alert(errorMessage);
     }
   };
 
