@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 import { DotsThreeVerticalIcon, ChatCircleIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,9 @@ import Thermometer from '@/components/Thermometer/Thermometer';
 import BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
 import Badge from '@/features/Badge/Badge';
+import { useChatRequest } from '@/features/Profile/hooks/useChatRequest';
 import { useAuthStore } from '@/stores/authStore';
+import type { CompleteProfileInfo } from '@/types/user';
 
 import styles from './ProfileBar.module.scss';
 
@@ -31,15 +33,40 @@ interface ProfileBarProps {
   temperature: number;
   // DM 요청 상태
   dmRequestPending?: boolean;
-  // 사용자 정의 DM 요청 보내기 핸들러
-  onSendDmRequest?: (userId: number) => void;
-  // 사용자 정의 DM 하기 핸들러
-  onSendDm?: (userId: number) => void;
   // 채팅방 ID (DM이 가능한 경우)
   chatRoomId?: number | null;
   // 외부 스타일 클래스
   className?: string;
 }
+
+// ProfileBar props를 CompleteProfileInfo로 변환하는 헬퍼 함수
+const convertProfileBarToProfileInfo = (props: ProfileBarProps): CompleteProfileInfo => {
+  return {
+    userId: props.userId,
+    nickname: props.nickname || '',
+    profileImage: props.profileImageUrl || '',
+    ageGroup: '', // ProfileBar에서는 제공하지 않음
+    introduction: '', // ProfileBar에서는 제공하지 않음
+    isMine: false, // 컴포넌트 내부에서 계산 필요
+    isProfilePublic: true, // 기본값
+    chatRoomId: props.chatRoomId || null,
+    dmRequestPending: props.dmRequestPending || false,
+    temperature: props.temperature,
+    temperatureLevel: 'warm' as const, // 기본값, 실제로는 온도에 따라 계산 필요
+    badges: [], // ProfileBar에서는 mainBadge만 있음
+    abandonBadge: props.abandonBadge || { isGranted: false, count: 0 },
+    mainPosition: props.mainPosition || '',
+    subPositions: [],
+    traits: [],
+    activeHours: { start: '', end: '' },
+    portfolio: [],
+    location: {
+      address: '',
+      latitude: 0,
+      longitude: 0,
+    },
+  };
+};
 
 const ProfileBar = ({
   userId,
@@ -51,8 +78,6 @@ const ProfileBar = ({
   mainPosition,
   temperature,
   dmRequestPending,
-  onSendDmRequest,
-  onSendDm,
   chatRoomId,
   className,
 }: ProfileBarProps) => {
@@ -63,20 +88,42 @@ const ProfileBar = ({
   const navigate = useNavigate();
   const { user: currentUser } = useAuthStore();
 
-  // 기본 DM 요청 핸들러
-  const handleDefaultSendDmRequest = () => {
-    console.log('DM 요청 보내기:', userId);
-    // TODO: 실제 DM 요청 API 호출
-  };
+  // ProfileBar props를 CompleteProfileInfo로 변환
+  const profileInfo = useMemo(() => {
+    const props = {
+      userId,
+      nickname,
+      profileImageUrl,
+      mainBadge,
+      abandonBadge,
+      mainPosition,
+      temperature,
+      dmRequestPending,
+      chatRoomId,
+      className,
+    };
+    return convertProfileBarToProfileInfo(props);
+  }, [
+    userId,
+    nickname,
+    profileImageUrl,
+    mainBadge,
+    abandonBadge,
+    mainPosition,
+    temperature,
+    dmRequestPending,
+    chatRoomId,
+    className,
+  ]);
 
-  // 기본 DM 하기 핸들러
-  const handleDefaultSendDm = () => {
-    console.log('DM 하기:', userId);
-    if (chatRoomId) {
-      navigate(`/chat/${chatRoomId}`);
-    } else {
-      navigate(`/chat/user/${userId}`);
-    }
+  // 채팅 요청 훅 사용
+  const { handleChatRequest, getChatButtonText, getChatButtonDisabled } =
+    useChatRequest(profileInfo);
+
+  // DM 요청 핸들러
+  const handleDmRequest = () => {
+    setShowMenu(false);
+    handleChatRequest();
   };
 
   // 프로필 클릭 핸들러
@@ -123,24 +170,9 @@ const ProfileBar = ({
     ? []
     : [
         {
-          icon: dmRequestPending ? <ChatCircleIcon size={16} /> : <PaperPlaneTiltIcon size={16} />,
-          name: dmRequestPending ? 'DM 하기' : 'DM 요청 보내기',
-          onClick: () => {
-            setShowMenu(false);
-            if (dmRequestPending) {
-              if (onSendDm) {
-                onSendDm(userId);
-              } else {
-                handleDefaultSendDm();
-              }
-            } else {
-              if (onSendDmRequest) {
-                onSendDmRequest(userId);
-              } else {
-                handleDefaultSendDmRequest();
-              }
-            }
-          },
+          icon: chatRoomId ? <ChatCircleIcon size={16} /> : <PaperPlaneTiltIcon size={16} />,
+          name: getChatButtonText(),
+          onClick: getChatButtonDisabled() ? undefined : handleDmRequest,
         },
       ];
 
