@@ -26,7 +26,6 @@
   }
 
   &__ongoing {
-    // border: 1px solid $gray-1;
     background-color: $white-3;
   }
 }
@@ -92,8 +91,11 @@
     }
 
     &__title {
+      overflow: hidden;
       font-size: $fs-xsmall;
       font-weight: $fw-medium;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &__address {
