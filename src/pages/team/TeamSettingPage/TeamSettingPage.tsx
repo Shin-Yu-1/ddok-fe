@@ -7,6 +7,7 @@ import type { EvaluationData } from '@/constants/evaluation';
 import { EVALUATION_CRITERIA_LIST } from '@/constants/evaluation';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
 import EvaluateModal from '@/features/Team/components/EvaluateModal/EvaluateModal';
+import EvaluationResultModal from '@/features/Team/components/EvaluationResultModal/EvaluationResultModal';
 import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
 import RemoveModal from '@/features/Team/components/RemoveModal/RemoveModal';
 import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
@@ -18,7 +19,10 @@ import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
 import { useSubmitEvaluation } from '@/features/Team/hooks/useSubmitEvaluation';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
 
-import type { SubmitEvaluationScore } from '../../../features/Team/schemas/teamEvaluationSchema';
+import type {
+  SubmitEvaluationScore,
+  EvaluationScore,
+} from '../../../features/Team/schemas/teamEvaluationSchema';
 import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
 
 import styles from './TeamSettingPage.module.scss';
@@ -31,9 +35,11 @@ const TeamSettingPage = () => {
   // 모달 상태 관리
   const [isSelectMemberModalOpen, setIsSelectMemberModalOpen] = useState(false);
   const [isEvaluateModalOpen, setIsEvaluateModalOpen] = useState(false);
+  const [isViewEvaluationModalOpen, setIsViewEvaluationModalOpen] = useState(false); // 평가 조회 모달
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
+  const [selectedMemberScores, setSelectedMemberScores] = useState<EvaluationScore[]>([]); // 선택된 멤버의 평가 점수
 
   const teamId = id ? parseInt(id, 10) : null;
 
@@ -120,7 +126,7 @@ const TeamSettingPage = () => {
           alert(`${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`);
           setIsEvaluateModalOpen(false);
           setSelectedMember(null);
-          // 평가 데이터 새로고침을 위해 페이지 새로고침 또는 쿼리 무효화
+          // 평가 데이터 새로고침을 위해 페이지 새로고침
           window.location.reload();
         },
         onError: error => {
@@ -160,6 +166,19 @@ const TeamSettingPage = () => {
   const closeEvaluateModal = () => {
     setIsEvaluateModalOpen(false);
     setSelectedMember(null);
+  };
+
+  // 평가 조회 관련 핸들러
+  const handleViewEvaluation = (member: MemberType, scores: EvaluationScore[]) => {
+    setSelectedMember(member);
+    setSelectedMemberScores(scores);
+    setIsViewEvaluationModalOpen(true);
+  };
+
+  const closeViewEvaluationModal = () => {
+    setIsViewEvaluationModalOpen(false);
+    setSelectedMember(null);
+    setSelectedMemberScores([]);
   };
 
   // 하차 관련 핸들러
@@ -398,7 +417,16 @@ const TeamSettingPage = () => {
         onClose={closeSelectMemberModal}
         members={teamData?.data.items || []}
         onSelectMember={handleMemberSelect}
+        onViewEvaluation={handleViewEvaluation}
         evaluationMembers={evaluationData?.data.items}
+      />
+
+      {/* 평가 조회 모달 */}
+      <EvaluationResultModal
+        isOpen={isViewEvaluationModalOpen}
+        onClose={closeViewEvaluationModal}
+        member={selectedMember}
+        scores={selectedMemberScores}
       />
 
       {/* 평가 모달 */}
