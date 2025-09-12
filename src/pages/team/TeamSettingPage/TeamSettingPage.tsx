@@ -175,10 +175,30 @@ const TeamSettingPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        {teamData.data.teamTitle}
-        <span className={styles.subtitle}> 관리 페이지</span>
-      </h1>
+      <div className={styles.header}>
+        {/* 팀 이름 */}
+        <h1 className={styles.title}>
+          {teamData.data.teamTitle}
+          <span className={styles.subtitle}> 관리 페이지</span>
+        </h1>
+
+        {/* 프로젝트 진행 상태 */}
+        <div
+          className={`${styles.teamStatus} ${
+            teamData.data.teamStatus === 'RECRUITING'
+              ? styles.recruiting
+              : teamData.data.teamStatus === 'ONGOING'
+                ? styles.ongoing
+                : styles.closed
+          }`}
+        >
+          {teamData.data.teamStatus === 'RECRUITING'
+            ? '모집 중'
+            : teamData.data.teamStatus === 'ONGOING'
+              ? '진행 중'
+              : '종료'}
+        </div>
+      </div>
 
       <section className={styles.wrapper}>
         <div className={styles.label}>팀원</div>
@@ -201,7 +221,6 @@ const TeamSettingPage = () => {
 
       <section className={styles.settings}>
         <div className={styles.label}>프로젝트 관련 설정</div>
-
         {/* 하차하기 버튼: 내가 leader가 아니고, teamStatus가 종료되지 않았을 때만 보임 */}
         {!teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
@@ -220,8 +239,8 @@ const TeamSettingPage = () => {
           </div>
         )}
 
-        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 종료되지 않았을 때만 보임 */}
-        {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
+        {/* 종료하기 버튼: 내가 leader이고 teamStatus가 진행 중일 때만 보임 */}
+        {teamData.data.isLeader && teamData.data.teamStatus === 'ONGOING' && (
           <div className={styles.settingItem}>
             <div>프로젝트 종료하기</div>
             <Button
@@ -238,7 +257,6 @@ const TeamSettingPage = () => {
         )}
 
         {/* 평가하기 버튼: teamStatus가 종료 상태일 때 보임 */}
-        {/* {teamData.data.teamStatus !== 'CLOSED' && ( */}
         {teamData.data.teamStatus === 'CLOSED' && (
           <div className={styles.settingItem}>
             <div>팀원 평가하기</div>

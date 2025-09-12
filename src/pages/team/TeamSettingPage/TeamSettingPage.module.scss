@@ -26,6 +26,13 @@
   font-weight: $fw-semibold;
 }
 
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -53,10 +60,33 @@
 .settingItem {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   height: 40px;
   font-weight: $fw-semibold;
   line-height: 40px;
+}
+
+.teamStatus {
+  width: fit-content;
+  height: fit-content;
+  padding: 5px 10px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  color: $white-1;
+
+  &.recruiting {
+    background-color: $green-1;
+  }
+
+  &.ongoing {
+    background-color: $blue-1;
+  }
+
+  &.closed {
+    background-color: $red-1;
+  }
 }
 
 .gridLabel {
