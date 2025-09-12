@@ -4,6 +4,7 @@
 import { forwardRef } from 'react';
 
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 import type { ProfileSectionProps } from '@/types/user';
 
@@ -17,6 +18,7 @@ interface StudySectionProps extends ProfileSectionProps {
 }
 
 const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, className }, ref) => {
+  const navigate = useNavigate();
   const initialStudies = user.studies || [];
   const {
     items: studies,
@@ -25,6 +27,10 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
     loadMore,
     getShowMoreText,
   } = useInfiniteLoad(user.userId, 'studies', initialStudies);
+
+  const handleStudyClick = (teamId: number) => {
+    navigate(`/team/${teamId}/setting`);
+  };
 
   return (
     <section
@@ -43,13 +49,19 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
           <>
             <div className={styles.studyList}>
               {studies.map(study => (
-                <div key={study.id} className={styles.studyItem}>
+                <button
+                  key={study.id}
+                  type="button"
+                  className={styles.studyItem}
+                  onClick={() => handleStudyClick(study.teamId)}
+                  aria-label={`${study.title} 스터디 팀 관리 페이지로 이동`}
+                >
                   <div className={styles.studyIcon}>📚</div>
 
                   <div className={styles.studyInfo}>
                     <h3 className={styles.studyTitle}>{study.title}</h3>
                     <p className={styles.studyDate}>
-                      {formatDateRange(study.startDate, study.endDate)}
+                      {formatDateRange(study.startDate, study.endDate ?? undefined)}
                     </p>
                   </div>
 
@@ -58,7 +70,7 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
                       {getStatusText(study.status, 'study')}
                     </span>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 

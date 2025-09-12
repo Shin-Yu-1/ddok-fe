@@ -4,6 +4,7 @@
 import { forwardRef } from 'react';
 
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 import type { ProfileSectionProps } from '@/types/user';
 
@@ -17,6 +18,7 @@ interface ProjectSectionProps extends ProfileSectionProps {
 }
 
 const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, className }, ref) => {
+  const navigate = useNavigate();
   const initialProjects = user.projects || [];
   const {
     items: projects,
@@ -25,6 +27,10 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
     loadMore,
     getShowMoreText,
   } = useInfiniteLoad(user.userId, 'projects', initialProjects);
+
+  const handleProjectClick = (teamId: number) => {
+    navigate(`/team/${teamId}/setting`);
+  };
 
   return (
     <section
@@ -43,13 +49,19 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
           <>
             <div className={styles.projectList}>
               {projects.map(project => (
-                <div key={project.id} className={styles.projectItem}>
+                <button
+                  key={project.id}
+                  type="button"
+                  className={styles.projectItem}
+                  onClick={() => handleProjectClick(project.teamId)}
+                  aria-label={`${project.title} 프로젝트 팀 관리 페이지로 이동`}
+                >
                   <div className={styles.projectIcon}>📋</div>
 
                   <div className={styles.projectInfo}>
                     <h3 className={styles.projectTitle}>{project.title}</h3>
                     <p className={styles.projectDate}>
-                      {formatDateRange(project.startDate, project.endDate)}
+                      {formatDateRange(project.startDate, project.endDate ?? undefined)}
                     </p>
                   </div>
 
@@ -58,7 +70,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
                       {getStatusText(project.status, 'project')}
                     </span>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 

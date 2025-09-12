@@ -13,11 +13,12 @@ type ApiResponse = {
   items: Array<{
     studyId?: number;
     projectId?: number;
+    teamId: number;
     title: string;
     teamStatus: 'ONGOING' | 'CLOSED';
     period: {
       start: string;
-      end: string;
+      end: string | null;
     };
   }>;
 };
@@ -50,6 +51,7 @@ export const useInfiniteLoad = (
       // API 응답을 ParticipationHistory로 변환
       const newItems: ParticipationHistory[] = response.items.map(item => ({
         id: type === 'studies' ? item.studyId! : item.projectId!,
+        teamId: item.teamId,
         title: item.title,
         type: type === 'studies' ? 'study' : 'project',
         status: item.teamStatus,
