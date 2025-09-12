@@ -14,13 +14,13 @@ import {
   type CategoryFilterOption,
   type StatusFilterOption,
 } from '../../types/common';
-import MapPanelCafeItem from '../MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
-import MapPanelPlayerItem from '../MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
-import MapPanelProjectItem from '../MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
-import MapPanelStudyItem from '../MapPanelItem/MapPanelStudyItem/MapPanelStudyItem';
 
 import MapPagination from './MapPagination/MapPagination';
 import styles from './MapPanel.module.scss';
+import MapPanelCafeItem from './MapPanelItem/MapPanelCafeItem/MapPanelCafeItem';
+import MapPanelPlayerItem from './MapPanelItem/MapPanelPlayerItem/MapPanelPlayerItem';
+import MapPanelProjectItem from './MapPanelItem/MapPanelProjectItem/MapPanelProjectItem';
+import MapPanelStudyItem from './MapPanelItem/MapPanelStudyItem/MapPanelStudyItem';
 
 interface MapPanelProps {
   data?: MapPanelItem[];

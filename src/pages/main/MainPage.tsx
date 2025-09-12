@@ -1,6 +1,16 @@
 import { useState } from 'react';
 
-import { Plus, Users, Code, BookOpen, MapPin, UserCheck, HandTap } from '@phosphor-icons/react';
+import {
+  Plus,
+  Users,
+  Code,
+  BookOpen,
+  MapPin,
+  UserCheck,
+  HandTap,
+  Trophy,
+  Play,
+} from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 import DDOKMascot from '@/assets/images/DDOK/DDOK-Mascot.svg';
@@ -77,10 +87,11 @@ export default function MainPage() {
             ) : (
               <>
                 <Link to="/auth/signin" className={styles.primaryButton}>
-                  <Users size={20} weight="bold" />
+                  <Play size={20} weight="bold" />
                   <span>시작하기</span>
                 </Link>
                 <Link to="/ranking" className={styles.primaryButton}>
+                  <Trophy size={20} weight="bold" />
                   <span>랭킹 보기</span>
                 </Link>
               </>

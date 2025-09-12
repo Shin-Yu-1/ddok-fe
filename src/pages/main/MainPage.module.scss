@@ -28,7 +28,9 @@
   color: $black-1;
 
   .userName {
-    color: $yellow-1;
+    color: #f97316; // 후보 1
+    // color: $blue-1; // 후보 2
+    // color: #1E3A8A; // 후보 2
   }
 }
 
@@ -447,7 +449,6 @@
   justify-content: center;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgb(0 0 0 / 30%);
 }
 
 .ddokMascot {
