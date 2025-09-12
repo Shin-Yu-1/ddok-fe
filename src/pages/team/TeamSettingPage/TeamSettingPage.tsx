@@ -11,6 +11,7 @@ import RemoveModal from '@/features/Team/components/RemoveModal/RemoveModal';
 import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
 import WithdrawModal from '@/features/Team/components/WithdrawModal/WithdrawModal';
 import { useCloseTeam } from '@/features/Team/hooks/useCloseTeam';
+import { useGetEvaluationItems } from '@/features/Team/hooks/useGetEvaluationItems';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
 import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
@@ -41,6 +42,12 @@ const TeamSettingPage = () => {
   } = useGetTeamSetting({
     teamId: teamId || 0,
     enabled: !!teamId,
+  });
+
+  // 평가 데이터 가져오기 (팀이 종료된 상태이고 모달이 열렸을 때만)
+  const { data: evaluationData } = useGetEvaluationItems({
+    teamId: teamId || 0,
+    enabled: !!teamId && teamData?.data.teamStatus === 'CLOSED' && isSelectMemberModalOpen,
   });
 
   // 현재 사용자의 memberId 찾기
@@ -88,6 +95,19 @@ const TeamSettingPage = () => {
   };
 
   const handleMemberSelect = (member: MemberType) => {
+    // 평가 데이터가 있다면 해당 멤버의 평가 상태를 확인
+    if (evaluationData?.data.items) {
+      const evaluationMember = evaluationData.data.items.find(
+        item => item.memberId === member.memberId
+      );
+      if (evaluationMember) {
+        console.log(`${member.user.nickname} 평가 상태:`, {
+          isEvaluated: evaluationMember.isEvaluated,
+          scores: evaluationMember.scores,
+        });
+      }
+    }
+
     setSelectedMember(member);
     setIsEvaluateModalOpen(true);
   };
@@ -329,8 +349,9 @@ const TeamSettingPage = () => {
       <SelectMemberModal
         isOpen={isSelectMemberModalOpen}
         onClose={closeSelectMemberModal}
-        members={teamData.data.items}
+        members={teamData?.data.items || []}
         onSelectMember={handleMemberSelect}
+        evaluationMembers={evaluationData?.data.items}
       />
 
       {/* 평가 모달 */}
