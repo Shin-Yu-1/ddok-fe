@@ -5,8 +5,8 @@ import { api } from './api';
 // DM 요청 응답 스키마
 export const zDmRequestResponse = z.object({
   dmRequestId: z.number(),
-  fromUserId: z.string(),
-  toUserId: z.string(),
+  fromUserId: z.number(),
+  toUserId: z.number(),
   status: z.string(),
   chatRoomId: z.number().nullable(),
   dmRequestPending: z.boolean(),

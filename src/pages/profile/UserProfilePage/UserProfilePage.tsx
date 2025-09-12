@@ -8,14 +8,17 @@ import styles from './UserProfilePage.module.scss';
 const UserProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { profileData, isLoading, error } = useProfileData(id, false);
-  const { handleChatRequest, getChatButtonText } = useChatRequest(profileData);
+  const { profileData, isLoading, error, refetch } = useProfileData(id, false);
+  const { handleChatRequest, getChatButtonText } = useChatRequest(profileData, {
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  // 에러 상태
   if (error) {
     return (
       <main className={styles.userProfilePage}>
