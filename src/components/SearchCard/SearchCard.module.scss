@@ -1,4 +1,5 @@
 @use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
 
 .cardContainer {
   width: 100%;
@@ -108,26 +109,6 @@
   }
 }
 
-// 반응형 처리
-@media (width <= 768px) {
-  .cardContainer {
-    max-width: 100%;
-  }
-
-  .infoGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .infoWrapper {
-    padding: 20px;
-  }
-
-  .title {
-    font-size: $fs-xsmall;
-  }
-}
-
 // 스켈레톤 애니메이션
 @keyframes shimmer {
   0% {
@@ -188,24 +169,4 @@
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200px 100%;
   animation: shimmer 1.5s infinite;
-}
-
-// 반응형 처리
-@media (width <= 768px) {
-  .cardContainer {
-    max-width: 100%;
-  }
-
-  .infoGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .infoWrapper {
-    padding: 20px;
-  }
-
-  .title {
-    font-size: $fs-xsmall;
-  }
 }

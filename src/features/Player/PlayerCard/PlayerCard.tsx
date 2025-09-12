@@ -83,6 +83,12 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
     setIsMenuOpen(true);
   };
 
+  const profileClickHandle = () => {
+    if (isLoggedIn && player) {
+      navigate(`/profile/user/${player.userId}`);
+    }
+  };
+
   if (isLoading || !player) {
     return (
       <div className={styles.skeletonCard}>
@@ -129,19 +135,15 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
         )}
       </div>
       <div
-        className={styles.profileImage}
-        onClick={() => {
-          navigate(`/profile/user/${player.userId}`);
-        }}
+        className={`${styles.profileImage} ${isLoggedIn ? styles.cursor : ''}`}
+        onClick={profileClickHandle}
       >
         <img src={player.profileImageUrl} alt={`${player.nickname} 프로필`} />
       </div>
       <h3
         role="button"
-        className={styles.nickname}
-        onClick={() => {
-          navigate(`/profile/user/${player.userId}`);
-        }}
+        className={`${styles.nickname} ${isLoggedIn ? styles.cursor : ''}`}
+        onClick={profileClickHandle}
       >
         {player.nickname}
       </h3>
