@@ -126,6 +126,7 @@ const DetailStudyPage = () => {
                     isApplied={studyData.isApplied}
                     isApproved={studyData.isApproved}
                     isMine={studyData.isMine}
+                    status={studyData.teamStatus}
                     onApply={handleStudyAction}
                   />
                 </MainSection>

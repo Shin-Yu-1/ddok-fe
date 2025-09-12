@@ -196,7 +196,7 @@ const DetailProjectPage = () => {
                 </MainSection>
 
                 {projectData.mode === 'offline' && projectData.location?.address && (
-                  <MainSection title={'지역'} readonly>
+                  <MainSection title={'지역'}>
                     <PostLocationDisplay
                       address={projectData.location.address}
                       location={projectData.location}

@@ -27,8 +27,8 @@ type FilterOption = {
 const STATUS_OPTIONS = [
   { label: '전체', value: '' },
   { label: '모집 중', value: 'RECRUITING' },
-  { label: '프로젝트 진행 중', value: 'ONGOING' },
-  { label: '프로젝트 종료', value: 'CLOSED' },
+  { label: '스터디 진행 중', value: 'ONGOING' },
+  { label: '스터디 종료', value: 'CLOSED' },
 ];
 
 const CAPACITY_OPTIONS = Array.from({ length: 7 }, (_, i) => ({
@@ -218,6 +218,7 @@ const SearchStudyPage = () => {
   };
 
   const handleChangeOptionValue = (key: string, value: string | number | null) => {
+    console.log(key, value);
     setFilterOption(prev => ({
       ...prev,
       [key]: value,
@@ -284,6 +285,7 @@ const SearchStudyPage = () => {
     paramsChangedRef.current = true;
     setStudyList([]);
     setHasMore(true);
+    setPagination(prev => ({ ...prev, page: 0 }));
 
     const newParams = buildParams();
     setSubmittedParams(newParams);
@@ -295,7 +297,14 @@ const SearchStudyPage = () => {
         <h1 className={styles.title}>스터디</h1>
 
         {isLoggedIn && (
-          <Button size="md" variant="secondary" radius="xsm">
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={() => {
+              navigate('/create/study');
+            }}
+          >
             모집글 작성하기
           </Button>
         )}
@@ -313,12 +322,18 @@ const SearchStudyPage = () => {
             border="1px solid var(--gray-2)"
             focusBorder="1px solid var(--gray-2)"
             backgroundColor="var(--white-3)"
-            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+            leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
             onChange={handleChangeKeyword}
             onKeyDown={handleEnter}
           />
 
-          <Button size="md" variant="secondary" radius="xsm" onClick={handleClickSearch}>
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={handleClickSearch}
+            disabled={isLoading}
+          >
             검색하기
           </Button>
         </div>
@@ -327,7 +342,7 @@ const SearchStudyPage = () => {
           <div className={styles.optionsGroup}>
             <Select
               placeholder="진행 여부"
-              width={154}
+              width={140}
               height={32}
               options={STATUS_OPTIONS}
               value={filterOption.status as string | null | undefined}
@@ -378,7 +393,7 @@ const SearchStudyPage = () => {
               className={styles.datePicker}
               selected={startDate}
               onChange={date => setStartDate(date || new Date())}
-              dateFormat="yyy-MM-dd"
+              dateFormat="yyyy.MM.dd"
               placeholderText="시작일 선택"
             />
           </div>

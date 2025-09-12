@@ -109,55 +109,52 @@ const TeamMemberTable = ({
               </div>
             </div>
 
-            {/* 스터디원 행 (참여자들이 있을 때만) */}
-            {participants.length > 0 && (
-              <div className={styles.tableRow}>
+            {/* 스터디원 행들 (각 참여자마다 별도 행) */}
+            {participants.map(member => (
+              <div key={member.userId} className={styles.tableRow}>
                 <div className={styles.positionCell}>
                   <span className={styles.positionTag}>스터디원</span>
                 </div>
                 <div className={styles.memberCell}>
                   <div className={styles.membersContainer}>
-                    {participants.map(member => (
-                      <div key={member.userId} className={styles.memberItem}>
-                        <ProfileBar
-                          userId={member.userId}
-                          nickname={member.nickname}
-                          profileImageUrl={member.profileImageUrl || undefined}
-                          profileImageAlt={`${member.nickname} 프로필`}
-                          mainBadge={
-                            member.mainBadge
-                              ? {
-                                  type: mapBadgeType(member.mainBadge.type),
-                                  tier: mapBadgeTier(member.mainBadge.tier),
-                                }
-                              : undefined
-                          }
-                          abandonBadge={
-                            member.abandonBadge?.isGranted
-                              ? {
-                                  isGranted: true,
-                                  count: member.abandonBadge.count,
-                                }
-                              : undefined
-                          }
-                          mainPosition={member.mainPosition || '스터디원'}
-                          temperature={member.temperature ?? 36.5}
-                          dmRequestPending={member.dmRequestPending}
-                          chatRoomId={member.chatRoomId}
-                        />
-                      </div>
-                    ))}
+                    <div className={styles.memberItem}>
+                      <ProfileBar
+                        userId={member.userId}
+                        nickname={member.nickname}
+                        profileImageUrl={member.profileImageUrl || undefined}
+                        profileImageAlt={`${member.nickname} 프로필`}
+                        mainBadge={
+                          member.mainBadge
+                            ? {
+                                type: mapBadgeType(member.mainBadge.type),
+                                tier: mapBadgeTier(member.mainBadge.tier),
+                              }
+                            : undefined
+                        }
+                        abandonBadge={
+                          member.abandonBadge?.isGranted
+                            ? {
+                                isGranted: true,
+                                count: member.abandonBadge.count,
+                              }
+                            : undefined
+                        }
+                        mainPosition={member.mainPosition || '스터디원'}
+                        temperature={member.temperature ?? 36.5}
+                        dmRequestPending={member.dmRequestPending}
+                        chatRoomId={member.chatRoomId}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
     );
   }
 
-  // 기존 프로젝트 모드 로직
   const allMembers = [leader, ...participants] as TeamMember[];
 
   // 포지션별로 그룹화
@@ -191,22 +188,22 @@ const TeamMemberTable = ({
 
         {/* 테이블 바디 */}
         <div className={styles.tableBody}>
-          {positionOrder.map(position => (
-            <div key={position} className={styles.tableRow}>
-              {/* 포지션 셀 */}
-              <div className={styles.positionCell}>
-                {/* 리더인 경우 팀장 버튼을 먼저 표시 */}
-                {membersByPosition[position].some(m => m.userId === leader.userId) && (
-                  <span className={styles.leaderButton}>팀장</span>
-                )}
-                <span className={styles.positionTag}>{position}</span>
-              </div>
+          {positionOrder.map(position =>
+            membersByPosition[position].map(member => (
+              <div key={`${position}-${member.userId}`} className={styles.tableRow}>
+                {/* 포지션 셀 */}
+                <div className={styles.positionCell}>
+                  {/* 리더인 경우 팀장 버튼을 먼저 표시 */}
+                  {member.userId === leader.userId && (
+                    <span className={styles.leaderButton}>팀장</span>
+                  )}
+                  <span className={styles.positionTag}>{position}</span>
+                </div>
 
-              {/* 멤버 셀 */}
-              <div className={styles.memberCell}>
-                <div className={styles.membersContainer}>
-                  {membersByPosition[position].map(member => (
-                    <div key={member.userId} className={styles.memberItem}>
+                {/* 멤버 셀 */}
+                <div className={styles.memberCell}>
+                  <div className={styles.membersContainer}>
+                    <div className={styles.memberItem}>
                       <ProfileBar
                         userId={member.userId}
                         nickname={member.nickname}
@@ -234,11 +231,11 @@ const TeamMemberTable = ({
                         chatRoomId={member.chatRoomId}
                       />
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -228,6 +228,7 @@ const CreateStudyPage = () => {
                     <PostLocationSelector
                       location={formData.location}
                       onLocationChange={updateLocation}
+                      type="study"
                     />
                   </MainSection>
                 )}

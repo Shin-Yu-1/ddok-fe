@@ -237,7 +237,7 @@ const ChatList = ({ roomType }: ChatProps) => {
           onKeyUp={onSearchInputHandler}
           border="1px solid var(--gray-2)"
           focusBorder="1px solid var(--gray-2)"
-          leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+          leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
         />
       </div>
 

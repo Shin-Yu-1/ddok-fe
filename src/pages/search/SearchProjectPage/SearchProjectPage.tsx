@@ -283,6 +283,7 @@ const SearchProjectPage = () => {
     paramsChangedRef.current = true;
     setProjectList([]);
     setHasMore(true);
+    setPagination(prev => ({ ...prev, page: 0 }));
 
     const newParams = buildParams();
     setSubmittedParams(newParams);
@@ -294,7 +295,14 @@ const SearchProjectPage = () => {
         <h1 className={styles.title}>프로젝트</h1>
 
         {isLoggedIn && (
-          <Button size="md" variant="secondary" radius="xsm">
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={() => {
+              navigate('/create/project');
+            }}
+          >
             모집글 작성하기
           </Button>
         )}
@@ -312,12 +320,18 @@ const SearchProjectPage = () => {
             border="1px solid var(--gray-2)"
             focusBorder="1px solid var(--gray-2)"
             backgroundColor="var(--white-3)"
-            leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+            leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
             onChange={handleChangeKeyword}
             onKeyDown={handleEnter}
           />
 
-          <Button size="md" variant="secondary" radius="xsm" onClick={handleClickSearch}>
+          <Button
+            size="md"
+            variant="secondary"
+            radius="xsm"
+            onClick={handleClickSearch}
+            disabled={isLoading}
+          >
             검색하기
           </Button>
         </div>
@@ -377,7 +391,7 @@ const SearchProjectPage = () => {
               className={styles.datePicker}
               selected={startDate}
               onChange={date => setStartDate(date || new Date())}
-              dateFormat="yyyy-MM-dd"
+              dateFormat="yyyy.MM.dd"
               placeholderText="시작일 선택"
             />
           </div>
