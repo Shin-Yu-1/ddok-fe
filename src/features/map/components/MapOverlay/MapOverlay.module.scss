@@ -63,6 +63,12 @@
     gap: 3px;
     margin-bottom: 8px;
 
+    &__badges {
+      display: flex;
+      flex-direction: row;
+      gap: 3px;
+    }
+
     &__temperature {
       display: flex;
       flex-direction: row;
