@@ -73,18 +73,18 @@ export const useChatRequest = (
   }, [user, setActiveSection, setActiveSubSection, openRoom, options]);
 
   const getChatButtonText = (): string => {
-    if (!user) return '채팅하기';
+    if (!user) return 'DM 보내기';
 
     if (isLoading) {
-      return '요청 중...';
+      return 'DM 요청 중...';
     }
 
     if (user.chatRoomId) {
-      return '채팅하기';
+      return 'DM 보내기';
     } else if (user.dmRequestPending || localDmRequestPending) {
-      return '요청 대기 중...';
+      return 'DM 요청 대기 중...';
     } else {
-      return '채팅 요청';
+      return 'DM 요청';
     }
   };
 
