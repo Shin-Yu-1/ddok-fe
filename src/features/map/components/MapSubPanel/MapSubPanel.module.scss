@@ -32,8 +32,9 @@
 .subPanel__header {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
+  gap: 10px;
 
   &__title {
     font-size: $fs-small;
@@ -41,6 +42,7 @@
   }
 
   &__category {
+    flex-shrink: 0;
     width: fit-content;
     padding: 3px 7px;
     border-radius: $r-xxsmall;
