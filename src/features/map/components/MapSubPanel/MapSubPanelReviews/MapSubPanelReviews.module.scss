@@ -92,6 +92,17 @@
           color: $black-4;
         }
       }
+
+      &__stars {
+        font-size: $fs-xxxsmall;
+        font-weight: $fw-semibold;
+
+        svg {
+          width: 12px;
+          height: 12px;
+          fill: $yellow-1;
+        }
+      }
     }
   }
 }

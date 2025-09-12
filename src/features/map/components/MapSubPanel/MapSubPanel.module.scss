@@ -9,8 +9,7 @@
   height: 100%;
   padding: 20px;
   border-right: 1px solid $gray-1;
-  overflow: scroll;
-  overflow: hidden;
+  overflow-y: auto;
   color: $black-4;
   background-color: $white-3;
 }
@@ -32,8 +31,9 @@
 .subPanel__header {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
+  gap: 10px;
 
   &__title {
     font-size: $fs-small;
@@ -41,6 +41,7 @@
   }
 
   &__category {
+    flex-shrink: 0;
     width: fit-content;
     padding: 3px 7px;
     border-radius: $r-xxsmall;

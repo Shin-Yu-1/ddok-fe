@@ -85,7 +85,7 @@ const MapPage = () => {
   } = useMapSearch(mapBounds, {
     enabled: false,
     page: currentPage,
-    pageSize: 5,
+    pageSize: 7,
     category: selectedCategory,
     filter: selectedFilter,
     keyword: keyword,
