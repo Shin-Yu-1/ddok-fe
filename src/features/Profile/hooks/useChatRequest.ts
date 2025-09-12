@@ -82,7 +82,7 @@ export const useChatRequest = (
     if (user.chatRoomId) {
       return 'DM 보내기';
     } else if (user.dmRequestPending || localDmRequestPending) {
-      return 'DM 요청 대기 중...';
+      return 'DM 요청 대기 중';
     } else {
       return 'DM 요청';
     }
