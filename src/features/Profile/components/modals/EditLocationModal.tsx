@@ -37,7 +37,7 @@ const EditLocationModal = ({ isOpen, onClose, user }: EditLocationModalProps) =>
   });
 
   // 모달이 열릴 때 기존 데이터로 초기화
-useEffect(() => {
+  useEffect(() => {
     if (isOpen && user.location) {
       const initialLocation: Location = {
         address: user.location.address || '',
