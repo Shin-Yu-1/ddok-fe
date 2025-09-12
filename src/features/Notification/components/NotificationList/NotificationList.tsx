@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import type { NotificationFront } from '@/api/notification';
 import { useNotifications } from '@/hooks/notification/useNotifications';
@@ -38,7 +38,6 @@ interface NotificationListProps {
   onAction?: (id: string, action: NotificationAction['type']) => void;
   // API 연결 옵션들
   useApi?: boolean;
-  page?: number;
   size?: number;
   isRead?: boolean;
   type?: string;
@@ -50,40 +49,87 @@ const NotificationList = ({
   onMarkAsRead,
   onAction,
   useApi = true,
-  page = 0,
   size = 20,
   isRead,
   type,
 }: NotificationListProps) => {
   const [notifications, setNotifications] = useState<Notification[]>(items ?? []);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   // API 연결
   const {
     notifications: apiNotifications,
     loading,
     error,
+    hasNext,
     markAsRead: apiMarkAsRead,
     accept: apiAccept,
     reject: apiReject,
   } = useNotifications({
-    page,
+    page: currentPage,
     size,
     isRead,
     type,
-    autoRefresh: true, // 자동 새로고침 활성화
+    autoRefresh: currentPage === 0, // 첫 페이지만 자동 새로고침
   });
 
   // API 사용 시 데이터 변환 및 설정
   useEffect(() => {
     if (useApi && apiNotifications.length > 0) {
       const convertedNotifications = apiNotifications.map(convertToNotification);
-      setNotifications(convertedNotifications);
+
+      if (currentPage === 0) {
+        // 첫 페이지는 기존 데이터를 교체
+        setNotifications(convertedNotifications);
+      } else {
+        // 추가 페이지는 기존 데이터에 추가 (중복 제거)
+        setNotifications(prev => {
+          const existingIds = new Set(prev.map(n => n.id));
+          const newNotifications = convertedNotifications.filter(n => !existingIds.has(n.id));
+          return [...prev, ...newNotifications];
+        });
+      }
     } else if (!useApi && items) {
       setNotifications(items);
-    } else if (useApi && apiNotifications.length === 0) {
+    } else if (useApi && apiNotifications.length === 0 && currentPage === 0) {
       setNotifications([]);
     }
-  }, [useApi, apiNotifications, items]);
+
+    setIsLoadingMore(false);
+  }, [useApi, apiNotifications, items, currentPage]);
+
+  // 더 많은 데이터 로드 함수
+  const loadMore = useCallback(() => {
+    if (!loading && !isLoadingMore && hasNext && useApi) {
+      setIsLoadingMore(true);
+      setCurrentPage(prev => prev + 1);
+    }
+  }, [loading, isLoadingMore, hasNext, useApi]);
+
+  // Intersection Observer를 사용한 무한 스크롤
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentObserverRef = observerRef.current;
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
+    return () => {
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
+      }
+    };
+  }, [loadMore]);
 
   const handleMarkAsRead = async (id: string) => {
     if (onMarkAsRead) {
@@ -164,6 +210,17 @@ const NotificationList = ({
               isFirst={index === 0}
             />
           ))
+        )}
+
+        {/* 무한 스크롤 트리거 */}
+        {useApi && hasNext && (
+          <div ref={observerRef} className={styles.loadMoreTrigger}>
+            {isLoadingMore && (
+              <div className={styles.loadingMore}>
+                <p>더 많은 알림을 불러오는 중...</p>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>
