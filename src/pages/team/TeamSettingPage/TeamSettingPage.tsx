@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import type { EvaluationData } from '@/constants/evaluation';
+import { EVALUATION_CRITERIA_LIST } from '@/constants/evaluation';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
 import EvaluateModal from '@/features/Team/components/EvaluateModal/EvaluateModal';
 import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
@@ -14,8 +15,10 @@ import { useCloseTeam } from '@/features/Team/hooks/useCloseTeam';
 import { useGetEvaluationItems } from '@/features/Team/hooks/useGetEvaluationItems';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
 import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
+import { useSubmitEvaluation } from '@/features/Team/hooks/useSubmitEvaluation';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
 
+import type { SubmitEvaluationScore } from '../../../features/Team/schemas/teamEvaluationSchema';
 import type { MemberType } from '../../../features/Team/schemas/teamMemberSchema';
 
 import styles from './TeamSettingPage.module.scss';
@@ -34,6 +37,7 @@ const TeamSettingPage = () => {
 
   const teamId = id ? parseInt(id, 10) : null;
 
+  // 팀 정보 가져오기
   const {
     data: teamData,
     isLoading,
@@ -60,6 +64,9 @@ const TeamSettingPage = () => {
   // 종료 API 호출
   const closeMutation = useCloseTeam();
 
+  // 평가 제출 API 호출
+  const submitEvaluationMutation = useSubmitEvaluation();
+
   // 삭제 API 호출
   const removeMutation = useRemoveTeam(
     teamData?.data.teamType || 'PROJECT',
@@ -80,10 +87,48 @@ const TeamSettingPage = () => {
     }
   }, [isError, error, navigate]);
 
-  const handleEvaluateSubmit = (evaluationData: EvaluationData) => {
-    console.log('평가 데이터:', evaluationData);
-    console.log('평가 대상:', selectedMember?.user.nickname);
-    // TODO: 평가 데이터 API 전송 로직 추가
+  const handleEvaluateSubmit = (userEvaluationData: EvaluationData) => {
+    if (!selectedMember || !teamData?.data.teamId || !userEvaluationData) {
+      console.error('필수 데이터가 누락되었습니다.');
+      return;
+    }
+
+    if (!evaluationData?.data.evaluationId) {
+      console.error('평가 ID가 없습니다.');
+      return;
+    }
+
+    // EvaluationData를 SubmitEvaluationRequest 형태로 변환
+    const scores: SubmitEvaluationScore[] = EVALUATION_CRITERIA_LIST.map((criteria, index) => ({
+      itemId: index + 1, // 평가 항목 ID (1~5)
+      score: userEvaluationData[criteria] || 1, // null인 경우 기본값 1
+    }));
+
+    const submitData = {
+      targetUserId: selectedMember.user.userId,
+      scores,
+    };
+
+    submitEvaluationMutation.mutate(
+      {
+        teamId: teamData.data.teamId,
+        evaluationId: evaluationData.data.evaluationId,
+        evaluationData: submitData,
+      },
+      {
+        onSuccess: () => {
+          alert(`${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`);
+          setIsEvaluateModalOpen(false);
+          setSelectedMember(null);
+          // 평가 데이터 새로고침을 위해 페이지 새로고침 또는 쿼리 무효화
+          window.location.reload();
+        },
+        onError: error => {
+          console.error('평가 제출 실패:', error);
+          alert('평가 제출 중 오류가 발생했습니다.');
+        },
+      }
+    );
   };
 
   const openSelectMemberModal = () => {
