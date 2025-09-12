@@ -61,6 +61,7 @@ interface StudyApiResponse {
   };
   items: Array<{
     studyId: number;
+    teamId: number;
     title: string;
     teamStatus: 'ONGOING' | 'CLOSED';
     location: {
@@ -70,7 +71,7 @@ interface StudyApiResponse {
     };
     period: {
       start: string;
-      end: string;
+      end: string | null;
     };
   }>;
 }
@@ -84,6 +85,7 @@ interface ProjectApiResponse {
   };
   items: Array<{
     projectId: number;
+    teamId: number;
     title: string;
     teamStatus: 'ONGOING' | 'CLOSED';
     location: {
@@ -93,7 +95,7 @@ interface ProjectApiResponse {
     };
     period: {
       start: string;
-      end: string;
+      end: string | null;
     };
   }>;
 }

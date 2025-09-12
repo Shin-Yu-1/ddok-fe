@@ -115,7 +115,9 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>시작 예정일</div>
-              <div className={styles.overlay__info__details__item__value}>{project.startDate}</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {project.startDate.replace(/-/g, '.')}
+              </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>희망 나이대</div>

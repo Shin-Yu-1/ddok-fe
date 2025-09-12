@@ -113,7 +113,9 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>시작 예정일</div>
-              <div className={styles.overlay__info__details__item__value}>{study.startDate}</div>
+              <div className={styles.overlay__info__details__item__value}>
+                {study.startDate.replace(/-/g, '.')}
+              </div>
             </div>
             <div className={styles.overlay__info__details__item}>
               <div className={styles.overlay__info__details__item__label}>희망 나이대</div>

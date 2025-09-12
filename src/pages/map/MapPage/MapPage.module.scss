@@ -31,21 +31,21 @@
 .map__panelContainer {
   position: absolute;
   top: 96px;
-  left: 47.5px;
-  z-index: 100;
+  left: 47.5px; /* 사이드바 width(47px) + border(0.5px) = 47.5px */
+  z-index: 99;
   width: 363px;
   height: calc(100% - 96px);
   background-color: $white-3;
 
   @include m.tablet {
     top: 96px;
-    left: 42.5px;
+    left: 42.5px; /* 사이드바 width(42px) + border(0.5px) = 42.5px */
     height: calc(100% - 96px);
   }
 
   @include m.mobile {
     top: 81px;
-    left: 37.5px;
+    left: 37.5px; /* Sidebar width(37px) + border(0.5px) = 37.5px */
     height: calc(100% - 81px);
   }
 }
