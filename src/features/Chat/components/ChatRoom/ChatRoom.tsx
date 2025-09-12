@@ -311,7 +311,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     if (!el) return;
 
     const r = el.getBoundingClientRect();
-    setMenuPos({ top: r.bottom + window.scrollY, left: r.left + window.scrollX + 10 });
+    setMenuPos({ top: r.bottom, left: r.left + window.scrollX + 10 });
 
     setIsMemberMenuOpen(true);
   };
