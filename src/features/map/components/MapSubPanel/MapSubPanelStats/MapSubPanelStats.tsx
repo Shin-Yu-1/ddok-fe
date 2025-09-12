@@ -1,14 +1,35 @@
+import { useState } from 'react';
+
 import Button from '@/components/Button/Button';
+import { useAuthStore } from '@/stores/authStore';
 
 import type { CafeStat } from '../../../schemas/cafeStatSchema';
+import CafeReviewModal from '../../CafeReviewModal/CafeReviewModal';
 
 import styles from './MapSubPanelStats.module.scss';
 
 interface MapSubPanelStatsProps {
   statData: CafeStat;
+  cafeId: number;
+  onDataRefresh: () => void;
 }
 
-const MapSubPanelStats: React.FC<MapSubPanelStatsProps> = ({ statData }) => {
+const MapSubPanelStats: React.FC<MapSubPanelStatsProps> = ({ statData, cafeId, onDataRefresh }) => {
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const { isLoggedIn } = useAuthStore();
+
+  const handleReviewButtonClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+    setIsReviewModalOpen(true);
+  };
+
+  const handleReviewSubmitted = () => {
+    onDataRefresh();
+  };
+
   // 별점 렌더링 함수
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => {
@@ -53,6 +74,7 @@ const MapSubPanelStats: React.FC<MapSubPanelStatsProps> = ({ statData }) => {
           backgroundColor="var(--blue-1)"
           textColor="var(--white-3)"
           height="25px"
+          onClick={handleReviewButtonClick}
         >
           후기 작성
         </Button>
@@ -79,6 +101,14 @@ const MapSubPanelStats: React.FC<MapSubPanelStatsProps> = ({ statData }) => {
           </div>
         ))}
       </div>
+
+      {/* 후기 작성 모달 */}
+      <CafeReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        cafeId={cafeId}
+        onReviewSubmitted={handleReviewSubmitted}
+      />
     </div>
   );
 };
