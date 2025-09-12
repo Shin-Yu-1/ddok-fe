@@ -5,6 +5,7 @@ import { X } from '@phosphor-icons/react';
 import Button from '@/components/Button/Button';
 import User from '@/features/Team/components/UserRow/UserRow';
 
+import type { EvaluationMember } from '../../schemas/teamEvaluationSchema';
 import type { MemberType } from '../../schemas/teamMemberSchema';
 
 import styles from './SelectMemberModal.module.scss';
@@ -14,6 +15,7 @@ interface SelectMemberModalProps {
   onClose: () => void;
   members: MemberType[];
   onSelectMember: (member: MemberType) => void;
+  evaluationMembers?: EvaluationMember[]; // 평가 데이터 (선택적)
 }
 
 const SelectMemberModal = ({
@@ -21,6 +23,7 @@ const SelectMemberModal = ({
   onClose,
   members,
   onSelectMember,
+  evaluationMembers,
 }: SelectMemberModalProps) => {
   const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
 
@@ -39,6 +42,13 @@ const SelectMemberModal = ({
   const handleClose = () => {
     onClose();
     setSelectedMember(null);
+  };
+
+  // 해당 멤버가 이미 평가되었는지 확인하는 함수
+  const isAlreadyEvaluated = (memberId: number): boolean => {
+    if (!evaluationMembers) return false;
+    const evaluationMember = evaluationMembers.find(item => item.memberId === memberId);
+    return evaluationMember?.isEvaluated || false;
   };
 
   if (!isOpen) return null;
@@ -75,17 +85,25 @@ const SelectMemberModal = ({
             <div className={styles.empty}>평가할 수 있는 팀원이 없습니다.</div>
           ) : (
             <div className={styles.memberList}>
-              {evaluatableMembers.map(member => (
-                <div
-                  key={member.memberId}
-                  className={`${styles.memberItem} ${
-                    selectedMember?.memberId === member.memberId ? styles.selected : ''
-                  }`}
-                  onClick={() => handleMemberSelect(member)}
-                >
-                  <User user={member.user} />
-                </div>
-              ))}
+              {evaluatableMembers.map(member => {
+                const isEvaluated = isAlreadyEvaluated(member.memberId);
+                return (
+                  <div
+                    key={member.memberId}
+                    className={`${styles.memberItem} ${
+                      selectedMember?.memberId === member.memberId ? styles.selected : ''
+                    } ${isEvaluated ? styles.evaluated : ''}`}
+                    onClick={() => handleMemberSelect(member)}
+                  >
+                    <User user={member.user} />
+                    {isEvaluated && (
+                      <div className={styles.evaluationStatus}>
+                        <span className={styles.evaluatedBadge}>평가 완료</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
@@ -112,7 +130,9 @@ const SelectMemberModal = ({
               className={styles.confirmButton}
               disabled={!selectedMember}
             >
-              평가하기
+              {selectedMember && isAlreadyEvaluated(selectedMember.memberId)
+                ? '재평가하기'
+                : '평가하기'}
             </Button>
           </div>
         </div>
