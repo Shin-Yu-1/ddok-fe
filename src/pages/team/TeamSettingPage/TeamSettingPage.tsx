@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { ArrowUUpLeftIcon } from '@phosphor-icons/react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -64,7 +65,7 @@ const TeamSettingPage = () => {
         (error as { response?: { status?: number } }).response?.status === 403
       ) {
         alert('해당 팀에 접근할 권한이 없습니다.');
-        navigate('/map'); // 지도 페이지로 이동
+        navigate(-1); // 이전 페이지로 이동
       }
     }
   }, [isError, error, navigate]);
@@ -107,7 +108,7 @@ const TeamSettingPage = () => {
         onSuccess: () => {
           alert('프로젝트에서 하차했습니다.');
           setIsWithdrawModalOpen(false);
-          navigate('/map'); // 지도 페이지로 이동
+          navigate(-1); // 이전 페이지로 이동
         },
         onError: error => {
           console.error('하차 실패:', error);
@@ -175,13 +176,17 @@ const TeamSettingPage = () => {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backButton} onClick={() => navigate(-1)}>
+        <ArrowUUpLeftIcon size={20} weight="bold" />
+      </button>
+
       <h1 className={styles.title}>
         {teamData.data.teamTitle}
         <span className={styles.subtitle}> 관리 페이지</span>
       </h1>
 
       <section className={styles.wrapper}>
-        <div className={styles.label}>팀원</div>
+        <div className={styles.label}>멤버</div>
         <MembersGrid
           teamType={teamData.data.teamType}
           members={teamData.data.items}
