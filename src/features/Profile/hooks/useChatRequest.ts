@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import { createDmRequest } from '@/api/chat';
+import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import { useChatUiStore } from '@/stores/chatUiStore';
 import type { CompleteProfileInfo } from '@/types/user';
 
 interface UseChatRequestOptions {
@@ -14,14 +16,30 @@ export const useChatRequest = (
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [localDmRequestPending, setLocalDmRequestPending] = useState(false);
+  const { openRoom } = useChatUiStore();
 
   const handleChatRequest = async () => {
     if (!user) return;
 
     if (user.chatRoomId) {
-      // 이미 채팅방이 있는 경우 - 채팅방으로 이동
+      // 이미 채팅방이 있는 경우 - 채팅방 사이드바 열기
       console.log('기존 채팅방으로 이동:', user.chatRoomId);
-      // TODO: 채팅방 페이지로 라우팅
+
+      // ChatListItem 형태로 변환하여 채팅방 열기
+      const chatRoom = {
+        roomId: user.chatRoomId,
+        roomType: ChatRoomType.PRIVATE as const,
+        isPinned: false,
+        otherUser: {
+          id: user.userId,
+          nickname: user.nickname || '사용자',
+          profileImage: user.profileImage || null,
+          temperature: user.temperature || 36.5,
+        },
+        updatedAt: new Date().toISOString(),
+      };
+
+      openRoom(chatRoom);
     } else if (user.dmRequestPending || localDmRequestPending) {
       // 채팅 요청 대기 중
       console.log('채팅 요청 대기 중...');
@@ -67,7 +85,14 @@ export const useChatRequest = (
   };
 
   const getChatButtonDisabled = (): boolean => {
-    return isLoading || (user?.dmRequestPending ?? false) || localDmRequestPending;
+    // 로딩 중이면 비활성화
+    if (isLoading) return true;
+
+    // 채팅방이 이미 존재하면 dmRequestPending 상태와 관계없이 활성화
+    if (user?.chatRoomId) return false;
+
+    // 채팅방이 없고 DM 요청 대기 중이면 비활성화
+    return (user?.dmRequestPending ?? false) || localDmRequestPending;
   };
 
   return {

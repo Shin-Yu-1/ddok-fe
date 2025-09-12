@@ -20,6 +20,7 @@ import UserInfoSection from './sections/UserInfoSection';
 interface ExtendedProfileViewProps extends ProfileViewProps {
   onChatRequest?: () => void;
   getChatButtonText?: () => string;
+  getChatButtonDisabled?: () => boolean;
   onEditPersonalInfo?: () => void;
   onEditIntroduction?: () => void;
 }
@@ -34,6 +35,7 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
       className,
       onChatRequest,
       getChatButtonText,
+      getChatButtonDisabled,
       onEditPersonalInfo,
       onEditIntroduction,
     },
@@ -131,8 +133,11 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
                 <button
                   type="button"
                   onClick={onChatRequest}
-                  disabled={user.dmRequestPending}
-                  className={clsx(styles.chatButton, user.dmRequestPending && styles.pending)}
+                  disabled={getChatButtonDisabled?.() ?? user.dmRequestPending}
+                  className={clsx(
+                    styles.chatButton,
+                    (getChatButtonDisabled?.() ?? user.dmRequestPending) && styles.pending
+                  )}
                   aria-label={getChatButtonText?.() || '채팅하기'}
                 >
                   {getChatButtonText?.() || '채팅하기'}
