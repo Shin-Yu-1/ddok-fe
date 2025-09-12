@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { DotsThreeVertical, ChatCircle, PaperPlaneTilt } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon, ChatCircleIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
@@ -123,7 +123,7 @@ const ProfileBar = ({
     ? []
     : [
         {
-          icon: dmRequestPending ? <ChatCircle size={16} /> : <PaperPlaneTilt size={16} />,
+          icon: dmRequestPending ? <ChatCircleIcon size={16} /> : <PaperPlaneTiltIcon size={16} />,
           name: dmRequestPending ? 'DM 하기' : 'DM 요청 보내기',
           onClick: () => {
             setShowMenu(false);
@@ -205,7 +205,7 @@ const ProfileBar = ({
               onClick={handleMenuClick}
               aria-label="메뉴 열기"
             >
-              <DotsThreeVertical size={16} />
+              <DotsThreeVerticalIcon size={16} />
             </button>
 
             {showMenu && (
