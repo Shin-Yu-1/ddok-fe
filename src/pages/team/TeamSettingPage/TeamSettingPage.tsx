@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { ArrowUUpLeftIcon } from '@phosphor-icons/react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -289,6 +290,14 @@ const TeamSettingPage = () => {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backButton} onClick={() => navigate(-1)}>
+        <ArrowUUpLeftIcon size={20} weight="bold" />
+      </button>
+
+      <h1 className={styles.title}>
+        {teamData.data.teamTitle}
+        <span className={styles.subtitle}> 관리 페이지</span>
+      </h1>
       <div className={styles.header}>
         {/* 팀 이름 */}
         <h1 className={styles.title}>
@@ -316,7 +325,7 @@ const TeamSettingPage = () => {
       </div>
 
       <section className={styles.wrapper}>
-        <div className={styles.label}>팀원</div>
+        <div className={styles.label}>멤버</div>
         <MembersGrid
           teamType={teamData.data.teamType}
           members={teamData.data.items}
