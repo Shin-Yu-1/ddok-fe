@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { X } from '@phosphor-icons/react';
+
 import Button from '@/components/Button/Button';
 import {
   EVALUATION_CRITERIA_LIST,
@@ -68,9 +70,16 @@ const EvaluateModal = ({ isOpen, onClose, memberName, onSubmit }: EvaluateModalP
           <div className={styles.headerContent}>
             <div className={styles.titleSection}>
               <h2 className={styles.title}>{memberName} 평가하기</h2>
-              <button className={styles.closeButton} onClick={onClose}>
-                <span className={styles.closeIcon}>×</span>
-              </button>
+              <Button
+                backgroundColor="transparent"
+                width={24}
+                height={24}
+                padding="0px"
+                onClick={onClose}
+                style={{ flexShrink: 0 }}
+              >
+                <X size={24} weight="light" color="var(--black-1)" />
+              </Button>
             </div>
             <p className={styles.subtitle}>동료에 대한 평가 질문에 응답해주세요.</p>
           </div>
