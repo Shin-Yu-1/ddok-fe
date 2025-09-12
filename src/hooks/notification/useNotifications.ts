@@ -9,6 +9,7 @@ import {
   type NotificationListParams,
   type NotificationFront,
 } from '@/api/notification';
+import { useAuthStore } from '@/stores/authStore';
 
 export interface UseNotificationsOptions {
   page?: number;
@@ -29,6 +30,7 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
     refreshInterval = 30000, // 30초
   } = options;
 
+  const { user } = useAuthStore();
   const [notifications, setNotifications] = useState<NotificationFront[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +38,13 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
   const [totalElements, setTotalElements] = useState(0);
 
   const fetchNotifications = useCallback(async () => {
+    // 로그인하지 않은 경우 처리
+    if (!user) {
+      setError('로그인이 필요합니다.');
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -55,7 +64,7 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
     } finally {
       setLoading(false);
     }
-  }, [page, size, isRead, type]);
+  }, [page, size, isRead, type, user]);
 
   const markNotificationAsRead = useCallback(async (id: string) => {
     try {
@@ -115,11 +124,20 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
 };
 
 export const useUnreadCount = (autoRefresh = true, refreshInterval = 30000) => {
+  const { user } = useAuthStore();
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchUnreadCount = useCallback(async () => {
+    // 로그인하지 않은 경우 처리
+    if (!user) {
+      setError('로그인이 필요합니다.');
+      setLoading(false);
+      setCount(0);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -132,7 +150,7 @@ export const useUnreadCount = (autoRefresh = true, refreshInterval = 30000) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   // 초기 로드
   useEffect(() => {
