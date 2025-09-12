@@ -190,6 +190,7 @@ const NotificationItem = ({
                     e.stopPropagation();
                     handleAction(action.type);
                   }}
+                  disabled={notification.isProcessed}
                 >
                   {action.label}
                 </Button>

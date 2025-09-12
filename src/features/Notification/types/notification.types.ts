@@ -18,6 +18,7 @@ export interface Notification {
   type: NotificationType;
   message: string;
   isRead: boolean;
+  isProcessed: boolean;
   createdAt: Date;
 
   actorUserId?: string;

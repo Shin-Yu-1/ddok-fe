@@ -8,6 +8,7 @@ export const zNotificationServer = z.object({
   type: z.string(), // "PROJECT_JOIN_REQUEST" 등
   message: z.string(),
   isRead: z.boolean().optional(),
+  isProcessed: z.boolean(),
   createdAt: z.string(), // ISO
   userId: z.string().nullable().optional(),
   userNickname: z.string().nullable().optional(),
@@ -28,6 +29,7 @@ export type NotificationFront = {
   type: string; // 또는 프로젝트의 NotificationType
   message: string;
   isRead: boolean;
+  isProcessed: boolean;
   createdAt: Date;
   userId?: string | null;
   userNickname?: string | null;
@@ -43,6 +45,7 @@ export type NotificationFront = {
 export const toFrontNotification = (n: NotificationServer): NotificationFront => ({
   ...n,
   isRead: !!n.isRead,
+  isProcessed: n.isProcessed,
   createdAt: new Date(n.createdAt),
 });
 

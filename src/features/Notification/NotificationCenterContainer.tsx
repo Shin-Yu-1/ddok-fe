@@ -12,6 +12,7 @@ type ServerPayload = {
   type: string;
   message: string;
   isRead?: boolean;
+  isProcessed: boolean;
   createdAt: string;
 
   // actor 필드
@@ -41,6 +42,7 @@ function toFrontModel(p: ServerPayload): Notification {
     type: p.type as Notification['type'],
     message: p.message,
     isRead: !!p.isRead,
+    isProcessed: p.isProcessed,
     createdAt: new Date(p.createdAt),
 
     actorUserId,
