@@ -313,6 +313,7 @@ const TeamSettingPage = () => {
           teamType={teamData.data.teamType}
           teamId={teamId}
           amILeader={teamData.data.isLeader}
+          teamStatus={teamData.data.teamStatus}
         />
       </section>
 
