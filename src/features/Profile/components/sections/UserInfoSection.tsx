@@ -63,9 +63,9 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                     type="button"
                     onClick={handlePersonalInfoEdit}
                     className={styles.personalInfoEditButton}
-                    aria-label="개인 정보 수정"
+                    aria-label="개인 정보 변경"
                   >
-                    개인 정보 수정
+                    개인 정보 변경
                   </button>
                 )}
               </div>
