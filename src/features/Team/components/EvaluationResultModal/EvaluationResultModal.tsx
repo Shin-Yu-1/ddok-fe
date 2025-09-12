@@ -60,10 +60,10 @@ const EvaluationResultModal = ({ isOpen, onClose, member, scores }: EvaluationRe
         <div className={styles.footer}>
           <Button
             onClick={onClose}
-            backgroundColor="var(--gray-2)"
-            textColor="var(--black-1)"
             radius="sm"
-            fontSize="var(--fs-xsmall)"
+            backgroundColor="var(--gray-3)"
+            textColor="var(--black-4)"
+            fontSize="var(--fs-xxsmall)"
             className={styles.closeButton}
           >
             닫기

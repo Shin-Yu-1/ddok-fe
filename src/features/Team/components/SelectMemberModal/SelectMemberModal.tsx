@@ -160,10 +160,10 @@ const SelectMemberModal = ({
           <div className={styles.buttonGroup}>
             <Button
               onClick={handleClose}
-              backgroundColor="var(--gray-2)"
-              textColor="var(--black-1)"
+              backgroundColor="var(--gray-3)"
+              textColor="var(--black-4)"
+              fontSize="var(--fs-xxsmall)"
               radius="sm"
-              fontSize="var(--fs-xsmall)"
               className={styles.cancelButton}
             >
               취소
@@ -173,7 +173,7 @@ const SelectMemberModal = ({
               backgroundColor="var(--blue-1)"
               textColor="var(--white-3)"
               radius="sm"
-              fontSize="var(--fs-xsmall)"
+              fontSize="var(--fs-xxsmall)"
               className={styles.confirmButton}
               disabled={!selectedMember}
             >

@@ -113,10 +113,10 @@ const EvaluateModal = ({ isOpen, onClose, memberName, onSubmit }: EvaluateModalP
         <div className={styles.footer}>
           <Button
             onClick={handleSubmit}
-            backgroundColor="var(--black-1)"
+            backgroundColor="var(--black-4)"
             textColor="var(--white-3)"
             radius="sm"
-            fontSize="var(--fs-small)"
+            fontSize="var(--fs-xxsmall)"
             height="45px"
             className={styles.submitButton}
           >
