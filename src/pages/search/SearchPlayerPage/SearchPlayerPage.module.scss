@@ -1,6 +1,8 @@
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as m;
 
+$full-width: 830px;
+
 .container {
   display: grid;
   width: 100%;
@@ -37,7 +39,12 @@
     display: grid;
     grid-template-columns: repeat(3, 230px);
     gap: 20px 73px;
-    width: 830px;
+    width: $full-width;
     place-items: center center;
+  }
+
+  .emptyItemWrapper {
+    width: $full-width;
+    text-align: center;
   }
 }

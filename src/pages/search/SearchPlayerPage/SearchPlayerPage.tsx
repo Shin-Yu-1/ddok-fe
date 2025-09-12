@@ -137,9 +137,10 @@ const SearchPlayerPage = () => {
               border="1px solid var(--gray-2)"
               focusBorder="1px solid var(--gray-2)"
               backgroundColor="var(--white-3)"
-              leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
+              leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
               onChange={onChangeHandle}
               onKeyDown={onKeyDownHandle}
+              disabled={isResponseLoading}
             />
           </div>
 
@@ -148,6 +149,12 @@ const SearchPlayerPage = () => {
               <PlayerCard key={`${player.userId}`} player={player} isLoading={isResponseLoading} />
             ))}
           </div>
+
+          {playerList.length <= 0 && (
+            <div className={styles.emptyItemWrapper}>
+              <span>해당되는 플레이어가 없네요. 다른 키워드로 검색해보세요.</span>
+            </div>
+          )}
 
           <div ref={sentinelRef} style={{ height: 1 }} />
         </>
@@ -167,6 +174,7 @@ const SearchPlayerPage = () => {
             leftIcon={<MagnifyingGlassIcon size="var(--i-large)" weight="light" />}
             onChange={onChangeHandle}
             onKeyDown={onKeyDownHandle}
+            disabled={isResponseLoading}
           />
           <div className={styles.infoWrapper}>
             <WarningCircleIcon />
