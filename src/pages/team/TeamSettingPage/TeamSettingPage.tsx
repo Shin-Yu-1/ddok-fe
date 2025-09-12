@@ -10,6 +10,7 @@ import MembersGrid from '@/features/Team/components/MembersGrid/MembersGrid';
 import RemoveModal from '@/features/Team/components/RemoveModal/RemoveModal';
 import SelectMemberModal from '@/features/Team/components/SelectMemberModal/SelectMemberModal';
 import WithdrawModal from '@/features/Team/components/WithdrawModal/WithdrawModal';
+import { useCloseTeam } from '@/features/Team/hooks/useCloseTeam';
 import { useGetTeamSetting } from '@/features/Team/hooks/useGetTeamSetting';
 import { useRemoveTeam } from '@/features/Team/hooks/useRemoveTeam';
 import { useWithdrawFromTeam } from '@/features/Team/hooks/useWithdrawFromTeam';
@@ -49,13 +50,16 @@ const TeamSettingPage = () => {
   // 하차 API 호출
   const withdrawMutation = useWithdrawFromTeam(teamId || 0, currentMemberId || 0);
 
+  // 종료 API 호출
+  const closeMutation = useCloseTeam();
+
   // 삭제 API 호출
   const removeMutation = useRemoveTeam(
     teamData?.data.teamType || 'PROJECT',
     teamData?.data.recruitmentId || 0
   );
 
-  // 403 에러 체크 및 이전 페이지로 이동
+  // 권한 에러 체크 및 이전 페이지로 이동
   useEffect(() => {
     if (isError && error) {
       if (
@@ -119,6 +123,32 @@ const TeamSettingPage = () => {
 
   const closeWithdrawModal = () => {
     setIsWithdrawModalOpen(false);
+  };
+
+  // 종료 관련 핸들러
+  const handleCloseClick = () => {
+    if (!teamData?.data.teamId) return;
+
+    const confirmMessage = `정말로 ${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}를 종료하시겠습니까?`;
+
+    if (confirm(confirmMessage)) {
+      closeMutation.mutate(
+        { teamId: teamData.data.teamId },
+        {
+          onSuccess: () => {
+            alert(
+              `${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}가 종료되었습니다.`
+            );
+            // 페이지 새로고침 또는 상태 업데이트
+            window.location.reload();
+          },
+          onError: error => {
+            console.error('종료 실패:', error);
+            alert('종료 처리 중 오류가 발생했습니다.');
+          },
+        }
+      );
+    }
   };
 
   // 삭제 관련 핸들러
@@ -251,8 +281,10 @@ const TeamSettingPage = () => {
               radius="xsm"
               fontSize="var(--fs-xxsmall)"
               height="35px"
+              onClick={handleCloseClick}
+              disabled={closeMutation.isPending}
             >
-              종료하기
+              {closeMutation.isPending ? '종료 중...' : '종료하기'}
             </Button>
           </div>
         )}
