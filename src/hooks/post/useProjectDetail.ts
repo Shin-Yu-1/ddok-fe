@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/api/api';
+import { DDtoast } from '@/features/toast';
 import type {
   DetailProjectResponse,
   ProjectJoinRequest,
@@ -34,6 +35,14 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
         return data;
       } catch (error) {
         console.error('❌ API 호출 에러:', error);
+
+        // API 에러 시 토스트 표시
+        DDtoast({
+          mode: 'server-first',
+          userMessage: '프로젝트 정보를 불러오는데 실패했습니다.',
+          apiResponse: error,
+        });
+
         throw error;
       }
     },
@@ -56,20 +65,48 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
       );
       return data;
     },
-    onSuccess: response => {
+    onSuccess: (response, variables) => {
       // 성공 시 프로젝트 상세 정보 다시 조회
       queryClient.invalidateQueries({ queryKey: ['project', 'detail', projectId] });
 
-      // 성공 메시지 표시 (TODO: 추후 토스트 알림으로 변경 가능)
+      // 성공 토스트 표시
       if (response.data?.isApplied) {
-        console.log(`${response.data.appliedPosition} 포지션에 지원했습니다.`);
+        const position =
+          response.data.appliedPosition || variables.appliedPosition || '해당 포지션';
+
+        DDtoast({
+          mode: 'server-first',
+          type: 'success',
+          userMessage: `${position}에 성공적으로 지원하였습니다! 🎉`,
+          apiResponse: response,
+        });
+
+        console.log(`${position}에 지원했습니다.`);
       } else {
+        DDtoast({
+          mode: 'server-first',
+          type: 'info',
+          userMessage: '지원을 취소했습니다.',
+          apiResponse: response,
+        });
+
         console.log('지원을 취소했습니다.');
       }
     },
-    onError: error => {
+    onError: (error, variables) => {
       console.error('프로젝트 참여 신청/취소 실패:', error);
-      // TODO: 에러 처리 (토스트 알림 등)
+
+      // 에러 토스트 표시
+      const isApplying = variables.appliedPosition;
+      const errorMessage = isApplying
+        ? '프로젝트 지원 중 문제가 발생했습니다.'
+        : '지원 취소 중 문제가 발생했습니다.';
+
+      DDtoast({
+        mode: 'server-first',
+        userMessage: errorMessage,
+        apiResponse: error,
+      });
     },
   });
 
@@ -88,6 +125,18 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
     joinProjectMutation.mutate({});
   };
 
+  // 네트워크 재시도 기능
+  const handleRetry = () => {
+    DDtoast({
+      mode: 'custom',
+      type: 'info',
+      userMessage: '데이터를 다시 불러오는 중입니다...',
+      duration: 2000,
+    });
+
+    refetch();
+  };
+
   return {
     projectData: projectResponse?.data,
     isLoading,
@@ -97,6 +146,7 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
     handleEditProject,
     handleApplyPosition,
     handleCancelApplication,
+    handleRetry,
     refetch,
 
     // 뮤테이션 상태
