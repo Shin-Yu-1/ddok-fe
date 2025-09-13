@@ -24,6 +24,7 @@ import type {
   EvaluationScore,
 } from '@/features/Team/schemas/teamEvaluationSchema';
 import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
+import { DDtoast } from '@/features/toast';
 
 import styles from './TeamSettingPage.module.scss';
 
@@ -87,7 +88,11 @@ const TeamSettingPage = () => {
         'response' in error &&
         (error as { response?: { status?: number } }).response?.status === 403
       ) {
-        alert('해당 팀에 접근할 권한이 없습니다.');
+        DDtoast({
+          mode: 'custom',
+          type: 'error',
+          userMessage: '해당 팀에 접근할 권한이 없습니다.',
+        });
         navigate(-1); // 이전 페이지로 이동
       }
     }
@@ -123,15 +128,21 @@ const TeamSettingPage = () => {
       },
       {
         onSuccess: () => {
-          alert(`${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`);
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: `${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`,
+          });
           setIsEvaluateModalOpen(false);
           setSelectedMember(null);
-          // 평가 데이터 새로고침을 위해 페이지 새로고침
           window.location.reload();
         },
-        onError: error => {
-          console.error('평가 제출 실패:', error);
-          alert('평가 제출 중 오류가 발생했습니다.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '평가 제출 중 오류가 발생했습니다.',
+          });
         },
       }
     );
@@ -202,13 +213,20 @@ const TeamSettingPage = () => {
       { confirmText },
       {
         onSuccess: () => {
-          alert('프로젝트에서 하차했습니다.');
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '프로젝트에서 하차했습니다.',
+          });
           setIsWithdrawModalOpen(false);
-          navigate(-1); // 이전 페이지로 이동
+          navigate(-1);
         },
-        onError: error => {
-          console.error('하차 실패:', error);
-          alert('하차 처리 중 오류가 발생했습니다.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '하차 처리 중 오류가 발생했습니다.',
+          });
         },
       }
     );
@@ -229,15 +247,19 @@ const TeamSettingPage = () => {
         { teamId: teamData.data.teamId },
         {
           onSuccess: () => {
-            alert(
-              `${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}가 종료되었습니다.`
-            );
-            // 페이지 새로고침 또는 상태 업데이트
+            DDtoast({
+              mode: 'custom',
+              type: 'success',
+              userMessage: `${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}가 종료되었습니다.`,
+            });
             window.location.reload();
           },
-          onError: error => {
-            console.error('종료 실패:', error);
-            alert('종료 처리 중 오류가 발생했습니다.');
+          onError: () => {
+            DDtoast({
+              mode: 'custom',
+              type: 'error',
+              userMessage: '종료 처리 중 오류가 발생했습니다.',
+            });
           },
         }
       );
@@ -256,13 +278,20 @@ const TeamSettingPage = () => {
       { confirmText },
       {
         onSuccess: () => {
-          alert('프로젝트/스터디가 삭제되었습니다.');
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '프로젝트/스터디가 삭제되었습니다.',
+          });
           setIsRemoveModalOpen(false);
-          navigate('/map'); // 지도 페이지로 이동
+          navigate(-1);
         },
-        onError: error => {
-          console.error('삭제 실패:', error);
-          alert('삭제 처리 중 오류가 발생했습니다.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '삭제 처리 중 오류가 발생했습니다.',
+          });
         },
       }
     );
