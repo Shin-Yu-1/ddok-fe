@@ -1,11 +1,86 @@
 @use '@/styles/variables' as *;
-@use '@/styles/mixins' as m;
 
-// TODO: 향후 본 클래스는 지우고 코드 작성 필요
 .container {
-  background-color: $blue-1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  margin-bottom: 200px;
+  background-color: none;
 }
 
-.title {
-  @include m.font-title;
+// 로딩 및 에러 상태
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  font-size: $fs-small;
+  font-weight: $fw-medium;
+  color: $gray-1;
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 50vh;
+}
+
+.error {
+  font-size: $fs-small;
+  font-weight: $fw-medium;
+  text-align: center;
+  color: $red-1;
+}
+
+.retryButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: $r-small;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  color: $white-3;
+  background-color: $blue-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: color.adjust($blue-1, $lightness: -10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 컨텐츠 래퍼
+.contentWrapper {
+  box-sizing: border-box;
+  width: $ranking-base-width;
+  margin: 0 auto;
+}
+
+// 메인 타이틀 섹션
+.mainTitleSection {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.mainTitle {
+  margin: 0 0 8px;
+  font-size: $fs-large;
+  font-weight: $fw-bold;
+  text-align: left;
+  color: $black-3;
+}
+
+.subText {
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-regular;
+  text-align: left;
+  color: $gray-1;
 }
