@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { ArrowUUpLeftIcon, UserIcon, MagicWandIcon } from '@phosphor-icons/react';
+import { ArrowUUpLeftIcon, UserIcon /* MagicWandIcon */ } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
@@ -388,7 +388,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
         {/* 입력창 */}
         <div className={styles.inputBar}>
-          <Button
+          {/* <Button
             padding={'0px'}
             width={30}
             height={30}
@@ -396,12 +396,13 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
             backgroundColor={'var(--yellow-1)'}
           >
             <MagicWandIcon className={styles.aiButtonIcon} />
-          </Button>
+          </Button> */}
 
           <textarea
             className={styles.chatInputField}
             onKeyUp={onEnterPress}
             disabled={!!search}
+            placeholder="메세지를 입력해 주세요."
           ></textarea>
         </div>
       </main>
