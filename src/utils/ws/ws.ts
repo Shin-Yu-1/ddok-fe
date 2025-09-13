@@ -1,5 +1,4 @@
 import { Client } from '@stomp/stompjs';
-// import type { IMessage, StompSubscription } from '@stomp/stompjs';
 
 import { WEBSOCKET_CONSTANTS, createWebSocketUrl } from '@/constants/websocket';
 import type { WebSocketOptions } from '@/types/websocket.types';
