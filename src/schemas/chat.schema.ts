@@ -84,6 +84,10 @@ export const chatMemberListResponseDataSchema = z.object({
   totalCount: z.number(),
   members: z.array(ChatRoomMemberSchema),
 });
+export const chatMessageLastReadSchema = z.object({
+  messageId: z.number(),
+});
+export type ChatMessageLastRead = z.infer<typeof chatMessageLastReadSchema>;
 
 /* Final API Schema */
 export const ChatListApiResponseSchema = apiResponseSchema(chatListResponseDataSchema);
@@ -92,3 +96,5 @@ export const ChatMessageApiResponseSchema = apiResponseSchema(chatMessageListRes
 export type ChatMessageApiResponse = z.infer<typeof ChatMessageApiResponseSchema>;
 export const ChatRoomMemberApiResponseSchema = apiResponseSchema(chatMemberListResponseDataSchema);
 export type ChatRoomMemberApiResponse = z.infer<typeof ChatRoomMemberApiResponseSchema>;
+export const ChatMessageLastReadApiResponseSchema = apiResponseSchema(chatMessageLastReadSchema);
+export type ChatMessageLastReadApiResponse = z.infer<typeof ChatMessageLastReadApiResponseSchema>;

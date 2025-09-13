@@ -8,10 +8,13 @@ import Button from '@/components/Button/Button';
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
 import { useGetApi } from '@/hooks/useGetApi';
+import { usePostApi } from '@/hooks/usePostApi';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import type {
   ChatMessageApiResponse,
   ChatRoomMemberApiResponse,
+  ChatMessageLastReadApiResponse,
+  ChatMessageLastRead,
   ChatListItem,
   ChatMessage,
 } from '@/schemas/chat.schema';
@@ -65,14 +68,24 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   const isNearTop = (c: HTMLElement) => c.scrollTop <= 80;
   const isNearBottom = (c: HTMLElement) => c.scrollHeight - c.scrollTop - c.clientHeight < 80;
 
+  const messageParams = useMemo(
+    () => ({ ...(search && { search }), ...pagination }),
+    [search, pagination.page, pagination.size]
+  );
+
   // API
   const { data: chatMessageResponse } = useGetApi<ChatMessageApiResponse>({
     url: `/api/chats/${chat.roomId}/messages`,
-    params: { ...(search && { search }), ...pagination },
+    // params: { ...(search && { search }), ...pagination },
+    params: messageParams,
   });
 
   const { data: chatMemberResponse } = useGetApi<ChatRoomMemberApiResponse>({
     url: `/api/chats/${chat.roomId}/members`,
+  });
+
+  const messageLastReadPost = usePostApi<ChatMessageLastReadApiResponse, ChatMessageLastRead>({
+    url: `/api/chats/${chat.roomId}/messages/read`,
   });
 
   // WebSocket 연결
@@ -131,9 +144,15 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     });
 
     return () => {
+      const lastMessage = messages.at(-1);
+
+      if (lastMessage) {
+        messageLastReadPost.mutate({ messageId: lastMessage.messageId });
+      }
+
       if (subscriptionId) websocket.unsubscribe(subscriptionId);
     };
-  }, [websocket.isConnected, websocket, chat.roomId]);
+  }, [websocket.isConnected, chat.roomId]);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
