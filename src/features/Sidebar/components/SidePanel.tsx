@@ -15,7 +15,7 @@ const SidePanel = forwardRef<HTMLDivElement, SidePanelProps>(
         ref={ref}
         className={clsx(styles.sidePanel, className)}
         role="complementary"
-        aria-label={`${title} 섹션`}
+        aria-label={typeof title === 'string' ? `${title} 섹션` : '사이드 패널'}
       >
         {title && (
           <header className={styles.header}>

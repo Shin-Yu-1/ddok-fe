@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { DotsThreeVerticalIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon, ChatCircleIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import Thermometer from '@/components/Thermometer/Thermometer';
 import Badge from '@/features/Badge/Badge';
-// import { usePostApi } from '@/hooks/usePostApi';
+import { useChatRequest } from '@/features/Profile/hooks/useChatRequest';
 import type { Player } from '@/schemas/player.schema';
 import { useAuthStore } from '@/stores/authStore';
+import type { CompleteProfileInfo } from '@/types/user';
 
 import styles from './PlayerCard.module.scss';
 
@@ -18,50 +19,71 @@ interface PlayerCardProps {
   player?: Player;
 }
 
+// Player를 CompleteProfileInfo로 변환하는 헬퍼 함수
+const convertPlayerToProfileInfo = (player: Player): CompleteProfileInfo => {
+  return {
+    userId: player.userId,
+    nickname: player.nickname,
+    profileImage: player.profileImageUrl,
+    ageGroup: '', // Player에서는 제공하지 않음
+    introduction: '', // Player에서는 제공하지 않음
+    isMine: player.isMine,
+    isProfilePublic: true, // 기본값
+    chatRoomId: player.chatRoomId,
+    dmRequestPending: player.dmRequestPending,
+    temperature: player.temperature,
+    temperatureLevel: 'warm' as const, // 기본값, 실제로는 온도에 따라 계산 필요
+    badges: [], // Player에서는 mainBadge만 있음
+    abandonBadge: player.abandonBadge,
+    mainPosition: player.mainPosition,
+    subPositions: [],
+    traits: [],
+    activeHours: { start: '', end: '' },
+    portfolio: [],
+    location: {
+      address: player.address,
+      latitude: 0,
+      longitude: 0,
+    },
+  };
+};
+
 const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  /* TODO: API 연동 시 주석 해제 */
-  // const postDmRequest = usePostApi<void, void>({
-  //   url: `/api/players/${player.userId}/dm-requests`,
-  // });
+  // Player를 CompleteProfileInfo로 변환
+  const profileInfo = useMemo(() => {
+    return player ? convertPlayerToProfileInfo(player) : null;
+  }, [player]);
+
+  // 채팅 요청 훅 사용
+  const { handleChatRequest, getChatButtonText, getChatButtonDisabled } =
+    useChatRequest(profileInfo);
 
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false);
   }, []);
 
   const sendDmRequest = useCallback(() => {
-    /* TODO: API 연동 시 제거 */
-    console.log(player?.nickname + ' 1:1 채팅 요청');
+    handleChatRequest();
     closeMenu();
-
-    /* TODO: API 연동 시 주석 해제 */
-    // postDmRequest.mutate(undefined, {
-    //   onSuccess: () => {
-    //     alert('DM 요청이 성공적으로 전송되었습니다!');
-    //     closeMenu();
-    //   },
-    //   onError: err => {
-    //     console.error(err);
-    //     alert('DM 요청 전송 중 오류가 발생했습니다.');
-    //   },
-    // });
-  }, [player?.nickname, closeMenu]);
+  }, [handleChatRequest, closeMenu]);
 
   const menuItems = useMemo(() => {
+    const isDisabled = getChatButtonDisabled();
     const items = [
       {
-        icon: <PaperPlaneTiltIcon />,
-        name: '채팅 보내기',
-        onClick: sendDmRequest,
+        icon: player?.chatRoomId ? <ChatCircleIcon /> : <PaperPlaneTiltIcon />,
+        name: getChatButtonText(),
+        onClick: isDisabled ? undefined : sendDmRequest, // 비활성화 상태일 때는 클릭 이벤트 자체를 제거
       },
     ];
 
     return items;
-  }, [sendDmRequest]);
+  }, [player?.chatRoomId, getChatButtonText, getChatButtonDisabled, sendDmRequest]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

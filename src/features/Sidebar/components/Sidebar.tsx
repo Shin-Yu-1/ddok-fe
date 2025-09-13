@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   MailboxIcon,
@@ -12,6 +12,7 @@ import { useLocation } from 'react-router-dom';
 import ChatList from '@/features/Chat/components/ChatList/ChatList';
 import ChatRoom from '@/features/Chat/components/ChatRoom/ChatRoom';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
+import NotificationList from '@/features/Notification/components/NotificationList/NotificationList';
 import { useAuthStore } from '@/stores/authStore';
 import { useChatUiStore } from '@/stores/chatUiStore';
 
@@ -26,6 +27,7 @@ const Sidebar = () => {
   const location = useLocation();
   const isMapPage = location.pathname.startsWith('/map');
   const { isLoggedIn } = useAuthStore();
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
   const { activeSection, expandedButton, activeSubSection, setActiveSection } = useSidebarState();
   const { handleButtonClick, handleSubButtonClick } = useSidebarHandlers();
@@ -93,8 +95,18 @@ const Sidebar = () => {
     switch (activeSection) {
       case 'notification':
         return (
-          <SidePanel title="수신함" {...sectionProps}>
-            <div>수신함 입니닷</div>
+          <SidePanel
+            title={
+              <div className={styles.headerTitle}>
+                수신함
+                {unreadNotificationCount > 0 && (
+                  <span className={styles.unreadCount}>{unreadNotificationCount}</span>
+                )}
+              </div>
+            }
+            {...sectionProps}
+          >
+            <NotificationList onUnreadCountChange={setUnreadNotificationCount} />
           </SidePanel>
         );
       case 'chat': {
@@ -169,6 +181,9 @@ const Sidebar = () => {
                   aria-expanded={button.hasSubmenu ? expandedButton === button.id : undefined}
                 >
                   <span className={styles.icon}>{button.icon}</span>
+                  {button.id === 'notification' && unreadNotificationCount > 0 && (
+                    <div className={styles.notificationDot} />
+                  )}
                 </button>
 
                 {/* 하위 버튼들 (드롭다운) */}

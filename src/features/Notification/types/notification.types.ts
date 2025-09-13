@@ -1,0 +1,115 @@
+export enum NotificationType {
+  PROJECT_JOIN_REQUEST = 'PROJECT_JOIN_REQUEST', // 프로젝트 참여 승인 요청
+  PROJECT_JOIN_APPROVED = 'PROJECT_JOIN_APPROVED', // 프로젝트 참여 희망 승인
+  PROJECT_JOIN_REJECTED = 'PROJECT_JOIN_REJECTED', // 프로젝트 참여 희망 거절
+  STUDY_JOIN_REQUEST = 'STUDY_JOIN_REQUEST', // 스터디 참여 승인 요청
+  STUDY_JOIN_APPROVED = 'STUDY_JOIN_APPROVED', // 스터디 참여 희망 승인
+  STUDY_JOIN_REJECTED = 'STUDY_JOIN_REJECTED', // 스터디 참여 희망 거절
+  DM_REQUEST = 'DM_REQUEST', // DM 요청
+  DM_APPROVED = 'DM_APPROVED', // DM 요청 승인
+  DM_REJECTED = 'DM_REJECTED', // DM 요청 거절
+  ACHIEVEMENT = 'ACHIEVEMENT', // 업적 달성
+  TEAM_LEADER_VIOLATION = 'TEAM_LEADER_VIOLATION', // 팀 리더의 일탈
+  TEAM_MEMBER_VIOLATION = 'TEAM_MEMBER_VIOLATION', // 팀원의 일탈
+}
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  message: string;
+  isRead: boolean;
+  isProcessed: boolean;
+  createdAt: Date;
+
+  actorUserId?: string;
+  actorNickname?: string;
+  actorTemperature?: number;
+
+  /** 하위호환용(서버에서 아직 userId/userNickname을 주는 경우 대비) */
+  userId?: string;
+  userNickname?: string;
+
+  projectId?: string;
+  projectTitle?: string;
+  studyId?: string;
+  studyTitle?: string;
+  achievementName?: string;
+  teamId?: string;
+  teamName?: string;
+}
+
+export interface NotificationAction {
+  type: 'accept' | 'reject';
+  label: string;
+  variant: 'primary' | 'secondary' | 'outline' | 'ghost';
+}
+
+export const notificationConfig: Record<
+  NotificationType,
+  {
+    title: string;
+    hasActions: boolean;
+    actions?: NotificationAction[];
+  }
+> = {
+  [NotificationType.PROJECT_JOIN_REQUEST]: {
+    title: '프로젝트 참여 승인 요청',
+    hasActions: true,
+    actions: [
+      { type: 'accept', label: '수락', variant: 'secondary' },
+      { type: 'reject', label: '거절', variant: 'secondary' },
+    ],
+  },
+  [NotificationType.PROJECT_JOIN_APPROVED]: {
+    title: '프로젝트 참여 희망 승인',
+    hasActions: false,
+  },
+  [NotificationType.PROJECT_JOIN_REJECTED]: {
+    title: '프로젝트 참여 희망 거절',
+    hasActions: false,
+  },
+  [NotificationType.STUDY_JOIN_REQUEST]: {
+    title: '스터디 참여 승인 요청',
+    hasActions: true,
+    actions: [
+      { type: 'accept', label: '수락', variant: 'secondary' },
+      { type: 'reject', label: '거절', variant: 'secondary' },
+    ],
+  },
+  [NotificationType.STUDY_JOIN_APPROVED]: {
+    title: '스터디 참여 희망 승인',
+    hasActions: false,
+  },
+  [NotificationType.STUDY_JOIN_REJECTED]: {
+    title: '스터디 참여 희망 거절',
+    hasActions: false,
+  },
+  [NotificationType.DM_REQUEST]: {
+    title: 'DM 요청',
+    hasActions: true,
+    actions: [
+      { type: 'accept', label: '수락', variant: 'secondary' },
+      { type: 'reject', label: '거절', variant: 'secondary' },
+    ],
+  },
+  [NotificationType.DM_APPROVED]: {
+    title: 'DM 요청 승인',
+    hasActions: false,
+  },
+  [NotificationType.DM_REJECTED]: {
+    title: 'DM 요청 거절',
+    hasActions: false,
+  },
+  [NotificationType.ACHIEVEMENT]: {
+    title: '업적 달성',
+    hasActions: false,
+  },
+  [NotificationType.TEAM_LEADER_VIOLATION]: {
+    title: '팀 리더의 일탈',
+    hasActions: false,
+  },
+  [NotificationType.TEAM_MEMBER_VIOLATION]: {
+    title: '팀원의 일탈',
+    hasActions: false,
+  },
+};
