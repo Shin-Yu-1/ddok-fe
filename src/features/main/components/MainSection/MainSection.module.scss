@@ -51,8 +51,14 @@
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  justify-content: start;
+  grid-template-columns: repeat(4, 1fr); // 기본 4열
   gap: 20px;
+
+  // 로그인 시 2열
+  &.loggedIn {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (width <= 768px) {
     grid-template-columns: 1fr;
@@ -60,15 +66,9 @@
   }
 }
 
-// 사용자 카드 전용 그리드 (더 넓은 카드를 위해)
+// 사용자 카드 전용 그리드
 .userCardGrid {
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
-
-  @media (width <= 768px) {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+  grid-template-columns: 1fr 1fr;
 }
 
 .emptyContainer {
@@ -95,8 +95,13 @@
 
 .loadingGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr); // 기본 4열
   gap: 20px;
+
+  // 로그인 시 2열
+  &.loggedIn {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (width <= 768px) {
     grid-template-columns: 1fr;
