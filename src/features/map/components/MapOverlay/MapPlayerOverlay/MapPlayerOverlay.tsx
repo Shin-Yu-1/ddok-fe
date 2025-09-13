@@ -8,6 +8,7 @@ import type BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
 import Badge from '@/features/Badge/Badge';
 import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -22,11 +23,20 @@ interface PlayerOverlayProps {
 
 const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) => {
   const nav = useNavigate();
+  const { isLoggedIn } = useAuthStore();
   const [tooltipContent, setTooltipContent] = useState<string>('');
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
   const { data: response, isLoading, isError } = useGetPlayerOverlay(id);
+
+  const handleDetailClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+    nav(`/profile/user/${id}`);
+  };
 
   // Badge type을 한글로 변환하는 함수
   const getBadgeTypeInKorean = (type: BadgeType): string => {
@@ -122,9 +132,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
-                onClick={() => {
-                  nav(`/profile/user/${id}`);
-                }}
+                onClick={handleDetailClick}
               >
                 상세보기
               </Button>

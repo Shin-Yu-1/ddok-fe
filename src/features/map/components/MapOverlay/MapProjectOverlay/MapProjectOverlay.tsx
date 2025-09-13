@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button/Button';
 import { useGetProjectOverlay } from '@/features/map/hooks/useGetOverlay';
 import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -17,8 +18,17 @@ interface ProjectOverlayProps {
 
 const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }) => {
   const nav = useNavigate();
+  const { isLoggedIn } = useAuthStore();
 
   const { data: response, isLoading, isError } = useGetProjectOverlay(id);
+
+  const handleDetailClick = () => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+    nav(`/detail/project/${id}`);
+  };
 
   if (isLoading) {
     return (
@@ -84,9 +94,7 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
-                onClick={() => {
-                  nav(`/detail/project/${id}`);
-                }}
+                onClick={handleDetailClick}
               >
                 상세보기
               </Button>
