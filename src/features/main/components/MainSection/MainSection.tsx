@@ -14,7 +14,8 @@ interface MainSectionProps {
   viewAllLink?: string;
   isLoading?: boolean;
   emptyMessage?: string;
-  isUserSection?: boolean; // 사용자 섹션인지 구분하는 prop
+  isUserSection?: boolean;
+  isLoggedIn?: boolean;
 }
 
 export default function MainSection({
@@ -25,6 +26,7 @@ export default function MainSection({
   isLoading = false,
   emptyMessage = '등록된 항목이 없습니다.',
   isUserSection = false,
+  isLoggedIn = false,
 }: MainSectionProps) {
   if (isLoading) {
     return (
@@ -36,24 +38,30 @@ export default function MainSection({
           </div>
         </div>
         <div className={styles.loadingContainer}>
-          <div className={styles.loadingGrid}>
-            {Array.from({ length: 4 }, (_, index) => (
-              <div key={index} className={styles.skeletonCard}>
-                <div className={styles.skeletonBanner} />
-                <div className={styles.skeletonContent}>
-                  <div className={styles.skeletonTitle} />
-                  <div className={styles.skeletonTags}>
-                    <div className={styles.skeletonTag} />
-                    <div className={styles.skeletonTag} />
-                  </div>
-                  <div className={styles.skeletonInfo}>
-                    {Array.from({ length: 4 }, (_, i) => (
-                      <div key={i} className={styles.skeletonInfoLine} />
-                    ))}
+          <div className={`${styles.loadingGrid} ${isLoggedIn ? styles.loggedIn : ''}`}>
+            {Array.from(
+              { length: isLoggedIn ? 2 : 4 },
+              (
+                _,
+                index // 로딩 개수도 조정
+              ) => (
+                <div key={index} className={styles.skeletonCard}>
+                  <div className={styles.skeletonBanner} />
+                  <div className={styles.skeletonContent}>
+                    <div className={styles.skeletonTitle} />
+                    <div className={styles.skeletonTags}>
+                      <div className={styles.skeletonTag} />
+                      <div className={styles.skeletonTag} />
+                    </div>
+                    <div className={styles.skeletonInfo}>
+                      {Array.from({ length: 4 }, (_, i) => (
+                        <div key={i} className={styles.skeletonInfoLine} />
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </div>
       </section>
@@ -81,15 +89,19 @@ export default function MainSection({
             <p className={styles.emptyMessage}>{emptyMessage}</p>
           </div>
         ) : (
-          <div className={`${styles.cardGrid} ${isUserSection ? styles.userCardGrid : ''}`}>
+          <div
+            className={`
+            ${styles.cardGrid} 
+            ${isUserSection ? styles.userCardGrid : ''} 
+            ${isLoggedIn ? styles.loggedIn : ''}
+          `}
+          >
             {items.map(item => {
               if (isUserSection) {
-                // 사용자 섹션에서는 UserCard 사용
                 return (
                   <UserCard key={`user-${item.type}-${item.id}`} item={item as UserCardItem} />
                 );
               } else {
-                // 일반 섹션에서는 MainCard 사용
                 return <MainCard key={`${item.type}-${item.id}`} item={item as CardItem} />;
               }
             })}
