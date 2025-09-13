@@ -357,7 +357,9 @@ const TeamSettingPage = () => {
 
         {/* 공고 상세보기 버튼 */}
         <div className={styles.settingItem}>
-          <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 공고 상세보기</div>
+          <div>
+            {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 모집 공고 상세보기
+          </div>
           <Button
             className={styles.leaveBtn}
             backgroundColor="var(--blue-1)"
@@ -367,7 +369,7 @@ const TeamSettingPage = () => {
             height="35px"
             onClick={handleDetailClick}
           >
-            공고 상세보기
+            상세보기
           </Button>
         </div>
 
