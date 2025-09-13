@@ -21,7 +21,8 @@ const MAIN_PAGE_LIMITS = {
   DISPLAY_SIZE: 50, // 전체 데이터 조회 개수(표시용)
   USER_STUDIES: 2, // 사용자 스터디 조회 개수
   USER_PROJECTS: 2, // 사용자 프로젝트 조회 개수
-  DISPLAY_LIMIT: 3, // 각 섹션별 표시 개수
+  DISPLAY_LIMIT_LOGGED_IN: 3, // 로그인 시 각 섹션별 표시 개수
+  DISPLAY_LIMIT_LOGGED_OUT: 4, // 비로그인 시 각 섹션별 표시 개수
 } as const;
 
 // 통계 데이터 타입
@@ -93,7 +94,7 @@ const transformUserProjectToCard = (project: UserProjectItem): UserCardItem => (
 });
 
 // 전체 데이터 조회 (통계 + 표시용 통합)
-const fetchAllData = async () => {
+const fetchAllData = async (displayLimit: number) => {
   const [studiesDisplayResponse, projectsDisplayResponse] = await Promise.all([
     api.get<StudyListResponse>('/api/studies', {
       params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
@@ -124,14 +125,14 @@ const fetchAllData = async () => {
     ongoingProjectsCount: ongoingProjects.length,
   };
 
-  // 표시용 데이터 (각각 제한된 개수만)
+  // 표시용 데이터 (동적 제한 개수 사용)
   const displayData = {
-    recruitingStudies: recruitingStudies.slice(0, MAIN_PAGE_LIMITS.DISPLAY_LIMIT),
-    ongoingStudies: ongoingStudies.slice(0, MAIN_PAGE_LIMITS.DISPLAY_LIMIT),
-    recruitingProjects: recruitingProjects.slice(0, MAIN_PAGE_LIMITS.DISPLAY_LIMIT),
-    ongoingProjects: ongoingProjects.slice(0, MAIN_PAGE_LIMITS.DISPLAY_LIMIT),
-    recentStudies: allStudies.slice(0, MAIN_PAGE_LIMITS.DISPLAY_LIMIT),
-    recentProjects: allProjects.slice(0, MAIN_PAGE_LIMITS.DISPLAY_LIMIT),
+    recruitingStudies: recruitingStudies.slice(0, displayLimit),
+    ongoingStudies: ongoingStudies.slice(0, displayLimit),
+    recruitingProjects: recruitingProjects.slice(0, displayLimit),
+    ongoingProjects: ongoingProjects.slice(0, displayLimit),
+    recentStudies: allStudies.slice(0, displayLimit),
+    recentProjects: allProjects.slice(0, displayLimit),
   };
 
   return {
@@ -193,14 +194,19 @@ const fetchUserProjects = async (userId: number): Promise<UserProjectsResponse> 
 export const useMainData = () => {
   const { isLoggedIn, user } = useAuthStore();
 
+  // 로그인 상태에 따른 표시 개수 결정
+  const displayLimit = isLoggedIn
+    ? MAIN_PAGE_LIMITS.DISPLAY_LIMIT_LOGGED_IN
+    : MAIN_PAGE_LIMITS.DISPLAY_LIMIT_LOGGED_OUT;
+
   // 전체 데이터 조회 (통계 + 표시용 통합)
   const {
     data: allData,
     isLoading: isLoadingAllData,
     error: allDataError,
   } = useQuery({
-    queryKey: ['main-data'],
-    queryFn: fetchAllData,
+    queryKey: ['main-data', displayLimit],
+    queryFn: () => fetchAllData(displayLimit),
   });
 
   // 사용자 참여 스터디 조회 (로그인한 경우에만)
