@@ -291,6 +291,22 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     setIsMemberMenuOpen(true);
   };
 
+  const backClickHandle = () => {
+    const ids = Array.from(seenIdsRef.current);
+    const lastMessageId = ids[ids.length - 1];
+
+    if (lastMessageId) {
+      messageLastReadPost.mutate(
+        { messageId: lastMessageId },
+        {
+          onSuccess: () => {
+            onBack();
+          },
+        }
+      );
+    }
+  };
+
   return (
     <div className={styles.container}>
       {isMemberMenuOpen && (
@@ -304,7 +320,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           {chat.roomType === ChatRoomType.PRIVATE ? '1:1 채팅' : '팀 채팅'}
         </span>
 
-        <Button onClick={onBack} size="sm" padding={'0px'}>
+        <Button onClick={backClickHandle} size="sm" padding={'0px'}>
           <ArrowUUpLeftIcon className={styles.headerIcon} />
         </Button>
       </header>
