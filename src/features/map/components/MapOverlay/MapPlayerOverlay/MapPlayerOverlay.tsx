@@ -9,6 +9,7 @@ import type BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
 import Badge from '@/features/Badge/Badge';
 import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
+import { DDtoast } from '@/features/toast';
 import { useAuthStore } from '@/stores/authStore';
 
 import styles from '../MapOverlay.module.scss';
@@ -33,7 +34,11 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
 
   const handleDetailClick = () => {
     if (!isLoggedIn) {
-      alert('로그인이 필요한 서비스입니다.');
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '로그인이 필요한 서비스입니다.',
+      });
       return;
     }
     nav(`/profile/user/${id}`);

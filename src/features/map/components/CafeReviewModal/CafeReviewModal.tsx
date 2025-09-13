@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { XIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
+import { DDtoast } from '@/features/toast';
 
 import { usePostCafeReview } from '../../hooks/usePostCafeReview';
 
@@ -95,13 +96,20 @@ const CafeReviewModal: React.FC<CafeReviewModalProps> = ({
       },
       {
         onSuccess: () => {
-          alert('후기가 성공적으로 작성되었습니다!');
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '후기가 성공적으로 작성되었습니다.',
+          });
           onReviewSubmitted();
           handleClose();
         },
-        onError: error => {
-          console.error('후기 작성 오류:', error);
-          alert('후기 작성에 실패했습니다. 다시 시도해주세요.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '후기 작성에 실패했습니다. 다시 시도해주세요.',
+          });
         },
       }
     );

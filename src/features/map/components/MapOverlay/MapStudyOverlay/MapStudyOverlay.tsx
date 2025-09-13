@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button/Button';
 import { useGetStudyOverlay } from '@/features/map/hooks/useGetOverlay';
 import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
+import { DDtoast } from '@/features/toast';
 import { useAuthStore } from '@/stores/authStore';
 
 import styles from '../MapOverlay.module.scss';
@@ -24,7 +25,11 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
 
   const handleDetailClick = () => {
     if (!isLoggedIn) {
-      alert('로그인이 필요한 서비스입니다.');
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '로그인이 필요한 서비스입니다.',
+      });
       return;
     }
     nav(`/detail/study/${id}`);
