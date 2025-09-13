@@ -80,7 +80,13 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
   }, [selectedMainPosition, selectedInterestPositions, user.mainPosition, user.subPositions]);
 
   const handleSubmit = async () => {
-    if (!hasChanges || !selectedMainPosition || isUpdating) return;
+    if (
+      !hasChanges ||
+      !selectedMainPosition ||
+      selectedInterestPositions.length !== 2 ||
+      isUpdating
+    )
+      return;
 
     const mainPosition = getPositionNameById(selectedMainPosition);
     const subPositions = selectedInterestPositions
@@ -130,14 +136,15 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
     });
   };
 
-  const isValidPosition = !!selectedMainPosition;
+  // 대표 1개 + 관심 2개 필수
+  const isValidPosition = !!selectedMainPosition && selectedInterestPositions.length === 2;
 
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
       title="포지션를 입력해주세요"
-      subtitle="대표 포지션과 관심 포지션을 설정해주세요! (대표 포지션 필수)"
+      subtitle="대표 포지션과 관심 포지션을 설정해주세요!"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}

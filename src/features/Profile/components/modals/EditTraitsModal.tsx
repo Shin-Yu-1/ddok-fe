@@ -76,7 +76,7 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
   }, [selectedPersonality, user.traits]);
 
   const handleSubmit = async () => {
-    if (!hasChanges || isUpdating) return;
+    if (!hasChanges || selectedPersonality.length < 1 || isUpdating) return;
 
     const traitNames = selectedPersonality
       .map(id => getPersonalityNameById(id))
@@ -113,12 +113,15 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     });
   };
 
+  // 최소 1개 - 최대 5개 검증
+  const isValidSelection = selectedPersonality.length >= 1 && selectedPersonality.length <= 5;
+
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
       title="본인의 성향을 선택해주세요"
-      subtitle="당신은 어떤 사람인가요? (최대 5개)"
+      subtitle="당신은 어떤 사람인가요? (최소 1개, 최대 5개)"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}
@@ -136,7 +139,7 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
           <Button
             variant={hasChanges ? 'secondary' : 'ghost'}
             onClick={handleSubmit}
-            disabled={!hasChanges || isUpdating}
+            disabled={!hasChanges || !isValidSelection || isUpdating}
             isLoading={isUpdating}
             fullWidth={true}
             radius="xsm"
