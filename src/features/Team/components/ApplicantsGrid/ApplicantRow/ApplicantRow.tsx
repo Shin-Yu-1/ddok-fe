@@ -14,9 +14,10 @@ interface ApplicantRowProps {
   member: ApplicantType;
   teamId: number;
   amILeader: boolean;
+  teamStatus?: string; // 팀 상태 추가
 }
 
-const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps) => {
+const ApplicantRow = ({ teamType, member, teamId, amILeader, teamStatus }: ApplicantRowProps) => {
   const queryClient = useQueryClient();
 
   const approveApplicant = useApproveApplicant({
@@ -104,7 +105,7 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps
               radius="xsm"
               fontWeightPreset="regular"
               onClick={handleApprove}
-              disabled={approveApplicant.isPending}
+              disabled={approveApplicant.isPending || teamStatus === 'CLOSED'}
             >
               {approveApplicant.isPending ? '처리 중...' : '수락'}
             </Button>
@@ -117,7 +118,7 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader }: ApplicantRowProps
               radius="xsm"
               fontWeightPreset="regular"
               onClick={handleReject}
-              disabled={rejectApplicant.isPending}
+              disabled={rejectApplicant.isPending || teamStatus === 'CLOSED'}
             >
               {rejectApplicant.isPending ? '처리 중...' : '거절'}
             </Button>

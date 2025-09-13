@@ -12,9 +12,10 @@ interface MemberRowProps {
   member: MemberType;
   amILeader: boolean;
   teamId: number;
+  teamStatus?: string; // 팀 상태 추가
 }
 
-const MemberRow = ({ teamType, member, amILeader, teamId }: MemberRowProps) => {
+const MemberRow = ({ teamType, member, amILeader, teamId, teamStatus }: MemberRowProps) => {
   const queryClient = useQueryClient();
 
   const expelMember = useExpelMember({
@@ -57,7 +58,7 @@ const MemberRow = ({ teamType, member, amILeader, teamId }: MemberRowProps) => {
             radius="xsm"
             fontWeightPreset="regular"
             onClick={handleExpel}
-            disabled={expelMember.isPending}
+            disabled={expelMember.isPending || teamStatus === 'CLOSED'}
           >
             {expelMember.isPending ? '처리 중...' : '추방'}
           </Button>

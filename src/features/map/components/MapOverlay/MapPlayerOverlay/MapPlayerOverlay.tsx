@@ -1,9 +1,11 @@
+import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import Thermometer from '@/components/Thermometer/Thermometer';
 import type BadgeTier from '@/constants/enums/BadgeTier.enum';
-import type BadgeType from '@/constants/enums/BadgeType.enum';
+import BadgeType from '@/constants/enums/BadgeType.enum';
 import Badge from '@/features/Badge/Badge';
 import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
 
@@ -20,8 +22,51 @@ interface PlayerOverlayProps {
 
 const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) => {
   const nav = useNavigate();
+  const [tooltipContent, setTooltipContent] = useState<string>('');
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const { data: response, isLoading, isError } = useGetPlayerOverlay(id);
+
+  // Badge type을 한글로 변환하는 함수
+  const getBadgeTypeInKorean = (type: BadgeType): string => {
+    switch (type) {
+      case BadgeType.COMPLETE:
+        return '완주';
+      case BadgeType.LEADER_COMPLETE:
+        return '리더 완주';
+      case BadgeType.LOGIN:
+        return '출석';
+      default:
+        return type;
+    }
+  };
+
+  const handleBadgeMouseEnter = (
+    event: React.MouseEvent,
+    type: 'main' | 'abandon',
+    badgeData: { type?: BadgeType; tier?: BadgeTier; count?: number; isGranted?: boolean }
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      x: rect.left - rect.width / 2,
+      y: rect.top - 45,
+    });
+
+    if (type === 'main') {
+      const tierText = badgeData.tier ? badgeData.tier.toLowerCase() : '';
+      const koreanType = badgeData.type ? getBadgeTypeInKorean(badgeData.type) : '';
+      setTooltipContent(`${koreanType} ${tierText.toLocaleUpperCase()} 등급`);
+    } else {
+      setTooltipContent(`탈주 ${badgeData.count}회`);
+    }
+
+    setShowTooltip(true);
+  };
+
+  const handleBadgeMouseLeave = () => {
+    setShowTooltip(false);
+  };
 
   if (isLoading) {
     return (
@@ -93,26 +138,48 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
             </div>
             <div className={styles.overlay__info__core__badges}>
               {player.mainBadge && (
-                <Badge
-                  className={styles.badge}
-                  mainBadge={{
-                    type: player.mainBadge.type as BadgeType,
-                    tier: player.mainBadge.tier as BadgeTier,
-                  }}
-                  widthSize="20px"
-                />
+                <div
+                  onMouseEnter={e =>
+                    handleBadgeMouseEnter(e, 'main', {
+                      type: player.mainBadge?.type as BadgeType,
+                      tier: player.mainBadge?.tier as BadgeTier,
+                    })
+                  }
+                  onMouseLeave={handleBadgeMouseLeave}
+                  style={{ display: 'inline-block' }}
+                >
+                  <Badge
+                    className={styles.badge}
+                    mainBadge={{
+                      type: player.mainBadge.type as BadgeType,
+                      tier: player.mainBadge.tier as BadgeTier,
+                    }}
+                    widthSize="20px"
+                  />
+                </div>
               )}
               {player.abandonBadge && (
-                <Badge
-                  className={styles.badge}
-                  abandonBadge={
-                    player.abandonBadge && {
-                      isGranted: player.abandonBadge.isGranted,
-                      count: player.abandonBadge.count,
-                    }
+                <div
+                  onMouseEnter={e =>
+                    handleBadgeMouseEnter(e, 'abandon', {
+                      count: player.abandonBadge?.count,
+                      isGranted: player.abandonBadge?.isGranted,
+                    })
                   }
-                  widthSize="20px"
-                />
+                  onMouseLeave={handleBadgeMouseLeave}
+                  style={{ display: 'inline-block' }}
+                >
+                  <Badge
+                    className={styles.badge}
+                    abandonBadge={
+                      player.abandonBadge && {
+                        isGranted: player.abandonBadge.isGranted,
+                        count: player.abandonBadge.count,
+                      }
+                    }
+                    widthSize="20px"
+                  />
+                </div>
               )}
             </div>
             <div className={styles.overlay__info__core__address}>{player.address}</div>
@@ -149,6 +216,28 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
       <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
         닫기
       </div>
+
+      {/* 툴팁 */}
+      {showTooltip && (
+        <div
+          style={{
+            position: 'fixed',
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+            transform: 'translateX(-50%) translateY(-100%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            pointerEvents: 'none',
+            zIndex: 1000,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {tooltipContent}
+        </div>
+      )}
     </div>
   );
 };

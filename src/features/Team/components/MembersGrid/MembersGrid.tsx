@@ -8,9 +8,10 @@ interface MembersGridProps {
   members: MemberType[];
   amILeader: boolean;
   teamId: number;
+  teamStatus?: string; // 팀 상태 추가
 }
 
-const MembersGrid = ({ teamType, members, amILeader, teamId }: MembersGridProps) => {
+const MembersGrid = ({ teamType, members, amILeader, teamId, teamStatus }: MembersGridProps) => {
   if (!members || members.length === 0) {
     return <div className={styles.empty}>팀원이 없습니다.</div>;
   }
@@ -28,6 +29,7 @@ const MembersGrid = ({ teamType, members, amILeader, teamId }: MembersGridProps)
           member={member}
           amILeader={amILeader}
           teamId={teamId}
+          teamStatus={teamStatus}
         />
       ))}
     </div>

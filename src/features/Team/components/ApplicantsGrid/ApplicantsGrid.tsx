@@ -9,6 +9,7 @@ interface ApplicantsGridProps {
   amILeader: boolean;
   page?: number;
   size?: number;
+  teamStatus?: string; // 팀 상태 추가
 }
 
 const ApplicantsGrid = ({
@@ -17,6 +18,7 @@ const ApplicantsGrid = ({
   amILeader,
   page = 0,
   size = 4,
+  teamStatus,
 }: ApplicantsGridProps) => {
   const { data, isLoading, isError, error } = useGetTeamApplicants({
     teamId,
@@ -51,6 +53,7 @@ const ApplicantsGrid = ({
           member={applicant}
           teamId={teamId}
           amILeader={amILeader}
+          teamStatus={teamStatus}
         />
       ))}
     </div>
