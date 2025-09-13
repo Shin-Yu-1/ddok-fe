@@ -1,4 +1,4 @@
-import { CaretDown } from '@phosphor-icons/react';
+import { CaretDownIcon } from '@phosphor-icons/react';
 import { Select } from 'radix-ui';
 
 import styles from './PostStatusSelector.module.scss';
@@ -68,7 +68,7 @@ const PostStatusSelector = ({
 
         <Select.Root value={value} onValueChange={newValue => onChange?.(newValue as TeamStatus)}>
           <Select.Trigger className={styles.dropdownTrigger} aria-label="상태 변경">
-            <CaretDown size={14} color="var(--gray-1)" />
+            <CaretDownIcon size={14} color="var(--gray-1)" />
           </Select.Trigger>
 
           <Select.Portal>

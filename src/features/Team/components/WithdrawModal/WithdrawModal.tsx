@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
@@ -47,7 +47,7 @@ const WithdrawModal = ({ isOpen, onClose, onConfirm, isLoading = false }: Withdr
               onClick={handleClose}
               style={{ flexShrink: 0 }}
             >
-              <X size={24} weight="light" color="var(--black-1)" />
+              <XIcon size={24} weight="light" color="var(--black-1)" />
             </Button>
           </div>
           <p className={styles.subtitle}>중도 하차할 경우, 탈주자 뱃지를 부여 받습니다.</p>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import Thermometer from '@/components/Thermometer/Thermometer';
@@ -91,7 +91,7 @@ const SelectMemberModal = ({
                 onClick={handleClose}
                 style={{ flexShrink: 0 }}
               >
-                <X size={24} weight="light" color="var(--black-1)" />
+                <XIcon size={24} weight="light" color="var(--black-1)" />
               </Button>
             </div>
             <p className={styles.subtitle}>평가하고 싶은 팀원을 선택해주세요.</p>

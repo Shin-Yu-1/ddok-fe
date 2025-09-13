@@ -1,4 +1,4 @@
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import { EVALUATION_QUESTIONS, EVALUATION_CRITERIA_LIST } from '@/constants/evaluation';
@@ -38,7 +38,7 @@ const EvaluationResultModal = ({ isOpen, onClose, member, scores }: EvaluationRe
             onClick={onClose}
             style={{ flexShrink: 0 }}
           >
-            <X size={24} weight="light" color="var(--black-1)" />
+            <XIcon size={24} weight="light" color="var(--black-1)" />
           </Button>
         </div>
 

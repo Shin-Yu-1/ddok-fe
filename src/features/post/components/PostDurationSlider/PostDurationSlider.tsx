@@ -1,4 +1,4 @@
-import { Minus, Plus } from '@phosphor-icons/react';
+import { MinusIcon, PlusIcon } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import { Slider } from 'radix-ui';
 
@@ -59,7 +59,7 @@ const PostDurationSlider = ({ value, onChange, startDate }: PostDurationSliderPr
             onClick={handleDecrease}
             disabled={value <= 1}
           >
-            <Minus size={14} />
+            <MinusIcon size={14} />
           </button>
 
           <span className={styles.currentValue}>{value}개월</span>
@@ -69,7 +69,7 @@ const PostDurationSlider = ({ value, onChange, startDate }: PostDurationSliderPr
             onClick={handleIncrease}
             disabled={value >= 36}
           >
-            <Plus size={14} />
+            <PlusIcon size={14} />
           </button>
         </div>
 

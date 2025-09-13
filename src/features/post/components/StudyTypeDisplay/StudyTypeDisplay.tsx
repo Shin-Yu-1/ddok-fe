@@ -1,4 +1,4 @@
-import { BookOpen } from '@phosphor-icons/react';
+import { BookOpenIcon } from '@phosphor-icons/react';
 
 import styles from './StudyTypeDisplay.module.scss';
 
@@ -11,7 +11,7 @@ const StudyTypeDisplay = ({ studyType }: StudyTypeDisplayProps) => {
     <div className={styles.container}>
       <div className={styles.typeInfo}>
         <div className={styles.iconSection}>
-          <BookOpen size={20} color="var(--green-1)" />
+          <BookOpenIcon size={20} color="var(--green-1)" />
         </div>
 
         <div className={styles.textSection}>
