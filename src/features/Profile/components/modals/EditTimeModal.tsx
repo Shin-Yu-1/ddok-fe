@@ -6,6 +6,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import ActiveTimeSelector from '@/features/Auth/components/ActiveTimeSelector/ActiveTimeSelector';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -30,6 +31,11 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
     userId: user.userId,
     onSuccess: () => {
       console.log('활동 시간 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '활동 시간 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -38,7 +44,11 @@ const EditTimeModal = ({ isOpen, onClose, user }: EditTimeModalProps) => {
     },
     onError: error => {
       console.error('활동 시간 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '활동 시간 수정에 실패했습니다. 다시 시도해주세요.',
+      });
     },
   });
 

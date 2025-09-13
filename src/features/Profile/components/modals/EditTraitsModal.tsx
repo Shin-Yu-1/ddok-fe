@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import { USER_TRAITS } from '@/constants/userTraits';
 import PersonalitySelector from '@/features/Auth/components/PersonalitySelector/PersonalitySelector';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -24,6 +25,11 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     userId: user.userId,
     onSuccess: () => {
       console.log('성향 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '성향 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -32,7 +38,11 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     },
     onError: error => {
       console.error('성향 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '성향 수정에 실패하셨습니다. 다시 시도해주세요.',
+      });
     },
   });
 

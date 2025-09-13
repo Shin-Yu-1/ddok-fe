@@ -12,6 +12,7 @@ import PasswordConfirmModal from '@/features/Profile/components/edit/modals/Pass
 import PersonalInfoForm from '@/features/Profile/components/edit/PersonalInfoForm';
 import ProfileImageEditor from '@/features/Profile/components/edit/ProfileImageEditor';
 import { useEditMyInfo } from '@/features/Profile/hooks/useEditMyInfo';
+import { DDtoast } from '@/features/toast';
 
 import styles from './EditMyInfoPage.module.scss';
 
@@ -54,7 +55,11 @@ const EditMyInfoPage = () => {
     } catch (error) {
       console.error('닉네임 저장 실패:', error);
       const errorMessage = getErrorMessage(error);
-      alert(errorMessage);
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: errorMessage,
+      });
     }
   };
 
@@ -78,7 +83,11 @@ const EditMyInfoPage = () => {
     try {
       const isValid = await verifyPassword(password);
       if (!isValid) {
-        alert('현재 비밀번호가 일치하지 않습니다.');
+        DDtoast({
+          mode: 'custom',
+          type: 'error',
+          userMessage: '현재 비밀번호가 일치하지 않습니다. 다시 시도해주세요.',
+        });
         return;
       }
 
@@ -98,7 +107,11 @@ const EditMyInfoPage = () => {
     } catch (error) {
       console.error('비밀번호 확인 실패:', error);
       const errorMessage = getErrorMessage(error);
-      alert(errorMessage);
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: errorMessage,
+      });
     }
   };
 
@@ -114,7 +127,11 @@ const EditMyInfoPage = () => {
     } catch (error) {
       console.error('전화번호 저장 실패:', error);
       const errorMessage = getErrorMessage(error);
-      alert(errorMessage);
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: errorMessage,
+      });
     }
   };
 
@@ -125,7 +142,11 @@ const EditMyInfoPage = () => {
     } catch (error) {
       console.error('비밀번호 저장 실패:', error);
       const errorMessage = getErrorMessage(error);
-      alert(errorMessage);
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: errorMessage,
+      });
     }
   };
 
@@ -135,7 +156,11 @@ const EditMyInfoPage = () => {
     } catch (error) {
       console.error('프로필 이미지 변경 실패:', error);
       const errorMessage = getErrorMessage(error);
-      alert(errorMessage);
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: errorMessage,
+      });
     }
   };
 
@@ -157,13 +182,21 @@ const EditMyInfoPage = () => {
   const handleWithdrawConfirm = async () => {
     try {
       await withdrawUser();
-      alert('회원 탈퇴가 완료되었습니다.');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '회원 탈퇴가 완료되었습니다.',
+      });
       // 탈퇴 성공 시 로그인 페이지로 이동
       navigate('/auth/signin');
     } catch (error) {
       console.error('회원 탈퇴 실패:', error);
       const errorMessage = getErrorMessage(error);
-      alert(errorMessage);
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: errorMessage,
+      });
     }
   };
 

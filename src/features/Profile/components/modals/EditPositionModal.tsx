@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import { POSITIONS } from '@/constants/positions';
 import PositionSelector from '@/features/Auth/components/PositionSelector/PositionSelector';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -25,6 +26,11 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
     userId: user.userId,
     onSuccess: () => {
       console.log('포지션 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '포지션 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -33,7 +39,11 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
     },
     onError: error => {
       console.error('포지션 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '포지션 수정에 실패했습니다. 다시 시도해주세요.',
+      });
     },
   });
 

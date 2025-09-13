@@ -1,5 +1,7 @@
 import { useRef, useCallback, useMemo } from 'react';
 
+import { DDtoast } from '@/features/toast';
+
 export interface ProfileImageOptions {
   maxSize?: number;
   allowedTypes?: string[];
@@ -49,7 +51,11 @@ export const useProfileImage = (
       // 유효성 검사
       const error = validateImage(file);
       if (error) {
-        alert(error);
+        DDtoast({
+          mode: 'custom',
+          type: 'error',
+          userMessage: error,
+        });
         return;
       }
 
@@ -57,7 +63,11 @@ export const useProfileImage = (
         await onImageChange(file);
       } catch (error) {
         console.error('이미지 처리 실패:', error);
-        alert('이미지 업로드에 실패했습니다.');
+        DDtoast({
+          mode: 'custom',
+          type: 'error',
+          userMessage: '이미지 업로드에 실패했습니다. 다시 시도해주세요.',
+        });
       }
 
       // 파일 입력 초기화 (같은 파일 재선택 가능하도록)
