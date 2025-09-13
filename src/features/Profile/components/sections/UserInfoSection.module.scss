@@ -4,11 +4,12 @@
 .userInfoSection {
   align-content: center;
   min-width: 800px;
-  padding: 1rem;
+  padding: 1rem 37px;
   background-color: v.$white-3;
 
   @include m.mobile {
     min-width: 700px;
+    padding: 1rem 23px;
   }
 }
 
@@ -169,7 +170,6 @@
 .badgeContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
 }
 
 // 뱃지 래퍼 - 호버 효과와 툴팁을 위한 컨테이너
@@ -213,7 +213,7 @@
 .mainBadge,
 .abandonBadge {
   @include m.mobile {
-    width: 23px !important;
+    width: 44px !important;
     height: 44px !important;
   }
 }
