@@ -3,6 +3,7 @@
 
 import { forwardRef } from 'react';
 
+import { ShoppingBagOpenIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,7 +57,9 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
                   onClick={() => handleProjectClick(project.teamId)}
                   aria-label={`${project.title} 프로젝트 팀 관리 페이지로 이동`}
                 >
-                  <div className={styles.projectIcon}>📋</div>
+                  <div className={styles.projectIcon}>
+                    <ShoppingBagOpenIcon size={21} weight="regular" />
+                  </div>
 
                   <div className={styles.projectInfo}>
                     <h3 className={styles.projectTitle}>{project.title}</h3>

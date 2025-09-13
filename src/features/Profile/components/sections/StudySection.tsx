@@ -3,6 +3,7 @@
 
 import { forwardRef } from 'react';
 
+import { BookBookmarkIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,7 +57,9 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
                   onClick={() => handleStudyClick(study.teamId)}
                   aria-label={`${study.title} 스터디 팀 관리 페이지로 이동`}
                 >
-                  <div className={styles.studyIcon}>📚</div>
+                  <div className={styles.studyIcon}>
+                    <BookBookmarkIcon size={21} weight="regular" />
+                  </div>
 
                   <div className={styles.studyInfo}>
                     <h3 className={styles.studyTitle}>{study.title}</h3>

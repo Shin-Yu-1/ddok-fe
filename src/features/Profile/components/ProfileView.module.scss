@@ -94,11 +94,6 @@
   display: flex;
   justify-content: flex-end;
   width: 404px;
-
-  @include m.mobile {
-    justify-content: flex-start;
-    width: 100%;
-  }
 }
 
 .toggleContainer {
@@ -270,12 +265,11 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 1179px;
   margin: 0 auto;
-  padding: 60px 20px;
+  padding: 60px 0;
 
   @include m.mobile {
-    padding: 40px 20px;
+    padding: 40px 0;
   }
 }
 

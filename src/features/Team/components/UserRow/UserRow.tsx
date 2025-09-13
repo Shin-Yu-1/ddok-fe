@@ -73,7 +73,7 @@ const User = ({ user }: UserProps) => {
                   type: user.mainBadge.type as BadgeType,
                   tier: user.mainBadge.tier as BadgeTier,
                 }}
-                widthSize="13px"
+                widthSize="20px"
               />
             )}
             {user.abandonBadge && (
@@ -85,7 +85,7 @@ const User = ({ user }: UserProps) => {
                     count: user.abandonBadge.count,
                   }
                 }
-                widthSize="13px"
+                widthSize="20px"
               />
             )}
           </div>

@@ -1,5 +1,20 @@
+export const formatDateToDot = (dateString: string): string => {
+  if (!dateString) return '';
+
+  if (dateString.includes('.')) return dateString;
+
+  return dateString.replace(/-/g, '.');
+};
+
 export const formatDateRange = (startDate: string, endDate?: string): string => {
-  return endDate ? `${startDate} - ${endDate}` : `${startDate} -`;
+  const formattedStartDate = formatDateToDot(startDate);
+
+  if (!endDate) {
+    return `${formattedStartDate} -`;
+  }
+
+  const formattedEndDate = formatDateToDot(endDate);
+  return `${formattedStartDate} - ${formattedEndDate}`;
 };
 
 export const formatTime = (hour: string): string => {
