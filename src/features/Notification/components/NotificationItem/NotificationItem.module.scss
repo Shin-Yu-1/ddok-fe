@@ -4,7 +4,6 @@
 .notificationItem {
   display: flex;
   gap: 2px;
-  height: 116px;
   padding: 4px;
   border-bottom: 1px solid v.$gray-2;
   transition: background-color 0.2s ease;
@@ -111,6 +110,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 4px;
 }
 
 .actions {
