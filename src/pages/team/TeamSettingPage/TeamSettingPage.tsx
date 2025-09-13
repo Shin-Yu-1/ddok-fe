@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ArrowUUpLeftIcon } from '@phosphor-icons/react';
+import { CaretLeftIcon } from '@phosphor-icons/react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -290,7 +290,7 @@ const TeamSettingPage = () => {
   return (
     <div className={styles.container}>
       <button className={styles.backButton} onClick={() => navigate(-1)}>
-        <ArrowUUpLeftIcon size={20} weight="bold" />
+        <CaretLeftIcon size={20} weight="bold" />
         <span>돌아가기</span>
       </button>
 
