@@ -59,7 +59,7 @@ export default function MainCard({ item }: MainCardProps) {
 
   // 날짜 포맷팅 - YYYY.M.D 형식
   const formatDate = (dateString: string) => {
-    return dayjs(dateString).format('YYYY.M.D');
+    return dayjs(dateString).format('YYYY.MM.DD');
   };
 
   // 예상 종료일 계산
