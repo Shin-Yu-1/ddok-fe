@@ -65,7 +65,6 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   const messagesRef = useRef<HTMLDivElement>(null);
   const seenIdsRef = useRef<Set<number>>(new Set()); // 중복 메시지 방지
 
-  // ✅ 전역 WebSocket
   const ws = useWebSocketContext();
 
   // 스크롤 위치 판별
@@ -127,10 +126,13 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     });
 
     return () => {
-      const lastMessage = messages.at(-1);
-      if (lastMessage) {
-        messageLastReadPost.mutate({ messageId: lastMessage.messageId });
+      const ids = Array.from(seenIdsRef.current);
+      const lastMessageId = ids[ids.length - 1];
+
+      if (lastMessageId) {
+        messageLastReadPost.mutate({ messageId: lastMessageId });
       }
+
       if (subId) ws.unsubscribe(subId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
