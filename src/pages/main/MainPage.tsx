@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
 import {
-  Plus,
-  Users,
-  Code,
-  BookOpen,
-  MapPin,
-  UserCheck,
-  HandTap,
-  Trophy,
-  Play,
+  PlusIcon,
+  UsersIcon,
+  CodeIcon,
+  BookOpenIcon,
+  MapPinIcon,
+  UserCheckIcon,
+  HandTapIcon,
+  TrophyIcon,
+  PlayIcon,
 } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
@@ -39,13 +39,13 @@ export default function MainPage() {
   const getFeatureIcon = (iconName: string) => {
     switch (iconName) {
       case 'user-match':
-        return <UserCheck size={32} weight="bold" />;
+        return <UserCheckIcon size={32} weight="bold" />;
       case 'map':
-        return <MapPin size={32} weight="bold" />;
+        return <MapPinIcon size={32} weight="bold" />;
       case 'click':
-        return <HandTap size={32} weight="bold" />;
+        return <HandTapIcon size={32} weight="bold" />;
       default:
-        return <UserCheck size={32} weight="bold" />;
+        return <UserCheckIcon size={32} weight="bold" />;
     }
   };
 
@@ -72,26 +72,26 @@ export default function MainPage() {
             {isLoggedIn ? (
               <>
                 <Link to="/create/project" className={styles.primaryButton}>
-                  <Code size={20} weight="bold" />
+                  <CodeIcon size={20} weight="bold" />
                   <span>새로운 프로젝트 만들기</span>
                 </Link>
                 <Link to="/create/study" className={styles.primaryButton}>
-                  <BookOpen size={20} weight="bold" />
+                  <BookOpenIcon size={20} weight="bold" />
                   <span>새로운 스터디 만들기</span>
                 </Link>
                 <Link to="/map" className={styles.primaryButton}>
-                  <MapPin size={20} weight="bold" />
+                  <MapPinIcon size={20} weight="bold" />
                   <span>지도로 탐색하기</span>
                 </Link>
               </>
             ) : (
               <>
                 <Link to="/auth/signin" className={styles.primaryButton}>
-                  <Play size={20} weight="bold" />
+                  <PlayIcon size={20} weight="bold" />
                   <span>시작하기</span>
                 </Link>
                 <Link to="/ranking" className={styles.primaryButton}>
-                  <Trophy size={20} weight="bold" />
+                  <TrophyIcon size={20} weight="bold" />
                   <span>랭킹 보기</span>
                 </Link>
               </>
@@ -103,7 +103,7 @@ export default function MainPage() {
         <div className={styles.statsCards}>
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <BookOpen size={24} weight="bold" />
+              <BookOpenIcon size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
               <div className={styles.statsNumber}>{data.stats.recruitingStudiesCount}</div>
@@ -113,7 +113,7 @@ export default function MainPage() {
 
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <Code size={24} weight="bold" />
+              <CodeIcon size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
               <div className={styles.statsNumber}>{data.stats.recruitingProjectsCount}</div>
@@ -123,7 +123,7 @@ export default function MainPage() {
 
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <Users size={24} weight="bold" />
+              <UsersIcon size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
               <div className={styles.statsNumber}>
@@ -237,11 +237,11 @@ export default function MainPage() {
                   <p className={styles.emptyMessage}>새로운 활동을 시작해보세요!</p>
                   <div className={styles.emptyActions}>
                     <Link to="/create/project" className={styles.primaryButton}>
-                      <Code size={16} weight="bold" />
+                      <CodeIcon size={16} weight="bold" />
                       <span>프로젝트 만들기</span>
                     </Link>
                     <Link to="/create/study" className={styles.primaryButton}>
-                      <BookOpen size={16} weight="bold" />
+                      <BookOpenIcon size={16} weight="bold" />
                       <span>스터디 만들기</span>
                     </Link>
                   </div>
@@ -318,7 +318,7 @@ export default function MainPage() {
           {!isLoggedIn && (
             <div className={styles.finalActions}>
               <Link to="/auth/signup" className={styles.finalPrimaryButton}>
-                <Plus size={20} weight="bold" />
+                <PlusIcon size={20} weight="bold" />
                 <span>지금 시작하기</span>
               </Link>
             </div>

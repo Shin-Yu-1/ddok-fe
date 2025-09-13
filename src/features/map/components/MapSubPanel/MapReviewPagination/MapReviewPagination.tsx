@@ -1,4 +1,4 @@
-import { CaretLeft, CaretRight } from '@phosphor-icons/react';
+import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 
 import type { Pagination } from '../../../schemas/cafeReviewSchema';
 
@@ -58,7 +58,7 @@ const MapReviewPagination: React.FC<MapReviewPaginationProps> = ({ pagination, o
         onClick={handlePrevious}
         disabled={currentPage === 0}
       >
-        <CaretLeft size={12} weight="bold" />
+        <CaretLeftIcon size={12} weight="bold" />
       </button>
 
       {/* 페이지 번호들 */}
@@ -84,7 +84,7 @@ const MapReviewPagination: React.FC<MapReviewPaginationProps> = ({ pagination, o
         onClick={handleNext}
         disabled={currentPage === totalPages - 1}
       >
-        <CaretRight size={12} weight="bold" />
+        <CaretRightIcon size={12} weight="bold" />
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import { DDOK_STORY_FULL } from '@/constants/mainContent';
 
@@ -41,7 +41,7 @@ export default function DdokStoryModal({ isOpen, onClose }: DdokStoryModalProps)
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>{DDOK_STORY_FULL.title}</h2>
           <button className={styles.modalCloseButton} onClick={onClose}>
-            <X size={24} weight="bold" />
+            <XIcon size={24} weight="bold" />
           </button>
         </div>
         <div className={styles.modalBody}>

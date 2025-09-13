@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-import { Prohibit, TrashSimple, CaretDown } from '@phosphor-icons/react';
+import { ProhibitIcon, TrashSimpleIcon, CaretDownIcon } from '@phosphor-icons/react';
 import { Select } from 'radix-ui';
 
 import { POSITIONS } from '@/constants/positions';
@@ -247,11 +247,11 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
                       className={styles.deleteButton}
                       onClick={() => handleRemovePosition(position.position)}
                     >
-                      <TrashSimple size={16} weight="regular" />
+                      <TrashSimpleIcon size={16} weight="regular" />
                     </button>
                   ) : (
                     <button className={styles.deleteButton} disabled>
-                      <Prohibit size={16} weight="regular" />
+                      <ProhibitIcon size={16} weight="regular" />
                     </button>
                   )}
                 </div>
@@ -273,7 +273,7 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
             <Select.Trigger className={styles.dropdownTrigger}>
               <Select.Value placeholder="포지션 등록하기" />
               <Select.Icon>
-                <CaretDown size={16} weight="regular" />
+                <CaretDownIcon size={16} weight="regular" />
               </Select.Icon>
             </Select.Trigger>
 

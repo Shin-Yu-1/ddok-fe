@@ -1,6 +1,6 @@
 import { forwardRef, useEffect } from 'react';
 
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 
@@ -91,7 +91,7 @@ const BaseModal = forwardRef<HTMLDivElement, ModalProps>(
                   padding={'0px'}
                   onClick={() => onClose()}
                 >
-                  <X size={24} weight="light" color="var(--black-1)" />
+                  <XIcon size={24} weight="light" color="var(--black-1)" />
                 </Button>
               </div>
               {subtitle && (

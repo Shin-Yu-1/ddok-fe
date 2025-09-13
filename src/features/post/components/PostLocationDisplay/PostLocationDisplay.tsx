@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { MapPin, NavigationArrow } from '@phosphor-icons/react';
+import { MapPinIcon, NavigationArrowIcon } from '@phosphor-icons/react';
 import { Map, MapMarker, CustomOverlayMap, useKakaoLoader } from 'react-kakao-maps-sdk';
 
 import type { Location } from '@/types/project';
@@ -102,14 +102,14 @@ const PostLocationDisplay = ({
       <div className={styles.container}>
         <div className={styles.mapSection}>
           <div className={styles.mapLoading}>
-            <MapPin size={24} />
+            <MapPinIcon size={24} />
             <span>카카오 지도를 로드하고 있습니다...</span>
           </div>
         </div>
 
         <div className={styles.locationInfo}>
           <div className={styles.iconSection}>
-            <MapPin size={20} color="var(--blue-1)" />
+            <MapPinIcon size={20} color="var(--blue-1)" />
           </div>
           <div className={styles.addressSection}>
             <div className={styles.region}>{region}</div>
@@ -126,14 +126,14 @@ const PostLocationDisplay = ({
       <div className={styles.container}>
         <div className={styles.mapSection}>
           <div className={styles.mapError}>
-            <MapPin size={24} />
+            <MapPinIcon size={24} />
             <span>카카오 지도를 불러올 수 없습니다.</span>
           </div>
         </div>
 
         <div className={styles.locationInfo}>
           <div className={styles.iconSection}>
-            <MapPin size={20} color="var(--blue-1)" />
+            <MapPinIcon size={20} color="var(--blue-1)" />
           </div>
           <div className={styles.addressSection}>
             <div className={styles.region}>{region}</div>
@@ -150,14 +150,14 @@ const PostLocationDisplay = ({
       <div className={styles.container}>
         <div className={styles.mapSection}>
           <div className={styles.mapError}>
-            <MapPin size={24} />
+            <MapPinIcon size={24} />
             <span>{mapError}</span>
           </div>
         </div>
 
         <div className={styles.locationInfo}>
           <div className={styles.iconSection}>
-            <MapPin size={20} color="var(--blue-1)" />
+            <MapPinIcon size={20} color="var(--blue-1)" />
           </div>
           <div className={styles.addressSection}>
             <div className={styles.region}>{region}</div>
@@ -174,7 +174,7 @@ const PostLocationDisplay = ({
       <div className={styles.container}>
         <div className={styles.locationInfo}>
           <div className={styles.iconSection}>
-            <MapPin size={20} color="var(--blue-1)" />
+            <MapPinIcon size={20} color="var(--blue-1)" />
           </div>
           <div className={styles.addressSection}>
             <div className={styles.region}>{region}</div>
@@ -240,7 +240,7 @@ const PostLocationDisplay = ({
                 onClick={handleNavigateToKakaoMap}
                 title="카카오맵에서 길찾기"
               >
-                <NavigationArrow size={14} />
+                <NavigationArrowIcon size={14} />
                 길찾기
               </button>
 
@@ -249,7 +249,7 @@ const PostLocationDisplay = ({
                 onClick={moveToAddress}
                 title="해당 주소로 이동"
               >
-                <MapPin size={14} />
+                <MapPinIcon size={14} />
                 이동
               </button>
             </div>
@@ -260,7 +260,7 @@ const PostLocationDisplay = ({
       {/* 주소 정보 */}
       <div className={styles.locationInfo}>
         <div className={styles.iconSection}>
-          <MapPin size={20} color="var(--blue-1)" />
+          <MapPinIcon size={20} color="var(--blue-1)" />
         </div>
 
         <div className={styles.addressSection}>
@@ -275,7 +275,7 @@ const PostLocationDisplay = ({
             onClick={handleNavigateToKakaoMap}
             title="카카오맵에서 보기"
           >
-            <NavigationArrow size={16} />
+            <NavigationArrowIcon size={16} />
           </button>
         )}
       </div>
