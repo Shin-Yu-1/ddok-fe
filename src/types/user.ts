@@ -1,5 +1,5 @@
 export interface UserInfo {
-  profileImage?: string;
+  profileImageUrl?: string;
   nickname?: string;
   id?: number;
   email?: string;
