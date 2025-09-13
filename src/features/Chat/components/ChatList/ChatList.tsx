@@ -295,6 +295,7 @@ const ChatList = ({ roomType }: ChatProps) => {
                     }`
                   : (chat.name ?? chat.owner.nickname)}
               </span>
+              {chat.hasUnreadMessages && <span className={styles.unreadMessage}></span>}
             </div>
 
             <Button size="sm" onClick={e => openMenu(e, chat)} ref={buttonRef}>
