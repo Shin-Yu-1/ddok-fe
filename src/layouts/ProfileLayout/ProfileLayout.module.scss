@@ -23,4 +23,16 @@
   @include m.tablet {
     margin-left: 42px;
   }
+
+  &.noSidebar {
+    margin-left: 0;
+
+    @include m.mobile {
+      margin-left: 0;
+    }
+
+    @include m.tablet {
+      margin-left: 0;
+    }
+  }
 }
