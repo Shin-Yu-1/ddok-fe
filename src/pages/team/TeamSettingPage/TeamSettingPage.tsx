@@ -342,11 +342,13 @@ const TeamSettingPage = () => {
       </section>
 
       <section className={styles.settings}>
-        <div className={styles.label}>프로젝트 관련 설정</div>
+        <div className={styles.label}>
+          {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 관련 설정
+        </div>
         {/* 하차하기 버튼: 내가 leader가 아니고, teamStatus가 종료되지 않았을 때만 보임 */}
         {!teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
-            <div>프로젝트 중도 하차하기</div>
+            <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 중도 하차하기</div>
             <Button
               className={styles.leaveBtn}
               backgroundColor="var(--black-1)"
@@ -364,7 +366,7 @@ const TeamSettingPage = () => {
         {/* 종료하기 버튼: 내가 leader이고 teamStatus가 진행 중일 때만 보임 */}
         {teamData.data.isLeader && teamData.data.teamStatus === 'ONGOING' && (
           <div className={styles.settingItem}>
-            <div>프로젝트 종료하기</div>
+            <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 종료하기</div>
             <Button
               className={styles.closureBtn}
               backgroundColor="var(--black-1)"
@@ -401,7 +403,7 @@ const TeamSettingPage = () => {
         {/* 프로젝트 삭제하기 버튼: 내가 leader이고, teamStatus가 종료되지 않았을 때만 */}
         {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
-            <div>프로젝트 삭제하기</div>
+            <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 삭제하기</div>
             <Button
               className={styles.deleteBtn}
               backgroundColor="var(--gray-4)"
