@@ -75,27 +75,33 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
     }
   }, []);
 
-  const acceptNotificationAction = useCallback(async (id: string) => {
-    try {
-      await acceptNotification(id);
-      // 승인 후 알림을 읽음 처리
-      setNotifications(prev => prev.map(n => (n.id === id ? { ...n, isRead: true } : n)));
-    } catch (err) {
-      console.error('알림 승인 실패:', err);
-      throw err;
-    }
-  }, []);
+  const acceptNotificationAction = useCallback(
+    async (id: string) => {
+      try {
+        await acceptNotification(id);
+        // 승인 후 목록 새로고침
+        await fetchNotifications();
+      } catch (err) {
+        console.error('알림 승인 실패:', err);
+        throw err;
+      }
+    },
+    [fetchNotifications]
+  );
 
-  const rejectNotificationAction = useCallback(async (id: string) => {
-    try {
-      await rejectNotification(id);
-      // 거절 후 알림을 읽음 처리
-      setNotifications(prev => prev.map(n => (n.id === id ? { ...n, isRead: true } : n)));
-    } catch (err) {
-      console.error('알림 거절 실패:', err);
-      throw err;
-    }
-  }, []);
+  const rejectNotificationAction = useCallback(
+    async (id: string) => {
+      try {
+        await rejectNotification(id);
+        // 거절 후 목록 새로고침
+        await fetchNotifications();
+      } catch (err) {
+        console.error('알림 거절 실패:', err);
+        throw err;
+      }
+    },
+    [fetchNotifications]
+  );
 
   // 초기 로드
   useEffect(() => {
