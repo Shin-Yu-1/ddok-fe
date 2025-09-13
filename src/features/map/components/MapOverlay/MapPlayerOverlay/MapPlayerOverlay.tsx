@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -59,8 +60,8 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltipPosition({
-      x: rect.left - rect.width / 2,
-      y: rect.top - 45,
+      x: rect.left + rect.width / 2,
+      y: rect.top - 5,
     });
 
     if (type === 'main') {
@@ -226,26 +227,28 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
       </div>
 
       {/* 툴팁 */}
-      {showTooltip && (
-        <div
-          style={{
-            position: 'fixed',
-            left: tooltipPosition.x,
-            top: tooltipPosition.y,
-            transform: 'translateX(-50%) translateY(-100%)',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            color: 'white',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            fontSize: '12px',
-            pointerEvents: 'none',
-            zIndex: 1000,
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {tooltipContent}
-        </div>
-      )}
+      {showTooltip &&
+        createPortal(
+          <div
+            style={{
+              position: 'fixed',
+              left: tooltipPosition.x,
+              top: tooltipPosition.y,
+              transform: 'translateX(-50%) translateY(-100%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              pointerEvents: 'none',
+              zIndex: 50,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {tooltipContent}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
