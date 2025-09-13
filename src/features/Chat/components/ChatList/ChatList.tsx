@@ -8,6 +8,8 @@ import {
   PushPinSimpleSlashIcon,
   SignOutIcon,
 } from '@phosphor-icons/react';
+import type { IMessage } from '@stomp/stompjs';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
@@ -15,8 +17,10 @@ import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
 import { useGetApi } from '@/hooks/useGetApi';
 import type { ChatListApiResponse, ChatListItem } from '@/schemas/chat.schema';
+import { useAuthStore } from '@/stores/authStore';
 import { useChatUiStore } from '@/stores/chatUiStore';
 import type { Pagination } from '@/types/pagination.types';
+import { useWebSocketContext } from '@/utils/ws/WebSocketProvider';
 
 import styles from './ChatList.module.scss';
 
@@ -25,6 +29,7 @@ interface ChatProps {
 }
 
 const ChatList = ({ roomType }: ChatProps) => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState<Pagination>({ page: 0, size: 13 });
   const [chats, setChats] = useState<ChatListItem[] | null>(null);
@@ -41,6 +46,7 @@ const ChatList = ({ roomType }: ChatProps) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const menuAnchorRef = useRef<HTMLElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const { user, isLoggedIn } = useAuthStore();
 
   const {
     data: chatRoomResponse,
@@ -51,6 +57,29 @@ const ChatList = ({ roomType }: ChatProps) => {
     url: `/api/chats/${roomType === ChatRoomType.PRIVATE ? 'private' : 'team'}`,
     params: { ...(search && { search }), ...pagination },
   });
+
+  const ws = useWebSocketContext();
+
+  useEffect(() => {
+    if (!isLoggedIn || !user?.id) return;
+    if (!ws.isConnected) return;
+
+    const destination = `/sub/users/${user.id}/notifications`;
+    const subId = ws.subscribe(destination, (msg: IMessage) => {
+      try {
+        const payload = JSON.parse(msg.body);
+        // 예상 페이로드 예: { type: 'NEW_MESSAGE', roomId, messageId, snippet, createdAt, ... }
+        console.log('[알림] 미열람 메시지 도착:', payload);
+      } catch {
+        console.log('[알림] 원문:', msg.body);
+      }
+    });
+
+    return () => {
+      console.log('unSub');
+      if (subId) ws.unsubscribe(subId);
+    };
+  }, [ws.isConnected, user?.id]);
 
   const isLastPage =
     (chatRoomResponse?.data?.pagination?.currentPage ?? 0) >=
@@ -172,8 +201,9 @@ const ChatList = ({ roomType }: ChatProps) => {
 
   // 팀 전용 페이지 이동 (원하는 동작으로 변경)
   const goTeamPage = (chat: ChatListItem) => {
-    console.log('팀 전용 페이지 이동:', chat.roomId);
-    // TODO: 페이지 전환 로직 추가
+    if (chat.roomType === ChatRoomType.GROUP) {
+      navigate(`/team/${chat.teamId}/setting`);
+    }
   };
 
   const menuItems = useMemo(() => {
