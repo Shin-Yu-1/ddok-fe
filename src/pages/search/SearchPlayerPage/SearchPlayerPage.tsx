@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { MagnifyingGlassIcon, WarningCircleIcon } from '@phosphor-icons/react';
 
@@ -6,125 +6,104 @@ import Input from '@/components/Input/Input';
 import PlayerCard from '@/features/Player/PlayerCard/PlayerCard';
 import { useGetApi } from '@/hooks/useGetApi';
 import type { playerSearchApiResponse, Player } from '@/schemas/player.schema';
-import type { Pagination } from '@/types/pagination.types';
 
 import styles from './SearchPlayerPage.module.scss';
 
 const PAGE_SIZE = 6;
-const MAX_AUTO_LOADS = 5;
 
 const SearchPlayerPage = () => {
   const [playerList, setPlayerList] = useState<Player[]>([]);
   const [keyword, setKeyword] = useState<string>('');
-  const [searchKeyword, setSearchKeyword] = useState<string>(''); // 실제 검색에 사용될 키워드
-  const [pagination, setPagination] = useState<Pagination>({ page: 0, size: PAGE_SIZE });
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const autoLoadsRef = useRef(0);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // API 호출
-  const { data: responseData, isLoading: isResponseLoading } = useGetApi<playerSearchApiResponse>({
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  const { data: responseData, isLoading } = useGetApi<playerSearchApiResponse>({
     url: 'api/players/search',
     params: {
       ...(searchKeyword && { keyword: searchKeyword.trim() }),
-      ...pagination,
+      page: currentPage,
+      size: PAGE_SIZE,
     },
-    enabled: !!searchKeyword.trim(), // searchKeyword가 있을 때만 API 호출
+    enabled: !!searchKeyword.trim(),
   });
-
-  // API 응답 처리
-  useEffect(() => {
-    if (!responseData?.data) return;
-
-    const { items: newPlayers, pagination: responsePagination } = responseData.data;
-
-    setPlayerList(prev => {
-      return pagination.page === 0 ? newPlayers : [...prev, ...newPlayers];
-    });
-
-    setHasMore(responsePagination.currentPage < responsePagination.totalPages);
-  }, [responseData, pagination.page]);
-
-  const ensureScrollable = useCallback(() => {
-    const listEl = document.querySelector(`.${styles.playerListWrapper}`) as HTMLElement | null;
-    const isListScrollable = listEl && listEl.scrollHeight > listEl.clientHeight;
-    const isPageScrollable = document.documentElement.scrollHeight > window.innerHeight;
-    const scrollable = isListScrollable || isPageScrollable;
-
-    if (
-      !scrollable &&
-      !isResponseLoading &&
-      hasMore &&
-      autoLoadsRef.current < MAX_AUTO_LOADS &&
-      searchKeyword.trim()
-    ) {
-      autoLoadsRef.current += 1;
-      setPagination(prev => ({ ...prev, page: prev.page + 1 }));
-    }
-  }, [hasMore, searchKeyword, isResponseLoading]);
 
   useEffect(() => {
     if (!searchKeyword.trim()) {
       setPlayerList([]);
-      setPagination({ page: 0, size: PAGE_SIZE });
+      setCurrentPage(0);
       setHasMore(true);
-      autoLoadsRef.current = 0;
+      setIsLoadingMore(false);
       return;
     }
 
-    autoLoadsRef.current = 0;
     setPlayerList([]);
-    setPagination({ page: 0, size: PAGE_SIZE });
+    setCurrentPage(0);
     setHasMore(true);
+    setIsLoadingMore(false);
   }, [searchKeyword]);
 
+  // API 응답 처리
   useEffect(() => {
-    if (!searchKeyword.trim()) return;
+    if (!responseData?.data || !searchKeyword.trim()) return;
 
-    const timer = setTimeout(() => {
-      ensureScrollable();
-    }, 100);
+    const { items: newPlayers, pagination } = responseData.data;
 
-    return () => clearTimeout(timer);
-  }, [playerList, searchKeyword, ensureScrollable]);
+    if (pagination.currentPage === 0) {
+      setPlayerList(newPlayers);
+    } else {
+      setPlayerList(prev => [...prev, ...newPlayers]);
+    }
+
+    setHasMore(pagination.currentPage + 1 < pagination.totalPages);
+    setIsLoadingMore(false);
+  }, [responseData, searchKeyword]);
 
   useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !searchKeyword.trim()) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !searchKeyword.trim() || !hasMore || isLoading || isLoadingMore) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       entries => {
         const entry = entries[0];
-        if (entry.isIntersecting && !isResponseLoading && hasMore && searchKeyword.trim()) {
-          setPagination(prev => ({ ...prev, page: prev.page + 1 }));
+        if (entry.isIntersecting) {
+          setIsLoadingMore(true);
+          setCurrentPage(prev => prev + 1);
         }
       },
       {
         root: null,
-        rootMargin: '100px 0px',
+        rootMargin: '100px',
         threshold: 0.1,
       }
     );
 
-    observer.observe(el);
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [isResponseLoading, hasMore, searchKeyword]);
+  }, [searchKeyword, hasMore, isLoading, isLoadingMore, currentPage]);
 
-  const onChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
   };
 
-  const onKeyDownHandle = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      setSearchKeyword(keyword.trim());
+      const trimmed = keyword.trim();
+      if (trimmed) {
+        setSearchKeyword(trimmed);
+      }
     }
   };
 
   return (
     <div className={`${styles.container} ${searchKeyword ? '' : styles.default}`}>
       {searchKeyword.trim() ? (
-        /* searchKeyword 있을 때 */
         <>
           <div className={styles.keywordWrapper}>
             <Input
@@ -138,28 +117,33 @@ const SearchPlayerPage = () => {
               focusBorder="1px solid var(--gray-2)"
               backgroundColor="var(--white-3)"
               leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
-              onChange={onChangeHandle}
-              onKeyDown={onKeyDownHandle}
-              disabled={isResponseLoading}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
             />
           </div>
 
           <div className={styles.playerListWrapper}>
-            {playerList.map(player => (
-              <PlayerCard key={`${player.userId}`} player={player} isLoading={isResponseLoading} />
+            {playerList.map((player, index) => (
+              <PlayerCard
+                key={`${player.userId}-${index}`}
+                player={player}
+                isLoading={isLoading && currentPage === 0}
+              />
             ))}
           </div>
 
-          {playerList.length <= 0 && (
+          {/* 빈 결과 메시지 */}
+          {!isLoading && !isLoadingMore && playerList.length === 0 && (
             <div className={styles.emptyItemWrapper}>
               <span>해당되는 플레이어가 없네요. 다른 키워드로 검색해보세요.</span>
             </div>
           )}
 
+          {/* 무한 스크롤 센티넬 */}
           <div ref={sentinelRef} style={{ height: 1 }} />
         </>
       ) : (
-        /* searchKeyword 없을 때 */
         <div className={styles.searchWrapper}>
           <Input
             type="text"
@@ -172,9 +156,9 @@ const SearchPlayerPage = () => {
             focusBorder="1px solid var(--gray-2)"
             backgroundColor="var(--white-3)"
             leftIcon={<MagnifyingGlassIcon size={20} weight="light" />}
-            onChange={onChangeHandle}
-            onKeyDown={onKeyDownHandle}
-            disabled={isResponseLoading}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            disabled={isLoading}
           />
           <div className={styles.infoWrapper}>
             <WarningCircleIcon />
