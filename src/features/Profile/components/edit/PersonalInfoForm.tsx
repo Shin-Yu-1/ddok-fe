@@ -52,6 +52,13 @@ const PersonalInfoForm = ({
 
     return birthDate;
   };
+  // 비밀번호 표시 값 계산
+  const getPasswordDisplay = () => {
+    if (userInfo.isSocial) {
+      return ''; // 소셜 로그인 시 빈칸
+    }
+    return '*'.repeat(userInfo.password?.length || 8);
+  };
 
   // 읽기전용 인풋 클릭 방지
   const handleReadOnlyInputEvents = (e: React.MouseEvent | React.FocusEvent) => {
@@ -151,9 +158,9 @@ const PersonalInfoForm = ({
       {/* 비밀번호 */}
       <EditableFieldRow
         label="비밀번호"
-        value="**********"
+        value={getPasswordDisplay()}
         buttonText="비밀번호 변경"
-        inputType="password"
+        inputType="text"
         onEdit={onPasswordEdit}
         disabled={userInfo.isSocial}
       />

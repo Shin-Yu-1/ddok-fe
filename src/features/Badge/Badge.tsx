@@ -2,7 +2,9 @@ import AbandonBadge from '@/assets/images/badge/abandon.png';
 import CompleteBronzeBadge from '@/assets/images/badge/completeBronze.png';
 import CompleteGoldBadge from '@/assets/images/badge/completeGold.png';
 import CompleteSilverBadge from '@/assets/images/badge/completeSilver.png';
-import LeaderBadge from '@/assets/images/badge/leader.png';
+import LeaderBronzeBadge from '@/assets/images/badge/leaderBronze.png';
+import LeaderGoldBadge from '@/assets/images/badge/leaderGold.png';
+import LeaderSilverBadge from '@/assets/images/badge/leaderSilver.png';
 import LoginBronzeBadge from '@/assets/images/badge/loginBronze.png';
 import LoginGoldBadge from '@/assets/images/badge/loginGold.png';
 import LoginSilverBadge from '@/assets/images/badge/loginSilver.png';
@@ -36,6 +38,12 @@ const LOGIN_SRC_BY_TIER: Record<BadgeTier, string> = {
   [BadgeTier.GOLD]: LoginGoldBadge,
 };
 
+const LEADER_COMPLETE_SRC_BY_TIER: Record<BadgeTier, string> = {
+  [BadgeTier.BRONZE]: LeaderBronzeBadge,
+  [BadgeTier.SILVER]: LeaderSilverBadge,
+  [BadgeTier.GOLD]: LeaderGoldBadge,
+};
+
 function getBadgeSrc(type: BadgeType, tier?: BadgeTier, abandonGranted?: boolean): string | null {
   switch (type) {
     case BadgeType.COMPLETE:
@@ -43,7 +51,7 @@ function getBadgeSrc(type: BadgeType, tier?: BadgeTier, abandonGranted?: boolean
     case BadgeType.LOGIN:
       return LOGIN_SRC_BY_TIER[tier ?? BadgeTier.BRONZE];
     case BadgeType.LEADER_COMPLETE:
-      return LeaderBadge;
+      return LEADER_COMPLETE_SRC_BY_TIER[tier ?? BadgeTier.BRONZE];
     case BadgeType.ABANDON:
       return abandonGranted ? AbandonBadge : null;
     default:

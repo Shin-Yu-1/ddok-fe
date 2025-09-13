@@ -63,9 +63,9 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                     type="button"
                     onClick={handlePersonalInfoEdit}
                     className={styles.personalInfoEditButton}
-                    aria-label="개인 정보 수정"
+                    aria-label="개인 정보 변경"
                   >
-                    개인 정보 수정
+                    개인 정보 변경
                   </button>
                 )}
               </div>
@@ -116,8 +116,8 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                       type: badge.type as BadgeType,
                       tier: badge.tier as BadgeTier,
                     }}
-                    widthSize={28}
-                    heightSize={51}
+                    widthSize={55}
+                    heightSize={55}
                     className={styles.mainBadge}
                   />
                 </div>
@@ -131,8 +131,8 @@ const UserInfoSection = forwardRef<HTMLElement, UserInfoSectionProps>(
                   <Badge
                     mainBadge={{ type: BadgeType.ABANDON }}
                     abandonBadge={user.abandonBadge}
-                    widthSize={28}
-                    heightSize={51}
+                    widthSize={55}
+                    heightSize={55}
                     className={styles.abandonBadge}
                   />
                 </div>

@@ -208,7 +208,7 @@ const ProfileBar = ({
             <Badge
               mainBadge={mainBadge}
               abandonBadge={abandonBadge}
-              widthSize={10}
+              widthSize={20}
               className={styles.badge}
             />
           </div>

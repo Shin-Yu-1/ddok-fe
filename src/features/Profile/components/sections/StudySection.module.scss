@@ -55,9 +55,8 @@
   }
 
   @include m.mobile {
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
+    width: 25px;
+    height: 25px;
   }
 }
 
@@ -145,17 +144,17 @@
 .statusBadge {
   @include m.font-text;
 
-  padding: 2px 12px;
+  padding: 3px 12px;
   border-radius: v.$r-xxsmall;
   font-weight: v.$fw-medium;
   white-space: nowrap;
 
-  &.status-ongoing {
+  &.status-ONGOING {
     color: v.$white-3;
     background-color: v.$blue-1;
   }
 
-  &.status-completed {
+  &.status-CLOSED {
     border: 1px solid v.$gray-3;
     color: v.$black-4;
     background-color: v.$white-2;

@@ -13,6 +13,7 @@ import ChatList from '@/features/Chat/components/ChatList/ChatList';
 import ChatRoom from '@/features/Chat/components/ChatRoom/ChatRoom';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
 import NotificationList from '@/features/Notification/components/NotificationList/NotificationList';
+import { useAuthStore } from '@/stores/authStore';
 import { useChatUiStore } from '@/stores/chatUiStore';
 
 import { useSidebarHandlers } from '../hooks/useSidebarHandlers';
@@ -25,6 +26,7 @@ import SidePanel from './SidePanel';
 const Sidebar = () => {
   const location = useLocation();
   const isMapPage = location.pathname.startsWith('/map');
+  const { isLoggedIn } = useAuthStore();
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
   const { activeSection, expandedButton, activeSubSection, setActiveSection } = useSidebarState();
@@ -78,7 +80,9 @@ const Sidebar = () => {
     },
   ];
 
-  const buttons = baseButtons;
+  // 비로그인 + MapPage인 경우 지도 버튼만 표시
+  const buttons =
+    !isLoggedIn && isMapPage ? baseButtons.filter(button => button.id === 'map') : baseButtons;
 
   const renderActiveSection = () => {
     if (!activeSection) return null;

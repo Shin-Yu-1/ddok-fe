@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 
 import { personalInfoApi } from '@/api/personalInfoApi';
+import { useAuthStore } from '@/stores/authStore';
 
 export interface UserEditInfo {
   userId: number;
@@ -15,6 +16,7 @@ export interface UserEditInfo {
 }
 
 export const useEditMyInfo = () => {
+  const { updateUserInfo } = useAuthStore();
   const [userInfo, setUserInfo] = useState<UserEditInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [reauthToken, setReauthToken] = useState<string | null>(null);
@@ -66,21 +68,28 @@ export const useEditMyInfo = () => {
   }, []);
 
   // 프로필 이미지 업데이트 (accessToken만 사용)
-  const updateProfileImage = useCallback(async (file: File) => {
-    setIsLoading(true);
-    try {
-      const newImageUrl = await personalInfoApi.updateProfileImage(file);
+  const updateProfileImage = useCallback(
+    async (file: File) => {
+      setIsLoading(true);
+      try {
+        const newImageUrl = await personalInfoApi.updateProfileImage(file);
 
-      setUserInfo(prev => (prev ? { ...prev, profileImageUrl: newImageUrl } : null));
+        setUserInfo(prev => (prev ? { ...prev, profileImageUrl: newImageUrl } : null));
 
-      console.log('프로필 이미지 업로드 성공:', newImageUrl);
-    } catch (error) {
-      console.error('프로필 이미지 업로드 실패:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        updateUserInfo({
+          profileImageUrl: newImageUrl,
+        });
+
+        console.log('프로필 이미지 업로드 성공:', newImageUrl);
+      } catch (error) {
+        console.error('프로필 이미지 업로드 실패:', error);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [updateUserInfo]
+  );
 
   // 닉네임 업데이트 (accessToken만 사용)
   const updateNickname = useCallback(
@@ -102,6 +111,11 @@ export const useEditMyInfo = () => {
         };
 
         setUserInfo(editInfo);
+
+        updateUserInfo({
+          nickname: updatedInfo.nickname,
+        });
+
         console.log('닉네임 수정 성공:', nickname);
       } catch (error) {
         console.error('닉네임 수정 실패:', error);
@@ -110,7 +124,7 @@ export const useEditMyInfo = () => {
         setIsLoading(false);
       }
     },
-    [userInfo?.isSocial]
+    [userInfo?.isSocial, updateUserInfo]
   );
 
   // 전화번호 업데이트 (accessToken + reauthToken 사용)

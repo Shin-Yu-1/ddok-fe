@@ -171,8 +171,8 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
       </h3>
       <div className={styles.line}>
         <div className={styles.badgeWrapper}>
-          {player.mainBadge && <Badge heightSize={16} mainBadge={player?.mainBadge} />}
-          {player.abandonBadge && <Badge heightSize={16} abandonBadge={player?.abandonBadge} />}
+          {player.mainBadge && <Badge heightSize={20} mainBadge={player?.mainBadge} />}
+          {player.abandonBadge && <Badge heightSize={20} abandonBadge={player?.abandonBadge} />}
         </div>
       </div>
       <div className={styles.playerInfo}>
