@@ -10,6 +10,7 @@ import {
   type EvaluationScore,
   type EvaluationCriteria,
 } from '@/constants/evaluation';
+import { DDtoast } from '@/features/toast';
 
 import styles from './EvaluateModal.module.scss';
 
@@ -37,13 +38,16 @@ const EvaluateModal = ({ isOpen, onClose, memberName, onSubmit }: EvaluateModalP
   };
 
   const handleSubmit = () => {
-    // 모든 항목이 평가되었는지 확인
     const isAllEvaluated = EVALUATION_CRITERIA_LIST.every(
       criteria => evaluations[criteria] !== null
     );
 
     if (!isAllEvaluated) {
-      alert('모든 항목을 평가해주세요.');
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '모든 항목을 평가해주세요.',
+      });
       return;
     }
 

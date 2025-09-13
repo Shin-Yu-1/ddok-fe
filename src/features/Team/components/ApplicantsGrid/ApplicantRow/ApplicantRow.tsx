@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import User from '@/features/Team/components/UserRow/UserRow';
 import { useApproveApplicant } from '@/features/Team/hooks/useApproveApplicant';
 import { useRejectApplicant } from '@/features/Team/hooks/useRejectApplicant';
+import { DDtoast } from '@/features/toast';
 
 import type { ApplicantType } from '../../../schemas/teamApplicantsListSchema';
 
@@ -14,7 +15,7 @@ interface ApplicantRowProps {
   member: ApplicantType;
   teamId: number;
   amILeader: boolean;
-  teamStatus?: string; // 팀 상태 추가
+  teamStatus?: string;
 }
 
 const ApplicantRow = ({ teamType, member, teamId, amILeader, teamStatus }: ApplicantRowProps) => {
@@ -52,8 +53,6 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader, teamStatus }: Appli
     if (window.confirm(`${member.user.nickname}님을 멤버로 수락하시겠습니까?`)) {
       approveApplicant.mutate(undefined, {
         onSuccess: () => {
-          console.log('참여 희망자 수락 성공');
-          // 팀 설정 데이터와 참여 희망자 목록을 새로고침
           queryClient.invalidateQueries({
             queryKey: ['getApi', `/api/teams/${teamId}/members`],
           });
@@ -62,9 +61,12 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader, teamStatus }: Appli
           });
         },
         onError: error => {
-          console.error('참여 희망자 수락 실패:', error);
           const errorMessage = getErrorMessage(error, '참여 희망자 수락에 실패했습니다.');
-          alert(errorMessage);
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: errorMessage,
+          });
         },
       });
     }
@@ -81,9 +83,12 @@ const ApplicantRow = ({ teamType, member, teamId, amILeader, teamStatus }: Appli
           });
         },
         onError: error => {
-          console.error('참여 희망자 거절 실패:', error);
           const errorMessage = getErrorMessage(error, '참여 희망자 거절에 실패했습니다.');
-          alert(errorMessage);
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: errorMessage,
+          });
         },
       });
     }
