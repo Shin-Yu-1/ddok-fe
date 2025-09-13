@@ -10,6 +10,7 @@ import styles from './PostLayout.module.scss';
 
 const PostLayout = () => {
   const { isLoggedIn } = useAuthStore();
+
   return (
     <ProtectedRoute requirePreference={true}>
       <div className={styles.layoutContainer}>
