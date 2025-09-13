@@ -1,4 +1,4 @@
-import { CaretDown, Users } from '@phosphor-icons/react';
+import { CaretDownIcon, UsersIcon } from '@phosphor-icons/react';
 import { Select } from 'radix-ui';
 
 import styles from './PostCapacitySelector.module.scss';
@@ -20,11 +20,11 @@ const PostCapacitySelector = ({ value, onChange }: PostCapacitySelectorProps) =>
       <Select.Root value={value.toString()} onValueChange={handleValueChange}>
         <Select.Trigger className={styles.selectTrigger}>
           <div className={styles.triggerContent}>
-            <Users size={20} color="var(--gray-1)" />
+            <UsersIcon size={20} color="var(--gray-1)" />
             <Select.Value placeholder="모집하실 인원 수를 선택해주세요" />
           </div>
           <Select.Icon>
-            <CaretDown size={16} color="var(--gray-1)" />
+            <CaretDownIcon size={16} color="var(--gray-1)" />
           </Select.Icon>
         </Select.Trigger>
 
@@ -50,7 +50,7 @@ const PostCapacitySelector = ({ value, onChange }: PostCapacitySelectorProps) =>
       {value && (
         <div className={styles.selectedCapacity}>
           <div className={styles.capacityInfo}>
-            <Users size={16} color="var(--black-3)" />
+            <UsersIcon size={16} color="var(--black-3)" />
             <span className={styles.capacityText}>총 {value}명의 인원을 모집합니다</span>
           </div>
         </div>

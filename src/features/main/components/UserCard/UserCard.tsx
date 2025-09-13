@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Clock } from '@phosphor-icons/react';
+import { CalendarIcon, MapPinIcon, ClockIcon } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
@@ -46,19 +46,19 @@ export default function UserCard({ item }: UserCardProps) {
         {/* 정보 섹션 */}
         <div className={styles.infoSection}>
           <div className={styles.infoItem}>
-            <MapPin size={16} weight="fill" className={styles.icon} />
+            <MapPinIcon size={16} weight="fill" className={styles.icon} />
             <span className={styles.infoText}>{mode === 'online' ? '온라인' : address}</span>
           </div>
 
           <div className={styles.infoItem}>
-            <Calendar size={16} weight="fill" className={styles.icon} />
+            <CalendarIcon size={16} weight="fill" className={styles.icon} />
             <span className={styles.infoText}>{formatDate(period.start)} 시작</span>
           </div>
 
           {/* 종료된 경우에만 종료일 표시 */}
           {isEnded && (
             <div className={styles.infoItem}>
-              <Clock size={16} weight="fill" className={styles.icon} />
+              <ClockIcon size={16} weight="fill" className={styles.icon} />
               <span className={styles.infoText}>{formatDate(period.end)} 종료</span>
             </div>
           )}
@@ -66,7 +66,7 @@ export default function UserCard({ item }: UserCardProps) {
           {/* 진행중인 경우 진행 중 표시 */}
           {teamStatus === 'ONGOING' && (
             <div className={styles.infoItem}>
-              <Clock size={16} weight="fill" className={styles.icon} />
+              <ClockIcon size={16} weight="fill" className={styles.icon} />
               <span className={`${styles.infoText} ${styles.highlight}`}>현재 진행중</span>
             </div>
           )}

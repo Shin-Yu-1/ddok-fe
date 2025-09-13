@@ -1,4 +1,4 @@
-import { CaretRight } from '@phosphor-icons/react';
+import { CaretRightIcon } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 import MainCard from '@/features/main/components/MainCard/MainCard';
@@ -70,7 +70,7 @@ export default function MainSection({
         {viewAllLink && items.length > 0 && (
           <Link to={viewAllLink} className={styles.viewAllLink}>
             <span>전체보기</span>
-            <CaretRight size={16} weight="bold" />
+            <CaretRightIcon size={16} weight="bold" />
           </Link>
         )}
       </div>
