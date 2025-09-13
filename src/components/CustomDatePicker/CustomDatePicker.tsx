@@ -40,10 +40,15 @@ const CustomDatePicker = ({
   onInputClick,
   onChangeRaw,
 }: CustomDatePickerProps) => {
+  const handleDateChange = (date: Date | null) => {
+    // 타임존 보정 없이 그대로 상태에 반영 (전날 선택 문제 해결)
+    onChange(date);
+  };
+
   return (
     <DatePicker
       selected={selected}
-      onChange={onChange}
+      onChange={handleDateChange}
       customInput={customInput}
       open={open}
       onClickOutside={onClickOutside}
