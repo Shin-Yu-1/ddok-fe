@@ -33,10 +33,21 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
   if (isLoading) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>PROJECT</div>
+        <div className={styles.overlay__img}>PROJECT</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
-            <div>로딩 중...</div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '175px',
+                fontSize: '14px',
+                color: '#666',
+              }}
+            >
+              로딩 중...
+            </div>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
@@ -49,7 +60,7 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
   if (isError || !response?.data) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>PROJECT</div>
+        <div className={styles.overlay__img}>PROJECT</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
             <div>데이터를 불러올 수 없습니다.</div>
@@ -76,8 +87,18 @@ const MapProjectOverlay: React.FC<ProjectOverlayProps> = ({ id, onOverlayClose }
             {MAP_ITEM_STATUS_LABELS.ONGOING}
           </div>
         ))}
-      <div className={styles.overlay__banner}>
-        <img src={project.bannerImageUrl} alt="PROJECT" />
+      <div className={styles.overlay__img}>
+        <img
+          src={project.bannerImageUrl}
+          alt="PROJECT"
+          style={{
+            width: '100%',
+            height: '125px',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            display: 'block',
+          }}
+        />
       </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>

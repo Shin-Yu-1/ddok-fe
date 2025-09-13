@@ -82,10 +82,21 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   if (isLoading) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>PLAYER</div>
+        <div className={styles.overlay__img}>PLAYER</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
-            <div>로딩 중...</div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '180px',
+                fontSize: '14px',
+                color: '#666',
+              }}
+            >
+              로딩 중...
+            </div>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
@@ -98,7 +109,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   if (isError || !response?.data) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>PLAYER</div>
+        <div className={styles.overlay__img}>PLAYER</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
             <div>데이터를 불러올 수 없습니다.</div>
@@ -115,8 +126,18 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
 
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>
-        <img src={player.profileImageUrl} alt="PLAYER" />
+      <div className={styles.overlay__img}>
+        <img
+          src={player.profileImageUrl}
+          alt="PLAYER"
+          style={{
+            width: '100%',
+            height: '125px',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            display: 'block',
+          }}
+        />
       </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
