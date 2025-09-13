@@ -19,6 +19,7 @@ export const privateChatListItemSchema = z.object({
   roomId: z.number(),
   roomType: z.literal(ChatRoomType.PRIVATE),
   isPinned: z.boolean(),
+  hasUnreadMessages: z.boolean(),
   otherUser: z.object({
     id: z.number(),
     nickname: z.string(),
@@ -30,7 +31,9 @@ export const privateChatListItemSchema = z.object({
 
 export const teamChatListItemSchema = z.object({
   roomId: z.number(),
+  teamId: z.number(),
   roomType: z.literal(ChatRoomType.GROUP),
+  hasUnreadMessages: z.boolean(),
   isPinned: z.boolean(),
   memberCount: z.number(),
   name: z.string(),
