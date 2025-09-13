@@ -36,7 +36,7 @@ const PostDurationDisplay = ({ months, startDate }: PostDurationDisplayProps) =>
 
       <div className={styles.periodInfo}>
         <div className={styles.periodText}>
-          {start.format('YYYY.M.D')} ~ {end.format('YYYY.M.D')}
+          {start.format('YYYY.MM.DD')} ~ {end.format('YYYY.MM.DD')}
         </div>
         <div className={styles.totalDays}>총 {totalDays}일 진행</div>
       </div>
