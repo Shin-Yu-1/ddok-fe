@@ -40,10 +40,6 @@
       background-color: #fff3d3;
     }
   }
-
-  &:hover {
-    background-color: $white-2;
-  }
 }
 
 .rankCell {
@@ -55,7 +51,7 @@
   justify-content: center;
   width: 120px;
   min-height: 70px;
-  background-color: $white-2;
+  background-color: $white-3;
 }
 
 .rankNumber {
