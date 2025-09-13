@@ -27,32 +27,32 @@ export default function MainCard({ item }: MainCardProps) {
   } = item;
 
   // 팀 상태에 따른 배지 스타일과 텍스트
-  const getStatusBadge = () => {
-    switch (teamStatus) {
-      case 'RECRUITING':
-        return {
-          className: styles.recruiting,
-          text: type === 'study' ? '스터디 모집중' : '프로젝트 모집중',
-        };
-      case 'ONGOING':
-        return {
-          className: styles.ongoing,
-          text: type === 'study' ? '스터디 진행중' : '프로젝트 진행중',
-        };
-      case 'CLOSED':
-        return {
-          className: styles.closed,
-          text: type === 'study' ? '스터디 종료' : '프로젝트 종료',
-        };
-      default:
-        return {
-          className: styles.recruiting,
-          text: type === 'study' ? '스터디 모집중' : '프로젝트 모집중',
-        };
-    }
-  };
+  // const getStatusBadge = () => {
+  //   switch (teamStatus) {
+  //     case 'RECRUITING':
+  //       return {
+  //         className: styles.recruiting,
+  //         text: type === 'study' ? '스터디 모집중' : '프로젝트 모집중',
+  //       };
+  //     case 'ONGOING':
+  //       return {
+  //         className: styles.ongoing,
+  //         text: type === 'study' ? '스터디 진행중' : '프로젝트 진행중',
+  //       };
+  //     case 'CLOSED':
+  //       return {
+  //         className: styles.closed,
+  //         text: type === 'study' ? '스터디 종료' : '프로젝트 종료',
+  //       };
+  //     default:
+  //       return {
+  //         className: styles.recruiting,
+  //         text: type === 'study' ? '스터디 모집중' : '프로젝트 모집중',
+  //       };
+  //   }
+  // };
 
-  const statusBadge = getStatusBadge();
+  // const statusBadge = getStatusBadge();
 
   // 링크 경로 결정
   const linkPath = type === 'study' ? `/detail/study/${id}` : `/detail/project/${id}`;
@@ -144,9 +144,9 @@ export default function MainCard({ item }: MainCardProps) {
           <div className={styles.bannerContainer}>
             <img src={bannerImageUrl} alt={title} className={styles.bannerImage} />
             <div className={styles.statusBadgeContainer}>
-              <span className={`${styles.statusBadge} ${statusBadge.className}`}>
+              {/* <span className={`${styles.statusBadge} ${statusBadge.className}`}>
                 {statusBadge.text}
-              </span>
+              </span> */}
             </div>
           </div>
         )}
@@ -157,9 +157,9 @@ export default function MainCard({ item }: MainCardProps) {
           {!bannerImageUrl && (
             <div className={styles.headerWithBadge}>
               <h3 className={styles.title}>{title}</h3>
-              <span className={`${styles.statusBadge} ${statusBadge.className}`}>
-                {statusBadge.text}
-              </span>
+              {/* <span className={`${styles.statusBadge} ${statusBadge.className}`}>
+              {statusBadge.text}
+              </span> */}
             </div>
           )}
 
