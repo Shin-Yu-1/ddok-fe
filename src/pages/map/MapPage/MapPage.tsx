@@ -104,8 +104,7 @@ const MapPage = () => {
           });
         }
       }
-    } catch (error) {
-      console.error('세션 스토리지에서 사용자 위치 정보를 가져오는 중 오류 발생:', error);
+    } catch {
       // 오류 발생 시 기본 위치 사용 (서울시청)
       setUserLocation({ lat: 37.5665, lng: 126.978 });
     }
@@ -237,8 +236,6 @@ const MapPage = () => {
         refetchMapItem();
       }, 100);
     }
-
-    console.log(newMapBounds);
   };
 
   // 페이지 변경 핸들러
