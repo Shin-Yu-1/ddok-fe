@@ -186,6 +186,15 @@ const TeamSettingPage = () => {
     setIsWithdrawModalOpen(true);
   };
 
+  // 공고 상세보기 버튼 핸들러
+  const handleDetailClick = () => {
+    if (teamData?.data.teamType === 'PROJECT') {
+      navigate(`/detail/project/${teamData.data.recruitmentId}`);
+    } else {
+      navigate(`/detail/study/${teamData?.data.recruitmentId}`);
+    }
+  };
+
   const handleWithdrawConfirm = (confirmText: string) => {
     if (!teamId || !currentMemberId) return;
 
@@ -345,6 +354,23 @@ const TeamSettingPage = () => {
         <div className={styles.label}>
           {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 관련 설정
         </div>
+
+        {/* 공고 상세보기 버튼 */}
+        <div className={styles.settingItem}>
+          <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 공고 상세보기</div>
+          <Button
+            className={styles.leaveBtn}
+            backgroundColor="var(--blue-1)"
+            textColor="var(--white-3)"
+            radius="xsm"
+            fontSize="var(--fs-xxsmall)"
+            height="35px"
+            onClick={handleDetailClick}
+          >
+            공고 상세보기
+          </Button>
+        </div>
+
         {/* 하차하기 버튼: 내가 leader가 아니고, teamStatus가 종료되지 않았을 때만 보임 */}
         {!teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
