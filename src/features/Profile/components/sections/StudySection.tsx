@@ -27,7 +27,7 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
     hasMore,
     loadMore,
     getShowMoreText,
-  } = useInfiniteLoad(user.userId, 'studies', initialStudies);
+  } = useInfiniteLoad(user.userId, 'studies', initialStudies, user.studiesTotalItems);
 
   const handleStudyClick = (teamId: number) => {
     navigate(`/team/${teamId}/setting`);
