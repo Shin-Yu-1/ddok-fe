@@ -1,4 +1,4 @@
-import { User } from '@phosphor-icons/react';
+import { UserIcon } from '@phosphor-icons/react';
 
 import type { PreferredAges } from '@/types/project';
 
@@ -29,7 +29,7 @@ const AgeRangeDisplay = ({ preferredAges }: AgeRangeDisplayProps) => {
     return (
       <div className={styles.container}>
         <div className={styles.ageInfo}>
-          <User size={16} color="var(--gray-1)" />
+          <UserIcon size={16} color="var(--gray-1)" />
           <span className={styles.ageText}>나이 제한 없음</span>
         </div>
       </div>
@@ -41,7 +41,7 @@ const AgeRangeDisplay = ({ preferredAges }: AgeRangeDisplayProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.ageInfo}>
-        <User size={16} color="var(--blue-1)" />
+        <UserIcon size={16} color="var(--blue-1)" />
         <span className={styles.ageText}>{getAgeRangeText(ageMin, ageMax)}</span>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Monitor, Users } from '@phosphor-icons/react';
+import { MonitorIcon, UsersIcon } from '@phosphor-icons/react';
 
 import styles from './PostModeDisplay.module.scss';
 
@@ -14,9 +14,9 @@ const PostModeDisplay = ({ value }: PostModeDisplayProps) => {
       <div className={styles.modeInfo}>
         <div className={styles.iconSection}>
           {isOnline ? (
-            <Monitor size={20} color="var(--blue-1)" />
+            <MonitorIcon size={20} color="var(--blue-1)" />
           ) : (
-            <Users size={20} color="var(--green-1)" />
+            <UsersIcon size={20} color="var(--green-1)" />
           )}
         </div>
 

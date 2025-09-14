@@ -36,7 +36,7 @@
 
 .heroSubtitle {
   margin: 0 0 40px;
-  font-size: $fs-small;
+  font-size: $fs-xsmall;
   line-height: 1.6;
   color: $gray-1;
 }
@@ -262,38 +262,34 @@
 
 // 메인 컨텐츠
 .mainContent {
+  display: flex;
+  justify-content: center;
   width: 100%;
   margin: 0 auto;
-  padding: 80px 20px;
-  background: $white-3;
-
-  // 비로그인 시 최대 너비 제한
-  &:has(.contentSingleColumn) {
-    max-width: 1050px;
-  }
-
-  // 로그인 시 더 넓은 레이아웃
-  &:has(.contentTwoColumn) {
-    max-width: 2000px;
-  }
+  margin-bottom: 100px;
+  background: none;
 }
 
 // 2열 레이아웃 (로그인 시)
 .contentTwoColumn {
-  display: grid;
-  align-items: start;
-  grid-template-columns: 3fr 2fr;
-  gap: 80px;
+  display: flex;
+  justify-content: space-around;
+  gap: 40px;
+  width: 1400px;
 }
 
 // 1열 레이아웃 (비로그인 시)
 .contentSingleColumn {
-  max-width: 1000px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  gap: 40px;
+  width: 1400px;
 }
 
 // 개인 섹션 (왼쪽)
 .personalSection {
+  flex: 2;
+  height: fit-content;
   padding: 40px;
   border-radius: $r-large;
   color: $black-1;
@@ -334,6 +330,8 @@
 
 // 전체 섹션 (오른쪽)
 .globalSection {
+  flex: 3;
+  height: fit-content;
   padding: 40px;
   border-radius: $r-large;
   background: $white-1;

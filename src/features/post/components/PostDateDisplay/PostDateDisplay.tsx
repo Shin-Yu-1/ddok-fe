@@ -36,7 +36,7 @@ const PostDateDisplay = ({ date, label }: PostDateDisplayProps) => {
       <p className={styles.label}>{label}</p>
 
       <div className={styles.dateInfo}>
-        <div className={styles.mainDate}>{dateObj.format('YYYY년 M월 D일 (ddd)')}</div>
+        <div className={styles.mainDate}>{dateObj.format('YYYY년 MM월 DD일 (ddd)')}</div>
 
         <div className={`${styles.relativeDate} ${styles[getStatusClass()]}`}>
           {getRelativeText()}

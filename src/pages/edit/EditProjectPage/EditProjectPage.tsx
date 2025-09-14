@@ -1,4 +1,4 @@
-import { MagicWand } from '@phosphor-icons/react';
+import { MagicWandIcon } from '@phosphor-icons/react';
 import { useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -190,7 +190,7 @@ const EditProjectPage = () => {
                   titleAction={
                     <>
                       <button className={styles.useAIWrite}>
-                        <MagicWand
+                        <MagicWandIcon
                           size={25}
                           weight="light"
                           color="var(--white-3)"

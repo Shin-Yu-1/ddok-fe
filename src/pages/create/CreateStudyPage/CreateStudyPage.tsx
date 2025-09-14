@@ -1,4 +1,4 @@
-import { MagicWand } from '@phosphor-icons/react';
+import { MagicWandIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
@@ -179,7 +179,7 @@ const CreateStudyPage = () => {
                   titleAction={
                     <>
                       <button className={styles.useAIWrite}>
-                        <MagicWand
+                        <MagicWandIcon
                           size={25}
                           weight="light"
                           color="var(--white-3)"
