@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/api/api';
+import { DDtoast } from '@/features/toast';
 import type {
   UpdateStudyData,
   CreateStudyResponse,
@@ -25,24 +26,9 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
   const { data: editData, isLoading: isLoadingEdit } = useQuery({
     queryKey: ['study', 'edit', studyId],
     queryFn: async (): Promise<EditStudyResponse> => {
-      console.log('📥 스터디 수정 데이터 조회 시작');
-      console.log('Study ID:', studyId);
-      console.log('API URL:', `/api/studies/${studyId}/edit`);
-
-      try {
-        const { data } = await api.get<EditStudyResponse>(`/api/studies/${studyId}/edit`);
-
-        console.log('✅ 수정 데이터 조회 성공:');
-        console.log('Status:', data.status);
-        console.log('Message:', data.message);
-        console.log('Response Data:', JSON.stringify(data.data, null, 2));
-
-        return data;
-      } catch (error) {
-        console.error('❌ 수정 데이터 조회 실패:');
-        console.error('Error:', error);
-        throw error;
-      }
+      const { data } = await api.get<EditStudyResponse>(`/api/studies/${studyId}/edit`);
+      console.log('✅ 스터디 수정 데이터 조회 성공:', data);
+      return data;
     },
     enabled: !!studyId,
   });
@@ -86,7 +72,23 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       formDataToSend.append('bannerImage', data.bannerImage);
     }
 
-    const requestData: Omit<UpdateStudyData, 'bannerImage'> = {
+    // bannerImageUrl 처리 로직 개선
+    let bannerImageUrlToSend: string | undefined;
+
+    if (data.bannerImage) {
+      // 새로운 이미지를 업로드하는 경우: bannerImageUrl 안보냄
+      bannerImageUrlToSend = undefined;
+    } else if (data.bannerImageUrl === undefined) {
+      // 기본 이미지로 변경하는 경우: bannerImageUrl 안보냄
+      bannerImageUrlToSend = undefined;
+    } else {
+      // 기존 이미지를 유지하는 경우: 기존 bannerImageUrl 보냄
+      bannerImageUrlToSend = data.bannerImageUrl;
+    }
+
+    const requestData: Omit<UpdateStudyData, 'bannerImage' | 'bannerImageUrl'> & {
+      bannerImageUrl?: string;
+    } = {
       title: data.title,
       expectedStart: data.expectedStart,
       teamStatus: data.teamStatus,
@@ -98,11 +100,17 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       traits: data.traits,
       studyType: data.studyType,
       detail: data.detail,
-      bannerImageUrl: data.bannerImageUrl, // 기존 이미지 URL
     };
+
+    // bannerImageUrl이 정의된 경우에만 추가
+    if (bannerImageUrlToSend !== undefined) {
+      requestData.bannerImageUrl = bannerImageUrlToSend;
+    }
 
     console.log('📤 API로 전송할 JSON 데이터:');
     console.log(JSON.stringify(requestData, null, 2));
+    console.log('📤 전송할 bannerImage 파일:', data.bannerImage ? data.bannerImage.name : 'none');
+    console.log('📤 전송할 bannerImageUrl:', bannerImageUrlToSend);
 
     formDataToSend.append(
       'request',
@@ -126,12 +134,24 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
   const updateStudyMutation = useMutation({
     mutationFn: updateStudy,
     onSuccess: response => {
+      DDtoast({
+        mode: 'server-first',
+        type: 'success',
+        userMessage: '스터디가 성공적으로 수정되었습니다! 🎉',
+        apiResponse: response,
+      });
+
       // 성공 시 상세 페이지로 이동
       navigate(`/detail/study/${response.data.studyId}`);
     },
     onError: error => {
       console.error('스터디 수정 실패:', error);
-      // TODO: 에러 처리 (토스트 알림 등)
+
+      DDtoast({
+        mode: 'server-first',
+        userMessage: '스터디 수정 중 문제가 발생했습니다.',
+        apiResponse: error,
+      });
     },
   });
 
@@ -193,39 +213,96 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       if (!prev) return null;
 
       if (bannerImage === null) {
-        // 기본 이미지로 변경하는 경우: bannerImageUrl도 undefined로 설정
+        // null을 전달받은 경우의 처리를 더 명확하게
+        // 이는 "기본 이미지 사용" 또는 "현재 이미지 제거"를 의미
         return { ...prev, bannerImage: null, bannerImageUrl: undefined };
       }
 
       // 새로운 파일 업로드하는 경우
-      return { ...prev, bannerImage };
+      return { ...prev, bannerImage, bannerImageUrl: undefined };
     });
   }, []);
 
-  // 폼 유효성 검사
-  const validateForm = useCallback((): boolean => {
-    if (!formData) return false;
+  // 폼 유효성 검사 및 오류 메시지 반환
+  const validateForm = useCallback((): { isValid: boolean; errors: string[] } => {
+    if (!formData) return { isValid: false, errors: ['폼 데이터를 불러오는 중입니다'] };
 
-    if (!formData.title.trim()) return false;
-    if (!formData.expectedStart) return false;
-    if (formData.expectedMonth < 1) return false;
-    if (formData.mode === 'offline' && !formData.location) return false;
-    if (formData.capacity < 1 || formData.capacity > 7) return false;
-    if (!formData.studyType.trim()) return false;
-    if (!formData.detail.trim()) return false;
+    const errors: string[] = [];
+
+    if (!formData.title.trim()) {
+      errors.push('스터디 제목을 입력해주세요');
+    }
+
+    if (!formData.expectedStart) {
+      errors.push('시작 예정일을 선택해주세요');
+    }
+
+    if (formData.expectedMonth < 1) {
+      errors.push('예상 기간은 최소 1개월 이상이어야 합니다');
+    }
+
+    if (formData.mode === 'offline' && !formData.location) {
+      errors.push('오프라인 모임의 경우 지역을 선택해주세요');
+    }
+
+    if (formData.capacity < 1) {
+      errors.push('모집 인원은 최소 1명 이상이어야 합니다');
+    }
+
+    if (formData.capacity > 7) {
+      errors.push('모집 인원은 최대 7명까지 가능합니다');
+    }
+
+    if (!formData.studyType.trim()) {
+      errors.push('스터디 유형을 선택해주세요');
+    }
+
+    if (!formData.detail.trim()) {
+      errors.push('스터디 상세 내용을 작성해주세요');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  }, [formData]);
+
+  // 유효성 검사와 토스트를 함께 처리하는 함수
+  const validateFormWithToast = useCallback((): boolean => {
+    const validation = validateForm();
+
+    if (!validation.isValid) {
+      // 유효성 검사 실패 시 토스트로 오류 메시지 표시
+      const errorMessage = validation.errors.join('\n• ');
+
+      DDtoast({
+        mode: 'custom',
+        type: 'warning',
+        userMessage: `입력 정보를 확인해주세요:\n\n• ${errorMessage}`,
+        duration: 6000,
+      });
+
+      return false;
+    }
 
     return true;
-  }, [formData]);
+  }, [validateForm]);
 
   // 스터디 수정 실행
   const handleSubmit = useCallback(() => {
-    if (!formData || !validateForm()) {
-      console.error('폼 유효성 검사 실패');
+    // 이미 제출 중이면 중복 호출 방지
+    if (updateStudyMutation.isPending) {
+      return;
+    }
+
+    if (!formData || !validateFormWithToast()) {
       return;
     }
 
     updateStudyMutation.mutate(formData);
-  }, [formData, validateForm, updateStudyMutation]);
+  }, [formData, validateFormWithToast, updateStudyMutation]);
+
+  const { isValid } = validateForm();
 
   return {
     formData,
@@ -245,6 +322,6 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
     updateBannerImage,
     handleSubmit,
     isSubmitting: updateStudyMutation.isPending,
-    isValid: validateForm(),
+    isValid,
   };
 };

@@ -4,7 +4,6 @@ import Button from '@/components/Button/Button';
 import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
-import { StudyRecruitmentTable } from '@/components/StudyRecruitmentTable';
 import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeDisplay from '@/features/post/components/AgeRangeDisplay/AgeRangeDisplay';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
@@ -15,6 +14,7 @@ import PostLocationDisplay from '@/features/post/components/PostLocationDisplay/
 import PostModeDisplay from '@/features/post/components/PostModeDisplay/PostModeDisplay';
 import PostPersonalityDisplay from '@/features/post/components/PostPersonalityDisplay/PostPersonalityDisplay';
 import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
+import { StudyRecruitmentTable } from '@/features/post/components/StudyRecruitmentTable';
 import StudyTypeDisplay from '@/features/post/components/StudyTypeDisplay/StudyTypeDisplay';
 import { useStudyDetail } from '@/hooks/post/useStudyDetail';
 
@@ -32,6 +32,7 @@ const DetailStudyPage = () => {
     isLoading,
     error,
     handleEditStudy,
+    handleTeamManagement,
     handleApplyStudy,
     handleCancelApplication,
   } = useStudyDetail({ studyId: studyIdNum });
@@ -67,21 +68,10 @@ const DetailStudyPage = () => {
   }
 
   if (error || !studyData) {
-    console.log('DetailStudyPage - error:', error);
-    console.log('DetailStudyPage - studyData:', studyData);
-
     return (
       <div className={styles.container}>
         <div className={styles.error}>
           <div>스터디를 불러올 수 없습니다.</div>
-          {error && (
-            <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-              에러 정보: {error instanceof Error ? error.message : String(error)}
-            </div>
-          )}
-          <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-            Study ID: {studyIdNum}
-          </div>
         </div>
       </div>
     );
@@ -105,6 +95,14 @@ const DetailStudyPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
+              {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
+              {studyData.isTeamMember && (
+                <Button variant="outline" radius="xsm" onClick={handleTeamManagement}>
+                  팀 관리 페이지로 이동하기
+                </Button>
+              )}
+
+              {/* 모집글 작성자인 경우 - 스터디 수정하기 버튼 */}
               {studyData.isMine && studyData.teamStatus !== 'CLOSED' && (
                 <Button variant="secondary" radius="xsm" onClick={handleEditStudy}>
                   스터디 수정하기

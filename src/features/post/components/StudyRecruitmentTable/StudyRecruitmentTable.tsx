@@ -128,7 +128,7 @@ const StudyRecruitmentTable: React.FC<StudyRecruitmentTableProps> = ({
             {/* 확정 인원 */}
             <div className={styles.bodyCell}>
               <span className={styles.count}>
-                {confirmedCount}명 / {capacity}명
+                {confirmedCount}명{/*  / {capacity}명 */}
               </span>
             </div>
 

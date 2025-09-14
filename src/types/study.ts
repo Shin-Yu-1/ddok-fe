@@ -130,6 +130,7 @@ export interface DetailStudyResponse {
   message: string;
   data: {
     studyId: number;
+    teamId: number;
     title: string;
     studyType: string;
     teamStatus: TeamStatus;
@@ -148,6 +149,7 @@ export interface DetailStudyResponse {
     participantsCount: number;
     isApplied: boolean;
     isApproved: boolean;
+    isTeamMember: boolean;
     isMine: boolean;
   };
 }

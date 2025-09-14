@@ -31,6 +31,7 @@ const DetailProjectPage = () => {
     isLoading,
     error,
     handleEditProject,
+    handleTeamManagement,
     handleCancelApplication,
     handleApplyPosition,
   } = useProjectDetail({ projectId: projectIdNum });
@@ -80,21 +81,10 @@ const DetailProjectPage = () => {
   }
 
   if (error || !projectData) {
-    console.log('DetailProjectPage - error:', error);
-    console.log('DetailProjectPage - projectData:', projectData);
-
     return (
       <div className={styles.container}>
         <div className={styles.error}>
           <div>프로젝트를 불러올 수 없습니다.</div>
-          {error && (
-            <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-              에러 정보: {error instanceof Error ? error.message : String(error)}
-            </div>
-          )}
-          <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-            Project ID: {projectIdNum}
-          </div>
         </div>
       </div>
     );
@@ -122,6 +112,14 @@ const DetailProjectPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
+              {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
+              {projectData.isTeamMember && (
+                <Button variant="outline" radius="xsm" onClick={handleTeamManagement}>
+                  팀 관리 페이지로 이동하기
+                </Button>
+              )}
+
+              {/* 모집글 작성자인 경우 - 프로젝트 수정하기 버튼 */}
               {projectData.isMine && projectData.teamStatus !== 'CLOSED' && (
                 <Button variant="secondary" radius="xsm" onClick={handleEditProject}>
                   프로젝트 수정하기

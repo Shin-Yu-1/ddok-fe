@@ -16,6 +16,7 @@ import PostModeSelector from '@/features/post/components/PostModeSelector/PostMo
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
 import PostStudyTypeSelector from '@/features/post/components/PostStudyTypeSelector/PostStudyTypeSelector';
+import TextInput from '@/features/post/components/TextInput/TextInput';
 import { useEditStudyForm } from '@/hooks/post/useEditStudyForm';
 
 import styles from './EditStudyPage.module.scss';
@@ -67,10 +68,6 @@ const EditStudyPage = () => {
     updateMode(mode);
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTitle(e.target.value);
-  };
-
   const handleDetailChange = (value: string) => {
     updateDetail(value);
   };
@@ -98,15 +95,6 @@ const EditStudyPage = () => {
 
   // 스터디 수정 저장 버튼 클릭 시
   const handleSubmitClick = () => {
-    console.log('=== 스터디 수정 폼 데이터 ===');
-    console.log(JSON.stringify(formData, null, 2));
-
-    if (!isValid) {
-      console.warn('⚠️ 유효성 검사 실패로 인해 실제 API 호출을 건너뜁니다.');
-      return;
-    }
-
-    console.log('✅ 유효성 검사 통과 - 스터디 수정 API 호출');
     handleSubmit();
   };
 
@@ -134,12 +122,13 @@ const EditStudyPage = () => {
             </div>
             <div className={styles.nameSection}>
               <MainSection title={'스터디 이름'}>
-                <input
-                  type="text"
-                  placeholder="스터디 이름을 입력해주세요"
-                  className={styles.titleInput}
+                <TextInput
                   value={formData.title}
-                  onChange={handleTitleChange}
+                  onChange={updateTitle}
+                  placeholder="스터디 제목을 입력해주세요"
+                  minLength={2}
+                  maxLength={30}
+                  showCounter={true}
                 />
               </MainSection>
             </div>

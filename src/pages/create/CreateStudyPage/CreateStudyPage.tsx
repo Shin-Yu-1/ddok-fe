@@ -14,6 +14,7 @@ import PostModeSelector from '@/features/post/components/PostModeSelector/PostMo
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
 import PostStudyTypeSelector from '@/features/post/components/PostStudyTypeSelector/PostStudyTypeSelector';
+import TextInput from '@/features/post/components/TextInput/TextInput';
 import { useCreateStudyForm } from '@/hooks/post/useCreateStudyForm';
 
 import styles from './CreateStudyPage.module.scss';
@@ -34,14 +35,11 @@ const CreateStudyPage = () => {
     updateExpectedMonth,
     updateBannerImage,
     isValid,
+    isSubmitting,
   } = useCreateStudyForm();
 
   const handleModeChange = (mode: 'online' | 'offline') => {
     updateMode(mode);
-  };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTitle(e.target.value);
   };
 
   const handleDetailChange = (value: string) => {
@@ -53,11 +51,9 @@ const CreateStudyPage = () => {
     const isSelected = currentTraits.includes(personalityName);
 
     if (isSelected) {
-      // 제거
       const newTraits = currentTraits.filter(trait => trait !== personalityName);
       updateTraits(newTraits);
     } else {
-      // 추가
       const newTraits = [...currentTraits, personalityName];
       updateTraits(newTraits);
     }
@@ -67,69 +63,6 @@ const CreateStudyPage = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
-  };
-
-  // 모집 공고 등록하기 버튼 클릭 시
-  const handleSubmitClick = () => {
-    console.log('=== 현재 스터디 폼 데이터 ===');
-    console.log(JSON.stringify(formData, null, 2));
-
-    // 실제 API로 전송될 데이터 구조
-    console.log('=== 실제 API로 전송될 데이터 ===');
-
-    // 1. 배너 이미지 정보
-    if (formData.bannerImage) {
-      console.log('배너 이미지:', {
-        name: formData.bannerImage.name,
-        size: formData.bannerImage.size,
-        type: formData.bannerImage.type,
-      });
-    } else {
-      console.log('배너 이미지: 없음 (기본 이미지 사용)');
-    }
-
-    // 2. JSON 요청 데이터 (FormData의 'request' 부분)
-    const requestData = {
-      title: formData.title,
-      expectedStart: formData.expectedStart,
-      expectedMonth: formData.expectedMonth,
-      mode: formData.mode,
-      location: formData.mode === 'offline' ? formData.location : null,
-      preferredAges: formData.preferredAges,
-      capacity: formData.capacity,
-      traits: formData.traits,
-      studyType: formData.studyType,
-      detail: formData.detail,
-    };
-
-    console.log('JSON 요청 데이터:');
-    console.log(JSON.stringify(requestData, null, 2));
-
-    // 3. FormData 시뮬레이션
-    console.log('=== FormData 시뮬레이션 ===');
-    console.log('FormData 구조:');
-    if (formData.bannerImage) {
-      console.log('- bannerImage: [File Object]', formData.bannerImage.name);
-    }
-    console.log('- request: [Blob]', JSON.stringify(requestData));
-
-    // 4. 실제 전송될 HTTP 요청 정보
-    console.log('=== HTTP 요청 정보 ===');
-    console.log('Method: POST');
-    console.log('URL: /api/studies');
-    console.log('Content-Type: multipart/form-data');
-    console.log('Headers: { Authorization: Bearer [token] }');
-
-    // 유효성 검사 실패 시 실제 API 호출 하지 않음
-    if (!isValid) {
-      console.warn('⚠️ 유효성 검사 실패로 인해 실제 API 호출을 건너뜁니다.');
-      return;
-    }
-
-    console.log('✅ 유효성 검사 통과 - 실제 API를 호출한다면 여기서 호출됩니다.');
-
-    // 실제 API 호출
-    handleSubmit();
   };
 
   return (
@@ -144,18 +77,24 @@ const CreateStudyPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
-              <Button variant="secondary" radius="xsm" onClick={handleSubmitClick}>
-                모집 공고 등록하기
+              <Button
+                variant="secondary"
+                radius="xsm"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !isValid}
+              >
+                {isSubmitting ? '등록 중...' : '모집 공고 등록하기'}
               </Button>
             </div>
             <div className={styles.nameSection}>
               <MainSection title={'스터디 이름'}>
-                <input
-                  type="text"
-                  placeholder="스터디 이름을 입력해주세요"
-                  className={styles.titleInput}
+                <TextInput
                   value={formData.title}
-                  onChange={handleTitleChange}
+                  onChange={updateTitle}
+                  placeholder="스터디 제목을 입력해주세요"
+                  minLength={2}
+                  maxLength={30}
+                  showCounter={true}
                 />
               </MainSection>
             </div>
@@ -209,7 +148,7 @@ const CreateStudyPage = () => {
                     onChange={updateExpectedStart}
                     label="스터디를 언제 시작하실 예정인가요?"
                     placeholder="날짜를 선택해주세요"
-                    min={getTomorrowDate()} // 내일부터 선택 가능
+                    min={getTomorrowDate()}
                   />
                 </MainSection>
                 <MainSection title={'예상 기간'}>
@@ -222,7 +161,6 @@ const CreateStudyPage = () => {
                 <MainSection title={'모임 형태'}>
                   <PostModeSelector value={formData.mode} onChange={handleModeChange} />
                 </MainSection>
-                {/* 조건부 렌더링: 오프라인일 때만 지역 섹션 표시 */}
                 {formData.mode === 'offline' && (
                   <MainSection title={'지역'}>
                     <PostLocationSelector
