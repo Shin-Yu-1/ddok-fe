@@ -83,9 +83,9 @@ const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
       case 'RECRUITING':
         return '모집 중';
       case 'ONGOING':
-        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 진행 중`;
+        return '진행 중';
       case 'CLOSED':
-        return `${isProjectItem(item) ? '프로젝트' : '스터디'} 종료`;
+        return '종료';
       default:
         return '모집 중';
     }
@@ -119,7 +119,7 @@ const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
     }
     if (ageMin) return `${ageMin}대 이상`;
     if (ageMax) return `${ageMax - 10}대 이하`;
-    return '-';
+    return '연령 무관';
   };
 
   // 시작 예정일 포맷팅
