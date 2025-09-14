@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { useNavigate } from 'react-router-dom';
 
 import type { ChatMessage, ChatRoomMember } from '@/schemas/chat.schema';
 
@@ -12,14 +13,30 @@ interface ChatMessageProps {
 }
 
 const ChatMessageItem = ({ messageItem, memberInfo, isMyMessage }: ChatMessageProps) => {
+  const navigate = useNavigate();
   const profileSrc = memberInfo?.profileImage || undefined;
   const senderName = memberInfo?.nickname ?? messageItem.senderNickname ?? '알 수 없음';
 
+  const profileClickHandle = () => {
+    if (memberInfo) {
+      navigate(`/profile/user/${memberInfo.userId}`);
+    }
+  };
+
   return (
     <div className={`${styles.chatMessageWrapper} ${isMyMessage ? styles.myMessage : ''}`}>
-      <img className={styles.memberProfile} src={profileSrc} alt="프로필" loading="lazy" />
+      <img
+        className={styles.memberProfile}
+        src={profileSrc}
+        alt="프로필"
+        loading="lazy"
+        draggable="false"
+        onClick={profileClickHandle}
+      />
       <div className={styles.message}>
-        <strong className={styles.sender}>{senderName}</strong>
+        <strong className={styles.sender} onClick={profileClickHandle}>
+          {senderName}
+        </strong>
         <div className={styles.bubbleRow}>
           <span className={styles.text}>{messageItem.contentText}</span>
           <span className={styles.time}>

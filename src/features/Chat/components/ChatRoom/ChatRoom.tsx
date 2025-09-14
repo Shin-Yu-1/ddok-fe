@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { ArrowUUpLeftIcon, UserIcon, MagicWandIcon } from '@phosphor-icons/react';
+import { ArrowUUpLeftIcon, UserIcon /* MagicWandIcon */ } from '@phosphor-icons/react';
+import type { IMessage } from '@stomp/stompjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
@@ -8,15 +9,18 @@ import Button from '@/components/Button/Button';
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
 import { useGetApi } from '@/hooks/useGetApi';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import { usePostApi } from '@/hooks/usePostApi';
 import type {
   ChatMessageApiResponse,
   ChatRoomMemberApiResponse,
+  ChatMessageLastReadApiResponse,
+  ChatMessageLastRead,
   ChatListItem,
   ChatMessage,
 } from '@/schemas/chat.schema';
 import { useAuthStore } from '@/stores/authStore';
 import type { Pagination } from '@/types/pagination.types';
+import { useWebSocketContext } from '@/utils/ws/WebSocketProvider';
 
 import ChatRoomType from '../../enums/ChatRoomType.enum';
 
@@ -61,31 +65,30 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   const messagesRef = useRef<HTMLDivElement>(null);
   const seenIdsRef = useRef<Set<number>>(new Set()); // 중복 메시지 방지
 
+  const ws = useWebSocketContext();
+
   // 스크롤 위치 판별
   const isNearTop = (c: HTMLElement) => c.scrollTop <= 80;
   const isNearBottom = (c: HTMLElement) => c.scrollHeight - c.scrollTop - c.clientHeight < 80;
 
+  const messageParams = useMemo(
+    () => ({ ...(search && { search }), ...pagination }),
+    [search, pagination.page, pagination.size]
+  );
+
   // API
   const { data: chatMessageResponse } = useGetApi<ChatMessageApiResponse>({
     url: `/api/chats/${chat.roomId}/messages`,
-    params: { ...(search && { search }), ...pagination },
+    params: messageParams,
   });
 
   const { data: chatMemberResponse } = useGetApi<ChatRoomMemberApiResponse>({
     url: `/api/chats/${chat.roomId}/members`,
   });
 
-  // WebSocket 연결
-  const websocket = useWebSocket({
-    path: '/ws/chats-ws',
-    reconnectDelay: 5000,
-    debug: true,
+  const messageLastReadPost = usePostApi<ChatMessageLastReadApiResponse, ChatMessageLastRead>({
+    url: `/api/chats/${chat.roomId}/messages/read`,
   });
-
-  useEffect(() => {
-    websocket.connect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     seenIdsRef.current.clear();
@@ -95,63 +98,45 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     setPagination({ page: 0, size: 5 });
   }, [chat.roomId]);
 
-  // 방 구독 (웹소켓)
   useEffect(() => {
-    if (!websocket.isConnected) return;
+    if (!ws.isConnected) return;
 
-    const subscriptionId = websocket.subscribe({
-      destination: `/sub/chats/${chat.roomId}`,
-      onMessage: msg => {
-        try {
-          const incoming = JSON.parse(msg.body) as ChatMessage;
+    const subId = ws.subscribe(`/sub/chats/${chat.roomId}`, (msg: IMessage) => {
+      try {
+        const incoming = JSON.parse(msg.body) as ChatMessage;
+        if (seenIdsRef.current.has(incoming.messageId)) return;
+        seenIdsRef.current.add(incoming.messageId);
 
-          if (seenIdsRef.current.has(incoming.messageId)) return;
+        const c = messagesRef.current;
+        const wasAtBottom = c ? isNearBottom(c) : true;
 
-          seenIdsRef.current.add(incoming.messageId);
+        setMessages(prev => [...prev, incoming]);
 
-          const c = messagesRef.current;
-          const wasAtBottom = c ? isNearBottom(c) : true;
-
-          setMessages(prev => [...prev, incoming]);
-
-          if (wasAtBottom) {
+        if (wasAtBottom) {
+          requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                const container = messagesRef.current;
-                if (container) {
-                  container.scrollTop = container.scrollHeight;
-                }
-              });
+              const container = messagesRef.current;
+              if (container) container.scrollTop = container.scrollHeight;
             });
-          }
-        } catch (e) {
-          console.error('소켓 메시지 파싱 실패:', e);
+          });
         }
-      },
+      } catch (e) {
+        console.error('소켓 메시지 파싱 실패:', e);
+      }
     });
 
     return () => {
-      if (subscriptionId) websocket.unsubscribe(subscriptionId);
-    };
-  }, [websocket.isConnected, websocket, chat.roomId]);
+      const ids = Array.from(seenIdsRef.current);
+      const lastMessageId = ids[ids.length - 1];
 
-  useEffect(() => {
-    const onDown = (e: MouseEvent) => {
-      if (!isMemberMenuOpen) return;
-      const inAnchor = anchorRef.current?.contains(e.target as Node);
-      const inMenu = menuRef.current?.contains(e.target as Node);
-      if (!inAnchor && !inMenu) setIsMemberMenuOpen(false);
+      if (lastMessageId) {
+        messageLastReadPost.mutate({ messageId: lastMessageId });
+      }
+
+      if (subId) ws.unsubscribe(subId);
     };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsMemberMenuOpen(false);
-    };
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [isMemberMenuOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ws.isConnected, chat.roomId]);
 
   const memberByUserId = useMemo(() => {
     const members = chatMemberResponse?.data?.members ?? [];
@@ -253,7 +238,6 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   // 스크롤 핸들러 (페이지네이션용)
   const onScroll = () => {
     const c = messagesRef.current;
-
     if (!c) return;
     if (isFetching || !hasMore) return;
     if (isNearTop(c)) {
@@ -264,9 +248,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
   const onWheel: React.WheelEventHandler<HTMLDivElement> = e => {
     if (e.ctrlKey) return;
-
     const c = messagesRef.current;
-
     if (!c || isFetching || !hasMore) return;
     if (e.deltaY < 0 && isNearTop(c)) {
       setIsFetching(true);
@@ -275,15 +257,11 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   };
 
   const sendMessage = (input: string) => {
-    websocket.publish({
-      destination: `/pub/chats/${chat.roomId}/send`,
-      payload: { contentType: 'TEXT', contentText: input },
-    });
+    ws.publish(`/pub/chats/${chat.roomId}/send`, { contentType: 'TEXT', contentText: input });
   };
 
   const onEnterPress: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
     if (e.key !== 'Enter') return;
-
     if (e.shiftKey) return;
 
     e.preventDefault();
@@ -307,13 +285,26 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
   const openMemberMenu = () => {
     const el = anchorRef.current;
-
     if (!el) return;
-
     const r = el.getBoundingClientRect();
     setMenuPos({ top: r.bottom, left: r.left + window.scrollX + 10 });
-
     setIsMemberMenuOpen(true);
+  };
+
+  const backClickHandle = () => {
+    const ids = Array.from(seenIdsRef.current);
+    const lastMessageId = ids[ids.length - 1];
+
+    if (lastMessageId) {
+      messageLastReadPost.mutate(
+        { messageId: lastMessageId },
+        {
+          onSuccess: () => {
+            onBack();
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -329,7 +320,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           {chat.roomType === ChatRoomType.PRIVATE ? '1:1 채팅' : '팀 채팅'}
         </span>
 
-        <Button onClick={onBack} size="sm" padding={'0px'}>
+        <Button onClick={backClickHandle} size="sm" padding={'0px'}>
           <ArrowUUpLeftIcon className={styles.headerIcon} />
         </Button>
       </header>
@@ -388,7 +379,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
         {/* 입력창 */}
         <div className={styles.inputBar}>
-          <Button
+          {/* <Button
             padding={'0px'}
             width={30}
             height={30}
@@ -396,12 +387,13 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
             backgroundColor={'var(--yellow-1)'}
           >
             <MagicWandIcon className={styles.aiButtonIcon} />
-          </Button>
+          </Button> */}
 
           <textarea
             className={styles.chatInputField}
             onKeyUp={onEnterPress}
             disabled={!!search}
+            placeholder="메세지를 입력해 주세요."
           ></textarea>
         </div>
       </main>

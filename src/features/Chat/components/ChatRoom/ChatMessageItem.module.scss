@@ -12,6 +12,7 @@
     height: 34px;
     border: 1px solid #c4c4c4;
     border-radius: 50%;
+    cursor: pointer;
   }
 
   .message {
@@ -27,6 +28,7 @@
       font-size: $fs-xsmall;
       font-weight: $fw-semibold;
       color: $black-3;
+      user-select: none;
     }
 
     .bubbleRow {

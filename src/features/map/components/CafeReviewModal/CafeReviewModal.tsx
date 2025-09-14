@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import Button from '@/components/Button/Button';
 
@@ -140,7 +140,7 @@ const CafeReviewModal: React.FC<CafeReviewModalProps> = ({
         <div className={styles.header}>
           <h2 className={styles.title}>후기 작성</h2>
           <button className={styles.closeButton} onClick={handleClose}>
-            <X size={24} weight="light" />
+            <XIcon size={24} weight="light" />
           </button>
         </div>
 

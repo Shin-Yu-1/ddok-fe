@@ -107,7 +107,7 @@ const PlayerCard = ({ isLoading, player }: PlayerCardProps) => {
 
   const profileClickHandle = () => {
     if (isLoggedIn && player) {
-      navigate(`/profile/user/${player.userId}`);
+      navigate(player.isMine ? '/profile/my' : `/profile/user/${player.userId}`);
     }
   };
 
