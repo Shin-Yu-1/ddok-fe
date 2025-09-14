@@ -253,6 +253,10 @@ export default function MainPage() {
           /* 비로그인 사용자: 기존 1열 레이아웃 */
           <div className={styles.contentSingleColumn}>
             <div className={styles.globalSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>전체 활동</h2>
+                <p className={styles.sectionSubtitle}>다양한 스터디와 프로젝트에 참여해보세요</p>
+              </div>
               <MainSection
                 title="진행중인 스터디"
                 subtitle="지금 활발히 진행되고 있는 스터디들입니다"
