@@ -96,6 +96,30 @@ export interface UpdateProjectData extends CreateProjectData {
   bannerImageUrl?: string; // 기존 이미지 URL
 }
 
+// AI 글 작성 요청 데이터 (프로젝트용)
+export interface ProjectAIRequest {
+  title: string;
+  expectedStart: string;
+  expectedMonth: number;
+  mode: string;
+  location: Location | null;
+  preferredAges: PreferredAges | null;
+  capacity: number;
+  traits: string[];
+  positions: string[];
+  leaderPosition: string;
+  detail: string; // 사용자가 입력한 프롬프트
+}
+
+// AI 글 작성 응답 데이터
+export interface AIWriteResponse {
+  status: number;
+  message: string;
+  data: {
+    detail: string;
+  };
+}
+
 // API 응답 타입들
 export interface CreateProjectResponse {
   status: number;
