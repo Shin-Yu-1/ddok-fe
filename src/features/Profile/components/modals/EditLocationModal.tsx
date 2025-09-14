@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
+import { DDtoast } from '@/features/toast';
 import type { Location } from '@/types/project';
 import type { CompleteProfileInfo } from '@/types/user';
 
@@ -24,6 +25,11 @@ const EditLocationModal = ({ isOpen, onClose, user }: EditLocationModalProps) =>
     userId: user.userId,
     onSuccess: () => {
       console.log('주활동지 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '주활동지 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -32,7 +38,11 @@ const EditLocationModal = ({ isOpen, onClose, user }: EditLocationModalProps) =>
     },
     onError: error => {
       console.error('주활동지 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '주활동지 수정에 실패했습니다. 다시 시도해주세요.',
+      });
     },
   });
 

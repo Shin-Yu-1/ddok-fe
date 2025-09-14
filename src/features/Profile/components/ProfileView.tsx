@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 
 import clsx from 'clsx';
 
+import { DDtoast } from '@/features/toast';
 import type { ProfileViewProps, ProfileSectionType } from '@/types/user';
 
 import { useProfileToggle } from '../hooks/useProfileToggle';
@@ -48,11 +49,19 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
         enabled: user.isMine, // 본인 프로필일 때만 활성화
         onSuccess: newPrivacyState => {
           console.log('토글 성공! 새로운 상태:', newPrivacyState ? '공개' : '비공개');
-          // TODO: 성공 토스트 표시
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '프로필 상태 변경에 성공했습니다.',
+          });
         },
         onError: error => {
           console.error('토글 실패:', error);
-          // TODO: 에러 토스트 표시
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '프로필 상태 변경에 실패했습니다. 다시 시도해주세요.',
+          });
         },
       });
 

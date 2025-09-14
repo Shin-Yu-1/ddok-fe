@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import TechStackSelector from '@/features/Auth/components/TechStackSelector/TechStackSelector';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -23,6 +24,11 @@ const EditTechStackModal = ({ isOpen, onClose, user }: EditTechStackModalProps) 
     userId: user.userId,
     onSuccess: () => {
       console.log('기술 스택 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '기술 스택 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -31,7 +37,11 @@ const EditTechStackModal = ({ isOpen, onClose, user }: EditTechStackModalProps) 
     },
     onError: error => {
       console.error('기술 스택 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '기술 스택 수정에 실패했습니다. 다시 시도해주세요.',
+      });
     },
   });
 

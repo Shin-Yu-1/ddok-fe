@@ -27,7 +27,7 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
     hasMore,
     loadMore,
     getShowMoreText,
-  } = useInfiniteLoad(user.userId, 'projects', initialProjects);
+  } = useInfiniteLoad(user.userId, 'projects', initialProjects, user.projectsTotalItems);
 
   const handleProjectClick = (teamId: number) => {
     navigate(`/team/${teamId}/setting`);

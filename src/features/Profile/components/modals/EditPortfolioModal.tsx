@@ -5,6 +5,7 @@ import { PlusIcon, TrashSimpleIcon } from '@phosphor-icons/react';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import BaseModal from '@/components/Modal/BaseModal';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo, PortfolioItem } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -25,6 +26,11 @@ const EditPortfolioModal = ({ isOpen, onClose, user }: EditPortfolioModalProps) 
     userId: user.userId,
     onSuccess: () => {
       console.log('포트폴리오 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '포트폴리오 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -33,7 +39,11 @@ const EditPortfolioModal = ({ isOpen, onClose, user }: EditPortfolioModalProps) 
     },
     onError: error => {
       console.error('포트폴리오 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '포트폴리오 수정에 실패했습니다. 다시 시도해주세요.',
+      });
     },
   });
 

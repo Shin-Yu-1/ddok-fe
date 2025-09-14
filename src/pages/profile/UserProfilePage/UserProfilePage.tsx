@@ -1,13 +1,26 @@
+import { useEffect } from 'react';
+
 import { useParams, useNavigate } from 'react-router-dom';
 
 import ProfileView from '@/features/Profile/components/ProfileView';
 import { useProfileData, useChatRequest } from '@/features/Profile/hooks';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from './UserProfilePage.module.scss';
 
 const UserProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user: currentUser } = useAuthStore();
+
+  // 현재 로그인한 사용자와 URL의 사용자 ID 비교하여 리다이렉트
+  useEffect(() => {
+    if (currentUser?.id === Number(id)) {
+      navigate('/profile/my', { replace: true });
+      return;
+    }
+  }, [currentUser, id, navigate]);
+
   const { profileData, isLoading, error, refetch } = useProfileData(id, false);
   const { handleChatRequest, getChatButtonText, getChatButtonDisabled } = useChatRequest(
     profileData,
@@ -21,6 +34,17 @@ const UserProfilePage = () => {
   const handleBack = () => {
     navigate(-1);
   };
+
+  // 본인 프로필인 경우 리다이렉트 중이므로 로딩 표시
+  if (currentUser?.id === Number(id)) {
+    return (
+      <main className={styles.userProfilePage}>
+        <div className={styles.loadingContainer}>
+          <p>내 프로필로 이동 중...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (error) {
     return (

@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import { POSITIONS } from '@/constants/positions';
 import PositionSelector from '@/features/Auth/components/PositionSelector/PositionSelector';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -25,6 +26,11 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
     userId: user.userId,
     onSuccess: () => {
       console.log('포지션 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '포지션 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -33,7 +39,11 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
     },
     onError: error => {
       console.error('포지션 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '포지션 수정에 실패했습니다. 다시 시도해주세요.',
+      });
     },
   });
 
@@ -80,7 +90,13 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
   }, [selectedMainPosition, selectedInterestPositions, user.mainPosition, user.subPositions]);
 
   const handleSubmit = async () => {
-    if (!hasChanges || !selectedMainPosition || isUpdating) return;
+    if (
+      !hasChanges ||
+      !selectedMainPosition ||
+      selectedInterestPositions.length !== 2 ||
+      isUpdating
+    )
+      return;
 
     const mainPosition = getPositionNameById(selectedMainPosition);
     const subPositions = selectedInterestPositions
@@ -130,14 +146,15 @@ const EditPositionModal = ({ isOpen, onClose, user }: EditPositionModalProps) =>
     });
   };
 
-  const isValidPosition = !!selectedMainPosition;
+  // 대표 1개 + 관심 2개 필수
+  const isValidPosition = !!selectedMainPosition && selectedInterestPositions.length === 2;
 
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
       title="포지션를 입력해주세요"
-      subtitle="대표 포지션과 관심 포지션을 설정해주세요! (대표 포지션 필수)"
+      subtitle="대표 포지션과 관심 포지션을 설정해주세요!"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}

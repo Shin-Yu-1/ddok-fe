@@ -37,11 +37,11 @@ export const useProfileData = (userId?: string, isMine: boolean = false) => {
         }
       }
 
-      // 4개 API 병렬 호출
+      // 4개 API 병렬 호출 - 기술 스택은 첫 8개만
       const [profileResponse, techStacksResponse, studiesResponse, projectsResponse] =
         await Promise.all([
           profileApi.getProfile(targetUserId),
-          profileApi.getTechStacks(targetUserId),
+          profileApi.getTechStacks(targetUserId, 0, 8),
           profileApi.getStudies(targetUserId),
           profileApi.getProjects(targetUserId),
         ]);
@@ -54,6 +54,12 @@ export const useProfileData = (userId?: string, isMine: boolean = false) => {
         projectsResponse,
         isMine
       );
+
+      // 페이지네이션 정보 추가
+      completeProfile.techStacksTotalItems = techStacksResponse.pagination.totalItems;
+      completeProfile.studiesTotalItems = studiesResponse.pagination.totalItems;
+      completeProfile.projectsTotalItems = projectsResponse.pagination.totalItems;
+      completeProfile.techStacksTotalItems = techStacksResponse.pagination.totalItems;
 
       setProfileData(completeProfile);
     } catch (err) {

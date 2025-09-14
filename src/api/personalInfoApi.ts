@@ -123,12 +123,17 @@ export const personalInfoApi = {
       formData.append('forcePlaceholder', forcePlaceholder.toString());
     }
 
-    const response = await api.patch<ApiResponse<string>>('/api/me/settings/image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data.data;
+    const response = await api.patch<ApiResponse<ApiUserSettingsInfo>>(
+      '/api/me/settings/image',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    return response.data.data.profileImageUrl;
   },
 
   // 회원 탈퇴 (소셜 로그인 시 accessToken만, 일반 로그인 시 accessToken + reauthToken)

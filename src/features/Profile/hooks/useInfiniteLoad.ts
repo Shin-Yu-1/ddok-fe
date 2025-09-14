@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 import { profileApi } from '@/api/profileApi';
-import type { ParticipationHistory } from '@/types/user';
+import type { ParticipationHistory, TechStack } from '@/types/user';
 
 type ApiResponse = {
   pagination: {
@@ -23,16 +23,31 @@ type ApiResponse = {
   }>;
 };
 
+type TechStackApiResponse = {
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  items: Array<{
+    techStack: string;
+  }>;
+};
+
 export const useInfiniteLoad = (
   userId: number,
   type: 'studies' | 'projects',
-  initialData: ParticipationHistory[] = []
+  initialData: ParticipationHistory[] = [],
+  initialTotalItems?: number
 ) => {
   const [items, setItems] = useState<ParticipationHistory[]>(initialData);
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [totalItems, setTotalItems] = useState(0);
+  const [hasMore, setHasMore] = useState(
+    initialTotalItems ? initialData.length < initialTotalItems : initialData.length === 4
+  );
+  const [totalItems, setTotalItems] = useState(initialTotalItems || initialData.length);
 
   const loadMore = useCallback(async () => {
     if (isLoading || !hasMore) return;
@@ -75,7 +90,7 @@ export const useInfiniteLoad = (
 
   const getShowMoreText = useCallback(() => {
     if (isLoading) {
-      return type === 'studies' ? 'Loading...' : 'Loading...';
+      return 'Loading...';
     }
 
     const remaining = Math.max(0, totalItems - items.length); // Math.max로 음수 방지
@@ -89,6 +104,70 @@ export const useInfiniteLoad = (
       ? `Show ${loadCount} more studies ▼`
       : `Show ${loadCount} more projects ▼`;
   }, [type, isLoading, totalItems, items.length]);
+
+  return {
+    items,
+    isLoading,
+    hasMore,
+    loadMore,
+    getShowMoreText,
+  };
+};
+
+// 기술 스택 전용 무한 로딩 훅
+export const useInfiniteTechStacks = (
+  userId: number,
+  initialData: TechStack[] = [],
+  initialTotalItems?: number
+) => {
+  const [items, setItems] = useState<TechStack[]>(initialData);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(
+    initialTotalItems ? initialData.length < initialTotalItems : initialData.length === 8
+  );
+  const [totalItems, setTotalItems] = useState(initialTotalItems || initialData.length);
+
+  const loadMore = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    try {
+      const nextPage = currentPage + 1;
+      const response: TechStackApiResponse = await profileApi.getTechStacks(userId, nextPage, 8);
+
+      const newItems: TechStack[] = response.items.map((item, index) => ({
+        id: nextPage * 8 + index + 1,
+        name: item.techStack,
+      }));
+
+      setItems(prev => [...prev, ...newItems]);
+      setCurrentPage(nextPage);
+      setTotalItems(response.pagination.totalItems);
+
+      const totalLoaded = items.length + newItems.length;
+      setHasMore(totalLoaded < response.pagination.totalItems);
+    } catch (error) {
+      console.error('기술 스택 추가 로딩 에러:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId, currentPage, isLoading, hasMore, items.length]);
+
+  const getShowMoreText = useCallback(() => {
+    if (isLoading) {
+      return 'Loading...';
+    }
+
+    const remaining = Math.max(0, totalItems - items.length);
+
+    if (remaining === 0) {
+      return 'All items loaded';
+    }
+
+    const loadCount = Math.min(remaining, 8);
+    return `Show ${loadCount} more tools ▼`;
+  }, [isLoading, totalItems, items.length]);
 
   return {
     items,

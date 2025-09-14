@@ -1,5 +1,5 @@
 export interface UserInfo {
-  profileImage?: string;
+  profileImageUrl?: string;
   nickname?: string;
   id?: number;
   email?: string;
@@ -145,8 +145,11 @@ export interface ProfileInfo {
 export interface CompleteProfileInfo extends ProfileInfo {
   // 별도 API로 조회되는 데이터들
   techStacks?: TechStack[];
+  techStacksTotalItems?: number;
   projects?: ParticipationHistory[];
+  projectsTotalItems?: number;
   studies?: ParticipationHistory[];
+  studiesTotalItems?: number;
 }
 
 // API 응답 타입들

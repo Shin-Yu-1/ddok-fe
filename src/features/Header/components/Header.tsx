@@ -62,7 +62,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(({ className }, ref) => {
             {user && (
               <div className={styles.userProfile} onClick={handlers.handleProfileClick}>
                 <div className={styles.profileImage}>
-                  <img src={user.profileImage} alt={`${user.nickname}의 프로필`} />
+                  <img src={user.profileImageUrl} alt={`${user.nickname}의 프로필`} />
                 </div>
                 <span className={styles.nickname}>{user.nickname}</span>
               </div>

@@ -8,7 +8,7 @@ import clsx from 'clsx';
 
 import type { ProfileSectionProps } from '@/types/user';
 
-import { useShowMore } from '../../hooks';
+import { useInfiniteTechStacks } from '../../hooks/useInfiniteLoad';
 
 import styles from './TechStackSection.module.scss';
 
@@ -18,18 +18,17 @@ interface TechStackSectionProps extends ProfileSectionProps {
 
 const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
   ({ user, isEditable = false, onEdit, className }, ref) => {
-    const { showAll, handleToggleShowAll, getDisplayItems, hasMoreItems, getShowMoreText } =
-      useShowMore(8);
+    const { items, isLoading, hasMore, loadMore, getShowMoreText } = useInfiniteTechStacks(
+      user.userId,
+      user.techStacks || [],
+      user.techStacksTotalItems
+    );
 
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('techStack');
       }
     };
-
-    const techStacks = user.techStacks || [];
-    const displayedTechStacks = getDisplayItems(techStacks);
-    const hasMore = hasMoreItems(techStacks);
 
     return (
       <section
@@ -55,10 +54,10 @@ const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
         </div>
 
         <div>
-          {techStacks.length > 0 ? (
+          {items.length > 0 ? (
             <>
               <div className={styles.techStackGrid}>
-                {displayedTechStacks.map(tech => (
+                {items.map(tech => (
                   <div key={tech.id} className={styles.techStackItem}>
                     <span className={styles.techName}>{tech.name}</span>
                   </div>
@@ -69,10 +68,11 @@ const TechStackSection = forwardRef<HTMLElement, TechStackSectionProps>(
                 <div className={styles.showMoreContainer}>
                   <button
                     type="button"
-                    onClick={handleToggleShowAll}
+                    onClick={loadMore}
                     className={styles.showMoreButton}
+                    disabled={isLoading}
                   >
-                    {getShowMoreText(showAll, 'tools')}
+                    {getShowMoreText()}
                   </button>
                 </div>
               )}

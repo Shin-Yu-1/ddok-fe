@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import { USER_TRAITS } from '@/constants/userTraits';
 import PersonalitySelector from '@/features/Auth/components/PersonalitySelector/PersonalitySelector';
+import { DDtoast } from '@/features/toast';
 import type { CompleteProfileInfo } from '@/types/user';
 
 import { useProfileMutations } from '../../hooks/useProfileMutations';
@@ -24,6 +25,11 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     userId: user.userId,
     onSuccess: () => {
       console.log('성향 수정 성공! 모달 닫기 및 새로고침');
+      DDtoast({
+        mode: 'custom',
+        type: 'success',
+        userMessage: '성향 수정에 성공했습니다.',
+      });
       onClose();
 
       setTimeout(() => {
@@ -32,7 +38,11 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     },
     onError: error => {
       console.error('성향 수정 실패:', error);
-      // TODO: 토스트 알림 등 에러 처리
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '성향 수정에 실패하셨습니다. 다시 시도해주세요.',
+      });
     },
   });
 
@@ -76,7 +86,7 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
   }, [selectedPersonality, user.traits]);
 
   const handleSubmit = async () => {
-    if (!hasChanges || isUpdating) return;
+    if (!hasChanges || selectedPersonality.length < 1 || isUpdating) return;
 
     const traitNames = selectedPersonality
       .map(id => getPersonalityNameById(id))
@@ -113,12 +123,15 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
     });
   };
 
+  // 최소 1개 - 최대 5개 검증
+  const isValidSelection = selectedPersonality.length >= 1 && selectedPersonality.length <= 5;
+
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={handleCancel}
       title="본인의 성향을 선택해주세요"
-      subtitle="당신은 어떤 사람인가요? (최대 5개)"
+      subtitle="당신은 어떤 사람인가요? (최소 1개, 최대 5개)"
       footer={null}
       disableBackdropClose={hasChanges}
       disableEscapeClose={hasChanges}
@@ -136,7 +149,7 @@ const EditTraitsModal = ({ isOpen, onClose, user }: EditTraitsModalProps) => {
           <Button
             variant={hasChanges ? 'secondary' : 'ghost'}
             onClick={handleSubmit}
-            disabled={!hasChanges || isUpdating}
+            disabled={!hasChanges || !isValidSelection || isUpdating}
             isLoading={isUpdating}
             fullWidth={true}
             radius="xsm"

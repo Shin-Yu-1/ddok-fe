@@ -41,7 +41,7 @@ export const useHeaderState = (): HeaderState => {
         user: {
           id: user.id,
           nickname: user.nickname || '사용자',
-          profileImage: user.profileImageUrl || '/src/assets/images/avatar.png',
+          profileImageUrl: user.profileImageUrl || '/src/assets/images/avatar.png',
           email: user.email,
         } as UserInfo,
         isLoggedIn,
