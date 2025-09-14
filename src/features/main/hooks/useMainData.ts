@@ -7,6 +7,7 @@ import type {
   ProjectListResponse,
   UserStudiesResponse,
   UserProjectsResponse,
+  TeamCountResponse,
   CardItem,
   UserCardItem,
   StudyItem,
@@ -14,24 +15,16 @@ import type {
   UserStudyItem,
   UserProjectItem,
   MainPageData,
+  StatsData,
 } from '@/types/main';
 
 // 메인 페이지 데이터 조회 개수 상수
 const MAIN_PAGE_LIMITS = {
-  DISPLAY_SIZE: 50, // 전체 데이터 조회 개수(표시용)
   USER_STUDIES: 2, // 사용자 스터디 조회 개수
   USER_PROJECTS: 2, // 사용자 프로젝트 조회 개수
   DISPLAY_LIMIT_LOGGED_IN: 3, // 로그인 시 각 섹션별 표시 개수
   DISPLAY_LIMIT_LOGGED_OUT: 4, // 비로그인 시 각 섹션별 표시 개수
 } as const;
-
-// 통계 데이터 타입
-interface StatsData {
-  recruitingStudiesCount: number;
-  recruitingProjectsCount: number;
-  ongoingStudiesCount: number;
-  ongoingProjectsCount: number;
-}
 
 // 스터디 아이템을 카드 아이템으로 변환
 const transformStudyToCard = (study: StudyItem): CardItem => ({
@@ -93,51 +86,84 @@ const transformUserProjectToCard = (project: UserProjectItem): UserCardItem => (
   period: project.period,
 });
 
-// 전체 데이터 조회 (통계 + 표시용 통합)
-const fetchAllData = async (displayLimit: number) => {
-  const [studiesDisplayResponse, projectsDisplayResponse] = await Promise.all([
-    api.get<StudyListResponse>('/api/studies', {
-      params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
-    }),
-    api.get<ProjectListResponse>('/api/projects', {
-      params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
-    }),
-  ]);
-
-  // 표시용 데이터 추출 및 변환
-  const studies = studiesDisplayResponse.data.data.items || [];
-  const projects = projectsDisplayResponse.data.data.items || [];
-
-  const allStudies: CardItem[] = studies.map(transformStudyToCard);
-  const allProjects: CardItem[] = projects.map(transformProjectToCard);
-
-  // 상태별 분류
-  const recruitingStudies = allStudies.filter(study => study.teamStatus === 'RECRUITING');
-  const ongoingStudies = allStudies.filter(study => study.teamStatus === 'ONGOING');
-  const recruitingProjects = allProjects.filter(project => project.teamStatus === 'RECRUITING');
-  const ongoingProjects = allProjects.filter(project => project.teamStatus === 'ONGOING');
-
-  // 필터링된 결과의 길이로 통계 계산
-  const stats: StatsData = {
-    recruitingStudiesCount: recruitingStudies.length,
-    ongoingStudiesCount: ongoingStudies.length,
-    recruitingProjectsCount: recruitingProjects.length,
-    ongoingProjectsCount: ongoingProjects.length,
-  };
-
-  // 표시용 데이터 (동적 제한 개수 사용)
-  const displayData = {
-    recruitingStudies: recruitingStudies.slice(0, displayLimit),
-    ongoingStudies: ongoingStudies.slice(0, displayLimit),
-    recruitingProjects: recruitingProjects.slice(0, displayLimit),
-    ongoingProjects: ongoingProjects.slice(0, displayLimit),
-    recentStudies: allStudies.slice(0, displayLimit),
-    recentProjects: allProjects.slice(0, displayLimit),
-  };
+// 팀 카운트 조회
+const fetchTeamCount = async (): Promise<StatsData> => {
+  const { data } = await api.get<TeamCountResponse>('/api/teams/count');
 
   return {
-    stats,
-    displayData,
+    recruitingStudiesCount: data.data.studyCount,
+    recruitingProjectsCount: data.data.projectCount,
+    ongoingTeamsCount: data.data.teamCount,
+  };
+};
+
+// 모집중인 스터디 조회
+const fetchRecruitingStudies = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<StudyListResponse>('/api/studies/search', {
+    params: {
+      status: 'RECRUITING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformStudyToCard);
+};
+
+// 진행중인 스터디 조회
+const fetchOngoingStudies = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<StudyListResponse>('/api/studies/search', {
+    params: {
+      status: 'ONGOING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformStudyToCard);
+};
+
+// 모집중인 프로젝트 조회
+const fetchRecruitingProjects = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<ProjectListResponse>('/api/projects/search', {
+    params: {
+      status: 'RECRUITING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformProjectToCard);
+};
+
+// 진행중인 프로젝트 조회
+const fetchOngoingProjects = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<ProjectListResponse>('/api/projects/search', {
+    params: {
+      status: 'ONGOING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformProjectToCard);
+};
+
+// 표시용 데이터 조회
+const fetchDisplayData = async (displayLimit: number) => {
+  const [recruitingStudies, ongoingStudies, recruitingProjects, ongoingProjects] =
+    await Promise.all([
+      fetchRecruitingStudies(displayLimit),
+      fetchOngoingStudies(displayLimit),
+      fetchRecruitingProjects(displayLimit),
+      fetchOngoingProjects(displayLimit),
+    ]);
+
+  return {
+    recruitingStudies,
+    ongoingStudies,
+    recruitingProjects,
+    ongoingProjects,
   };
 };
 
@@ -199,14 +225,24 @@ export const useMainData = () => {
     ? MAIN_PAGE_LIMITS.DISPLAY_LIMIT_LOGGED_IN
     : MAIN_PAGE_LIMITS.DISPLAY_LIMIT_LOGGED_OUT;
 
-  // 전체 데이터 조회 (통계 + 표시용 통합)
+  // 팀 카운트 조회 (통계용)
   const {
-    data: allData,
-    isLoading: isLoadingAllData,
-    error: allDataError,
+    data: statsData,
+    isLoading: isLoadingStats,
+    error: statsError,
   } = useQuery({
-    queryKey: ['main-data', displayLimit],
-    queryFn: () => fetchAllData(displayLimit),
+    queryKey: ['team-count'],
+    queryFn: fetchTeamCount,
+  });
+
+  // 표시용 데이터 조회
+  const {
+    data: displayData,
+    isLoading: isLoadingDisplayData,
+    error: displayDataError,
+  } = useQuery({
+    queryKey: ['display-data', displayLimit],
+    queryFn: () => fetchDisplayData(displayLimit),
   });
 
   // 사용자 참여 스터디 조회 (로그인한 경우에만)
@@ -243,19 +279,16 @@ export const useMainData = () => {
 
   // 메인 페이지 데이터 구성
   const mainPageData: MainPageData = {
-    // 표시용 데이터
-    recentStudies: allData?.displayData.recentStudies || [],
-    recentProjects: allData?.displayData.recentProjects || [],
-    ongoingStudies: allData?.displayData.ongoingStudies || [],
-    recruitingStudies: allData?.displayData.recruitingStudies || [],
-    ongoingProjects: allData?.displayData.ongoingProjects || [],
-    recruitingProjects: allData?.displayData.recruitingProjects || [],
+    // 실제 사용되는 표시용 데이터만
+    ongoingStudies: displayData?.ongoingStudies || [],
+    recruitingStudies: displayData?.recruitingStudies || [],
+    ongoingProjects: displayData?.ongoingProjects || [],
+    recruitingProjects: displayData?.recruitingProjects || [],
     // 통계 데이터
-    stats: allData?.stats || {
+    stats: statsData || {
       recruitingStudiesCount: 0,
       recruitingProjectsCount: 0,
-      ongoingStudiesCount: 0,
-      ongoingProjectsCount: 0,
+      ongoingTeamsCount: 0,
     },
     // 로그인한 경우 개인 데이터 포함
     ...(isLoggedIn && {
@@ -266,20 +299,24 @@ export const useMainData = () => {
 
   // 로딩 상태 계산
   const isLoading =
-    isLoadingAllData || (isLoggedIn && (isLoadingUserStudies || isLoadingUserProjects));
+    isLoadingStats ||
+    isLoadingDisplayData ||
+    (isLoggedIn && (isLoadingUserStudies || isLoadingUserProjects));
 
   // 에러 상태 계산
-  const error = allDataError || userStudiesError || userProjectsError;
+  const error = statsError || displayDataError || userStudiesError || userProjectsError;
 
   return {
     data: mainPageData,
     isLoading,
     error,
     // 개별 상태들
-    isLoadingAllData,
+    isLoadingStats,
+    isLoadingDisplayData,
     isLoadingUserStudies,
     isLoadingUserProjects,
-    allDataError,
+    statsError,
+    displayDataError,
     userStudiesError,
     userProjectsError,
   };
