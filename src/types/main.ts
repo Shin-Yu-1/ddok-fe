@@ -93,6 +93,17 @@ export interface Pagination {
   totalItems: number;
 }
 
+// 팀 카운트 API 응답 타입
+export interface TeamCountResponse {
+  status: number;
+  message: string;
+  data: {
+    projectCount: number;
+    studyCount: number;
+    teamCount: number;
+  };
+}
+
 // 스터디 리스트 API 응답
 export interface StudyListResponse {
   status: number;
@@ -169,6 +180,13 @@ export interface UserCardItem {
   };
 }
 
+// 통계 데이터 타입 수정 - API 응답에 맞게 변경
+export interface StatsData {
+  recruitingStudiesCount: number; // studyCount를 매핑
+  recruitingProjectsCount: number; // projectCount를 매핑
+  ongoingTeamsCount: number; // teamCount를 매핑
+}
+
 // 메인 페이지 섹션별 데이터
 export interface MainPageData {
   recentStudies: CardItem[];
@@ -177,12 +195,7 @@ export interface MainPageData {
   recruitingStudies: CardItem[];
   ongoingProjects: CardItem[];
   recruitingProjects: CardItem[];
-  stats: {
-    recruitingStudiesCount: number;
-    recruitingProjectsCount: number;
-    ongoingStudiesCount: number;
-    ongoingProjectsCount: number;
-  };
+  stats: StatsData;
   // 사용자 개인화 데이터 (로그인 시)
   userOngoingStudies?: UserCardItem[];
   userOngoingProjects?: UserCardItem[];
