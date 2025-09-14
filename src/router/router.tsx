@@ -18,7 +18,6 @@ import ResetPasswordPage from '@/pages/auth/ResetPasswordPage/ResetPasswordPage'
 import SignInPage from '@/pages/auth/SignInPage/SignInPage';
 import SignUpCompletePage from '@/pages/auth/SignUpCompletePage/SignUpCompletePage';
 import SignUpPage from '@/pages/auth/SignUpPage/SignUpPage';
-import ButtonExamplePage from '@/pages/ButtonExamplePage/ButtonExamplePage';
 import CreateProjectPage from '@/pages/create/CreateProjectPage/CreateProjectPage';
 import CreateStudyPage from '@/pages/create/CreateStudyPage/CreateStudyPage';
 import DetailProjectPage from '@/pages/detail/DetailProjectPage/DetailProjectPage';
@@ -207,10 +206,6 @@ export const router = createBrowserRouter([
             element: <RankingPage />,
           },
         ],
-      },
-      {
-        path: 'button-example',
-        element: <ButtonExamplePage />,
       },
     ],
   },
