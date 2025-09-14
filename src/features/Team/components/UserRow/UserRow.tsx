@@ -169,6 +169,7 @@ const User = ({ user }: UserProps) => {
             <div className={styles.user__item__left__badges}>
               {user.mainBadge && (
                 <div
+                  className={styles.user__item__left__badgeContainer}
                   onMouseEnter={e =>
                     handleBadgeMouseEnter(e, 'main', {
                       type: user.mainBadge?.type as BadgeType,
@@ -176,7 +177,6 @@ const User = ({ user }: UserProps) => {
                     })
                   }
                   onMouseLeave={handleBadgeMouseLeave}
-                  style={{ display: 'inline-block' }}
                 >
                   <Badge
                     className={styles.badge}
@@ -190,6 +190,7 @@ const User = ({ user }: UserProps) => {
               )}
               {user.abandonBadge && (
                 <div
+                  className={styles.user__item__left__badgeContainer}
                   onMouseEnter={e =>
                     handleBadgeMouseEnter(e, 'abandon', {
                       count: user.abandonBadge?.count,
@@ -197,7 +198,6 @@ const User = ({ user }: UserProps) => {
                     })
                   }
                   onMouseLeave={handleBadgeMouseLeave}
-                  style={{ display: 'inline-block' }}
                 >
                   <Badge
                     className={styles.badge}

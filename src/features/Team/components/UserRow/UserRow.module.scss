@@ -35,6 +35,13 @@
         align-items: center;
         font-size: $fs-xxxsmall;
       }
+
+      &__badgeContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
     }
 
     &__right {
