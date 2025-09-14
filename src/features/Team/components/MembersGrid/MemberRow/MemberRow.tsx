@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import UserRow from '@/features/Team/components/UserRow/UserRow';
 import { useExpelMember } from '@/features/Team/hooks/useExpelMember';
 import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
+import { DDtoast } from '@/features/toast';
 
 import styles from './MemberRow.module.scss';
 
@@ -12,7 +13,7 @@ interface MemberRowProps {
   member: MemberType;
   amILeader: boolean;
   teamId: number;
-  teamStatus?: string; // 팀 상태 추가
+  teamStatus?: string;
 }
 
 const MemberRow = ({ teamType, member, amILeader, teamId, teamStatus }: MemberRowProps) => {
@@ -27,15 +28,21 @@ const MemberRow = ({ teamType, member, amILeader, teamId, teamStatus }: MemberRo
     if (window.confirm(`${member.user.nickname}님을 팀에서 추방하시겠습니까?`)) {
       expelMember.mutate(undefined, {
         onSuccess: () => {
-          console.log('팀원 추방 성공');
-          // 팀원 목록을 새로고침
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '팀원 추방이 완료되었습니다.',
+          });
           queryClient.invalidateQueries({
             queryKey: ['getApi', `/api/teams/${teamId}/members`],
           });
         },
-        onError: error => {
-          console.error('팀원 추방 실패:', error);
-          // TODO: 에러 처리 로직
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '팀원 추방 중 오류가 발생했습니다.',
+          });
         },
       });
     }

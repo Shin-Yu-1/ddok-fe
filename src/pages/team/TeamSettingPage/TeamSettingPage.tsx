@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ArrowUUpLeftIcon } from '@phosphor-icons/react';
+import { CaretLeftIcon } from '@phosphor-icons/react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -24,6 +24,7 @@ import type {
   EvaluationScore,
 } from '@/features/Team/schemas/teamEvaluationSchema';
 import type { MemberType } from '@/features/Team/schemas/teamMemberSchema';
+import { DDtoast } from '@/features/toast';
 
 import styles from './TeamSettingPage.module.scss';
 
@@ -87,7 +88,11 @@ const TeamSettingPage = () => {
         'response' in error &&
         (error as { response?: { status?: number } }).response?.status === 403
       ) {
-        alert('해당 팀에 접근할 권한이 없습니다.');
+        DDtoast({
+          mode: 'custom',
+          type: 'error',
+          userMessage: '해당 팀에 접근할 권한이 없습니다.',
+        });
         navigate(-1); // 이전 페이지로 이동
       }
     }
@@ -123,15 +128,21 @@ const TeamSettingPage = () => {
       },
       {
         onSuccess: () => {
-          alert(`${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`);
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: `${selectedMember.user.nickname}님에 대한 평가가 완료되었습니다.`,
+          });
           setIsEvaluateModalOpen(false);
           setSelectedMember(null);
-          // 평가 데이터 새로고침을 위해 페이지 새로고침
           window.location.reload();
         },
-        onError: error => {
-          console.error('평가 제출 실패:', error);
-          alert('평가 제출 중 오류가 발생했습니다.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '평가 제출 중 오류가 발생했습니다.',
+          });
         },
       }
     );
@@ -186,6 +197,15 @@ const TeamSettingPage = () => {
     setIsWithdrawModalOpen(true);
   };
 
+  // 공고 상세보기 버튼 핸들러
+  const handleDetailClick = () => {
+    if (teamData?.data.teamType === 'PROJECT') {
+      navigate(`/detail/project/${teamData.data.recruitmentId}`);
+    } else {
+      navigate(`/detail/study/${teamData?.data.recruitmentId}`);
+    }
+  };
+
   const handleWithdrawConfirm = (confirmText: string) => {
     if (!teamId || !currentMemberId) return;
 
@@ -193,13 +213,20 @@ const TeamSettingPage = () => {
       { confirmText },
       {
         onSuccess: () => {
-          alert('프로젝트에서 하차했습니다.');
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '프로젝트에서 하차했습니다.',
+          });
           setIsWithdrawModalOpen(false);
-          navigate(-1); // 이전 페이지로 이동
+          navigate(-1);
         },
-        onError: error => {
-          console.error('하차 실패:', error);
-          alert('하차 처리 중 오류가 발생했습니다.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '하차 처리 중 오류가 발생했습니다.',
+          });
         },
       }
     );
@@ -220,15 +247,19 @@ const TeamSettingPage = () => {
         { teamId: teamData.data.teamId },
         {
           onSuccess: () => {
-            alert(
-              `${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}가 종료되었습니다.`
-            );
-            // 페이지 새로고침 또는 상태 업데이트
+            DDtoast({
+              mode: 'custom',
+              type: 'success',
+              userMessage: `${teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'}가 종료되었습니다.`,
+            });
             window.location.reload();
           },
-          onError: error => {
-            console.error('종료 실패:', error);
-            alert('종료 처리 중 오류가 발생했습니다.');
+          onError: () => {
+            DDtoast({
+              mode: 'custom',
+              type: 'error',
+              userMessage: '종료 처리 중 오류가 발생했습니다.',
+            });
           },
         }
       );
@@ -247,13 +278,20 @@ const TeamSettingPage = () => {
       { confirmText },
       {
         onSuccess: () => {
-          alert('프로젝트/스터디가 삭제되었습니다.');
+          DDtoast({
+            mode: 'custom',
+            type: 'success',
+            userMessage: '프로젝트/스터디가 삭제되었습니다.',
+          });
           setIsRemoveModalOpen(false);
-          navigate('/map'); // 지도 페이지로 이동
+          navigate(-1);
         },
-        onError: error => {
-          console.error('삭제 실패:', error);
-          alert('삭제 처리 중 오류가 발생했습니다.');
+        onError: () => {
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: '삭제 처리 중 오류가 발생했습니다.',
+          });
         },
       }
     );
@@ -290,7 +328,7 @@ const TeamSettingPage = () => {
   return (
     <div className={styles.container}>
       <button className={styles.backButton} onClick={() => navigate(-1)}>
-        <ArrowUUpLeftIcon size={20} weight="bold" />
+        <CaretLeftIcon size={20} weight="bold" />
         <span>돌아가기</span>
       </button>
 
@@ -342,11 +380,32 @@ const TeamSettingPage = () => {
       </section>
 
       <section className={styles.settings}>
-        <div className={styles.label}>프로젝트 관련 설정</div>
+        <div className={styles.label}>
+          {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 관련 설정
+        </div>
+
+        {/* 공고 상세보기 버튼 */}
+        <div className={styles.settingItem}>
+          <div>
+            {teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 모집 공고 상세보기
+          </div>
+          <Button
+            className={styles.leaveBtn}
+            backgroundColor="var(--blue-1)"
+            textColor="var(--white-3)"
+            radius="xsm"
+            fontSize="var(--fs-xxsmall)"
+            height="35px"
+            onClick={handleDetailClick}
+          >
+            상세보기
+          </Button>
+        </div>
+
         {/* 하차하기 버튼: 내가 leader가 아니고, teamStatus가 종료되지 않았을 때만 보임 */}
         {!teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
-            <div>프로젝트 중도 하차하기</div>
+            <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 중도 하차하기</div>
             <Button
               className={styles.leaveBtn}
               backgroundColor="var(--black-1)"
@@ -364,7 +423,7 @@ const TeamSettingPage = () => {
         {/* 종료하기 버튼: 내가 leader이고 teamStatus가 진행 중일 때만 보임 */}
         {teamData.data.isLeader && teamData.data.teamStatus === 'ONGOING' && (
           <div className={styles.settingItem}>
-            <div>프로젝트 종료하기</div>
+            <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 종료하기</div>
             <Button
               className={styles.closureBtn}
               backgroundColor="var(--black-1)"
@@ -401,7 +460,7 @@ const TeamSettingPage = () => {
         {/* 프로젝트 삭제하기 버튼: 내가 leader이고, teamStatus가 종료되지 않았을 때만 */}
         {teamData.data.isLeader && teamData.data.teamStatus !== 'CLOSED' && (
           <div className={styles.settingItem}>
-            <div>프로젝트 삭제하기</div>
+            <div>{teamData.data.teamType === 'PROJECT' ? '프로젝트' : '스터디'} 삭제하기</div>
             <Button
               className={styles.deleteBtn}
               backgroundColor="var(--gray-4)"

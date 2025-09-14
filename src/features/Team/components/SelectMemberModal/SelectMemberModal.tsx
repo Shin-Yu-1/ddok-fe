@@ -119,7 +119,7 @@ const SelectMemberModal = ({
                         <div className={styles.user__item__left}>
                           <img
                             className={styles.user__item__left__img}
-                            src="/src/assets/images/avatar.png"
+                            src={member.user.profileImageUrl}
                             alt="Banner"
                           />
                           <div className={styles.user__item__left__nickname}>

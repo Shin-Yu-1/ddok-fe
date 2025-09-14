@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 
 import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import Thermometer from '@/components/Thermometer/Thermometer';
@@ -52,6 +53,7 @@ const User = ({ user }: UserProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user: currentUser } = useAuthStore();
+  const navigate = useNavigate();
 
   // UserType을 CompleteProfileInfo로 변환
   const profileInfo = useMemo(() => {
@@ -73,6 +75,15 @@ const User = ({ user }: UserProps) => {
 
   // 현재 사용자와 같은 사용자인지 확인
   const isCurrentUser = currentUser?.id === user.userId;
+
+  // 프로필 페이지로 이동하는 핸들러
+  const handleProfileClick = useCallback(() => {
+    if (isCurrentUser) {
+      navigate('/profile/my');
+    } else {
+      navigate(`/profile/user/${user.userId}`);
+    }
+  }, [isCurrentUser, navigate, user.userId]);
 
   // DM 상태에 따른 버튼 텍스트와 비활성화 상태
   const dmButtonText = getChatButtonText();
@@ -96,8 +107,20 @@ const User = ({ user }: UserProps) => {
     <div className={styles.user}>
       <div className={styles.user__item}>
         <div className={styles.user__item__left}>
-          <img className={styles.user__item__left__img} src={user.profileImageUrl} alt="Avatar" />
-          <div className={styles.user__item__left__nickname}>{user.nickname}</div>
+          <img
+            className={styles.user__item__left__img}
+            src={user.profileImageUrl}
+            alt="Avatar"
+            onClick={handleProfileClick}
+            style={{ cursor: 'pointer' }}
+          />
+          <div
+            className={styles.user__item__left__nickname}
+            onClick={handleProfileClick}
+            style={{ cursor: 'pointer' }}
+          >
+            {user.nickname}
+          </div>
           <div className={styles.user__item__left__badges}>
             {user.mainBadge && (
               <Badge

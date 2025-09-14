@@ -9,7 +9,7 @@ interface ApplicantsGridProps {
   amILeader: boolean;
   page?: number;
   size?: number;
-  teamStatus?: string; // 팀 상태 추가
+  teamStatus?: string;
 }
 
 const ApplicantsGrid = ({
