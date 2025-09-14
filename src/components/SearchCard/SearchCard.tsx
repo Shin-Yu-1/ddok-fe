@@ -106,7 +106,7 @@ const SearchCard = ({ item, isLoading, clickHandle }: SearchCardProps) => {
 
   // 희망 나이대 포맷팅
   const getAgeRangeText = (preferredAges: PreferredAges) => {
-    if (!preferredAges) return '-';
+    if (!preferredAges) return '연령 무관';
 
     const { ageMin, ageMax } = preferredAges;
 
