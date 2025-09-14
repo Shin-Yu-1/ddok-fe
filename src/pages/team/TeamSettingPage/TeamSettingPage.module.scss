@@ -17,6 +17,8 @@
 }
 
 .subtitle {
+  margin-left: 13px;
+
   @include m.font-description;
 }
 
@@ -33,16 +35,21 @@
   justify-content: space-between;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: calc(100% - 160px);
+// .wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 20px;
+//   width: calc(100% - 160px);
+//   margin: 30px 0 0;
+//   padding: 50px 80px;
+//   border: 1px solid $gray-3;
+//   border-radius: $r-xsmall;
+//   background-color: $white-3;
+// }
+
+.MainSectionMargin {
   margin: 30px 0 0;
-  padding: 50px 80px;
-  border: 1px solid $gray-3;
-  border-radius: $r-xsmall;
-  background-color: $white-3;
+  padding-bottom: 30px;
 }
 
 .membersGrid {
