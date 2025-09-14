@@ -74,7 +74,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
 
   const messageParams = useMemo(
     () => ({ ...(search && { search }), ...pagination }),
-    [search, pagination.page, pagination.size]
+    [search, pagination]
   );
 
   // API
@@ -102,11 +102,14 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
   useEffect(() => {
     if (!ws.isConnected) return;
 
+    // useEffect 시작 시점에 seenIdsRef 캡처
+    const seenIds = seenIdsRef.current;
+
     const subId = ws.subscribe(`/sub/chats/${chat.roomId}`, (msg: IMessage) => {
       try {
         const incoming = JSON.parse(msg.body) as ChatMessage;
-        if (seenIdsRef.current.has(incoming.messageId)) return;
-        seenIdsRef.current.add(incoming.messageId);
+        if (seenIds.has(incoming.messageId)) return;
+        seenIds.add(incoming.messageId);
 
         const c = messagesRef.current;
         const wasAtBottom = c ? isNearBottom(c) : true;
@@ -127,7 +130,8 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
     });
 
     return () => {
-      const ids = Array.from(seenIdsRef.current);
+      // 캡처된 seenIds 사용
+      const ids = Array.from(seenIds);
       const lastMessageId = ids[ids.length - 1];
 
       if (subId) ws.unsubscribe(subId);
@@ -142,8 +146,7 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           });
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ws.isConnected, chat.roomId]);
+  }, [ws.isConnected, ws, chat.roomId, messageLastReadPost]);
 
   const memberByUserId = useMemo(() => {
     const members = chatMemberResponse?.data?.members ?? [];
