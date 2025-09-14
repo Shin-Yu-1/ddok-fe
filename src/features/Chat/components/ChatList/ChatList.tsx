@@ -9,6 +9,8 @@ import {
   SignOutIcon,
 } from '@phosphor-icons/react';
 import type { IMessage } from '@stomp/stompjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -27,6 +29,14 @@ import styles from './ChatList.module.scss';
 interface ChatProps {
   roomType: ChatRoomType;
 }
+type ChatAlarm = {
+  [key: number]: string;
+};
+type Payload = {
+  createdAt: string;
+  roomId: number;
+  type: string;
+};
 
 const ChatList = ({ roomType }: ChatProps) => {
   const navigate = useNavigate();
@@ -43,6 +53,7 @@ const ChatList = ({ roomType }: ChatProps) => {
     right?: number;
     bottom?: number;
   }>({});
+  const [chatAlarm, setChatAlarm] = useState<ChatAlarm>({});
   const menuRef = useRef<HTMLDivElement | null>(null);
   const menuAnchorRef = useRef<HTMLElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -67,16 +78,14 @@ const ChatList = ({ roomType }: ChatProps) => {
     const destination = `/sub/users/${user.id}/notifications`;
     const subId = ws.subscribe(destination, (msg: IMessage) => {
       try {
-        const payload = JSON.parse(msg.body);
-        // 예상 페이로드 예: { type: 'NEW_MESSAGE', roomId, messageId, snippet, createdAt, ... }
-        console.log('[알림] 미열람 메시지 도착:', payload);
+        const payload: Payload = JSON.parse(msg.body);
+        setChatAlarm(prev => ({ ...prev, [payload.roomId]: payload.createdAt }));
       } catch {
-        console.log('[알림] 원문:', msg.body);
+        console.error('[알림] 원문:', msg.body);
       }
     });
 
     return () => {
-      console.log('unSub');
       if (subId) ws.unsubscribe(subId);
     };
   }, [ws.isConnected, user?.id]);
@@ -295,7 +304,12 @@ const ChatList = ({ roomType }: ChatProps) => {
                     }`
                   : (chat.name ?? chat.owner.nickname)}
               </span>
-              {chat.hasUnreadMessages && <span className={styles.unreadMessage}></span>}
+              {(chat.hasUnreadMessages ||
+                (chatAlarm[chat.roomId] &&
+                  dayjs(chat.updatedAt).isBefore(dayjs(chatAlarm[chat.roomId])) &&
+                  !dayjs(chat.updatedAt).isSame(dayjs(chatAlarm[chat.roomId])))) && (
+                <span className={styles.unreadMessage}></span>
+              )}
             </div>
 
             <Button size="sm" onClick={e => openMenu(e, chat)} ref={buttonRef}>
