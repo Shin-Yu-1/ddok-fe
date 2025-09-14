@@ -61,4 +61,5 @@ export const WebSocketProvider = ({ children }: { children: React.ReactNode }) =
   return <WsCtx.Provider value={api}>{children}</WsCtx.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useWebSocketContext = () => useContext(WsCtx);

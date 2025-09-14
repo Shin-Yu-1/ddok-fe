@@ -17,6 +17,7 @@ const createChatListItemFromProfile = (user: CompleteProfileInfo): ChatListItem 
     roomId: user.chatRoomId!,
     roomType: ChatRoomType.PRIVATE,
     isPinned: false,
+    hasUnreadMessages: false,
     otherUser: {
       id: user.userId,
       nickname: user.nickname,

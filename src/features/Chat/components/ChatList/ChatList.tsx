@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 
 import {
   ArrowSquareOutIcon,
@@ -88,7 +88,7 @@ const ChatList = ({ roomType }: ChatProps) => {
     return () => {
       if (subId) ws.unsubscribe(subId);
     };
-  }, [ws.isConnected, user?.id]);
+  }, [ws.isConnected, ws, isLoggedIn, user?.id]);
 
   const isLastPage =
     (chatRoomResponse?.data?.pagination?.currentPage ?? 0) >=
@@ -209,11 +209,14 @@ const ChatList = ({ roomType }: ChatProps) => {
   };
 
   // 팀 전용 페이지 이동 (원하는 동작으로 변경)
-  const goTeamPage = (chat: ChatListItem) => {
-    if (chat.roomType === ChatRoomType.GROUP) {
-      navigate(`/team/${chat.teamId}/setting`);
-    }
-  };
+  const goTeamPage = useCallback(
+    (chat: ChatListItem) => {
+      if (chat.roomType === ChatRoomType.GROUP) {
+        navigate(`/team/${chat.teamId}/setting`);
+      }
+    },
+    [navigate]
+  );
 
   const menuItems = useMemo(() => {
     if (!menuFor) return [];
@@ -250,7 +253,7 @@ const ChatList = ({ roomType }: ChatProps) => {
     }
 
     return items;
-  }, [menuFor]);
+  }, [menuFor, goTeamPage]);
 
   const onSearchInputHandler: React.KeyboardEventHandler<HTMLInputElement> = e => {
     if (!e.currentTarget.value) {
