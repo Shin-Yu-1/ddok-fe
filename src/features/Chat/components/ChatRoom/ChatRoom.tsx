@@ -5,6 +5,7 @@ import type { IMessage } from '@stomp/stompjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
+import { api } from '@/api/api';
 import Button from '@/components/Button/Button';
 import OverflowMenu from '@/components/OverflowMenu/OverflowMenu';
 import ChatMessageItem from '@/features/Chat/components/ChatRoom/ChatMessageItem';
@@ -129,11 +130,17 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
       const ids = Array.from(seenIdsRef.current);
       const lastMessageId = ids[ids.length - 1];
 
-      if (lastMessageId) {
-        messageLastReadPost.mutate({ messageId: lastMessageId });
-      }
-
       if (subId) ws.unsubscribe(subId);
+
+      if (lastMessageId) {
+        api
+          .post<ChatMessageLastReadApiResponse>(`/api/chats/${chat.roomId}/messages/read`, {
+            messageId: lastMessageId,
+          })
+          .catch(error => {
+            console.warn('마지막 읽은 메시지 업데이트 실패 (cleanup):', error);
+          });
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ws.isConnected, chat.roomId]);
