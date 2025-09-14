@@ -14,12 +14,10 @@ interface UseProjectDetailProps {
 }
 
 export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
-  console.log('🎯 useProjectDetail 훅이 호출되었습니다! projectId:', projectId);
-
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // 프로젝트 상세 조회 - 조건 없이 바로 실행
+  // 프로젝트 상세 조회
   const {
     data: projectResponse,
     isLoading,
@@ -28,14 +26,10 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
   } = useQuery({
     queryKey: ['project', 'detail', projectId],
     queryFn: async (): Promise<DetailProjectResponse> => {
-      console.log('📡 API 호출 시작 - projectId:', projectId);
       try {
         const { data } = await api.get<DetailProjectResponse>(`/api/projects/${projectId}`);
-        console.log('✅ API 응답 성공:', data);
         return data;
       } catch (error) {
-        console.error('❌ API 호출 에러:', error);
-
         // API 에러 시 토스트 표시
         DDtoast({
           mode: 'server-first',
@@ -46,14 +40,6 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
         throw error;
       }
     },
-  });
-
-  console.log('📊 useProjectDetail 상태:', {
-    projectId,
-    isLoading,
-    error,
-    hasData: !!projectResponse,
-    enabled: !!projectId && projectId > 0,
   });
 
   // 프로젝트 참여 신청/취소
@@ -80,8 +66,6 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
           userMessage: `${position}에 성공적으로 지원하였습니다! 🎉`,
           apiResponse: response,
         });
-
-        console.log(`${position}에 지원했습니다.`);
       } else {
         DDtoast({
           mode: 'server-first',
@@ -89,13 +73,9 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
           userMessage: '지원을 취소했습니다.',
           apiResponse: response,
         });
-
-        console.log('지원을 취소했습니다.');
       }
     },
     onError: (error, variables) => {
-      console.error('프로젝트 참여 신청/취소 실패:', error);
-
       // 에러 토스트 표시
       const isApplying = variables.appliedPosition;
       const errorMessage = isApplying

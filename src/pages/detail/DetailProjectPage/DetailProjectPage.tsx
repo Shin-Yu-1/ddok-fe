@@ -81,21 +81,10 @@ const DetailProjectPage = () => {
   }
 
   if (error || !projectData) {
-    console.log('DetailProjectPage - error:', error);
-    console.log('DetailProjectPage - projectData:', projectData);
-
     return (
       <div className={styles.container}>
         <div className={styles.error}>
           <div>프로젝트를 불러올 수 없습니다.</div>
-          {error && (
-            <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-              에러 정보: {error instanceof Error ? error.message : String(error)}
-            </div>
-          )}
-          <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-            Project ID: {projectIdNum}
-          </div>
         </div>
       </div>
     );

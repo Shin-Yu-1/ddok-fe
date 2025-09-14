@@ -19,8 +19,6 @@ interface StudyJoinResponse {
 }
 
 export const useStudyDetail = ({ studyId }: UseStudyDetailProps) => {
-  console.log('🎯 useStudyDetail 훅이 호출되었습니다! studyId:', studyId);
-
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -33,14 +31,10 @@ export const useStudyDetail = ({ studyId }: UseStudyDetailProps) => {
   } = useQuery({
     queryKey: ['study', 'detail', studyId],
     queryFn: async (): Promise<DetailStudyResponse> => {
-      console.log('📡 API 호출 시작 - studyId:', studyId);
       try {
         const { data } = await api.get<DetailStudyResponse>(`/api/studies/${studyId}`);
-        console.log('✅ API 응답 성공:', data);
         return data;
       } catch (error) {
-        console.error('❌ API 호출 에러:', error);
-
         // API 에러 시 토스트 표시
         DDtoast({
           mode: 'server-first',
@@ -51,14 +45,6 @@ export const useStudyDetail = ({ studyId }: UseStudyDetailProps) => {
         throw error;
       }
     },
-    enabled: !!studyId && studyId > 0,
-  });
-
-  console.log('📊 useStudyDetail 상태:', {
-    studyId,
-    isLoading,
-    error,
-    hasData: !!studyResponse,
     enabled: !!studyId && studyId > 0,
   });
 
@@ -80,8 +66,6 @@ export const useStudyDetail = ({ studyId }: UseStudyDetailProps) => {
           userMessage: '스터디에 성공적으로 지원하였습니다! 🎉',
           apiResponse: response,
         });
-
-        console.log('스터디에 참여 신청했습니다.');
       } else {
         DDtoast({
           mode: 'server-first',
@@ -89,13 +73,9 @@ export const useStudyDetail = ({ studyId }: UseStudyDetailProps) => {
           userMessage: '스터디 참여 신청을 취소했습니다.',
           apiResponse: response,
         });
-
-        console.log('스터디 참여 신청을 취소했습니다.');
       }
     },
     onError: error => {
-      console.error('스터디 참여 신청/취소 실패:', error);
-
       // 에러 토스트 표시
       DDtoast({
         mode: 'server-first',

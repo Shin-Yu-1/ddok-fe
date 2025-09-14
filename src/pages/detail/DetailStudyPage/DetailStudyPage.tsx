@@ -68,21 +68,10 @@ const DetailStudyPage = () => {
   }
 
   if (error || !studyData) {
-    console.log('DetailStudyPage - error:', error);
-    console.log('DetailStudyPage - studyData:', studyData);
-
     return (
       <div className={styles.container}>
         <div className={styles.error}>
           <div>스터디를 불러올 수 없습니다.</div>
-          {error && (
-            <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-              에러 정보: {error instanceof Error ? error.message : String(error)}
-            </div>
-          )}
-          <div style={{ fontSize: '14px', marginTop: '10px', color: '#666' }}>
-            Study ID: {studyIdNum}
-          </div>
         </div>
       </div>
     );
