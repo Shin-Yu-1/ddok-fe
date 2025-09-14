@@ -4,6 +4,7 @@ import { CaretLeftIcon } from '@phosphor-icons/react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
+import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import type { EvaluationData } from '@/constants/evaluation';
 import { EVALUATION_CRITERIA_LIST } from '@/constants/evaluation';
 import ApplicantsGrid from '@/features/Team/components/ApplicantsGrid/ApplicantsGrid';
@@ -336,7 +337,7 @@ const TeamSettingPage = () => {
         {/* 팀 이름 */}
         <h1 className={styles.title}>
           {teamData.data.teamTitle}
-          <span className={styles.subtitle}> 관리 페이지</span>
+          <span className={styles.subtitle}>관리 페이지</span>
         </h1>
 
         {/* 프로젝트 진행 상태 */}
@@ -358,8 +359,7 @@ const TeamSettingPage = () => {
         </div>
       </div>
 
-      <section className={styles.wrapper}>
-        <div className={styles.label}>멤버</div>
+      <MainSection title={'멤버'} className={styles.MainSectionMargin}>
         <MembersGrid
           teamType={teamData.data.teamType}
           members={teamData.data.items}
@@ -367,17 +367,16 @@ const TeamSettingPage = () => {
           teamId={teamId}
           teamStatus={teamData.data.teamStatus}
         />
-      </section>
+      </MainSection>
 
-      <section className={styles.wrapper}>
-        <div className={styles.label}>참여 희망자</div>
+      <MainSection title={'참여 희망자'} className={styles.MainSectionMargin}>
         <ApplicantsGrid
           teamType={teamData.data.teamType}
           teamId={teamId}
           amILeader={teamData.data.isLeader}
           teamStatus={teamData.data.teamStatus}
         />
-      </section>
+      </MainSection>
 
       <section className={styles.settings}>
         <div className={styles.label}>
