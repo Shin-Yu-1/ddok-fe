@@ -303,6 +303,11 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
 
   // 프로젝트 수정 실행
   const handleSubmit = useCallback(() => {
+    // 이미 제출 중이면 중복 호출 방지
+    if (updateProjectMutation.isPending) {
+      return;
+    }
+
     if (!formData || !validateFormWithToast()) {
       return;
     }

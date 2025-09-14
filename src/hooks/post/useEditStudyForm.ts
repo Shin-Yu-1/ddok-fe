@@ -290,6 +290,11 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
 
   // 스터디 수정 실행
   const handleSubmit = useCallback(() => {
+    // 이미 제출 중이면 중복 호출 방지
+    if (updateStudyMutation.isPending) {
+      return;
+    }
+
     if (!formData || !validateFormWithToast()) {
       return;
     }

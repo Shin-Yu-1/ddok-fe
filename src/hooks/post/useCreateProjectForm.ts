@@ -231,6 +231,11 @@ export const useCreateProjectForm = () => {
 
   // 프로젝트 생성 실행
   const handleSubmit = useCallback(() => {
+    // 이미 제출 중이면 중복 호출 방지
+    if (createProjectMutation.isPending) {
+      return;
+    }
+
     if (!validateFormWithToast()) {
       return;
     }
