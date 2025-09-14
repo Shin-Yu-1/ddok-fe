@@ -191,33 +191,6 @@ export const useEditMyInfo = () => {
     [reauthToken]
   );
 
-  // 회원 탈퇴 (소셜: accessToken만, 일반: accessToken + reauthToken)
-  const withdrawUser = useCallback(async () => {
-    // 소셜 로그인이 아닌 경우에만 reauthToken 필요
-    if (!userInfo?.isSocial && !reauthToken) {
-      throw new Error('인증 토큰이 없습니다. 비밀번호를 다시 확인해주세요.');
-    }
-
-    setIsLoading(true);
-    try {
-      // 소셜 로그인인 경우 reauthToken 없이 호출
-      await personalInfoApi.deleteAccount(
-        userInfo?.isSocial ? undefined : reauthToken || undefined
-      );
-
-      // 탈퇴 성공 시 상태 초기화
-      setUserInfo(null);
-      setReauthToken(null);
-
-      console.log('회원 탈퇴 성공');
-    } catch (error) {
-      console.error('회원 탈퇴 실패:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [reauthToken, userInfo?.isSocial]);
-
   // reauthToken 만료 시 초기화
   useEffect(() => {
     if (reauthToken) {
@@ -243,7 +216,6 @@ export const useEditMyInfo = () => {
     updatePhoneNumber,
     updatePassword,
     verifyPassword,
-    withdrawUser,
     clearAuthentication: () => {
       setReauthToken(null);
     },

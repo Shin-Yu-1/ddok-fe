@@ -74,13 +74,6 @@ const DevPage: React.FC = () => {
       title: '⭐ 랭킹',
       routes: [{ path: '/ranking', name: '랭킹' }],
     },
-    etc: {
-      title: '🛠️ 기타',
-      routes: [
-        { path: '/button-example', name: '버튼 예시 페이지' },
-        // { path: '/ranking', name: '랭킹' },
-      ],
-    },
   };
 
   return (
