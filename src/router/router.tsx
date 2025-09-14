@@ -26,7 +26,6 @@ import DevPage from '@/pages/Dev/DevPage';
 import EditMyInfoPage from '@/pages/edit/EditMyInfoPage/EditMyInfoPage';
 import EditProjectPage from '@/pages/edit/EditProjectPage/EditProjectPage';
 import EditStudyPage from '@/pages/edit/EditStudyPage/EditStudyPage';
-import IntroPage from '@/pages/intro/IntroPage/IntroPage';
 import MainPage from '@/pages/main/MainPage';
 import MapPage from '@/pages/map/MapPage/MapPage';
 import PersonalizationPage from '@/pages/personalization/PersonalizationPage/PersonalizationPage';
@@ -36,8 +35,9 @@ import RankingPage from '@/pages/ranking/RankingPage/RankingPage';
 import SearchPlayerPage from '@/pages/search/SearchPlayerPage/SearchPlayerPage';
 import SearchProjectPage from '@/pages/search/SearchProjectPage/SearchProjectPage';
 import SearchStudyPage from '@/pages/search/SearchStudyPage/SearchStudyPage';
-import TeamPage from '@/pages/team/TeamPage/TeamPage';
 import TeamSettingPage from '@/pages/team/TeamSettingPage/TeamSettingPage';
+// import TeamPage from '@/pages/team/TeamPage/TeamPage';
+// import IntroPage from '@/pages/intro/IntroPage/IntroPage';
 
 export const router = createBrowserRouter([
   {
@@ -62,11 +62,11 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      {
-        // index: true,
-        path: '/intro',
-        element: <IntroPage />,
-      },
+      // {
+      //   // index: true,
+      //   path: '/intro',
+      //   element: <IntroPage />,
+      // },
       {
         element: <AuthLayout />,
         children: [
@@ -188,10 +188,10 @@ export const router = createBrowserRouter([
       {
         element: <TeamLayout />,
         children: [
-          {
-            path: 'team/:id',
-            element: <TeamPage />,
-          },
+          // {
+          //   path: 'team/:id',
+          //   element: <TeamPage />,
+          // },
           {
             path: 'team/:id/setting',
             element: <TeamSettingPage />,
