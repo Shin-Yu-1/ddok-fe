@@ -81,9 +81,13 @@ const User = ({ user }: UserProps) => {
   const isCurrentUser = currentUser?.id === user.userId;
 
   // 프로필 페이지로 이동하는 핸들러
-  const handleProfileClick = () => {
-    navigate(`/profile/${user.userId}`);
-  };
+  const handleProfileClick = useCallback(() => {
+    if (isCurrentUser) {
+      navigate('/profile/my');
+    } else {
+      navigate(`/profile/user/${user.userId}`);
+    }
+  }, [isCurrentUser, navigate, user.userId]);
 
   const handleBadgeMouseEnter = useCallback(
     (
