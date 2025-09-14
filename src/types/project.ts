@@ -150,6 +150,7 @@ export interface DetailProjectResponse {
   message: string;
   data: {
     projectId: number;
+    teamId: number;
     title: string;
     teamStatus: TeamStatus;
     bannerImageUrl: string;
@@ -165,6 +166,7 @@ export interface DetailProjectResponse {
     positions: ProjectPosition[];
     leader: ProjectLeader;
     participants: ProjectParticipant[];
+    isTeamMember: boolean;
     isMine: boolean;
   };
 }
