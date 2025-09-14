@@ -20,7 +20,6 @@ import type {
 
 // 메인 페이지 데이터 조회 개수 상수
 const MAIN_PAGE_LIMITS = {
-  DISPLAY_SIZE: 50, // 전체 데이터 조회 개수(표시용)
   USER_STUDIES: 2, // 사용자 스터디 조회 개수
   USER_PROJECTS: 2, // 사용자 프로젝트 조회 개수
   DISPLAY_LIMIT_LOGGED_IN: 3, // 로그인 시 각 섹션별 표시 개수
@@ -98,38 +97,107 @@ const fetchTeamCount = async (): Promise<StatsData> => {
   };
 };
 
+// 모집중인 스터디 조회
+const fetchRecruitingStudies = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<StudyListResponse>('/api/studies/search', {
+    params: {
+      status: 'RECRUITING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformStudyToCard);
+};
+
+// 진행중인 스터디 조회
+const fetchOngoingStudies = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<StudyListResponse>('/api/studies/search', {
+    params: {
+      status: 'ONGOING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformStudyToCard);
+};
+
+// 모집중인 프로젝트 조회
+const fetchRecruitingProjects = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<ProjectListResponse>('/api/projects/search', {
+    params: {
+      status: 'RECRUITING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformProjectToCard);
+};
+
+// 진행중인 프로젝트 조회
+const fetchOngoingProjects = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<ProjectListResponse>('/api/projects/search', {
+    params: {
+      status: 'ONGOING',
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformProjectToCard);
+};
+
+// 최근 스터디 조회 (전체 상태)
+const fetchRecentStudies = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<StudyListResponse>('/api/studies/search', {
+    params: {
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformStudyToCard);
+};
+
+// 최근 프로젝트 조회 (전체 상태)
+const fetchRecentProjects = async (size: number): Promise<CardItem[]> => {
+  const { data } = await api.get<ProjectListResponse>('/api/projects/search', {
+    params: {
+      page: 0,
+      size,
+    },
+  });
+
+  return (data.data.items || []).map(transformProjectToCard);
+};
+
 // 표시용 데이터 조회
 const fetchDisplayData = async (displayLimit: number) => {
-  const [studiesDisplayResponse, projectsDisplayResponse] = await Promise.all([
-    api.get<StudyListResponse>('/api/studies', {
-      params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
-    }),
-    api.get<ProjectListResponse>('/api/projects', {
-      params: { page: 0, size: MAIN_PAGE_LIMITS.DISPLAY_SIZE },
-    }),
+  const [
+    recruitingStudies,
+    ongoingStudies,
+    recruitingProjects,
+    ongoingProjects,
+    recentStudies,
+    recentProjects,
+  ] = await Promise.all([
+    fetchRecruitingStudies(displayLimit),
+    fetchOngoingStudies(displayLimit),
+    fetchRecruitingProjects(displayLimit),
+    fetchOngoingProjects(displayLimit),
+    fetchRecentStudies(displayLimit),
+    fetchRecentProjects(displayLimit),
   ]);
 
-  // 표시용 데이터 추출 및 변환
-  const studies = studiesDisplayResponse.data.data.items || [];
-  const projects = projectsDisplayResponse.data.data.items || [];
-
-  const allStudies: CardItem[] = studies.map(transformStudyToCard);
-  const allProjects: CardItem[] = projects.map(transformProjectToCard);
-
-  // 상태별 분류
-  const recruitingStudies = allStudies.filter(study => study.teamStatus === 'RECRUITING');
-  const ongoingStudies = allStudies.filter(study => study.teamStatus === 'ONGOING');
-  const recruitingProjects = allProjects.filter(project => project.teamStatus === 'RECRUITING');
-  const ongoingProjects = allProjects.filter(project => project.teamStatus === 'ONGOING');
-
-  // 표시용 데이터 (동적 제한 개수 사용)
   return {
-    recruitingStudies: recruitingStudies.slice(0, displayLimit),
-    ongoingStudies: ongoingStudies.slice(0, displayLimit),
-    recruitingProjects: recruitingProjects.slice(0, displayLimit),
-    ongoingProjects: ongoingProjects.slice(0, displayLimit),
-    recentStudies: allStudies.slice(0, displayLimit),
-    recentProjects: allProjects.slice(0, displayLimit),
+    recruitingStudies,
+    ongoingStudies,
+    recruitingProjects,
+    ongoingProjects,
+    recentStudies,
+    recentProjects,
   };
 };
 
