@@ -106,17 +106,17 @@ const DetailStudyPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
+              {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
+              {studyData.isTeamMember && (
+                <Button variant="outline" radius="xsm" onClick={handleTeamManagement}>
+                  팀 관리 페이지로 이동하기
+                </Button>
+              )}
+
               {/* 모집글 작성자인 경우 - 스터디 수정하기 버튼 */}
               {studyData.isMine && studyData.teamStatus !== 'CLOSED' && (
                 <Button variant="secondary" radius="xsm" onClick={handleEditStudy}>
                   스터디 수정하기
-                </Button>
-              )}
-
-              {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
-              {studyData.isTeamMember && (
-                <Button variant="primary" radius="xsm" onClick={handleTeamManagement}>
-                  팀 관리 페이지로 이동하기
                 </Button>
               )}
             </div>
