@@ -95,15 +95,6 @@ const EditStudyPage = () => {
 
   // 스터디 수정 저장 버튼 클릭 시
   const handleSubmitClick = () => {
-    console.log('=== 스터디 수정 폼 데이터 ===');
-    console.log(JSON.stringify(formData, null, 2));
-
-    if (!isValid) {
-      console.warn('⚠️ 유효성 검사 실패로 인해 실제 API 호출을 건너뜁니다.');
-      return;
-    }
-
-    console.log('✅ 유효성 검사 통과 - 스터디 수정 API 호출');
     handleSubmit();
   };
 

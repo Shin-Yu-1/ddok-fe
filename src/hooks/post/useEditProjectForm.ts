@@ -26,24 +26,9 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
   const { data: editData, isLoading: isLoadingEdit } = useQuery({
     queryKey: ['project', 'edit', projectId],
     queryFn: async (): Promise<EditProjectResponse> => {
-      console.log('📥 프로젝트 수정 데이터 조회 시작');
-      console.log('Project ID:', projectId);
-      console.log('API URL:', `/api/projects/${projectId}/edit`);
-
-      try {
-        const { data } = await api.get<EditProjectResponse>(`/api/projects/${projectId}/edit`);
-
-        console.log('✅ 수정 데이터 조회 성공:');
-        console.log('Status:', data.status);
-        console.log('Message:', data.message);
-        console.log('Response Data:', JSON.stringify(data.data, null, 2));
-
-        return data;
-      } catch (error) {
-        console.error('❌ 수정 데이터 조회 실패:');
-        console.error('Error:', error);
-        throw error;
-      }
+      const { data } = await api.get<EditProjectResponse>(`/api/projects/${projectId}/edit`);
+      console.log('✅ 프로젝트 수정 데이터 조회 성공:', data);
+      return data;
     },
     enabled: !!projectId,
   });
@@ -243,32 +228,90 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     });
   }, []);
 
-  // 폼 유효성 검사
-  const validateForm = useCallback((): boolean => {
-    if (!formData) return false;
+  // 폼 유효성 검사 및 오류 메시지 반환
+  const validateForm = useCallback((): { isValid: boolean; errors: string[] } => {
+    if (!formData) return { isValid: false, errors: ['폼 데이터를 불러오는 중입니다'] };
 
-    if (!formData.title.trim()) return false;
-    if (!formData.expectedStart) return false;
-    if (formData.expectedMonth < 1) return false;
-    if (formData.mode === 'offline' && !formData.location) return false;
-    if (formData.capacity < 1 || formData.capacity > 7) return false;
-    if (formData.positions.length === 0) return false;
-    if (!formData.leaderPosition) return false;
-    if (!formData.positions.includes(formData.leaderPosition)) return false;
-    if (!formData.detail.trim()) return false;
+    const errors: string[] = [];
+
+    if (!formData.title.trim()) {
+      errors.push('프로젝트 제목을 입력해주세요');
+    }
+
+    if (!formData.expectedStart) {
+      errors.push('시작 예정일을 선택해주세요');
+    }
+
+    if (formData.expectedMonth < 1) {
+      errors.push('예상 기간은 최소 1개월 이상이어야 합니다');
+    }
+
+    if (formData.mode === 'offline' && !formData.location) {
+      errors.push('오프라인 모임의 경우 지역을 선택해주세요');
+    }
+
+    if (formData.capacity < 1) {
+      errors.push('모집 인원은 최소 1명 이상이어야 합니다');
+    }
+
+    if (formData.capacity > 7) {
+      errors.push('모집 인원은 최대 7명까지 가능합니다');
+    }
+
+    if (formData.positions.length === 0) {
+      errors.push('최소 1개 이상의 모집 포지션을 추가해주세요');
+    }
+
+    if (!formData.leaderPosition) {
+      errors.push('리더 포지션을 선택해주세요');
+    }
+
+    if (formData.leaderPosition && !formData.positions.includes(formData.leaderPosition)) {
+      errors.push('리더 포지션이 모집 포지션에 포함되어야 합니다');
+    }
+
+    if (!formData.detail.trim()) {
+      errors.push('프로젝트 상세 내용을 작성해주세요');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  }, [formData]);
+
+  // 유효성 검사와 토스트를 함께 처리하는 함수
+  const validateFormWithToast = useCallback((): boolean => {
+    const validation = validateForm();
+
+    if (!validation.isValid) {
+      // 유효성 검사 실패 시 토스트로 오류 메시지 표시
+      const errorMessage = validation.errors.join('\n• ');
+
+      DDtoast({
+        mode: 'custom',
+        type: 'warning',
+        userMessage: `입력 정보를 확인해주세요:\n\n• ${errorMessage}`,
+        duration: 6000,
+      });
+
+      return false;
+    }
 
     return true;
-  }, [formData]);
+  }, [validateForm]);
 
   // 프로젝트 수정 실행
   const handleSubmit = useCallback(() => {
-    if (!formData || !validateForm()) {
-      console.error('폼 유효성 검사 실패');
+    if (!formData || !validateFormWithToast()) {
       return;
     }
 
     updateProjectMutation.mutate(formData);
-  }, [formData, validateForm, updateProjectMutation]);
+  }, [formData, validateFormWithToast, updateProjectMutation]);
+
+  // isValid 계산
+  const isValid = validateForm().isValid;
 
   return {
     formData,
@@ -289,6 +332,6 @@ export const useEditProjectForm = ({ projectId }: UseEditProjectFormProps) => {
     handleSubmit,
     editData,
     isSubmitting: updateProjectMutation.isPending,
-    isValid: validateForm(),
+    isValid,
   };
 };

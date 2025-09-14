@@ -36,6 +36,7 @@ const CreateProjectPage = () => {
     updateExpectedMonth,
     updateBannerImage,
     isValid,
+    isSubmitting,
   } = useCreateProjectForm();
 
   const handleModeChange = (mode: 'online' | 'offline') => {
@@ -56,18 +57,10 @@ const CreateProjectPage = () => {
     const newPositions = formData.positions.filter(p => p !== position);
     updatePositions(newPositions);
 
-    // 삭제된 포지션이 리더 포지션이었다면 리더 포지션도 초기화
+    // 삭제된 포지션이 리더 포지션이었다면 첫 번째 남은 포지션으로 변경
     if (formData.leaderPosition === position) {
-      updateLeaderPosition('');
-    }
-  };
-
-  const handleLeaderPositionChange = (position: string) => {
-    // 이미 선택된 포지션이면 선택 취소
-    if (formData.leaderPosition === position) {
-      updateLeaderPosition('');
-    } else {
-      updateLeaderPosition(position);
+      const remainingPositions = newPositions;
+      updateLeaderPosition(remainingPositions.length > 0 ? remainingPositions[0] : '');
     }
   };
 
@@ -92,73 +85,6 @@ const CreateProjectPage = () => {
     return tomorrow.toISOString().split('T')[0];
   };
 
-  // 모집 공고 등록하기 버튼 클릭 시
-  const handleSubmitClick = () => {
-    console.log('=== 현재 폼 데이터 ===');
-    console.log(JSON.stringify(formData, null, 2));
-
-    // 실제 API로 전송될 데이터 구조
-    console.log('=== 실제 API로 전송될 데이터 ===');
-
-    // 1. 배너 이미지 정보
-    if (formData.bannerImage) {
-      console.log('배너 이미지:', {
-        name: formData.bannerImage.name,
-        size: formData.bannerImage.size,
-        type: formData.bannerImage.type,
-      });
-    } else {
-      console.log('배너 이미지: 없음 (기본 이미지 사용)');
-    }
-
-    // 2. JSON 요청 데이터 (FormData의 'request' 부분)
-    const requestData = {
-      title: formData.title,
-      expectedStart: formData.expectedStart,
-      expectedMonth: formData.expectedMonth,
-      mode: formData.mode,
-      location: formData.mode === 'offline' ? formData.location : null,
-      preferredAges: formData.preferredAges,
-      capacity: formData.capacity,
-      traits: formData.traits,
-      positions: formData.positions,
-      leaderPosition: formData.leaderPosition,
-      detail: formData.detail,
-    };
-
-    console.log('JSON 요청 데이터:');
-    console.log(JSON.stringify(requestData, null, 2));
-
-    // 3. FormData 시뮬레이션
-    console.log('=== FormData 시뮬레이션 ===');
-    console.log('FormData 구조:');
-    if (formData.bannerImage) {
-      console.log('- bannerImage: [File Object]', formData.bannerImage.name);
-    }
-    console.log('- request: [Blob]', JSON.stringify(requestData));
-
-    // 4. 실제 전송될 HTTP 요청 정보
-    console.log('=== HTTP 요청 정보 ===');
-    console.log('Method: POST');
-    console.log('URL: /api/projects');
-    console.log('Content-Type: multipart/form-data');
-    console.log('Headers: { Authorization: Bearer [token] }');
-
-    // 유효성 검사 실패 시 실제 API 호출 하지 않음
-    if (!isValid) {
-      console.warn('⚠️ 유효성 검사 실패로 인해 실제 API 호출을 건너뜁니다.');
-      return;
-    }
-
-    console.log('✅ 유효성 검사 통과 - 실제 API를 호출한다면 여기서 호출됩니다.');
-
-    // 실제 API 호출은 주석 처리 (개발 중에는 실행하지 않음)
-    // handleSubmit();
-
-    // 실제 API 호출하고 싶으시면 위 주석을 해제하고 아래 주석을 추가하세요:
-    handleSubmit();
-  };
-
   return (
     <>
       <div className={styles.container}>
@@ -171,8 +97,13 @@ const CreateProjectPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
-              <Button variant="secondary" radius="xsm" onClick={handleSubmitClick}>
-                모집 공고 등록하기
+              <Button
+                variant="secondary"
+                radius="xsm"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !isValid}
+              >
+                {isSubmitting ? '등록 중...' : '모집 공고 등록하기'}
               </Button>
             </div>
             <div className={styles.nameSection}>
@@ -195,7 +126,7 @@ const CreateProjectPage = () => {
                     leaderPosition={formData.leaderPosition}
                     onAddPosition={handleAddPosition}
                     onRemovePosition={handleRemovePosition}
-                    onLeaderPositionChange={handleLeaderPositionChange}
+                    onLeaderPositionChange={updateLeaderPosition}
                   />
                 </MainSection>
                 <MainSection title={'이런 분을 찾습니다!'}>
@@ -228,7 +159,7 @@ const CreateProjectPage = () => {
                 </MainSection>
               </div>
               <div className={styles.rightSection}>
-                <SideSection title={'진행 상태'}>
+                <SideSection readonly={true} title={'진행 상태'}>
                   <PostStatusSelector value="RECRUITING" postType="project" editable={false} />
                 </SideSection>
                 <MainSection title={'모집 인원'}>
