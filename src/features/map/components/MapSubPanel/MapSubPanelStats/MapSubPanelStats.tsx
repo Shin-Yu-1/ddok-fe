@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import Button from '@/components/Button/Button';
+import { DDtoast } from '@/features/toast';
 import { useAuthStore } from '@/stores/authStore';
 
 import type { CafeStat } from '../../../schemas/cafeStatSchema';
@@ -20,7 +21,11 @@ const MapSubPanelStats: React.FC<MapSubPanelStatsProps> = ({ statData, cafeId, o
 
   const handleReviewButtonClick = () => {
     if (!isLoggedIn) {
-      alert('로그인이 필요한 서비스입니다.');
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '로그인이 필요한 서비스입니다.',
+      });
       return;
     }
     setIsReviewModalOpen(true);

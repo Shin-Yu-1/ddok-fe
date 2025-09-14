@@ -51,10 +51,21 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
   if (isLoading) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>CAFE</div>
+        <div className={styles.overlay__img}>CAFE</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
-            <div>로딩 중...</div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '83px',
+                fontSize: '14px',
+                color: '#666',
+              }}
+            >
+              로딩 중...
+            </div>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
@@ -67,7 +78,7 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
   if (isError || !response?.data) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>CAFE</div>
+        <div className={styles.overlay__img}>CAFE</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
             <div>데이터를 불러올 수 없습니다.</div>
@@ -84,8 +95,18 @@ const MapCafeOverlay: React.FC<CafeOverlayProps> = ({ id, onOverlayClose }) => {
 
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>
-        <img src={cafe.bannerImageUrl} alt="CAFE" />
+      <div className={styles.overlay__img}>
+        <img
+          src={cafe.bannerImageUrl}
+          alt="CAFE"
+          style={{
+            width: '100%',
+            height: '125px',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            display: 'block',
+          }}
+        />
       </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>

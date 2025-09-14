@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
@@ -8,6 +9,8 @@ import type BadgeTier from '@/constants/enums/BadgeTier.enum';
 import BadgeType from '@/constants/enums/BadgeType.enum';
 import Badge from '@/features/Badge/Badge';
 import { useGetPlayerOverlay } from '@/features/map/hooks/useGetOverlay';
+import { DDtoast } from '@/features/toast';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -22,11 +25,24 @@ interface PlayerOverlayProps {
 
 const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) => {
   const nav = useNavigate();
+  const { isLoggedIn } = useAuthStore();
   const [tooltipContent, setTooltipContent] = useState<string>('');
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
 
   const { data: response, isLoading, isError } = useGetPlayerOverlay(id);
+
+  const handleDetailClick = () => {
+    if (!isLoggedIn) {
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '로그인이 필요한 서비스입니다.',
+      });
+      return;
+    }
+    nav(`/profile/user/${id}`);
+  };
 
   // Badge type을 한글로 변환하는 함수
   const getBadgeTypeInKorean = (type: BadgeType): string => {
@@ -49,8 +65,8 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltipPosition({
-      x: rect.left - rect.width / 2,
-      y: rect.top - 45,
+      x: rect.left + rect.width / 2,
+      y: rect.top - 5,
     });
 
     if (type === 'main') {
@@ -71,10 +87,21 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   if (isLoading) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>PLAYER</div>
+        <div className={styles.overlay__img}>PLAYER</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
-            <div>로딩 중...</div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '180px',
+                fontSize: '14px',
+                color: '#666',
+              }}
+            >
+              로딩 중...
+            </div>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
@@ -87,7 +114,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
   if (isError || !response?.data) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>PLAYER</div>
+        <div className={styles.overlay__img}>PLAYER</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
             <div>데이터를 불러올 수 없습니다.</div>
@@ -104,8 +131,18 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
 
   return (
     <div className={styles.overlay__container}>
-      <div className={styles.overlay__banner}>
-        <img src={player.profileImageUrl} alt="PLAYER" />
+      <div className={styles.overlay__img}>
+        <img
+          src={player.profileImageUrl}
+          alt="PLAYER"
+          style={{
+            width: '100%',
+            height: '125px',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            display: 'block',
+          }}
+        />
       </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
@@ -122,9 +159,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
-                onClick={() => {
-                  nav(`/profile/user/${id}`);
-                }}
+                onClick={handleDetailClick}
               >
                 상세보기
               </Button>
@@ -218,26 +253,28 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
       </div>
 
       {/* 툴팁 */}
-      {showTooltip && (
-        <div
-          style={{
-            position: 'fixed',
-            left: tooltipPosition.x,
-            top: tooltipPosition.y,
-            transform: 'translateX(-50%) translateY(-100%)',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            color: 'white',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            fontSize: '12px',
-            pointerEvents: 'none',
-            zIndex: 1000,
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {tooltipContent}
-        </div>
-      )}
+      {showTooltip &&
+        createPortal(
+          <div
+            style={{
+              position: 'fixed',
+              left: tooltipPosition.x,
+              top: tooltipPosition.y,
+              transform: 'translateX(-50%) translateY(-100%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '12px',
+              pointerEvents: 'none',
+              zIndex: 50,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {tooltipContent}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

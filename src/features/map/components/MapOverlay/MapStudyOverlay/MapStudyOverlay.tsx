@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button/Button';
 import { useGetStudyOverlay } from '@/features/map/hooks/useGetOverlay';
 import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
+import { DDtoast } from '@/features/toast';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from '../MapOverlay.module.scss';
 
@@ -17,16 +19,40 @@ interface StudyOverlayProps {
 
 const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) => {
   const nav = useNavigate();
+  const { isLoggedIn } = useAuthStore();
 
   const { data: response, isLoading, isError } = useGetStudyOverlay(id);
+
+  const handleDetailClick = () => {
+    if (!isLoggedIn) {
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '로그인이 필요한 서비스입니다.',
+      });
+      return;
+    }
+    nav(`/detail/study/${id}`);
+  };
 
   if (isLoading) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>STUDY</div>
+        <div className={styles.overlay__img}>STUDY</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
-            <div>로딩 중...</div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '175px',
+                fontSize: '14px',
+                color: '#666',
+              }}
+            >
+              로딩 중...
+            </div>
           </div>
         </div>
         <div className={styles.overlay__closeBtn} onClick={onOverlayClose}>
@@ -39,7 +65,7 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
   if (isError || !response?.data) {
     return (
       <div className={styles.overlay__container}>
-        <div className={styles.overlay__banner}>STUDY</div>
+        <div className={styles.overlay__img}>STUDY</div>
         <div className={styles.overlay__content}>
           <div className={styles.overlay__info}>
             <div>데이터를 불러올 수 없습니다.</div>
@@ -66,8 +92,18 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
             {MAP_ITEM_STATUS_LABELS.ONGOING}
           </div>
         ))}
-      <div className={styles.overlay__banner}>
-        <img src={study.bannerImageUrl} alt="STUDY" />
+      <div className={styles.overlay__img}>
+        <img
+          src={study.bannerImageUrl}
+          alt="STUDY"
+          style={{
+            width: '100%',
+            height: '125px',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            display: 'block',
+          }}
+        />
       </div>
       <div className={styles.overlay__content}>
         <div className={styles.overlay__info}>
@@ -84,9 +120,7 @@ const MapStudyOverlay: React.FC<StudyOverlayProps> = ({ id, onOverlayClose }) =>
                 fontWeight="var(--font-weight-regular)"
                 radius="xxsm"
                 padding="4px 10px"
-                onClick={() => {
-                  nav(`/detail/study/${id}`);
-                }}
+                onClick={handleDetailClick}
               >
                 상세보기
               </Button>
