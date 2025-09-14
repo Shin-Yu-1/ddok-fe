@@ -104,10 +104,10 @@ const RecruitmentTable: React.FC<RecruitmentTableProps> = ({
       const isSelected = leaderPosition === position.position;
       return (
         <button
-          className={`${styles.actionButton} ${isSelected ? styles.cancel : styles.selectable}`}
+          className={`${styles.actionButton} ${isSelected ? styles.confirmed : styles.selectable}`}
           onClick={() => handleLeaderPositionSelect(position.position)}
         >
-          {isSelected ? '선택 취소' : '선택하기'}
+          {isSelected ? '선택완료' : '선택하기'}
         </button>
       );
     }
