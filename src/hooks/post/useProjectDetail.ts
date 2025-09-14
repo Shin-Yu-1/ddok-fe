@@ -115,6 +115,19 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
     navigate(`/edit/project/${projectId}`);
   };
 
+  // 팀 관리 페이지로 이동
+  const handleTeamManagement = () => {
+    if (projectResponse?.data.teamId) {
+      navigate(`/team/${projectResponse.data.teamId}/setting`);
+    } else {
+      DDtoast({
+        mode: 'custom',
+        type: 'error',
+        userMessage: '팀 정보를 찾을 수 없습니다.',
+      });
+    }
+  };
+
   // 포지션 지원하기
   const handleApplyPosition = (position: string) => {
     joinProjectMutation.mutate({ appliedPosition: position });
@@ -144,6 +157,7 @@ export const useProjectDetail = ({ projectId }: UseProjectDetailProps) => {
 
     // 액션
     handleEditProject,
+    handleTeamManagement,
     handleApplyPosition,
     handleCancelApplication,
     handleRetry,
