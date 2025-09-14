@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '@/App';
-import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout';
 import MainLayout from '@/layouts/MainLayout/MainLayout';
 import MapLayout from '@/layouts/MapLayout/MapLayout';
 import PersonalizationLayout from '@/layouts/PersonalizationLayout/PersonalizationLayout';
 import PostLayout from '@/layouts/PostLayout/PostLayout';
 import ProfileLayout from '@/layouts/ProfileLayout/ProfileLayout';
+import RankingLayout from '@/layouts/RankingLayout/RankingLayout';
 import SearchLayout from '@/layouts/SearchLayout/SearchLayout';
 import TeamLayout from '@/layouts/TeamLayout/TeamLayout';
 import FindIdCompletePage from '@/pages/auth/FindIdCompletePage/FindIdCompletePage';
@@ -200,12 +200,13 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: 'ranking',
-        element: (
-          <ProtectedRoute requirePreference={true}>
-            <RankingPage />
-          </ProtectedRoute>
-        ),
+        element: <RankingLayout />,
+        children: [
+          {
+            path: 'ranking',
+            element: <RankingPage />,
+          },
+        ],
       },
       {
         path: 'button-example',

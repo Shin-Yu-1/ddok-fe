@@ -1,0 +1,21 @@
+@use '@/styles/variables' as *;
+
+.container {
+  margin-bottom: 32px;
+}
+
+.title {
+  margin-bottom: 12px;
+  font-size: $fs-small;
+  font-weight: $fw-bold;
+  text-align: right;
+  color: $black-3;
+}
+
+.profileBar {
+  width: 40%;
+  margin-left: auto;
+  border: 1px solid $blue-1;
+  border-radius: $r-small;
+  background-color: $white-2;
+}
