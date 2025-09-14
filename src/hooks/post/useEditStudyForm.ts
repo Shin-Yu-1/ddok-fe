@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '@/api/api';
+import { DDtoast } from '@/features/toast';
 import type {
   UpdateStudyData,
   CreateStudyResponse,
@@ -86,7 +87,23 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       formDataToSend.append('bannerImage', data.bannerImage);
     }
 
-    const requestData: Omit<UpdateStudyData, 'bannerImage'> = {
+    // bannerImageUrl 처리 로직 개선
+    let bannerImageUrlToSend: string | undefined;
+
+    if (data.bannerImage) {
+      // 새로운 이미지를 업로드하는 경우: bannerImageUrl 안보냄
+      bannerImageUrlToSend = undefined;
+    } else if (data.bannerImageUrl === undefined) {
+      // 기본 이미지로 변경하는 경우: bannerImageUrl 안보냄
+      bannerImageUrlToSend = undefined;
+    } else {
+      // 기존 이미지를 유지하는 경우: 기존 bannerImageUrl 보냄
+      bannerImageUrlToSend = data.bannerImageUrl;
+    }
+
+    const requestData: Omit<UpdateStudyData, 'bannerImage' | 'bannerImageUrl'> & {
+      bannerImageUrl?: string;
+    } = {
       title: data.title,
       expectedStart: data.expectedStart,
       teamStatus: data.teamStatus,
@@ -98,11 +115,17 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       traits: data.traits,
       studyType: data.studyType,
       detail: data.detail,
-      bannerImageUrl: data.bannerImageUrl, // 기존 이미지 URL
     };
+
+    // bannerImageUrl이 정의된 경우에만 추가
+    if (bannerImageUrlToSend !== undefined) {
+      requestData.bannerImageUrl = bannerImageUrlToSend;
+    }
 
     console.log('📤 API로 전송할 JSON 데이터:');
     console.log(JSON.stringify(requestData, null, 2));
+    console.log('📤 전송할 bannerImage 파일:', data.bannerImage ? data.bannerImage.name : 'none');
+    console.log('📤 전송할 bannerImageUrl:', bannerImageUrlToSend);
 
     formDataToSend.append(
       'request',
@@ -126,12 +149,24 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
   const updateStudyMutation = useMutation({
     mutationFn: updateStudy,
     onSuccess: response => {
+      DDtoast({
+        mode: 'server-first',
+        type: 'success',
+        userMessage: '스터디가 성공적으로 수정되었습니다! 🎉',
+        apiResponse: response,
+      });
+
       // 성공 시 상세 페이지로 이동
       navigate(`/detail/study/${response.data.studyId}`);
     },
     onError: error => {
       console.error('스터디 수정 실패:', error);
-      // TODO: 에러 처리 (토스트 알림 등)
+
+      DDtoast({
+        mode: 'server-first',
+        userMessage: '스터디 수정 중 문제가 발생했습니다.',
+        apiResponse: error,
+      });
     },
   });
 
@@ -193,12 +228,13 @@ export const useEditStudyForm = ({ studyId }: UseEditStudyFormProps) => {
       if (!prev) return null;
 
       if (bannerImage === null) {
-        // 기본 이미지로 변경하는 경우: bannerImageUrl도 undefined로 설정
+        // null을 전달받은 경우의 처리를 더 명확하게
+        // 이는 "기본 이미지 사용" 또는 "현재 이미지 제거"를 의미
         return { ...prev, bannerImage: null, bannerImageUrl: undefined };
       }
 
       // 새로운 파일 업로드하는 경우
-      return { ...prev, bannerImage };
+      return { ...prev, bannerImage, bannerImageUrl: undefined };
     });
   }, []);
 
