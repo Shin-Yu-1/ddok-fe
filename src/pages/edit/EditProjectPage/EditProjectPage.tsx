@@ -16,6 +16,7 @@ import PostLocationSelector from '@/features/post/components/PostLocationSelecto
 import PostModeSelector from '@/features/post/components/PostModeSelector/PostModeSelector';
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
+import TextInput from '@/features/post/components/TextInput/TextInput';
 import { useEditProjectForm } from '@/hooks/post/useEditProjectForm';
 
 import styles from './EditProjectPage.module.scss';
@@ -66,10 +67,6 @@ const EditProjectPage = () => {
 
   const handleModeChange = (mode: 'online' | 'offline') => {
     updateMode(mode);
-  };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTitle(e.target.value);
   };
 
   const handleDetailChange = (value: string) => {
@@ -159,12 +156,13 @@ const EditProjectPage = () => {
             </div>
             <div className={styles.nameSection}>
               <MainSection title={'프로젝트 제목'}>
-                <input
-                  type="text"
-                  placeholder="프로젝트 제목을 입력해주세요"
-                  className={styles.titleInput}
+                <TextInput
                   value={formData.title}
-                  onChange={handleTitleChange}
+                  onChange={updateTitle}
+                  placeholder="프로젝트 제목을 입력해주세요"
+                  minLength={2}
+                  maxLength={30}
+                  showCounter={true}
                 />
               </MainSection>
             </div>
