@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import App from '@/App';
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout';
@@ -46,19 +46,19 @@ export const router = createBrowserRouter([
     children: [
       // NOTE: 개발용 페이지. 추후 삭제 필요 (기존 코드에 영향 없음)
       {
-        index: true,
+        path: 'dev',
         element: <DevPage />,
       },
-      // {
-      //   index: true,
-      //   element: <MainPage />,
-      // },
       {
         element: <MainLayout />,
         children: [
           {
-            path: 'main', // '/main' 경로
+            index: true,
             element: <MainPage />,
+          },
+          {
+            path: 'main', // '/main' 경로
+            element: <Navigate to="/" replace />, // '/'로 리다이렉트
           },
         ],
       },
