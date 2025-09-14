@@ -17,6 +17,8 @@ import PostPersonalitySelector from '@/features/post/components/PostPersonalityS
 import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
 import PostStudyTypeSelector from '@/features/post/components/PostStudyTypeSelector/PostStudyTypeSelector';
 import TextInput from '@/features/post/components/TextInput/TextInput';
+import AIWriteModal from '@/features/post/Modal/AIWriteModal/AIWriteModal';
+import { useAIWrite } from '@/hooks/post/useAIWrite';
 import { useEditStudyForm } from '@/hooks/post/useEditStudyForm';
 
 import styles from './EditStudyPage.module.scss';
@@ -45,6 +47,11 @@ const EditStudyPage = () => {
     isValid,
     isSubmitting,
   } = useEditStudyForm({ studyId });
+
+  // AI 글 작성 모달 관련
+  const { isModalOpen, openModal, closeModal, handleContentApply } = useAIWrite({
+    onContentApply: updateDetail,
+  });
 
   // 스터디 ID가 유효하지 않은 경우
   if (!id || studyId <= 0) {
@@ -151,7 +158,7 @@ const EditStudyPage = () => {
                   title={'모집 공고 상세'}
                   titleAction={
                     <>
-                      <button className={styles.useAIWrite}>
+                      <button className={styles.useAIWrite} onClick={openModal}>
                         <MagicWandIcon
                           size={25}
                           weight="light"
@@ -227,6 +234,15 @@ const EditStudyPage = () => {
           </div>
         </div>
       </div>
+
+      {/* AI 글 작성 모달 */}
+      <AIWriteModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onApplyContent={handleContentApply}
+        formData={formData}
+        postType="study"
+      />
     </>
   );
 };

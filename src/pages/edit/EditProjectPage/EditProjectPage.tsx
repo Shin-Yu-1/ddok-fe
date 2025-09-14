@@ -17,6 +17,8 @@ import PostModeSelector from '@/features/post/components/PostModeSelector/PostMo
 import PostPersonalitySelector from '@/features/post/components/PostPersonalitySelector/PostPersonalitySelector';
 import PostStatusSelector from '@/features/post/components/PostStatusSelector/PostStatusSelector';
 import TextInput from '@/features/post/components/TextInput/TextInput';
+import AIWriteModal from '@/features/post/Modal/AIWriteModal/AIWriteModal';
+import { useAIWrite } from '@/hooks/post/useAIWrite';
 import { useEditProjectForm } from '@/hooks/post/useEditProjectForm';
 
 import styles from './EditProjectPage.module.scss';
@@ -46,6 +48,11 @@ const EditProjectPage = () => {
     isValid,
     isSubmitting,
   } = useEditProjectForm({ projectId });
+
+  // AI 글 작성 모달 관련
+  const { isModalOpen, openModal, closeModal, handleContentApply } = useAIWrite({
+    onContentApply: updateDetail,
+  });
 
   // 프로젝트 ID가 유효하지 않은 경우
   if (!id || projectId <= 0) {
@@ -173,7 +180,7 @@ const EditProjectPage = () => {
                   title={'모집 공고 상세'}
                   titleAction={
                     <>
-                      <button className={styles.useAIWrite}>
+                      <button className={styles.useAIWrite} onClick={openModal}>
                         <MagicWandIcon
                           size={25}
                           weight="light"
@@ -248,6 +255,15 @@ const EditProjectPage = () => {
           </div>
         </div>
       </div>
+
+      {/* AI 글 작성 모달 */}
+      <AIWriteModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onApplyContent={handleContentApply}
+        formData={formData}
+        postType="project"
+      />
     </>
   );
 };
