@@ -257,22 +257,14 @@ export default function MainPage() {
                 <h2 className={styles.sectionTitle}>전체 활동</h2>
                 <p className={styles.sectionSubtitle}>다양한 스터디와 프로젝트에 참여해보세요</p>
               </div>
-              <MainSection
-                title="진행중인 스터디"
-                subtitle="지금 활발히 진행되고 있는 스터디들입니다"
-                items={ongoingStudies}
-                viewAllLink="/search/study"
-                isLoading={isLoading}
-                emptyMessage="현재 진행중인 스터디가 없습니다"
-              />
 
               <MainSection
-                title="모집중인 스터디"
-                subtitle="새로운 멤버를 찾고 있는 스터디들입니다"
-                items={recruitingStudies}
-                viewAllLink="/search/study"
+                title="모집중인 프로젝트"
+                subtitle="새로운 팀원을 찾고 있는 프로젝트들입니다"
+                items={recruitingProjects}
+                viewAllLink="/search/project"
                 isLoading={isLoading}
-                emptyMessage="현재 모집중인 스터디가 없습니다"
+                emptyMessage="현재 모집중인 프로젝트가 없습니다"
               />
 
               <MainSection
@@ -285,12 +277,21 @@ export default function MainPage() {
               />
 
               <MainSection
-                title="모집중인 프로젝트"
-                subtitle="새로운 팀원을 찾고 있는 프로젝트들입니다"
-                items={recruitingProjects}
-                viewAllLink="/search/project"
+                title="모집중인 스터디"
+                subtitle="새로운 멤버를 찾고 있는 스터디들입니다"
+                items={recruitingStudies}
+                viewAllLink="/search/study"
                 isLoading={isLoading}
-                emptyMessage="현재 모집중인 프로젝트가 없습니다"
+                emptyMessage="현재 모집중인 스터디가 없습니다"
+              />
+
+              <MainSection
+                title="진행중인 스터디"
+                subtitle="지금 활발히 진행되고 있는 스터디들입니다"
+                items={ongoingStudies}
+                viewAllLink="/search/study"
+                isLoading={isLoading}
+                emptyMessage="현재 진행중인 스터디가 없습니다"
               />
             </div>
           </div>
