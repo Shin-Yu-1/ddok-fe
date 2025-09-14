@@ -88,24 +88,3 @@
     padding-top: 16px;
   }
 }
-
-.withdrawButton {
-  font-size: v.$fs-xsmall;
-  font-weight: v.$fw-bold;
-  color: v.$red-1;
-  background: none;
-  transition: color 0.2s ease;
-
-  @include m.mobile {
-    @include m.font-small-text;
-
-    font-weight: v.$fw-bold;
-  }
-}
-
-.withdrawMainButton {
-  font-size: v.$fs-xxsmall;
-  font-weight: v.$fw-bold;
-  color: v.$black-4;
-  background-color: v.$gray-4;
-}

@@ -4,7 +4,6 @@ import { ArrowBendUpLeftIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 
 import { getErrorMessage } from '@/api/auth';
-import Button from '@/components/Button/Button';
 import EditNicknameModal from '@/features/Profile/components/edit/modals/EditNicknameModal';
 import EditPasswordModal from '@/features/Profile/components/edit/modals/EditPasswordModal';
 import EditPhoneModal from '@/features/Profile/components/edit/modals/EditPhoneModal';
@@ -16,7 +15,7 @@ import { DDtoast } from '@/features/toast';
 
 import styles from './EditMyInfoPage.module.scss';
 
-type PendingActionType = 'phone' | 'password' | 'withdraw' | null;
+type PendingActionType = 'phone' | 'password' | null;
 
 const EditMyInfoPage = () => {
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ const EditMyInfoPage = () => {
     updatePhoneNumber,
     updatePassword,
     verifyPassword,
-    withdrawUser,
   } = useEditMyInfo();
 
   // 모달 상태
@@ -98,9 +96,6 @@ const EditMyInfoPage = () => {
         setShowPhoneModal(true);
       } else if (pendingAction === 'password') {
         setShowPasswordModal(true);
-      } else if (pendingAction === 'withdraw') {
-        // 탈퇴 진행
-        await handleWithdrawConfirm();
       }
 
       setPendingAction(null);
@@ -164,42 +159,6 @@ const EditMyInfoPage = () => {
     }
   };
 
-  const handleWithdraw = async () => {
-    // 소셜 로그인이 아닌 경우 비밀번호 확인 필요
-    if (!userInfo?.isSocial) {
-      setPendingAction('withdraw');
-      setShowPasswordConfirmModal(true);
-      return;
-    }
-
-    // 소셜 로그인인 경우 바로 탈퇴 진행
-    const confirmed = window.confirm('정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.');
-    if (confirmed) {
-      await handleWithdrawConfirm();
-    }
-  };
-
-  const handleWithdrawConfirm = async () => {
-    try {
-      await withdrawUser();
-      DDtoast({
-        mode: 'custom',
-        type: 'success',
-        userMessage: '회원 탈퇴가 완료되었습니다.',
-      });
-      // 탈퇴 성공 시 로그인 페이지로 이동
-      navigate('/auth/signin');
-    } catch (error) {
-      console.error('회원 탈퇴 실패:', error);
-      const errorMessage = getErrorMessage(error);
-      DDtoast({
-        mode: 'custom',
-        type: 'error',
-        userMessage: errorMessage,
-      });
-    }
-  };
-
   // 사용자 정보가 없는 경우 로딩
   if (!userInfo) {
     return (
@@ -228,9 +187,6 @@ const EditMyInfoPage = () => {
 
   // 비밀번호 확인 모달 제목 생성
   const getPasswordModalSubtitle = (): string => {
-    if (pendingAction === 'withdraw') {
-      return '회원 탈퇴를 위해 현재 비밀번호를 입력해주세요.';
-    }
     if (pendingAction === 'phone') {
       return '전화번호 변경을 위해 현재 비밀번호를 입력해주세요.';
     }
@@ -271,22 +227,6 @@ const EditMyInfoPage = () => {
           onPhoneEdit={handlePhoneEdit}
           onPasswordEdit={handlePasswordEdit}
         />
-
-        {/* 하단 버튼 */}
-        <div className={styles.bottomSection}>
-          <label className={styles.withdrawButton}>탈퇴하기</label>
-
-          <Button
-            variant="danger"
-            onClick={handleWithdraw}
-            disabled={isLoading}
-            className={styles.withdrawMainButton}
-            height="40px"
-            radius="xsm"
-          >
-            탈퇴하기
-          </Button>
-        </div>
       </div>
 
       {/* 닉네임 편집 모달 */}
