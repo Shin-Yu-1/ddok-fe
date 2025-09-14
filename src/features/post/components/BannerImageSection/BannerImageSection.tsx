@@ -138,7 +138,6 @@ const BannerImageSection = ({
       >
         {!hasValidImage && (
           <div className={styles.placeholder}>
-            <div className={styles.placeholderIcon}>🖼️</div>
             <div className={styles.placeholderText}>
               {imageLoadError ? '이미지를 불러올 수 없습니다' : '배너 이미지가 없습니다'}
             </div>
