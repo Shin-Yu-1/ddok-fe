@@ -3,10 +3,12 @@ import { useState } from 'react';
 import {
   PlusIcon,
   UsersIcon,
-  CodeIcon,
   BookOpenIcon,
   MapPinIcon,
   UserCheckIcon,
+  ShoppingBagOpenIcon,
+  PackageIcon,
+  BookBookmarkIcon,
   HandTapIcon,
   TrophyIcon,
   PlayIcon,
@@ -72,7 +74,7 @@ export default function MainPage() {
             {isLoggedIn ? (
               <>
                 <Link to="/create/project" className={styles.primaryButton}>
-                  <CodeIcon size={20} weight="bold" />
+                  <PackageIcon size={20} weight="bold" />
                   <span>새로운 프로젝트 만들기</span>
                 </Link>
                 <Link to="/create/study" className={styles.primaryButton}>
@@ -103,21 +105,21 @@ export default function MainPage() {
         <div className={styles.statsCards}>
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <BookOpenIcon size={24} weight="bold" />
+              <ShoppingBagOpenIcon size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>{data.stats.recruitingStudiesCount}</div>
-              <div className={styles.statsLabel}>모집중인 스터디</div>
+              <div className={styles.statsNumber}>{data.stats.recruitingProjectsCount}</div>
+              <div className={styles.statsLabel}>모집중인 프로젝트</div>
             </div>
           </div>
 
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <CodeIcon size={24} weight="bold" />
+              <BookBookmarkIcon size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>{data.stats.recruitingProjectsCount}</div>
-              <div className={styles.statsLabel}>모집중인 프로젝트</div>
+              <div className={styles.statsNumber}>{data.stats.recruitingStudiesCount}</div>
+              <div className={styles.statsLabel}>모집중인 스터디</div>
             </div>
           </div>
 
@@ -235,7 +237,7 @@ export default function MainPage() {
                   <p className={styles.emptyMessage}>새로운 활동을 시작해보세요!</p>
                   <div className={styles.emptyActions}>
                     <Link to="/create/project" className={styles.primaryButton}>
-                      <CodeIcon size={16} weight="bold" />
+                      <PackageIcon size={16} weight="bold" />
                       <span>프로젝트 만들기</span>
                     </Link>
                     <Link to="/create/study" className={styles.primaryButton}>
