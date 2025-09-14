@@ -31,6 +31,7 @@ const DetailProjectPage = () => {
     isLoading,
     error,
     handleEditProject,
+    handleTeamManagement,
     handleCancelApplication,
     handleApplyPosition,
   } = useProjectDetail({ projectId: projectIdNum });
@@ -122,9 +123,17 @@ const DetailProjectPage = () => {
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
             <div className={styles.actionsLine}>
+              {/* 모집글 작성자인 경우 - 프로젝트 수정하기 버튼 */}
               {projectData.isMine && projectData.teamStatus !== 'CLOSED' && (
                 <Button variant="secondary" radius="xsm" onClick={handleEditProject}>
                   프로젝트 수정하기
+                </Button>
+              )}
+
+              {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
+              {projectData.isTeamMember && (
+                <Button variant="primary" radius="xsm" onClick={handleTeamManagement}>
+                  팀 관리 페이지로 이동하기
                 </Button>
               )}
             </div>
