@@ -126,9 +126,7 @@ export default function MainPage() {
               <UsersIcon size={24} weight="bold" />
             </div>
             <div className={styles.statsContent}>
-              <div className={styles.statsNumber}>
-                {data.stats.ongoingStudiesCount + data.stats.ongoingProjectsCount}
-              </div>
+              <div className={styles.statsNumber}>{data.stats.ongoingTeamsCount}</div>
               <div className={styles.statsLabel}>진행중인 전체 팀</div>
             </div>
           </div>
