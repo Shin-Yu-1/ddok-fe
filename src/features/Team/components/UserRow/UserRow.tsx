@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 
-import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
+import { ChatCircleIcon, DotsThreeVerticalIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -225,6 +225,7 @@ const User = ({ user }: UserProps) => {
                 <Button width="12" padding="0" onClick={handleDropdownToggle}>
                   <DotsThreeVerticalIcon size={20} />
                 </Button>
+
                 {isDropdownOpen && (
                   <div className={styles.dropdown}>
                     <button
@@ -236,7 +237,14 @@ const User = ({ user }: UserProps) => {
                         cursor: isDmButtonDisabled ? 'not-allowed' : 'pointer',
                       }}
                     >
-                      {dmButtonText}
+                      <div className={styles.iconWrapper}>
+                        {dmButtonText === 'DM 보내기' ? (
+                          <ChatCircleIcon size={16} />
+                        ) : (
+                          <PaperPlaneTiltIcon size={16} />
+                        )}
+                      </div>
+                      <span>{dmButtonText}</span>
                     </button>
                   </div>
                 )}
@@ -245,6 +253,7 @@ const User = ({ user }: UserProps) => {
           </div>
         </div>
       </div>
+
       {showTooltip &&
         createPortal(
           <div
