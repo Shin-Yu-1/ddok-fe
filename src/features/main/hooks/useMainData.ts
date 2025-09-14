@@ -149,55 +149,21 @@ const fetchOngoingProjects = async (size: number): Promise<CardItem[]> => {
   return (data.data.items || []).map(transformProjectToCard);
 };
 
-// 최근 스터디 조회 (전체 상태)
-const fetchRecentStudies = async (size: number): Promise<CardItem[]> => {
-  const { data } = await api.get<StudyListResponse>('/api/studies/search', {
-    params: {
-      page: 0,
-      size,
-    },
-  });
-
-  return (data.data.items || []).map(transformStudyToCard);
-};
-
-// 최근 프로젝트 조회 (전체 상태)
-const fetchRecentProjects = async (size: number): Promise<CardItem[]> => {
-  const { data } = await api.get<ProjectListResponse>('/api/projects/search', {
-    params: {
-      page: 0,
-      size,
-    },
-  });
-
-  return (data.data.items || []).map(transformProjectToCard);
-};
-
 // 표시용 데이터 조회
 const fetchDisplayData = async (displayLimit: number) => {
-  const [
-    recruitingStudies,
-    ongoingStudies,
-    recruitingProjects,
-    ongoingProjects,
-    recentStudies,
-    recentProjects,
-  ] = await Promise.all([
-    fetchRecruitingStudies(displayLimit),
-    fetchOngoingStudies(displayLimit),
-    fetchRecruitingProjects(displayLimit),
-    fetchOngoingProjects(displayLimit),
-    fetchRecentStudies(displayLimit),
-    fetchRecentProjects(displayLimit),
-  ]);
+  const [recruitingStudies, ongoingStudies, recruitingProjects, ongoingProjects] =
+    await Promise.all([
+      fetchRecruitingStudies(displayLimit),
+      fetchOngoingStudies(displayLimit),
+      fetchRecruitingProjects(displayLimit),
+      fetchOngoingProjects(displayLimit),
+    ]);
 
   return {
     recruitingStudies,
     ongoingStudies,
     recruitingProjects,
     ongoingProjects,
-    recentStudies,
-    recentProjects,
   };
 };
 
@@ -313,14 +279,12 @@ export const useMainData = () => {
 
   // 메인 페이지 데이터 구성
   const mainPageData: MainPageData = {
-    // 표시용 데이터
-    recentStudies: displayData?.recentStudies || [],
-    recentProjects: displayData?.recentProjects || [],
+    // 실제 사용되는 표시용 데이터만
     ongoingStudies: displayData?.ongoingStudies || [],
     recruitingStudies: displayData?.recruitingStudies || [],
     ongoingProjects: displayData?.ongoingProjects || [],
     recruitingProjects: displayData?.recruitingProjects || [],
-    // 통계 데이터 (API에서 받아온 값 사용)
+    // 통계 데이터
     stats: statsData || {
       recruitingStudiesCount: 0,
       recruitingProjectsCount: 0,

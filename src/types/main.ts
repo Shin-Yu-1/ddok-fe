@@ -189,8 +189,6 @@ export interface StatsData {
 
 // 메인 페이지 섹션별 데이터
 export interface MainPageData {
-  recentStudies: CardItem[];
-  recentProjects: CardItem[];
   ongoingStudies: CardItem[];
   recruitingStudies: CardItem[];
   ongoingProjects: CardItem[];
