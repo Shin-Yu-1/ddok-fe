@@ -63,6 +63,13 @@
     gap: 3px;
     margin-bottom: 8px;
 
+    &__badgeContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
     &__badges {
       display: flex;
       flex-direction: row;

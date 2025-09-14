@@ -174,6 +174,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
             <div className={styles.overlay__info__core__badges}>
               {player.mainBadge && (
                 <div
+                  className={styles.overlay__info__core__badgeContainer}
                   onMouseEnter={e =>
                     handleBadgeMouseEnter(e, 'main', {
                       type: player.mainBadge?.type as BadgeType,
@@ -181,7 +182,6 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                     })
                   }
                   onMouseLeave={handleBadgeMouseLeave}
-                  style={{ display: 'inline-block' }}
                 >
                   <Badge
                     className={styles.badge}
@@ -195,6 +195,7 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
               )}
               {player.abandonBadge && (
                 <div
+                  className={styles.overlay__info__core__badgeContainer}
                   onMouseEnter={e =>
                     handleBadgeMouseEnter(e, 'abandon', {
                       count: player.abandonBadge?.count,
@@ -202,7 +203,6 @@ const MapPlayerOverlay: React.FC<PlayerOverlayProps> = ({ id, onOverlayClose }) 
                     })
                   }
                   onMouseLeave={handleBadgeMouseLeave}
-                  style={{ display: 'inline-block' }}
                 >
                   <Badge
                     className={styles.badge}
