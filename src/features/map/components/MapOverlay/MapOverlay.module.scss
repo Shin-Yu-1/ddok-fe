@@ -1,0 +1,184 @@
+@use '@/styles/variables' as *;
+
+.overlay__container {
+  width: 246px;
+  height: fit-content;
+  border-radius: $r-small;
+  overflow: hidden;
+  color: $black-4;
+  background-color: $white-3;
+}
+
+.teamStatus {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: fit-content;
+  height: fit-content;
+  padding: 3px 7px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+
+  &__recruiting {
+    font-weight: $fw-bold;
+    color: $white-3;
+    background-color: $green-1;
+  }
+
+  &__ongoing {
+    background-color: $white-3;
+  }
+}
+
+.overlay__img {
+  width: 100%;
+  height: 125px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 125px;
+  text-align: center;
+  color: $white-1;
+  background-color: $blue-1;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.overlay__content {
+  width: 100%;
+}
+
+.overlay__info {
+  padding: 12px 16px;
+  color: $black-4;
+
+  &__core {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 8px;
+
+    &__badgeContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    &__badges {
+      display: flex;
+      flex-direction: row;
+    }
+
+    &__temperature {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: $fs-xxxsmall;
+    }
+
+    &__action {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    &__category {
+      width: fit-content;
+      padding: 4px 10px;
+      border-radius: $r-xxsmall;
+      font-size: 10px;
+      background-color: $gray-4;
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__title {
+      overflow: hidden;
+      font-size: $fs-xsmall;
+      font-weight: $fw-medium;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__address {
+      font-size: 9px;
+      font-weight: $fw-regular;
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: $black-3;
+
+    &__item {
+      display: flex;
+      flex-direction: row;
+      font-size: $fs-xxxsmall;
+
+      &__label {
+        flex: 0 0 50%;
+        font-weight: $fw-bold;
+      }
+
+      &__value {
+        flex: 1 1 50%;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.overlay__info__summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 12px;
+  line-height: 12px;
+
+  &__rating {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    font-size: $fs-xxxsmall;
+    font-weight: $fw-bold;
+    color: $black-1;
+
+    &__stars {
+      svg {
+        width: 12px;
+        height: 12px;
+        fill: $yellow-1;
+      }
+    }
+  }
+
+  &__reviewCount {
+    font-size: 9px;
+    font-weight: $fw-regular;
+    color: $gray-1;
+  }
+}
+
+.overlay__closeBtn {
+  height: 30px;
+  font-size: 10px;
+  line-height: 30px;
+  text-align: center;
+  background-color: $white-1;
+  cursor: pointer;
+}

@@ -1,0 +1,83 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+// TODO: 향후 본 클래스는 지우고 코드 작성 필요
+.container {
+  width: 1051px;
+
+  .titleWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 54px;
+
+    .title {
+      font-size: $fs-xxlarge;
+      font-weight: $fw-bold;
+    }
+  }
+
+  .searchWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+    margin-top: 58px;
+    margin-bottom: 18px;
+
+    .inputWrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .filterOptionsWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .optionsGroup {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+      }
+    }
+  }
+
+  .cardListWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 39px;
+    box-sizing: border-box;
+    padding: 20px 0%;
+    flex-flow: row wrap;
+
+    .warning {
+      width: 100%;
+      margin-left: 5px;
+      font-size: $fs-xsmall;
+      line-height: $fs-xsmall;
+      text-align: center;
+      color: $black-4;
+    }
+  }
+
+  .datePicker {
+    box-sizing: border-box;
+    width: 129px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid $gray-2;
+    border-radius: $r-xxsmall;
+    font-family: $font-family-primary;
+    font-size: $fs-xsmall;
+    text-align: center;
+    color: $black-1;
+    background: $white-3;
+  }
+}

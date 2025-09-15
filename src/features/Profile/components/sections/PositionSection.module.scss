@@ -1,0 +1,138 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.positionSection {
+  position: relative;
+  padding: 20px;
+  border: 0.7px solid v.$gray-3;
+  border-radius: v.$r-small;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    padding: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  @include m.font-small-title;
+
+  margin: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-description;
+  }
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.positionRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  @include m.mobile {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.positionLabel {
+  @include m.font-text;
+
+  flex-shrink: 0;
+  min-width: 120px;
+  font-weight: v.$fw-semibold;
+  color: v.$gray-1;
+
+  @include m.mobile {
+    min-width: auto;
+
+    @include m.font-text;
+  }
+}
+
+.positionValue {
+  flex: 1;
+}
+
+.mainPositionTag {
+  @include m.font-text;
+
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: v.$r-small;
+  font-weight: v.$fw-bold;
+  color: v.$white-3;
+  background-color: v.$yellow-1;
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 2px 10px;
+  }
+}
+
+.subPositionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.subPositionTag {
+  @include m.font-text;
+
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-small;
+  font-weight: v.$fw-bold;
+  color: v.$black-4;
+  background-color: v.$white-2;
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 2px 10px;
+  }
+}

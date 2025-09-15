@@ -1,0 +1,229 @@
+.cardLink {
+  display: block;
+  min-width: 250px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+
+    .card {
+      box-shadow: 0 8px 25px rgb(0 0 0 / 15%);
+    }
+
+    .actionHint {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  transition: box-shadow 0.2s ease;
+}
+
+.bannerContainer {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.bannerImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+  object-fit: cover;
+
+  .cardLink:hover & {
+    transform: scale(1.05);
+  }
+}
+
+.statusBadgeContainer {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  color: white;
+
+  &.recruiting {
+    background-color: #22c55e;
+  }
+
+  &.ongoing {
+    background-color: #3b82f6;
+  }
+
+  &.closed {
+    background-color: #6b7280;
+  }
+}
+
+.cardContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+
+  // 배너가 없을 때 상단 패딩 추가
+  &.noBanner {
+    padding-top: 20px;
+  }
+}
+
+// 배너가 없을 때 제목과 배지를 함께 배치
+.headerWithBadge {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.title {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  color: #1f2937;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 3px;
+  background: #6b7280;
+  transition: width 0.5s ease;
+}
+
+.progressInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progressText {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.remainingText {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 500;
+  color: #6b7280;
+  background-color: #f3f4f6;
+
+  &.modeTag {
+    color: #2563eb;
+    background-color: #dbeafe;
+  }
+}
+
+.infoLines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.infoLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+}
+
+.infoLabel {
+  min-width: 40px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.infoValue {
+  max-width: 60%;
+  overflow: hidden;
+  font-weight: 600;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #374151;
+}
+
+.actionHint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+
+  span {
+    font-size: 10px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+
+  .arrow {
+    font-size: 10px;
+    font-weight: 600;
+    color: #6b7280;
+    transition: transform 0.3s ease;
+  }
+}

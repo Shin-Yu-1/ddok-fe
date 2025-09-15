@@ -1,0 +1,90 @@
+@use '@/styles/variables' as *;
+
+.panel__list__item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: $r-xsmall;
+  color: $black-4;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $white-2;
+  }
+
+  &__user {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  &__img {
+    width: 40px;
+    height: 40px;
+    border-radius: $r-large;
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    font-size: $fs-xxsmall;
+  }
+
+  &__category {
+    width: fit-content;
+    padding: 3px 10px;
+    border-radius: $r-xxsmall;
+    font-size: $fs-xxxsmall;
+    background-color: $gray-4;
+  }
+
+  &__status {
+    position: relative;
+    right: 0;
+    flex-shrink: 0;
+    width: fit-content;
+    height: fit-content;
+    padding: 3px 7px;
+    border-radius: $r-xxsmall;
+    font-size: $fs-xxxsmall;
+    white-space: nowrap;
+
+    &__recruiting {
+      font-weight: $fw-bold;
+      color: $white-3;
+      background-color: $green-1;
+    }
+
+    &__ongoing {
+      border: 1px solid $gray-1;
+      background-color: $white-3;
+    }
+  }
+
+  &__temperature {
+    position: relative;
+    right: 0;
+    display: flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: $r-xxsmall;
+    font-size: $fs-xxxsmall;
+  }
+}

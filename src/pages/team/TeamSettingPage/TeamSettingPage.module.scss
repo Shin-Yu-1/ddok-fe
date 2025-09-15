@@ -1,0 +1,127 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 1000px;
+  margin: auto;
+  padding: 55px 103px;
+  color: $black-4;
+  background-color: $white-2;
+}
+
+.title {
+  @include m.font-title;
+}
+
+.subtitle {
+  margin-left: 13px;
+
+  @include m.font-description;
+}
+
+.label {
+  @include m.font-description;
+
+  font-weight: $fw-semibold;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// .wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 20px;
+//   width: calc(100% - 160px);
+//   margin: 30px 0 0;
+//   padding: 50px 80px;
+//   border: 1px solid $gray-3;
+//   border-radius: $r-xsmall;
+//   background-color: $white-3;
+// }
+
+.MainSectionMargin {
+  margin: 30px 0 0;
+  padding-bottom: 30px;
+}
+
+.membersGrid {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 120px 1fr 130px;
+  gap: 20px;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  font-weight: $fw-semibold;
+  line-height: 40px;
+}
+
+.teamStatus {
+  width: fit-content;
+  height: fit-content;
+  padding: 5px 10px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  color: $white-1;
+
+  &.recruiting {
+    background-color: $green-1;
+  }
+
+  &.ongoing {
+    background-color: $blue-1;
+  }
+
+  &.closed {
+    border: 1px solid $gray-2;
+    color: $black-4;
+    background-color: $white-3;
+  }
+}
+
+.gridLabel {
+  margin: auto;
+  font-weight: $fw-bold;
+  text-align: center;
+}
+
+.error {
+  padding: 40px 0;
+  text-align: center;
+  color: $red-1;
+}
+
+.loading {
+  padding: 40px 0;
+  text-align: center;
+  color: $gray-3;
+}
+
+.backButton {
+  display: flex;
+  gap: 5px;
+  width: fit-content;
+  color: $black-4;
+  cursor: pointer;
+}

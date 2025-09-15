@@ -1,0 +1,82 @@
+@use '@/styles/variables' as *;
+
+.container {
+  margin-bottom: 32px;
+  border-radius: $r-small;
+  background-color: $white-3;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+}
+
+.sectionTitle {
+  margin: 0;
+  padding: 16px 20px;
+  border-bottom: none;
+  font-size: $fs-medium;
+  font-weight: $fw-bold;
+  color: $black-3;
+  background-color: $gray-3;
+  border-top-left-radius: $r-small;
+  border-top-right-radius: $r-small;
+}
+
+// 테이블 스타일
+.rankingTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.rankingRow {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $gray-4;
+  transition: background-color 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: $white-2;
+  }
+}
+
+.regionCell {
+  display: flex;
+
+  // border-right: 1px solid $gray-4;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  min-height: 70px;
+
+  // background-color: $white-3;
+}
+
+.regionLabel {
+  min-width: 40px;
+  padding: 8px 12px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-bold;
+  text-align: center;
+  color: $white-3;
+  background-color: $blue-1;
+}
+
+.profileCell {
+  flex: 1;
+  padding: 12px 16px;
+}
+
+.noData {
+  padding: 40px 20px;
+  font-size: $fs-small;
+  text-align: center;
+  color: $gray-1;
+  background-color: $white-3;
+}
+
+.profileBar {
+  border-radius: $r-small;
+}

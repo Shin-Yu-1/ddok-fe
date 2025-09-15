@@ -1,0 +1,24 @@
+@use '@/styles/variables' as *;
+
+.optionGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .positionButton {
+    &.selected {
+      border-color: #{$yellow-1} !important;
+      font-weight: #{$fw-bold} !important;
+      color: #{$white-3} !important;
+      background-color: #{$yellow-1} !important;
+    }
+
+    &:not(.selected):hover:not(:disabled) {
+      border-color: #{$yellow-1} !important;
+      font-weight: #{$fw-bold} !important;
+      color: #{$white-3} !important;
+      background-color: #{$yellow-1} !important;
+    }
+  }
+}

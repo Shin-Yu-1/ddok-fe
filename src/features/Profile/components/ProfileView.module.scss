@@ -1,0 +1,332 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.profileView {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+
+  @include m.mobile {
+    max-width: 100%;
+  }
+
+  &.loading {
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+  }
+}
+
+.loadingMessage {
+  @include m.font-description;
+
+  text-align: center;
+  color: v.$gray-1;
+}
+
+.userInfoWrapper {
+  width: 100%;
+}
+
+.twoColumnLayout {
+  display: grid;
+  grid-template-columns: 737px 404px;
+  gap: 38px;
+  width: 100%;
+  max-width: 1179px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  @include m.mobile {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  padding: 40px 0;
+
+  @include m.mobile {
+    gap: 24px;
+    padding: 24px 0;
+  }
+}
+
+.rightColumn {
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  gap: 20px;
+  width: 100%;
+  padding: 40px 0;
+
+  @include m.mobile {
+    position: static;
+    gap: 24px;
+    padding: 24px 0;
+    border-left: none;
+  }
+}
+
+.ToggleSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 1179px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 40px 20px 0;
+
+  @include m.mobile {
+    padding: 40px 20px;
+  }
+}
+
+.profileToggle {
+  display: flex;
+  justify-content: flex-end;
+  width: 404px;
+}
+
+.toggleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+
+  @include m.mobile {
+    align-items: flex-start;
+  }
+}
+
+.toggleLabel {
+  @include m.font-text;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: v.$black-4;
+  cursor: pointer;
+
+  @include m.mobile {
+    flex-direction: row;
+    gap: 10px;
+  }
+}
+
+.toggleText {
+  @include m.font-sub-description;
+
+  text-align: center;
+  white-space: nowrap;
+
+  @include m.mobile {
+    @include m.font-text;
+  }
+}
+
+.toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 32px;
+  border-radius: 16px;
+  background-color: v.$gray-2;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+
+  &.on {
+    background-color: v.$blue-1;
+  }
+
+  &.loading {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
+    background-color: v.$white-3;
+    transition: transform 0.3s ease;
+  }
+
+  &.on::before {
+    transform: translateX(38px);
+  }
+
+  @include m.mobile {
+    width: 60px;
+    height: 28px;
+    border-radius: 14px;
+
+    &::before {
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+    }
+
+    &.on::before {
+      transform: translateX(32px);
+    }
+  }
+}
+
+.toggleStatus {
+  @include m.font-small-text;
+
+  position: absolute;
+
+  // OFF 상태일 때 오른쪽에 표시
+  right: 12px;
+  z-index: 1;
+  font-size: 11px;
+  font-weight: v.$fw-bold;
+  color: v.$white-3;
+  transition: all 0.3s ease;
+
+  // ON 상태일 때 왼쪽에 표시
+  .toggle.on & {
+    right: auto;
+    left: 12px;
+  }
+
+  @include m.mobile {
+    right: 10px;
+    font-size: 10px;
+
+    .toggle.on & {
+      left: 10px;
+    }
+  }
+}
+
+.chatButton {
+  @include m.font-small-text;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 5.5px 16px;
+  border: 1px solid v.$black-3;
+  border-radius: v.$r-xsmall;
+  font-weight: v.$fw-bold;
+  white-space: nowrap;
+  color: v.$white-3;
+  background-color: v.$black-3;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: v.$black-4;
+  }
+
+  &:active:not(:disabled) {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  &:disabled,
+  &.pending {
+    border-color: v.$gray-2;
+    color: v.$white-3;
+    background-color: v.$gray-2;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @include m.mobile {
+    @include m.font-text;
+
+    padding: 8px 12px;
+  }
+}
+
+.privateProfileContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px 0;
+
+  @include m.mobile {
+    padding: 40px 0;
+  }
+}
+
+.privateProfileMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 500px;
+  padding: 40px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-xsmall;
+  text-align: center;
+  background-color: v.$white-3;
+
+  h3 {
+    @include m.font-small-title;
+
+    margin: 0;
+    color: v.$black-1;
+
+    @include m.mobile {
+      @include m.font-description;
+    }
+  }
+
+  p {
+    @include m.font-text;
+
+    margin: 0;
+    line-height: 1.6;
+    color: v.$gray-1;
+
+    @include m.mobile {
+      @include m.font-small-text;
+    }
+  }
+
+  @include m.mobile {
+    gap: 12px;
+    padding: 30px 20px;
+  }
+}
+
+// 에러 메시지 스타일
+.errorMessage {
+  @include m.font-tiny-text;
+
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: v.$r-xxsmall;
+  text-align: center;
+  color: v.$red-1;
+  background-color: rgb(239 68 68 / 10%);
+
+  @include m.mobile {
+    margin-top: 6px;
+    padding: 3px 6px;
+  }
+}

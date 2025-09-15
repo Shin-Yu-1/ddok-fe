@@ -1,0 +1,128 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.portfolioSection {
+  position: relative;
+  padding: 20px;
+  border: 0.7px solid v.$gray-3;
+  border-radius: v.$r-small;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    padding: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  @include m.font-small-title;
+
+  margin: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-description;
+  }
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.portfolioList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.portfolioItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid v.$gray-4;
+  border-radius: v.$r-xsmall;
+  background-color: v.$white-2;
+
+  @include m.mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+  }
+}
+
+.portfolioInfo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+
+  @include m.mobile {
+    width: 100%;
+  }
+}
+
+.portfolioTitle {
+  @include m.font-small-text;
+
+  font-weight: v.$fw-bold;
+  color: v.$black-3;
+
+  @include m.mobile {
+    @include m.font-tiny-text;
+  }
+}
+
+.portfolioLink {
+  @include m.font-small-text;
+
+  text-decoration: none;
+  word-break: break-all;
+  color: v.$blue-1;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: v.$blue-1;
+  }
+
+  @include m.mobile {
+    @include m.font-tiny-text;
+  }
+}

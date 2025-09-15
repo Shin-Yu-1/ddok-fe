@@ -1,0 +1,50 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+$full-width: 830px;
+
+.container {
+  display: grid;
+  width: 100%;
+  user-select: none;
+  place-items: center;
+
+  &.default {
+    height: 100%;
+  }
+
+  // keyword 없을 때
+  .searchWrapper {
+    width: fit-content;
+    height: fit-content;
+
+    .infoWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 20px;
+      margin-top: 10px;
+      font-size: $fs-xxxsmall;
+      color: $gray-1;
+    }
+  }
+
+  // keyword 있을 때
+  .keywordWrapper {
+    box-sizing: border-box;
+    padding: 30px 0%;
+  }
+
+  .playerListWrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 230px);
+    gap: 20px 73px;
+    width: $full-width;
+    place-items: center center;
+  }
+
+  .emptyItemWrapper {
+    width: $full-width;
+    text-align: center;
+  }
+}

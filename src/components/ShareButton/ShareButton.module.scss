@@ -1,0 +1,87 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.shareContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1001;
+  min-width: 140px;
+  padding: 8px;
+  border: 1px solid $gray-3;
+  border-radius: $r-small;
+  background-color: $white-3;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 10%),
+    0 2px 4px -1px rgb(0 0 0 / 6%);
+  animation: fade-in-down 0.15s ease-out;
+
+  @keyframes fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.shareOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  text-align: left;
+  color: $gray-1;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray-4;
+  }
+
+  &:active {
+    background-color: $gray-3;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 4px;
+  }
+}
+
+.shareOptionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.kakaoIcon {
+  border-radius: 2px;
+  object-fit: contain;
+}

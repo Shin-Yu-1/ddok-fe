@@ -1,0 +1,165 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.overlay {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 50%);
+  inset: 0;
+}
+
+.modal {
+  width: 650px;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow-y: auto;
+  background-color: $white-3;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
+}
+
+.header {
+  padding: 20px 30px;
+  border-radius: 10px 10px 0 0;
+  background-color: $white-3;
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: $fs-small;
+  font-weight: $fw-bold;
+  color: $black-1;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.closeIcon {
+  font-size: 18px;
+  line-height: 1;
+  color: $black-1;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: $fs-xxxsmall;
+  color: $black-1;
+}
+
+.content {
+  padding: 7px 30px 25px;
+}
+
+.evaluationList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 590px;
+}
+
+.evaluationItem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  height: 16px;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  line-height: 1.61;
+  color: $black-4;
+}
+
+.scoreSelector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 31px;
+  padding: 0;
+  border-radius: 5px;
+  background-color: $gray-4;
+}
+
+.scoreButton {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: none;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-semibold;
+  color: $black-4;
+  background: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    right: 0;
+    bottom: 1px;
+    width: 1px;
+    background-color: $white-3;
+  }
+
+  &:hover {
+    background-color: rgb(43 43 43 / 10%);
+  }
+
+  &.selected {
+    color: $white-3;
+    background-color: $blue-1;
+  }
+
+  &:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+
+  &:last-child {
+    border-radius: 0 5px 5px 0;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 30px 20px;
+  border-radius: 0 0 10px 10px;
+  background-color: $white-3;
+}
+
+.submitButton {
+  width: 540px !important;
+}

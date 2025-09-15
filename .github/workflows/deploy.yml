@@ -1,0 +1,63 @@
+name: Deploy React Vite App to S3 + CloudFront
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  deploy:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.head_ref == 'develop' &&
+      contains(github.event.pull_request.title, '[deploy]')
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 저장소 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Node.js + pnpm 설치
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1   # packageManager에 맞춘 pnpm 버전
+
+      # 3. 의존성 설치 & 빌드
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm build
+        env:
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          VITE_KAKAO_API_KEY: ${{ secrets.VITE_KAKAO_API_KEY }}
+
+      # 4. AWS CLI 인증
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 5. 빌드 결과물을 S3에 업로드
+      - name: Sync files to S3
+        run: |
+          aws s3 sync ./dist s3://${{ secrets.AWS_S3_BUCKET }} \
+            --delete \
+            --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+      # 6. CloudFront 캐시 무효화
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} \
+            --paths "/*"

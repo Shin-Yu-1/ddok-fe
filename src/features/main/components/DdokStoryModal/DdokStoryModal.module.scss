@@ -1,0 +1,102 @@
+@use '@/styles/variables' as *;
+
+.modalOverlay {
+  position: fixed;
+  z-index: 1000;
+
+  // 스크롤이 생겨도 중앙 정렬 유지
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 20px;
+
+  // 스크롤 가능한 컨테이너로 설정
+  overflow-y: auto;
+  background: rgb(0 0 0 / 70%);
+  inset: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+
+  // 유연한 높이 설정
+  max-height: calc(100vh - 40px);
+  min-height: 200px;
+
+  // 마진으로 최소 공간 확보
+  margin: 20px 0;
+  border-radius: $r-medium;
+  overflow: hidden;
+  background: $white-3;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 30%);
+}
+
+.modalHeader {
+  display: flex;
+
+  // 헤더 고정
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 1px solid $gray-4;
+  background: $yellow-1;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: $fs-medium;
+  font-weight: $fw-bold;
+  color: $black-1;
+}
+
+.modalCloseButton {
+  padding: 8px;
+  border: none;
+  border-radius: $r-xxsmall;
+  color: $black-1;
+  background: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(0 0 0 / 10%);
+  }
+}
+
+.modalBody {
+  // 남은 공간 모두 사용
+  flex: 1;
+
+  // 최소 높이 보장
+  min-height: 0;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.storyContent {
+  p {
+    margin: 0 0 16px;
+    font-size: $fs-xxsmall;
+    line-height: 1.7;
+    color: $black-2;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.storyHighlight {
+  padding: 16px;
+  border-radius: $r-xsmall;
+  font-weight: $fw-medium;
+  color: $black-1 !important;
+  background: linear-gradient(135deg, $yellow-1 0%, #f59e0b 100%);
+}

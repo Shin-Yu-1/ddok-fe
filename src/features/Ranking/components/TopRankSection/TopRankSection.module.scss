@@ -1,0 +1,61 @@
+@use '@/styles/variables' as *;
+
+.container {
+  width: 100%;
+  margin-bottom: 50px;
+  padding: 50px 0;
+  border-bottom: 1px solid $gray-4;
+  background: $gray-4;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 250px;
+  width: $ranking-base-width;
+  margin-right: auto;
+  margin-bottom: 20px;
+  margin-left: auto;
+}
+
+.title {
+  margin: 0;
+  font-size: $fs-xlarge;
+  font-weight: $fw-bold;
+  white-space: nowrap;
+  color: $black-3;
+
+  .highlight {
+    color: $yellow-1;
+  }
+}
+
+.updateTime {
+  margin-top: 10px;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-regular;
+  color: $gray-1;
+}
+
+.profileContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profileBar {
+  border: 2px solid $yellow-1;
+  border-radius: $r-small;
+  background-color: $white-3;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+}
+
+.noData {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-size: $fs-small;
+  text-align: center;
+  color: $gray-1;
+}

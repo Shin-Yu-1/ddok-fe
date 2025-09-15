@@ -1,0 +1,162 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.content {
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+
+  @include m.mobile {
+    max-height: 350px;
+  }
+}
+
+.portfolioList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  @include m.mobile {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+}
+
+.portfolioItem {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid v.$gray-2;
+  border-radius: v.$r-xsmall;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+
+  @include m.mobile {
+    width: 90%;
+  }
+}
+
+.titleText {
+  font-size: v.$fs-xsmall;
+  font-weight: v.$fw-semibold;
+}
+
+.removeButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: v.$r-xxsmall;
+  color: v.$red-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: v.$white-3;
+    background-color: v.$red-1;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @include m.mobile {
+    align-self: flex-end;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.errorMessage {
+  @include m.font-tiny-text;
+
+  position: absolute;
+  right: 44px;
+  bottom: 8px;
+  padding: 2px 6px;
+  border-radius: v.$r-xxsmall;
+  color: v.$red-1;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    position: static;
+    margin-top: 4px;
+  }
+}
+
+.addButton {
+  @include m.font-text;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 2px dashed v.$gray-3;
+  border-radius: v.$r-xsmall;
+  font-weight: v.$fw-medium;
+  color: v.$gray-1;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: v.$yellow-1;
+    color: v.$yellow-1;
+    background-color: rgb(251 191 36 / 5%);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    gap: 6px;
+    padding: 10px;
+  }
+}
+
+.limitMessage {
+  @include m.font-tiny-text;
+
+  margin-top: 8px;
+  text-align: center;
+  color: v.$gray-1;
+
+  @include m.mobile {
+    margin-top: 6px;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}

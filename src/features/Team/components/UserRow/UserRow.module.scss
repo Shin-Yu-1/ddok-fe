@@ -1,0 +1,127 @@
+@use '@/styles/variables' as *;
+
+.user {
+  margin: auto;
+  text-align: center;
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 500px;
+    height: 40px;
+    padding: 11px 15px;
+    border: 1px solid $gray-3;
+    border-radius: $r-small;
+    line-height: 40px;
+
+    &__left {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+
+      &__img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      &__nickname {
+        font-weight: $fw-bold;
+      }
+
+      &__badges {
+        display: flex;
+        align-items: center;
+        font-size: $fs-xxxsmall;
+      }
+
+      &__badgeContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+    }
+
+    &__right {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      margin-right: 10px;
+
+      &__position {
+        width: fit-content;
+        height: min-content;
+        margin: auto;
+        padding: 8px 14px;
+        border-radius: $r-medium;
+        font-size: $fs-xxsmall;
+        font-weight: $fw-semibold;
+        line-height: $fs-xxsmall;
+        color: $white-1;
+        background-color: $yellow-1;
+      }
+
+      &__temperature {
+        display: flex;
+        align-items: center;
+        font-size: $fs-xxsmall;
+      }
+    }
+  }
+}
+
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 100;
+  min-width: 150px;
+  margin-top: 4px;
+  border: 1px solid $gray-2;
+  border-radius: $r-small;
+  background-color: $white-3;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+.dropdownItem {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  padding: 0 12px;
+  border: none;
+  font-size: $fs-xxsmall;
+  text-align: left;
+  color: $black-4;
+  background: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray-4;
+  }
+
+  &:first-child {
+    border-radius: $r-small $r-small 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 $r-small $r-small;
+  }
+
+  &:only-child {
+    border-radius: $r-small;
+  }
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

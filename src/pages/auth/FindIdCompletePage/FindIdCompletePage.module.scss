@@ -1,0 +1,33 @@
+@use '@/styles/variables.scss' as *;
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.title {
+  margin-bottom: 2.5rem;
+  font-size: $fs-xxlarge;
+  font-weight: $fw-bold;
+  text-align: left;
+  color: $black-1;
+}
+
+.email {
+  width: 100%;
+  margin-bottom: 3rem;
+  font-size: $fs-xsmall;
+  font-weight: $fw-bold;
+  text-align: center;
+  text-decoration: underline;
+  word-break: break-all;
+  color: $gray-1;
+}
+
+.submitBtn {
+  width: 100%;
+}

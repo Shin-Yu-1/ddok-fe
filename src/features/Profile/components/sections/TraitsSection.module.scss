@@ -1,0 +1,88 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.traitsSection {
+  position: relative;
+  padding: 20px;
+  border: 0.7px solid v.$gray-3;
+  border-radius: v.$r-small;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    padding: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  @include m.font-small-title;
+
+  margin: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-description;
+  }
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.traitList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
+
+.traitTag {
+  @include m.font-text;
+
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-xxsmall;
+  color: v.$black-1;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    @include m.font-small-text;
+
+    padding: 2px 10px;
+  }
+}

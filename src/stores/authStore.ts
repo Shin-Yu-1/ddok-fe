@@ -1,0 +1,143 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+import type { ApiUserInfo, SocialLoginResponse } from '@/types/auth';
+
+export type UserInfo = ApiUserInfo;
+
+// 세션스토리지에서 사용자 정보 가져오기
+const getUserFromStorage = (): UserInfo | null => {
+  try {
+    const userStr = sessionStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+  } catch (error) {
+    console.error('사용자 정보 파싱 실패:', error);
+    return null;
+  }
+};
+
+// 앱 시작시 토큰 확인
+const checkInitialAuth = (): boolean => {
+  const token = sessionStorage.getItem('accessToken');
+  return !!token;
+};
+
+interface AuthState {
+  // 상태
+  isLoggedIn: boolean;
+  user: UserInfo | null;
+
+  // 상태 조회 메서드
+  getUserInfo: () => UserInfo | null;
+
+  // 상태 업데이트 메서드
+  setLoggedIn: (user: UserInfo, accessToken: string) => void;
+  setLoggedOut: () => void;
+  setAuthSocialLogin: (data: SocialLoginResponse) => void;
+  updatePreference: (isPreference: boolean) => void;
+  updateUserInfo: (userData: Partial<UserInfo>) => void;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      // 초기 상태
+      isLoggedIn: checkInitialAuth(),
+      user: getUserFromStorage(),
+
+      // 사용자 정보 가져오기
+      getUserInfo: () => {
+        const state = get();
+        return state.user || getUserFromStorage();
+      },
+
+      // 소셜 로그인
+      setAuthSocialLogin: (data: SocialLoginResponse) => {
+        const { accessToken, user } = data;
+        sessionStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('user', JSON.stringify(user));
+
+        set({ isLoggedIn: true, user });
+      },
+
+      // 로그인 상태로 설정
+      setLoggedIn: (user: UserInfo, accessToken: string) => {
+        // 세션스토리지 저장
+        sessionStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('user', JSON.stringify(user));
+
+        // 상태 업데이트
+        set({
+          isLoggedIn: true,
+          user,
+        });
+      },
+
+      // 로그아웃 상태로 설정
+      setLoggedOut: () => {
+        // 세션스토리지 정리
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('user');
+
+        // 상태 업데이트
+        set({
+          isLoggedIn: false,
+          user: null,
+        });
+      },
+
+      // 개인화 설정 완료 상태 업데이트
+      updatePreference: (isPreference: boolean) => {
+        const state = get();
+        if (state.user) {
+          const updatedUser = { ...state.user, isPreference };
+
+          // 세션스토리지 업데이트
+          sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+          // 상태 업데이트
+          set({
+            user: updatedUser,
+          });
+        }
+      },
+
+      // 사용자 정보 부분 업데이트
+      updateUserInfo: (userData: Partial<UserInfo>) => {
+        const state = get();
+        if (state.user) {
+          const updatedUser = { ...state.user, ...userData };
+
+          // 세션스토리지 업데이트
+          sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
+          // 상태 업데이트
+          set({
+            user: updatedUser,
+          });
+        }
+      },
+    }),
+    {
+      name: 'auth-storage',
+      // persist에서 상태만 저장
+      partialize: state => ({
+        isLoggedIn: state.isLoggedIn,
+        user: state.user,
+      }),
+      // persist도 sessionStorage를 사용하도록 변경
+      storage: {
+        getItem: (name: string) => {
+          const value = sessionStorage.getItem(name);
+          return value ? JSON.parse(value) : null;
+        },
+        setItem: (name: string, value: unknown) => {
+          sessionStorage.setItem(name, JSON.stringify(value));
+        },
+        removeItem: (name: string) => {
+          sessionStorage.removeItem(name);
+        },
+      },
+    }
+  )
+);

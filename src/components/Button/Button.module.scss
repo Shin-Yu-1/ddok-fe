@@ -1,0 +1,282 @@
+@use '@/styles/variables' as *;
+
+.defaultButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  min-width: fit-content;
+  border: var(--button-border, 1.5px solid transparent);
+  font-family: $font-family-primary;
+  font-weight: $fw-semibold;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  color: $white-3;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // 로딩 상태
+  &.loading {
+    cursor: wait;
+  }
+
+  // 전체 너비
+  &.fullWidth {
+    width: 100%;
+  }
+
+  // 아이콘 관련 스타일
+  .icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+
+    img,
+    svg {
+      width: inherit;
+      height: inherit;
+    }
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+  }
+}
+
+// ===== 새로운 VARIANT 스타일 =====
+
+// 배경색이 없고, 커스텀만 하고 싶은 사람을 위해 추가 (그게 나야~
+.variant-none {
+  border-width: 1px;
+  border-color: transparent;
+  color: $black-4;
+  background-color: $white-3;
+}
+
+// Primary: gray-3 라인 + white-2 배경 + black-4 글자
+.variant-primary {
+  border-width: 1px;
+  border-color: $gray-3;
+  color: $black-4;
+  background-color: $white-2;
+
+  // 호버: yellow-1 라인 + white-2 배경 + black-4 글자
+  &:hover:not(:disabled) {
+    border-color: $yellow-1;
+    color: $black-4;
+    background-color: $white-2;
+    box-shadow: inset 0 0 0 0.5px $yellow-1;
+  }
+
+  // 활성화: yellow-1 배경 + white-3 글자
+  &:active:not(:disabled) {
+    border-color: $yellow-1;
+    color: $white-3;
+    background-color: $yellow-1;
+  }
+}
+
+// Secondary: black-3 배경 + white-3 글자
+.variant-secondary {
+  border-width: 1px;
+  border-color: transparent;
+  color: $white-3;
+  background-color: $black-3;
+
+  &:hover:not(:disabled) {
+    border-color: transparent;
+    color: $white-3;
+    background-color: $black-3-hover;
+  }
+
+  &:active:not(:disabled) {
+    border-color: transparent;
+    color: $white-3;
+    background-color: $black-3-active;
+  }
+}
+
+// Outline: gray-1 라인 + white-3 배경 + black-4 글자
+.variant-outline {
+  border-width: 1px;
+  border-color: $gray-1;
+  color: $black-4;
+  background-color: $white-3;
+
+  // 호버: yellow-1 배경 + white-3 글자
+  &:hover:not(:disabled) {
+    border-color: $yellow-1;
+    color: $white-3;
+    background-color: $yellow-1;
+  }
+
+  // 활성화: yellow-1, 1.5px 라인 + white-3 배경 + black-4 글자
+  &:active:not(:disabled) {
+    border-color: $yellow-1;
+    color: $black-4;
+    background-color: $white-3;
+    box-shadow: inset 0 0 0 0.5px $yellow-1;
+  }
+}
+
+// Ghost: gray-2 배경 + white-3 글자
+.variant-ghost {
+  border-width: 1px;
+  border-color: transparent;
+  color: $white-3;
+  background-color: $gray-2;
+
+  &:hover:not(:disabled) {
+    background-color: $gray-2-hover;
+  }
+
+  &:active:not(:disabled) {
+    background-color: $gray-2-active;
+  }
+}
+
+// Danger: red-1 배경 + white-3 글자
+.variant-danger {
+  border-width: 1px;
+  border-color: transparent;
+  color: $white-3;
+  background-color: $red-1;
+
+  // 호버: 연한 빨간 배경 + 흰 글자
+  &:hover:not(:disabled) {
+    border-color: transparent;
+    color: $white-3;
+    background-color: $red-1-hover;
+  }
+
+  &:active:not(:disabled) {
+    background-color: $red-1-active;
+  }
+}
+
+// ===== SIZE 스타일 ===== 솔직히 버튼크기 너무 제각각이라 이거 쓰긴 어려울수도 ㅎㅅㅎ
+
+.size-xsm {
+  gap: 2px;
+  height: 21px;
+  padding: 2px 8px;
+  font-size: $fs-xxxsmall; // 12px
+
+  .icon {
+    width: $i-small;
+    height: $i-small;
+  }
+}
+
+.size-sm {
+  gap: 4px;
+  height: 35px;
+  padding: 4px 12px;
+  font-size: $fs-xxsmall; // 14px
+
+  .icon {
+    width: $i-small;
+    height: $i-small;
+  }
+}
+
+.size-md {
+  gap: 6px;
+  height: 40px;
+  padding: 8px 16px;
+  font-size: $fs-xsmall; // 16px
+
+  .icon {
+    width: $i-medium;
+    height: $i-medium;
+  }
+}
+
+.size-lg {
+  gap: 8px;
+  height: 45px;
+  padding: 12px 24px;
+  font-size: $fs-small; // 20px
+
+  .icon {
+    width: $i-large;
+    height: $i-large;
+  }
+}
+
+// ===== RADIUS 스타일 =====
+.radius-none {
+  border-radius: 0;
+}
+
+.radius-xxsm {
+  border-radius: $r-xxsmall; // 5px
+}
+
+.radius-xsm {
+  border-radius: $r-xsmall; // 10px
+}
+
+.radius-sm {
+  border-radius: $r-small; // 15px
+}
+
+.radius-md {
+  border-radius: $r-medium; // 20px
+}
+
+.radius-full {
+  border-radius: $r-xxxxlarge; // 45px
+}
+
+// ===== FONT SIZE 프리셋 =====
+.fontSize-xxxsmall {
+  font-size: $fs-xxxsmall; // 12px
+}
+
+.fontSize-xxsmall {
+  font-size: $fs-xxsmall; // 14px
+}
+
+.fontSize-xsmall {
+  font-size: $fs-xsmall; // 16px
+}
+
+.fontSize-small {
+  font-size: $fs-small; // 20px
+}
+
+.fontSize-medium {
+  font-size: $fs-medium; // 24px
+}
+
+.fontSize-large {
+  font-size: $fs-large; // 28px
+}
+
+// ===== FONT WEIGHT 프리셋 =====
+.fontWeight-regular {
+  font-weight: $fw-regular; // 400
+}
+
+.fontWeight-medium {
+  font-weight: $fw-medium; // 500
+}
+
+.fontWeight-semibold {
+  font-weight: $fw-semibold; // 600
+}
+
+.fontWeight-bold {
+  font-weight: $fw-bold; // 700
+}

@@ -1,0 +1,12 @@
+@use './reset'; // 리셋 SCSS
+@use './fonts'; // 폰트 SCSS
+@use './mixins'; // 믹스인 SCSS
+@use './variables' as v; // 변수 SCSS
+
+body {
+  font-family: v.$font-family-primary;
+  font-size: 1rem;
+  font-weight: v.$fw-regular;
+  line-height: v.$default-line-height;
+  color: v.$black-1;
+}

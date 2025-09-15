@@ -1,0 +1,162 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.headerIcon {
+  width: $i-large;
+  height: $i-large;
+}
+
+.icon {
+  width: $i-small;
+  height: $i-small;
+}
+
+.aiButtonIcon {
+  width: 30px;
+  height: 30px;
+  color: $white-3;
+}
+
+.chatRoomHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 44px;
+  padding: 0 15px;
+  user-select: none;
+
+  .title {
+    margin: 0;
+    font-size: $fs-small;
+    font-weight: $fw-semibold;
+    color: var(--black-3);
+  }
+}
+
+.chatRoomMain {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.messages {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+}
+
+.subHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-sizing: border-box;
+  height: 78px;
+  padding: 23px 15px;
+  border-bottom: 1px solid var(--gray-2);
+  background: rgb(255 255 255 / 55%); // 반투명
+  backdrop-filter: blur(10px);
+  user-select: none;
+
+  .subHeaderTitle {
+    font-size: $fs-xsmall;
+  }
+}
+
+.profileImage {
+  width: 32px;
+  height: 32px;
+  border: 1px solid $gray-2;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.subHeaderMeta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.roomName {
+  max-width: 200px;
+  margin: 0;
+  overflow-x: hidden;
+  font-size: $fs-xsmall;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: $black-3;
+}
+
+.memberCount {
+  font-size: $fs-xxsmall;
+  color: $black-1;
+}
+
+.messageListWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0% 10px;
+
+  .dateDivider {
+    height: 19px;
+    font-size: $fs-xsmall;
+    line-height: 19px;
+    text-align: center;
+  }
+}
+
+.message {
+  line-height: 1.4;
+}
+
+.sender {
+  font-weight: 600;
+}
+
+.text {
+  margin-left: 4px;
+}
+
+.inputBar {
+  flex-shrink: 0;
+  padding: 10px 12px;
+}
+
+.chatInputField {
+  width: 100%;
+  height: 101px;
+  padding: 7px 19px;
+  border-radius: $r-xsmall;
+  overflow: hidden;
+  outline: none;
+  color: $gray-1;
+  background: $gray-4;
+  resize: none;
+}
+
+.overflowWrapper {
+  position: fixed;
+  top: 55px;
+  right: 0;
+  z-index: 100;
+  width: 200px;
+}

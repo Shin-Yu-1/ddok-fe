@@ -1,0 +1,86 @@
+import EditIntroductionModal from '@/features/Profile/components/modals/EditIntroductionModal';
+import EditLocationModal from '@/features/Profile/components/modals/EditLocationModal';
+import EditPortfolioModal from '@/features/Profile/components/modals/EditPortfolioModal';
+import EditPositionModal from '@/features/Profile/components/modals/EditPositionModal';
+import EditTechStackModal from '@/features/Profile/components/modals/EditTechStackModal';
+import EditTimeModal from '@/features/Profile/components/modals/EditTimeModal';
+import EditTraitsModal from '@/features/Profile/components/modals/EditTraitsModal';
+import ProfileView from '@/features/Profile/components/ProfileView';
+import { useProfileData, useProfileEdit } from '@/features/Profile/hooks';
+
+import styles from './MyProfilePage.module.scss';
+
+const MyProfilePage = () => {
+  const { profileData, isLoading } = useProfileData(undefined, true);
+  const { handleEdit, handleEditPersonalInfo, handleEditIntroduction, closeModal, isModalOpen } =
+    useProfileEdit();
+
+  return (
+    <main className={styles.myProfilePage}>
+      <div className={styles.content}>
+        {profileData ? (
+          <>
+            <ProfileView
+              user={profileData}
+              isEditable={true}
+              onEdit={handleEdit}
+              isLoading={isLoading}
+              className={styles.profileView}
+              onEditPersonalInfo={handleEditPersonalInfo}
+              onEditIntroduction={handleEditIntroduction}
+            />
+
+            {/* 모달들 */}
+            <EditIntroductionModal
+              isOpen={isModalOpen('introduction')}
+              onClose={() => closeModal('introduction')}
+              user={profileData}
+            />
+
+            <EditLocationModal
+              isOpen={isModalOpen('location')}
+              onClose={() => closeModal('location')}
+              user={profileData}
+            />
+
+            <EditPositionModal
+              isOpen={isModalOpen('position')}
+              onClose={() => closeModal('position')}
+              user={profileData}
+            />
+
+            <EditTraitsModal
+              isOpen={isModalOpen('traits')}
+              onClose={() => closeModal('traits')}
+              user={profileData}
+            />
+
+            <EditTimeModal
+              isOpen={isModalOpen('time')}
+              onClose={() => closeModal('time')}
+              user={profileData}
+            />
+
+            <EditPortfolioModal
+              isOpen={isModalOpen('portfolio')}
+              onClose={() => closeModal('portfolio')}
+              user={profileData}
+            />
+
+            <EditTechStackModal
+              isOpen={isModalOpen('techStack')}
+              onClose={() => closeModal('techStack')}
+              user={profileData}
+            />
+          </>
+        ) : (
+          <div className={styles.noData}>
+            <p>프로필 데이터를 불러올 수 없습니다.</p>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+};
+
+export default MyProfilePage;

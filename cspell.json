@@ -22,5 +22,32 @@
     ".env.example",
     ".prettierignore"
   ],
-  "words": ["DDOK", "kakao"]
+  "words": [
+    "appkey",
+    "bname",
+    "clusterer",
+    "daum",
+    "DDOK",
+    "ddtoast",
+    "Dragbar",
+    "findid",
+    "findidcomplete",
+    "findpassword",
+    "jibun",
+    "kakao",
+    "kakaotalk",
+    "noti",
+    "partialize",
+    "relayout",
+    "roadname",
+    "sido",
+    "signupcomplete",
+    "sigungu",
+    "stompjs",
+    "xsmall",
+    "xxsm",
+    "xxsmall",
+    "xxxsmall",
+    "zonecode"
+  ]
 }

@@ -1,0 +1,137 @@
+import { useQueryClient } from '@tanstack/react-query';
+
+import Button from '@/components/Button/Button';
+import User from '@/features/Team/components/UserRow/UserRow';
+import { useApproveApplicant } from '@/features/Team/hooks/useApproveApplicant';
+import { useRejectApplicant } from '@/features/Team/hooks/useRejectApplicant';
+import { DDtoast } from '@/features/toast';
+
+import type { ApplicantType } from '../../../schemas/teamApplicantsListSchema';
+
+import styles from './ApplicantRow.module.scss';
+
+interface ApplicantRowProps {
+  teamType: string;
+  member: ApplicantType;
+  teamId: number;
+  amILeader: boolean;
+  teamStatus?: string;
+}
+
+const ApplicantRow = ({ teamType, member, teamId, amILeader, teamStatus }: ApplicantRowProps) => {
+  const queryClient = useQueryClient();
+
+  const approveApplicant = useApproveApplicant({
+    teamId,
+    applicationId: member.applicantId,
+  });
+
+  const rejectApplicant = useRejectApplicant({
+    teamId,
+    applicationId: member.applicantId,
+  });
+
+  // 에러 메시지 추출 함수
+  const getErrorMessage = (error: unknown, defaultMessage: string): string => {
+    if (error && typeof error === 'object') {
+      // Axios 에러 구조에서 메시지 추출
+      if ('response' in error) {
+        const response = (error as { response?: { data?: { message?: string } } }).response;
+        if (response?.data?.message) {
+          return response.data.message;
+        }
+      }
+      // 일반적인 에러 메시지
+      if ('message' in error) {
+        return (error as { message: string }).message;
+      }
+    }
+    return defaultMessage;
+  };
+
+  const handleApprove = () => {
+    if (window.confirm(`${member.user.nickname}님을 멤버로 수락하시겠습니까?`)) {
+      approveApplicant.mutate(undefined, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ['getApi', `/api/teams/${teamId}/members`],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['getApi', `/api/teams/${teamId}/applicants`],
+          });
+        },
+        onError: error => {
+          const errorMessage = getErrorMessage(error, '참여 희망자 수락에 실패했습니다.');
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: errorMessage,
+          });
+        },
+      });
+    }
+  };
+
+  const handleReject = () => {
+    if (window.confirm(`${member.user.nickname}님의 참여 신청을 거절하시겠습니까?`)) {
+      rejectApplicant.mutate(undefined, {
+        onSuccess: () => {
+          console.log('참여 희망자 거절 성공');
+          // 참여 희망자 목록만 새로고침 (거절의 경우 팀원 목록은 변경되지 않음)
+          queryClient.invalidateQueries({
+            queryKey: ['getApi', `/api/teams/${teamId}/applicants`],
+          });
+        },
+        onError: error => {
+          const errorMessage = getErrorMessage(error, '참여 희망자 거절에 실패했습니다.');
+          DDtoast({
+            mode: 'custom',
+            type: 'error',
+            userMessage: errorMessage,
+          });
+        },
+      });
+    }
+  };
+
+  return (
+    <>
+      {teamType === 'PROJECT' && <div className={styles.position}>{member.appliedPosition}</div>}
+      <User user={member.user} />
+      <div className={styles.actionContainer}>
+        {amILeader ? (
+          <>
+            <Button
+              className={styles.action}
+              backgroundColor="var(--blue-1)"
+              fontSize="var(--fs-xxsmall)"
+              height="28px"
+              textColor="var(--white-2)"
+              radius="xsm"
+              fontWeightPreset="regular"
+              onClick={handleApprove}
+              disabled={approveApplicant.isPending || teamStatus === 'CLOSED'}
+            >
+              {approveApplicant.isPending ? '처리 중...' : '수락'}
+            </Button>
+            <Button
+              className={styles.action}
+              backgroundColor="var(--gray-1)"
+              fontSize="var(--fs-xxsmall)"
+              height="28px"
+              textColor="var(--white-2)"
+              radius="xsm"
+              fontWeightPreset="regular"
+              onClick={handleReject}
+              disabled={rejectApplicant.isPending || teamStatus === 'CLOSED'}
+            >
+              {rejectApplicant.isPending ? '처리 중...' : '거절'}
+            </Button>
+          </>
+        ) : null}
+      </div>
+    </>
+  );
+};
+
+export default ApplicantRow;

@@ -1,0 +1,240 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.userInfoSection {
+  align-content: center;
+  min-width: 800px;
+  padding: 1rem 37px;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    min-width: 700px;
+    padding: 1rem 23px;
+  }
+}
+
+.container {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+.leftContent {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+
+  @include m.mobile {
+    gap: 12px;
+    width: 100%;
+  }
+}
+
+.profileImageContainer {
+  flex-shrink: 0;
+}
+
+.profileImage {
+  width: 89px;
+  height: 89px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  @include m.mobile {
+    width: 69px;
+    height: 69px;
+  }
+}
+
+.userBasicInfo {
+  flex: 1;
+  align-content: center;
+  min-width: 0;
+}
+
+.userNameRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  @include m.mobile {
+    gap: 8px;
+  }
+}
+
+.nickname {
+  @include m.font-subtitle;
+
+  margin: 0;
+  padding: 0;
+  color: v.$black-1;
+
+  @include m.mobile {
+    @include m.font-small-title;
+  }
+}
+
+.ageGroup {
+  @include m.font-text;
+
+  color: v.$black-1;
+}
+
+.personalInfoEditButton {
+  @include m.font-small-text;
+
+  padding: 8px 10px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xsmall;
+  white-space: nowrap;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    padding: 8px;
+
+    @include m.font-tiny-text;
+  }
+}
+
+.introductionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.introduction {
+  @include m.font-small-text;
+
+  margin: 0;
+  line-height: 1.5;
+  color: v.$gray-1;
+}
+
+.introductionEditButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-1;
+  border-radius: v.$r-xxsmall;
+  color: v.$white-3;
+  background-color: v.$gray-1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$black-4;
+  }
+
+  &:active {
+    border: 1px solid v.$gray-1;
+    color: v.$gray-1;
+    background-color: v.$white-1;
+  }
+
+  @include m.mobile {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.rightContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+
+  @include m.mobile {
+    align-items: center;
+    margin-top: 0;
+  }
+}
+
+.badgeContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+// 뱃지 래퍼 - 호버 효과와 툴팁을 위한 컨테이너
+.badgeWrapper {
+  position: relative;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    z-index: 10;
+    transform: scale(1.2);
+  }
+
+  // 툴팁 스타일링 (data-tooltip 사용)
+  &[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    z-index: 1000;
+    padding: 6px 8px;
+    border-radius: v.$r-xxsmall;
+    font-size: v.$fs-xxxsmall;
+    font-weight: v.$fw-medium;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: v.$white-3;
+    background-color: v.$gray-1;
+    transform: translateX(-50%);
+    pointer-events: none;
+
+    @include m.mobile {
+      bottom: -30px;
+      padding: 4px 6px;
+      font-size: 10px;
+    }
+  }
+}
+
+// Badge 컴포넌트를 위한 스타일
+.mainBadge,
+.abandonBadge {
+  @include m.mobile {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+.temperatureContainer {
+  text-align: right;
+
+  @include m.mobile {
+    text-align: left;
+  }
+}
+
+.temperatureDisplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.temperature {
+  @include m.font-description;
+
+  font-weight: v.$fw-regular;
+  color: v.$black-4;
+}

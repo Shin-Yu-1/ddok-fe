@@ -1,0 +1,112 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.map__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: calc(100% - 47px);
+  height: calc(100vh - 96px);
+  margin-left: 47px;
+
+  @include m.tablet {
+    width: calc(100% - 42px);
+    height: calc(100vh - 96px);
+    margin-left: 42px;
+  }
+
+  @include m.mobile {
+    width: calc(100% - 37px);
+    height: calc(100vh - 81px);
+    margin-left: 37px;
+  }
+}
+
+.map__panelContainer {
+  position: absolute;
+  top: 96px;
+  left: 47.5px; /* 사이드바 width(47px) + border(0.5px) = 47.5px */
+  z-index: 99;
+  width: 363px;
+  height: calc(100% - 96px);
+  background-color: $white-3;
+
+  @include m.tablet {
+    top: 96px;
+    left: 42.5px; /* 사이드바 width(42px) + border(0.5px) = 42.5px */
+    height: calc(100% - 96px);
+  }
+
+  @include m.mobile {
+    top: 81px;
+    left: 37.5px; /* Sidebar width(37px) + border(0.5px) = 37.5px */
+    height: calc(100% - 81px);
+  }
+}
+
+.map__subPanelContainer {
+  position: absolute;
+  top: 96px;
+  left: 410.5px;
+  z-index: 1000;
+  width: 300px;
+  height: calc(100% - 96px);
+  background-color: $white-3;
+
+  @include m.tablet {
+    top: 96px;
+    left: 405.5px;
+    height: calc(100% - 96px);
+  }
+
+  @include m.mobile {
+    top: 81px;
+    left: 400.5px;
+    height: calc(100% - 81px);
+  }
+}
+
+.map__container {
+  width: 100%;
+  height: 100%;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.subPanel__closeBtn {
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 20px;
+  height: 50px;
+  border: 1px solid $gray-1;
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  line-height: 50px;
+  text-align: center;
+  color: $gray-2;
+  background-color: $white-3;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  &:hover {
+    background-color: $white-2;
+  }
+}
+
+.map__reloadBtn {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+}

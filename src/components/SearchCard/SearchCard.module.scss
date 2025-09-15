@@ -1,0 +1,172 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.cardContainer {
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid $gray-3;
+  border-radius: $r-medium;
+  background: $white-3;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+
+  .bannerWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 128px;
+    border-radius: $r-medium $r-medium 0 0;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.statusBadge {
+  position: absolute;
+  top: 11px;
+  right: 20px;
+  box-sizing: border-box;
+  height: 27px;
+  padding: 0 15px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xsmall;
+  font-weight: $fw-bold;
+  line-height: 27px;
+
+  &.recruiting {
+    color: $white-3;
+    background: $green-1;
+  }
+
+  &.ongoing {
+    color: $white-3;
+    background: $blue-1;
+  }
+
+  &.closed {
+    border: 1px solid $gray-3;
+    color: $black-4;
+    background: $white-2;
+  }
+}
+
+.infoWrapper {
+  box-sizing: border-box;
+  padding: 12px 31px;
+}
+
+.title {
+  margin-bottom: 12px;
+  font-size: $fs-small;
+  font-weight: $fw-bold;
+  line-height: 1.3;
+  color: $black-1;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+
+  > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .infoRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 17px;
+  }
+
+  .label {
+    width: 60px;
+    font-size: $fs-xxxsmall;
+    font-weight: $fw-semibold;
+    line-height: 1.2;
+    color: $black-1;
+  }
+
+  .value {
+    max-width: 143px;
+    overflow-x: hidden;
+    font-size: $fs-xxxsmall;
+    font-weight: $fw-medium;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $black-1;
+  }
+}
+
+// 스켈레톤 애니메이션
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeletonBanner {
+  width: 100%;
+  height: 128px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonBadge {
+  width: 60px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonTitle {
+  width: 70%;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonLabel {
+  width: 60px;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonValue {
+  width: 80px;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeletonValueShort {
+  width: 50px;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}

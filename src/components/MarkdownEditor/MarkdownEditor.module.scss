@@ -1,0 +1,102 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+// 커스텀 탭 헤더
+.tabHeader {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid $gray-3;
+  background-color: $white-2;
+}
+
+.tabButton {
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: $fs-xxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  background: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: $black-3;
+    background-color: rgba($gray-4, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    background-color: rgba($yellow-1, 0.1);
+  }
+
+  &.active {
+    font-weight: $fw-semibold;
+    color: $black-2;
+    background-color: $white-3;
+
+    &:first-child {
+      border-bottom-color: $blue-1; // Write 탭
+    }
+
+    &:last-child {
+      border-bottom-color: $green-1; // Preview 탭
+    }
+  }
+}
+
+.editorContainer {
+  width: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  overflow: hidden;
+  background-color: $white-3;
+}
+
+.characterCount {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 12px;
+  border-top: 1px solid $gray-3;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-medium;
+  color: $gray-1;
+  background-color: $white-2;
+
+  span {
+    padding: 4px 10px;
+    border: 1px solid $gray-3;
+    border-radius: 12px;
+    font-family: $font-family-primary;
+    font-size: $fs-xxxsmall;
+    background-color: $white-3;
+    transition: all 0.2s ease;
+
+    &.warning {
+      border-color: rgba($yellow-1, 0.3);
+      color: $yellow-1;
+      background-color: rgba($yellow-1, 0.1);
+      box-shadow: 0 1px 3px rgba($yellow-1, 0.1);
+    }
+
+    &.maxReached {
+      border-color: rgba($red-1, 0.3);
+      color: $red-1;
+      background-color: rgba($red-1, 0.1);
+      box-shadow: 0 1px 3px rgba($red-1, 0.1);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}

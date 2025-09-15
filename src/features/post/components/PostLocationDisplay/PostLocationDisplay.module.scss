@@ -1,0 +1,265 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+// 지도 섹션
+.mapSection {
+  position: relative;
+  width: 100%;
+  border-radius: $r-xsmall;
+}
+
+.map {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  overflow: hidden;
+}
+
+// 지도 로딩 스타일
+.mapLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  color: $gray-2;
+  background-color: $white-3;
+}
+
+// 지도 에러 스타일
+.mapError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  color: $red-1;
+  background-color: $white-3;
+}
+
+// 지도 컨트롤 버튼들 컨테이너
+.mapControls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// 길찾기 버튼 스타일
+.navigateButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  white-space: nowrap;
+  color: $gray-1;
+  background: $white-1;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $gray-2;
+    color: $black-1;
+    background: $gray-4;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// 주소로 이동 버튼 스타일
+.addressButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid $blue-1;
+  border-radius: $r-xsmall;
+  font-size: $fs-xxsmall;
+  white-space: nowrap;
+  color: $white-1;
+  background: $blue-1;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $blue-1;
+    background: $blue-1;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// 기존 위치 재설정 버튼
+.recenterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background: $white-1;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $gray-2;
+    background: $gray-4;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// 주소 정보 섹션
+.locationInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background-color: $white-1;
+}
+
+.iconSection {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.addressSection {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.region {
+  font-size: $fs-xsmall;
+  font-weight: 600;
+  line-height: 1.4;
+  color: $black-1;
+}
+
+.detail {
+  font-size: $fs-xxsmall;
+  line-height: 1.4;
+  color: $gray-1;
+}
+
+// 카카오맵 링크 버튼 (지도가 없을 때)
+.mapLinkButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  border-radius: $r-xsmall;
+  background: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: $gray-4;
+  }
+}
+
+// InfoWindow 관련 스타일
+.infoWindow {
+  position: relative;
+  max-width: 300px;
+  min-width: 200px;
+  border: 1px solid $gray-3;
+  border-radius: $r-xsmall;
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-top: 10px solid white;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    transform: translateX(-50%);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -11px;
+    left: 50%;
+    z-index: -1;
+    width: 0;
+    height: 0;
+    border-top: 11px solid $gray-3;
+    border-right: 11px solid transparent;
+    border-left: 11px solid transparent;
+    transform: translateX(-50%);
+  }
+}
+
+.infoContent {
+  padding: 12px 16px;
+  font-size: $fs-xxsmall;
+  line-height: 1.4;
+  word-break: keep-all;
+  color: $black-1;
+}
+
+.infoCloseButton {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: $gray-2;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    color: $black-1;
+  }
+}

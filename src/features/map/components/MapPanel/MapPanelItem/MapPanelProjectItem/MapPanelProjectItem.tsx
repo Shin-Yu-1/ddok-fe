@@ -1,0 +1,41 @@
+import type { ProjectPanelItem } from '@/features/map/schemas/mapItemSchema';
+import { MAP_ITEM_STATUS_LABELS, TeamStatus } from '@/features/map/types/common';
+
+import styles from '../MapPanelItem.module.scss';
+
+interface MapPanelProjectItemProps {
+  project: ProjectPanelItem;
+  onItemClick: () => void;
+}
+
+const MapPanelProjectItem: React.FC<MapPanelProjectItemProps> = ({ project, onItemClick }) => {
+  return (
+    <div className={styles.panel__list__item} onClick={onItemClick}>
+      <div className={styles.panel__list__item__user}>
+        <div className={styles.panel__list__item__img}>
+          <img src={project.bannerImageUrl} alt="Banner" />
+        </div>
+        <div className={styles.panel__list__item__info}>
+          <div className={styles.panel__list__item__title}>{project.title}</div>
+          <div className={styles.panel__list__item__category}>프로젝트</div>
+        </div>
+      </div>
+      {project.teamStatus &&
+        (project.teamStatus === TeamStatus.RECRUITING ? (
+          <div
+            className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__recruiting}`}
+          >
+            {MAP_ITEM_STATUS_LABELS.RECRUITING}
+          </div>
+        ) : (
+          <div
+            className={`${styles.panel__list__item__status} ${styles.panel__list__item__status__ongoing}`}
+          >
+            {MAP_ITEM_STATUS_LABELS.ONGOING}
+          </div>
+        ))}
+    </div>
+  );
+};
+
+export default MapPanelProjectItem;

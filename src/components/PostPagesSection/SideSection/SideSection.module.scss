@@ -1,0 +1,49 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px 30px;
+  border: 0.7px solid $gray-3;
+  border-radius: $r-xsmall;
+  background-color: $white-3;
+}
+
+.titleArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: fit-content;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  font-size: $fs-medium;
+  font-weight: $fw-bold;
+  white-space: normal;
+  color: $black-1;
+}
+
+.content {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0 5px;
+  white-space: pre-line;
+
+  &.readonly {
+    pointer-events: none;
+    user-select: none;
+
+    * {
+      cursor: default;
+    }
+  }
+}

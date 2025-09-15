@@ -1,0 +1,40 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+@use '@/styles/postPagesLayout' as p;
+
+.title {
+  @include m.font-title;
+}
+
+@include p.post-layout-base-styles;
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: $fs-large;
+  font-weight: $fw-medium;
+  color: $gray-1;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: $fs-large;
+  font-weight: $fw-medium;
+  color: $red-1;
+}
+
+.readonlyAgeRange {
+  pointer-events: none;
+  user-select: none;
+
+  * {
+    cursor: default !important;
+  }
+}

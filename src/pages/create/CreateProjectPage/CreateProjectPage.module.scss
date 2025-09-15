@@ -1,0 +1,9 @@
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as m;
+@use '@/styles/postPagesLayout' as p;
+
+.title {
+  @include m.font-title;
+}
+
+@include p.post-layout-base-styles;

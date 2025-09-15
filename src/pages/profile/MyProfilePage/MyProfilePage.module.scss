@@ -1,0 +1,35 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.myProfilePage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: v.$white-1;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 0;
+}
+
+.profileView {
+  width: 100%;
+}
+
+.noData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+
+  p {
+    @include m.font-description;
+
+    margin: 0;
+    color: v.$gray-1;
+  }
+}

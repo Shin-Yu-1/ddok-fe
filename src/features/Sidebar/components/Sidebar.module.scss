@@ -1,0 +1,191 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.sidebar {
+  position: fixed;
+  top: 96px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 47px;
+  height: 100%;
+  border-right: 0.5px solid v.$black-4;
+  background-color: v.$white-3;
+
+  @include m.mobile {
+    top: 81px;
+    width: 37px;
+  }
+
+  @include m.tablet {
+    width: 42px;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 9px 0;
+
+  @include m.mobile {
+    padding: 6px 0;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  // 확장되었을 때 하나의 컨테이너로 스타일링
+  &.expanded {
+    width: 29px;
+    border: 2px solid v.$black-4;
+    border-radius: v.$r-xxsmall;
+    background-color: v.$gray-4;
+  }
+}
+
+.sidebarButton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid v.$gray-3;
+  border-radius: v.$r-xxsmall;
+  color: v.$black-4;
+  background-color: v.$white-1;
+
+  &:hover {
+    border: 2px solid v.$yellow-1;
+  }
+
+  &:active {
+    background-color: v.$yellow-1;
+  }
+
+  &.active {
+    border: 2px solid v.$yellow-1;
+    background-color: v.$yellow-1;
+  }
+
+  &.expanded {
+    border: none;
+    border-radius: 0;
+    color: v.$yellow-1;
+    background-color: v.$black-4;
+    border-end-end-radius: v.$r-xxsmall;
+    border-end-start-radius: v.$r-xxsmall;
+  }
+}
+
+.icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationDot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid v.$white-1;
+  border-radius: v.$r-xxsmall;
+  background-color: v.$red-1;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 29px;
+  padding: 8px 0;
+  overflow: hidden;
+  background-color: v.$gray-4;
+  animation: slide-down 0.2s ease-out;
+}
+
+.subButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border: none;
+  border-radius: 2px;
+  color: v.$gray-1;
+  background-color: v.$white-1;
+  cursor: pointer;
+
+  &:active {
+    background-color: v.$gray-3;
+  }
+
+  &.active {
+    color: v.$black-4;
+    background-color: v.$yellow-1;
+  }
+}
+
+.subIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.groupDivider {
+  width: 70%;
+  height: 1px;
+  margin: 14px auto;
+  background-color: v.$black-4;
+
+  @include m.mobile {
+    margin: 6px auto;
+  }
+}
+
+.subDivider {
+  width: 80%;
+  height: 1px;
+  margin: 10px auto;
+  background-color: v.$black-4;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unreadCount {
+  min-width: 20px;
+  padding: 4px 8px;
+  border-radius: v.$r-xsmall;
+  font-size: v.$fs-xxxsmall;
+  font-weight: v.$fw-regular;
+  text-align: center;
+  color: v.$black-4;
+  background-color: v.$yellow-1;
+}
+
+@keyframes slide-down {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 200px;
+    opacity: 1;
+  }
+}
