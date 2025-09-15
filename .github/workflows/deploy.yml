@@ -1,12 +1,16 @@
 name: Deploy React Vite App to S3 + CloudFront
 
 on:
-  push:
-    branches:
-      - main   # main 브랜치 push 시 실행
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 jobs:
   deploy:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.head_ref == 'develop' &&
+      contains(github.event.pull_request.title, '[deploy]')
     runs-on: ubuntu-latest
 
     steps:
