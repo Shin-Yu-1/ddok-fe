@@ -29,13 +29,24 @@ export const useGetProfileMap = ({
         neLat: mapBounds.neLat,
         neLng: mapBounds.neLng,
       }
-    : {};
+    : null;
 
   return useQuery({
     queryKey: ['profileMap', playerId, queryParams],
     queryFn: async () => {
+      if (!mapBounds) {
+        throw new Error('MapBounds가 없습니다.');
+      }
+
+      const params = {
+        swLat: mapBounds.swLat,
+        swLng: mapBounds.swLng,
+        neLat: mapBounds.neLat,
+        neLng: mapBounds.neLng,
+      };
+
       const { data } = await api.get<ProfileMapResponse>(`/api/players/${playerId}/profile/map`, {
-        params: queryParams,
+        params,
       });
       return data;
     },
