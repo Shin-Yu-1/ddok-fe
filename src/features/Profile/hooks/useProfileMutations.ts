@@ -6,11 +6,11 @@ import type { CompleteProfileInfo } from '@/types/user';
 
 interface UseProfileMutationsProps {
   userId: number;
-  onSuccess?: () => void;
+  onSuccess?: (data?: UpdateProfileApiResponse | UpdateLocationApiResponse) => void;
   onError?: (error: unknown) => void;
 }
 
-// API 응답 타입
+// 일반 프로필 수정 API 응답 타입
 interface UpdateProfileApiResponse {
   userId: number;
   isMine: boolean;
@@ -45,7 +45,28 @@ interface UpdateProfileApiResponse {
     latitude: number;
     longitude: number;
     address: string;
+    region1depthName?: string;
+    region2depthName?: string;
+    region3depthName?: string;
+    roadName?: string;
+    mainBuildingNo?: string;
+    subBuildingNo?: string;
+    zoneNo?: string;
   };
+}
+
+// 주활동지 수정 전용 API 응답 타입
+interface UpdateLocationApiResponse {
+  address: string;
+  region1depthName: string;
+  region2depthName: string;
+  region3depthName: string;
+  roadName: string;
+  mainBuildingNo: string;
+  subBuildingNo: string | null;
+  zoneNo: string;
+  latitude: number;
+  longitude: number;
 }
 
 export const useProfileMutations = ({ userId, onSuccess, onError }: UseProfileMutationsProps) => {
@@ -153,8 +174,27 @@ export const useProfileMutations = ({ userId, onSuccess, onError }: UseProfileMu
   const updateLocationMutation = useMutation({
     mutationFn: (location: Location) => profileEditApi.updateLocation({ location }),
     onSuccess: data => {
-      updateProfileData(data);
-      onSuccess?.();
+      // location만 업데이트하므로 기존 프로필 데이터에 location만 변경
+      const existingData = queryClient.getQueryData(['profile', userId]) as CompleteProfileInfo;
+      if (existingData) {
+        const updatedData: CompleteProfileInfo = {
+          ...existingData,
+          location: {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            address: data.address,
+            region1depthName: data.region1depthName,
+            region2depthName: data.region2depthName,
+            region3depthName: data.region3depthName,
+            roadName: data.roadName,
+            mainBuildingNo: data.mainBuildingNo,
+            subBuildingNo: data.subBuildingNo || '',
+            zoneNo: data.zoneNo,
+          },
+        };
+        queryClient.setQueryData(['profile', userId], updatedData);
+      }
+      onSuccess?.(data);
     },
     onError,
   });
