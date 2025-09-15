@@ -29,8 +29,20 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
     getShowMoreText,
   } = useInfiniteLoad(user.userId, 'projects', initialProjects, user.projectsTotalItems);
 
-  const handleProjectClick = (teamId: number) => {
-    navigate(`/team/${teamId}/setting`);
+  const handleProjectClick = (projectId: number, teamId: number) => {
+    if (user.isMine) {
+      // 본인 프로필: 팀관리 페이지로 이동
+      navigate(`/team/${teamId}/setting`);
+    } else {
+      // 타인 프로필: 프로젝트 모집 공고 페이지로 이동
+      navigate(`/detail/project/${projectId}`);
+    }
+  };
+
+  const getAriaLabel = (title: string) => {
+    return user.isMine
+      ? `${title} 프로젝트 팀 관리 페이지로 이동`
+      : `${title} 프로젝트 모집 공고 보기`;
   };
 
   return (
@@ -54,8 +66,8 @@ const ProjectSection = forwardRef<HTMLElement, ProjectSectionProps>(({ user, cla
                   key={project.id}
                   type="button"
                   className={styles.projectItem}
-                  onClick={() => handleProjectClick(project.teamId)}
-                  aria-label={`${project.title} 프로젝트 팀 관리 페이지로 이동`}
+                  onClick={() => handleProjectClick(project.id, project.teamId)}
+                  aria-label={getAriaLabel(project.title)}
                 >
                   <div className={styles.projectIcon}>
                     <ShoppingBagOpenIcon size={21} weight="regular" />

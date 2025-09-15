@@ -29,8 +29,18 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
     getShowMoreText,
   } = useInfiniteLoad(user.userId, 'studies', initialStudies, user.studiesTotalItems);
 
-  const handleStudyClick = (teamId: number) => {
-    navigate(`/team/${teamId}/setting`);
+  const handleStudyClick = (studyId: number, teamId: number) => {
+    if (user.isMine) {
+      // 본인 프로필: 팀관리 페이지로 이동
+      navigate(`/team/${teamId}/setting`);
+    } else {
+      // 타인 프로필: 스터디 모집 공고 페이지로 이동
+      navigate(`/detail/study/${studyId}`);
+    }
+  };
+
+  const getAriaLabel = (title: string) => {
+    return user.isMine ? `${title} 스터디 팀 관리 페이지로 이동` : `${title} 스터디 모집 공고 보기`;
   };
 
   return (
@@ -54,8 +64,8 @@ const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, classNa
                   key={study.id}
                   type="button"
                   className={styles.studyItem}
-                  onClick={() => handleStudyClick(study.teamId)}
-                  aria-label={`${study.title} 스터디 팀 관리 페이지로 이동`}
+                  onClick={() => handleStudyClick(study.id, study.teamId)}
+                  aria-label={getAriaLabel(study.title)}
                 >
                   <div className={styles.studyIcon}>
                     <BookBookmarkIcon size={21} weight="regular" />
