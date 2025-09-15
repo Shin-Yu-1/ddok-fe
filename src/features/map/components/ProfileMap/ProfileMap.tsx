@@ -121,7 +121,7 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
         className={styles.map}
         center={{ lat: location.latitude, lng: location.longitude }}
         draggable={true}
-        zoomable={false}
+        zoomable={true}
         ref={mapRef}
         level={5}
         onLoad={handleMapLoad}
