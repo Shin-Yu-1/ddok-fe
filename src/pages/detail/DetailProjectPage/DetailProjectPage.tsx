@@ -5,6 +5,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { DetailRecruitmentTable } from '@/components/RecruitmentTable';
+import ShareButton from '@/components/ShareButton/ShareButton';
 import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeDisplay from '@/features/post/components/AgeRangeDisplay/AgeRangeDisplay';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
@@ -111,6 +112,23 @@ const DetailProjectPage = () => {
 
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
+            {/* 공유하기 섹션 */}
+            <div className={styles.shareSection}>
+              <ShareButton
+                title={projectData.title}
+                imageUrl={projectData.bannerImageUrl}
+                postType="project"
+                mode={projectData.mode as 'online' | 'offline'}
+                location={projectData.location?.region2depthName}
+                duration={projectData.expectedMonth}
+                capacity={projectData.capacity}
+                applicantCount={projectData.applicantCount}
+                startDate={projectData.startDate}
+                traits={projectData.traits}
+                status={projectData.teamStatus}
+              />
+            </div>
+
             <div className={styles.actionsLine}>
               {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
               {projectData.isTeamMember && (
