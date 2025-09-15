@@ -39,6 +39,9 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
   // 지도 사각 영역에 대한 정보
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
 
+  // 지도가 초기 위치에서 벗어났는지 확인하는 상태
+  const [isMapMoved, setIsMapMoved] = useState(false);
+
   // 아이템의 고유 ID를 가져오는 헬퍼 함수
   const getItemId = (item: ProfileMapItem): number => {
     return item.category === 'project' ? item.projectId : item.studyId;
@@ -68,6 +71,17 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
   // 지도 영역 업데이트 함수
   const updateMapBounds = () => {
     if (mapRef.current) {
+      const currentCenter = mapRef.current.getCenter();
+      const currentLevel = mapRef.current.getLevel();
+
+      // 초기 위치와 현재 위치/줌 레벨 비교 (약간의 오차 허용)
+      const centerMoved =
+        Math.abs(currentCenter.getLat() - location.latitude) > 0.001 ||
+        Math.abs(currentCenter.getLng() - location.longitude) > 0.001;
+      const levelChanged = currentLevel !== 5;
+
+      setIsMapMoved(centerMoved || levelChanged);
+
       const newMapBounds = {
         swLat: mapRef.current.getBounds().getSouthWest().getLat(),
         swLng: mapRef.current.getBounds().getSouthWest().getLng(),
@@ -169,22 +183,27 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
       </Map>
 
       {/* 사용자 기존 위치로 되돌아가는 버튼 */}
-      <Button
-        fontSize={12}
-        width="fit-content"
-        height="fit-content"
-        backgroundColor="var(--blue-1)"
-        textColor="var(--white-3)"
-        className={styles.resetButton}
-        onClick={() => {
-          if (mapRef.current) {
-            mapRef.current.setCenter(new kakao.maps.LatLng(location.latitude, location.longitude));
-            mapRef.current.setLevel(5);
-          }
-        }}
-      >
-        사용자 위치로 돌아가기
-      </Button>
+      {isMapMoved && (
+        <Button
+          fontSize={12}
+          width="fit-content"
+          height="fit-content"
+          backgroundColor="var(--blue-1)"
+          textColor="var(--white-3)"
+          className={styles.resetButton}
+          onClick={() => {
+            if (mapRef.current) {
+              mapRef.current.setCenter(
+                new kakao.maps.LatLng(location.latitude, location.longitude)
+              );
+              mapRef.current.setLevel(5);
+              setIsMapMoved(false); // 버튼 클릭 후 상태 초기화
+            }
+          }}
+        >
+          사용자 위치로 돌아가기
+        </Button>
+      )}
     </div>
   );
 };
