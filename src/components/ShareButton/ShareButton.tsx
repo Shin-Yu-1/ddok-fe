@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { ShareNetworkIcon, CopyIcon, CheckIcon } from '@phosphor-icons/react';
 
+import Button from '@/components/Button/Button';
 import { DDtoast } from '@/features/toast';
 import { useKakaoSDK } from '@/utils/kakaoShareUtils';
 
@@ -115,9 +116,15 @@ const ShareButton = ({ title, description, imageUrl, url }: ShareButtonProps) =>
 
   return (
     <div className={styles.shareContainer}>
-      <button onClick={toggleDropdown} className={styles.shareButton}>
-        <ShareNetworkIcon size={16} />
-      </button>
+      <Button
+        variant="outline"
+        size="sm"
+        radius="xsm"
+        leftIcon={<ShareNetworkIcon size={16} />}
+        onClick={toggleDropdown}
+      >
+        공유
+      </Button>
 
       {isDropdownOpen && (
         <>

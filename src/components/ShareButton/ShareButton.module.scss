@@ -6,38 +6,6 @@
   display: inline-block;
 }
 
-.shareButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border: 1px solid $gray-3;
-  border-radius: $r-xxsmall;
-  font-size: $fs-xxsmall;
-  font-weight: $fw-medium;
-  color: $gray-1;
-  background-color: $white-3;
-  transition: all 0.2s ease;
-  cursor: pointer;
-
-  &:hover {
-    border-color: $gray-2;
-    background-color: $gray-4;
-  }
-
-  &:active {
-    border-color: $gray-2;
-    background-color: $gray-3;
-    transform: translateY(1px);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba($blue-1, 0.2);
-  }
-}
-
 .backdrop {
   position: fixed;
   top: 0;
