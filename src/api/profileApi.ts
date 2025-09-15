@@ -134,6 +134,20 @@ interface UpdateLocationRequest {
   location: Location;
 }
 
+// 주활동지 수정 전용 응답 타입
+interface UpdateLocationResponse {
+  address: string;
+  region1depthName: string;
+  region2depthName: string;
+  region3depthName: string;
+  roadName: string;
+  mainBuildingNo: string;
+  subBuildingNo: string | null;
+  zoneNo: string;
+  latitude: number;
+  longitude: number;
+}
+
 // 프로필 수정 응답 타입
 interface UpdateProfileResponse {
   userId: number;
@@ -169,6 +183,13 @@ interface UpdateProfileResponse {
     latitude: number;
     longitude: number;
     address: string;
+    region1depthName?: string;
+    region2depthName?: string;
+    region3depthName?: string;
+    roadName?: string;
+    mainBuildingNo?: string;
+    subBuildingNo?: string;
+    zoneNo?: string;
   };
 }
 
@@ -277,11 +298,11 @@ export const profileEditApi = {
   },
 
   // 주활동지 수정
-  updateLocation: async (data: UpdateLocationRequest): Promise<UpdateProfileResponse> => {
-    const response = await api.patch<ApiResponse<{ profile: UpdateProfileResponse }>>(
+  updateLocation: async (data: UpdateLocationRequest): Promise<UpdateLocationResponse> => {
+    const response = await api.patch<ApiResponse<UpdateLocationResponse>>(
       '/api/players/profile/location',
       data
     );
-    return response.data.data.profile;
+    return response.data.data;
   },
 };
