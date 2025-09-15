@@ -1,0 +1,88 @@
+@use '@/styles/variables' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: fit-content;
+  border-radius: $r-small;
+  overflow: hidden;
+  font-size: $fs-xxsmall;
+  color: $black-4;
+  background-color: $white-3;
+  opacity: 0.9;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 4px 10px;
+
+  &__title {
+    font-weight: $fw-semibold;
+  }
+}
+
+.title {
+  margin: 15px;
+  font-size: $fs-xsmall;
+  font-weight: $fw-bold;
+  text-align: center;
+}
+
+.category {
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+  background-color: $gray-4;
+}
+
+.status {
+  width: fit-content;
+  height: fit-content;
+  padding: 3px 8px;
+  border-radius: $r-xxsmall;
+  font-size: $fs-xxxsmall;
+
+  &__ongoing {
+    color: $white-3;
+    background-color: $green-1;
+  }
+
+  &__closed {
+    color: $black-4;
+    background-color: $gray-4;
+  }
+}
+
+.address {
+  overflow-wrap: break-word;
+  font-size: $fs-xxxsmall;
+  line-height: 1.3;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  color: $gray-1;
+}
+
+.detailBtn {
+  align-self: flex-end;
+  padding: 3px 7px;
+  border-radius: $r-xxsmall;
+  font-size: 10px;
+  color: $white-3;
+  background-color: $gray-1;
+  cursor: pointer;
+}
+
+.closeBtn {
+  align-self: center;
+  padding: 10px;
+  font-size: $fs-xxxsmall;
+  font-weight: $fw-bold;
+  cursor: pointer;
+}
