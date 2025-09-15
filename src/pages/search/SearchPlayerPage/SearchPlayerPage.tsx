@@ -162,9 +162,7 @@ const SearchPlayerPage = () => {
           />
           <div className={styles.infoWrapper}>
             <WarningCircleIcon />
-            <span>
-              통합 검색을 이용해 보세요! 검색 결과는 닉네임 오름차순으로 정렬되어 표시됩니다.
-            </span>
+            <span>통합 검색을 이용해 보세요!</span>
           </div>
         </div>
       )}
