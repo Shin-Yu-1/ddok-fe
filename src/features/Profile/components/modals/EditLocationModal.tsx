@@ -4,6 +4,7 @@ import Button from '@/components/Button/Button';
 import BaseModal from '@/components/Modal/BaseModal';
 import PostLocationSelector from '@/features/post/components/PostLocationSelector/PostLocationSelector';
 import { DDtoast } from '@/features/toast';
+import { useAuthStore } from '@/stores/authStore';
 import type { Location } from '@/types/project';
 import type { CompleteProfileInfo } from '@/types/user';
 
@@ -20,11 +21,30 @@ interface EditLocationModalProps {
 const EditLocationModal = ({ isOpen, onClose, user }: EditLocationModalProps) => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
+  const { updateUserInfo } = useAuthStore();
 
   const { updateLocation, isUpdating } = useProfileMutations({
     userId: user.userId,
-    onSuccess: () => {
-      console.log('주활동지 수정 성공! 모달 닫기 및 새로고침');
+    onSuccess: data => {
+      if (data && 'address' in data && 'latitude' in data) {
+        const updatedLocationData = {
+          location: {
+            address: data.address || '',
+            region1depthName: data.region1depthName || '',
+            region2depthName: data.region2depthName || '',
+            region3depthName: data.region3depthName || '',
+            roadName: data.roadName || '',
+            mainBuildingNo: data.mainBuildingNo || '',
+            subBuildingNo: data.subBuildingNo || '',
+            zoneNo: data.zoneNo || '',
+            latitude: data.latitude,
+            longitude: data.longitude,
+          },
+        };
+
+        updateUserInfo(updatedLocationData);
+      }
+
       DDtoast({
         mode: 'custom',
         type: 'success',
