@@ -6,7 +6,7 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 export const useNotificationSocket = () => {
   const opts = useMemo(
     () => ({
-      path: WEBSOCKET_CONSTANTS.PATHS.NOTIFICATIONS,
+      path: '/notifications',
       reconnectDelay: 3000, // 3초로 단축
       heartbeatIncoming: WEBSOCKET_CONSTANTS.DEFAULT_HEARTBEAT_INCOMING,
       heartbeatOutgoing: WEBSOCKET_CONSTANTS.DEFAULT_HEARTBEAT_OUTGOING,
