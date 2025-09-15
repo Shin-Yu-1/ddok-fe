@@ -5,6 +5,7 @@ import MarkdownEditor from '@/components/MarkdownEditor/MarkdownEditor';
 import MainSection from '@/components/PostPagesSection/MainSection/MainSection';
 import SideSection from '@/components/PostPagesSection/SideSection/SideSection';
 import { DetailRecruitmentTable } from '@/components/RecruitmentTable';
+import ShareButton from '@/components/ShareButton/ShareButton';
 import TeamMemberTable from '@/components/TeamMemberTable/TeamMemberTable';
 import AgeRangeDisplay from '@/features/post/components/AgeRangeDisplay/AgeRangeDisplay';
 import BannerImageSection from '@/features/post/components/BannerImageSection/BannerImageSection';
@@ -102,6 +103,15 @@ const DetailProjectPage = () => {
     }
   };
 
+  // 공유용 설명 생성
+  const generateShareDescription = () => {
+    const modeText = projectData.mode === 'online' ? '온라인' : '오프라인';
+    const locationText = projectData.location?.region2depthName || '';
+    const durationText = `${projectData.expectedMonth}개월`;
+
+    return `${modeText} ${locationText ? `${locationText} ` : ''}프로젝트 | ${durationText} 진행 예정`;
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -111,6 +121,15 @@ const DetailProjectPage = () => {
 
         <div className={styles.postContainer}>
           <div className={styles.postContentsLayout}>
+            {/* 공유하기 섹션 */}
+            <div className={styles.shareSection}>
+              <ShareButton
+                title={projectData.title}
+                description={generateShareDescription()}
+                imageUrl={projectData.bannerImageUrl}
+              />
+            </div>
+
             <div className={styles.actionsLine}>
               {/* 팀 멤버인 경우 - 팀 관리 페이지로 이동하기 버튼 */}
               {projectData.isTeamMember && (
