@@ -314,6 +314,8 @@ const ChatRoom = ({ chat, onBack }: ChatRoomProps) => {
           },
         }
       );
+    } else {
+      onBack();
     }
   };
 
