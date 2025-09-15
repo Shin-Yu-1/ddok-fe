@@ -10,12 +10,33 @@ import styles from './ShareButton.module.scss';
 
 interface ShareButtonProps {
   title: string;
-  description?: string;
   imageUrl?: string;
   url?: string;
+  postType?: 'project' | 'study';
+  mode?: 'online' | 'offline';
+  location?: string;
+  duration?: number;
+  capacity?: number;
+  applicantCount?: number;
+  startDate?: string;
+  traits?: string[];
+  status?: 'RECRUITING' | 'ONGOING' | 'CLOSED';
 }
 
-const ShareButton = ({ title, description, imageUrl, url }: ShareButtonProps) => {
+const ShareButton = ({
+  title,
+  imageUrl,
+  url,
+  postType = 'project',
+  mode,
+  location,
+  duration,
+  capacity,
+  applicantCount,
+  startDate,
+  traits,
+  status,
+}: ShareButtonProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isKakaoReady, setIsKakaoReady] = useState(false);
@@ -33,6 +54,59 @@ const ShareButton = ({ title, description, imageUrl, url }: ShareButtonProps) =>
     setupKakao();
   }, [initializeKakao]);
 
+  // 향상된 설명 생성
+  const generateEnhancedDescription = () => {
+    const postTypeText = postType === 'project' ? '[프로젝트]' : '[스터디]';
+    const statusText =
+      status === 'RECRUITING' ? '모집중' : status === 'ONGOING' ? '진행중' : '종료';
+
+    let description = `${postTypeText}`;
+
+    // 팀 상태
+    description += `\n• 팀 상태: ${statusText}`;
+
+    // 모임 형태와 지역
+    if (mode) {
+      description += `\n• 형태: ${mode === 'online' ? '온라인' : '오프라인'}`;
+      if (location && mode === 'offline') {
+        description += ` (${location})`;
+      }
+    }
+
+    // 기간과 시작일
+    if (duration || startDate) {
+      description += `\n• 일정: `;
+      if (duration) {
+        description += `${duration}개월`;
+      }
+      if (startDate) {
+        const date = new Date(startDate);
+        const formattedDate = `${date.getMonth() + 1}/${date.getDate()}`;
+        description += duration ? ` | ${formattedDate} 시작` : `${formattedDate} 시작`;
+      }
+    }
+
+    // 모집 현황
+    if (capacity && applicantCount !== undefined) {
+      const remaining = capacity - applicantCount;
+      description += `\n• 모집: ${applicantCount}/${capacity}명`;
+      if (remaining > 0 && status === 'RECRUITING') {
+        description += ` (${remaining}명 더 필요)`;
+      }
+    }
+
+    // 원하는 성향
+    if (traits && traits.length > 0) {
+      const displayTraits = traits.slice(0, 2); // 최대 2개로 줄임
+      description += `\n• 성향: ${displayTraits.join(', ')}`;
+      if (traits.length > 2) {
+        description += ` 외 ${traits.length - 2}개`;
+      }
+    }
+
+    return description;
+  };
+
   // 카카오톡 공유하기
   const handleKakaoShare = () => {
     if (!isKakaoReady || !window.Kakao) {
@@ -45,11 +119,13 @@ const ShareButton = ({ title, description, imageUrl, url }: ShareButtonProps) =>
     }
 
     try {
+      const enhancedDescription = generateEnhancedDescription();
+
       window.Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
-          title: title,
-          description: description || '함께 성장할 팀원을 찾고 있습니다!',
+          title: `${title}`,
+          description: enhancedDescription,
           imageUrl: imageUrl || '',
           link: {
             mobileWebUrl: currentUrl,
@@ -119,9 +195,10 @@ const ShareButton = ({ title, description, imageUrl, url }: ShareButtonProps) =>
       <Button
         variant="outline"
         size="sm"
-        radius="xsm"
+        radius="xxsm"
         leftIcon={<ShareNetworkIcon size={16} />}
         onClick={toggleDropdown}
+        className={styles.shareButton}
       >
         공유
       </Button>

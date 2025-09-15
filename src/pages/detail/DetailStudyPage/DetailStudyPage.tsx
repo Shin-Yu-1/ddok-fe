@@ -87,15 +87,6 @@ const DetailStudyPage = () => {
     }
   };
 
-  // 공유용 설명 생성
-  const generateShareDescription = () => {
-    const modeText = studyData.mode === 'online' ? '온라인' : '오프라인';
-    const locationText = studyData.location?.region2depthName || '';
-    const durationText = `${studyData.expectedMonth}개월`;
-
-    return `${modeText} ${locationText ? `${locationText} ` : ''}스터디 | ${durationText} 진행 예정`;
-  };
-
   return (
     <>
       <div className={styles.container}>
@@ -108,8 +99,16 @@ const DetailStudyPage = () => {
             <div className={styles.shareSection}>
               <ShareButton
                 title={studyData.title}
-                description={generateShareDescription()}
                 imageUrl={studyData.bannerImageUrl}
+                postType="study"
+                mode={studyData.mode as 'online' | 'offline'}
+                location={studyData.location?.region2depthName}
+                duration={studyData.expectedMonth}
+                capacity={studyData.capacity}
+                applicantCount={studyData.applicantCount}
+                startDate={studyData.startDate}
+                traits={studyData.traits}
+                status={studyData.teamStatus}
               />
             </div>
 

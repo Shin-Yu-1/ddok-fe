@@ -103,15 +103,6 @@ const DetailProjectPage = () => {
     }
   };
 
-  // 공유용 설명 생성
-  const generateShareDescription = () => {
-    const modeText = projectData.mode === 'online' ? '온라인' : '오프라인';
-    const locationText = projectData.location?.region2depthName || '';
-    const durationText = `${projectData.expectedMonth}개월`;
-
-    return `${modeText} ${locationText ? `${locationText} ` : ''}프로젝트 | ${durationText} 진행 예정`;
-  };
-
   return (
     <>
       <div className={styles.container}>
@@ -125,8 +116,16 @@ const DetailProjectPage = () => {
             <div className={styles.shareSection}>
               <ShareButton
                 title={projectData.title}
-                description={generateShareDescription()}
                 imageUrl={projectData.bannerImageUrl}
+                postType="project"
+                mode={projectData.mode as 'online' | 'offline'}
+                location={projectData.location?.region2depthName}
+                duration={projectData.expectedMonth}
+                capacity={projectData.capacity}
+                applicantCount={projectData.applicantCount}
+                startDate={projectData.startDate}
+                traits={projectData.traits}
+                status={projectData.teamStatus}
               />
             </div>
 
