@@ -8,6 +8,7 @@ import {
   ZoomControl,
 } from 'react-kakao-maps-sdk';
 
+import DDOKMascotIcon from '@/assets/images/DDOK/DDOK-Mascot.svg';
 import Button from '@/components/Button/Button';
 
 import { useGetProfileMap } from '../../hooks/useGetProfileMap';
@@ -141,7 +142,7 @@ const ProfileMap = ({ playerId, location }: ProfileMapProps) => {
         <MapMarker
           position={{ lat: location.latitude, lng: location.longitude }}
           image={{
-            src: '/src/assets/images/DDOK/DDOK-Mascot.svg',
+            src: DDOKMascotIcon,
             size: { width: 40, height: 40 },
           }}
         />
