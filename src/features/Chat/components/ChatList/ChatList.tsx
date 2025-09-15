@@ -4,8 +4,8 @@ import {
   ArrowSquareOutIcon,
   MagnifyingGlassIcon,
   DotsThreeOutlineVerticalIcon,
-  PushPinSimpleIcon,
-  PushPinSimpleSlashIcon,
+  // PushPinSimpleIcon,
+  // PushPinSimpleSlashIcon,
   SignOutIcon,
 } from '@phosphor-icons/react';
 import type { IMessage } from '@stomp/stompjs';
@@ -193,14 +193,15 @@ const ChatList = ({ roomType }: ChatProps) => {
     };
   }, [menuFor]);
 
-  // 고정 토글
-  const togglePin = (chat: ChatListItem) => {
-    console.log(chat.roomId, '고정 토글');
-    // setChats(prev =>
-    //   prev ? prev.map(c => (c.roomId === chat.roomId ? { ...c, isPinned: !c.isPinned } : c)) : prev
-    // );
-    // TODO: 채팅방 고정/취소 API 호출
-  };
+  // // TODO: 고정하기 추가 시 주석 해제
+  // // 고정 토글
+  // const togglePin = (chat: ChatListItem) => {
+  //   console.log(chat.roomId, '고정 토글');
+  //   // setChats(prev =>
+  //   //   prev ? prev.map(c => (c.roomId === chat.roomId ? { ...c, isPinned: !c.isPinned } : c)) : prev
+  //   // );
+  //   // TODO: 채팅방 고정/취소 API 호출
+  // };
 
   // 1:1 대화 나가기
   const leaveChat = (chat: ChatListItem) => {
@@ -222,14 +223,15 @@ const ChatList = ({ roomType }: ChatProps) => {
     if (!menuFor) return [];
 
     const items = [
-      {
-        icon: menuFor.isPinned ? <PushPinSimpleSlashIcon /> : <PushPinSimpleIcon />,
-        name: menuFor.isPinned ? '고정하기 취소' : '고정하기',
-        onClick: () => {
-          togglePin(menuFor);
-          closeMenu();
-        },
-      },
+      // // TODO: 추후 고정하기 기능 추가 시 적용
+      // {
+      //   icon: menuFor.isPinned ? <PushPinSimpleSlashIcon /> : <PushPinSimpleIcon />,
+      //   name: menuFor.isPinned ? '고정하기 취소' : '고정하기',
+      //   onClick: () => {
+      //     togglePin(menuFor);
+      //     closeMenu();
+      //   },
+      // },
     ];
 
     if (menuFor.roomType === ChatRoomType.PRIVATE) {
