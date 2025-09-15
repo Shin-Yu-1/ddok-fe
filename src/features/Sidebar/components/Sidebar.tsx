@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 import ChatList from '@/features/Chat/components/ChatList/ChatList';
 import ChatRoom from '@/features/Chat/components/ChatRoom/ChatRoom';
 import ChatRoomType from '@/features/Chat/enums/ChatRoomType.enum';
-import NotificationList from '@/features/Notification/components/NotificationList/NotificationList';
+import NotificationCenterContainer from '@/features/Notification/NotificationCenterContainer';
 import { useAuthStore } from '@/stores/authStore';
 import { useChatUiStore } from '@/stores/chatUiStore';
 
@@ -106,7 +106,7 @@ const Sidebar = () => {
             }
             {...sectionProps}
           >
-            <NotificationList onUnreadCountChange={setUnreadNotificationCount} />
+            <NotificationCenterContainer onUnreadCountChange={setUnreadNotificationCount} />
           </SidePanel>
         );
       case 'chat': {

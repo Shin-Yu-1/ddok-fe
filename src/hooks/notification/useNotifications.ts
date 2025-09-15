@@ -40,12 +40,14 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
   const fetchNotifications = useCallback(async () => {
     // 로그인하지 않은 경우 처리
     if (!user) {
+      console.log('[useNotifications] 사용자가 로그인하지 않음');
       setError('로그인이 필요합니다.');
       setLoading(false);
       return;
     }
 
     try {
+      console.log('[useNotifications] 알림 목록 요청 시작:', { page, size, isRead, type });
       setLoading(true);
       setError(null);
 
@@ -53,13 +55,20 @@ export const useNotifications = (options: UseNotificationsOptions = {}) => {
       if (isRead !== undefined) params.isRead = isRead;
       if (type) params.type = type;
 
+      console.log('[useNotifications] API 요청 파라미터:', params);
       const result = await getNotifications(params);
+      console.log('[useNotifications] API 응답 결과:', result);
 
       setNotifications(result.content);
       setHasNext(result.hasNext);
       setTotalElements(result.totalElements);
+      console.log('[useNotifications] 상태 업데이트 완료:', {
+        count: result.content.length,
+        hasNext: result.hasNext,
+        totalElements: result.totalElements,
+      });
     } catch (err) {
-      console.error('알림 목록 조회 실패:', err);
+      console.error('[useNotifications] 알림 목록 조회 실패:', err);
       setError('알림을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
@@ -138,6 +147,7 @@ export const useUnreadCount = (autoRefresh = true, refreshInterval = 30000) => {
   const fetchUnreadCount = useCallback(async () => {
     // 로그인하지 않은 경우 처리
     if (!user) {
+      console.log('[useUnreadCount] 사용자가 로그인하지 않음');
       setError('로그인이 필요합니다.');
       setLoading(false);
       setCount(0);
@@ -145,13 +155,15 @@ export const useUnreadCount = (autoRefresh = true, refreshInterval = 30000) => {
     }
 
     try {
+      console.log('[useUnreadCount] 읽지 않은 알림 개수 요청 시작');
       setLoading(true);
       setError(null);
 
       const unreadCount = await getUnreadCount();
+      console.log('[useUnreadCount] 읽지 않은 알림 개수:', unreadCount);
       setCount(unreadCount);
     } catch (err) {
-      console.error('읽지 않은 알림 개수 조회 실패:', err);
+      console.error('[useUnreadCount] 읽지 않은 알림 개수 조회 실패:', err);
       setError('읽지 않은 알림 개수를 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);

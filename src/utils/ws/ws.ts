@@ -26,13 +26,30 @@ export const createStompClient = (
     return sessionStorage.getItem(WEBSOCKET_CONSTANTS.TOKEN_STORAGE_KEY);
   };
 
+  // 최신 토큰으로 연결 헤더 생성
+  const getConnectHeaders = (): Record<string, string> => {
+    const token = getToken();
+    console.log(
+      '[WebSocket] 연결 시 토큰 확인:',
+      !!token,
+      token ? `${token.substring(0, 20)}...` : 'null'
+    );
+    if (token) {
+      return { Authorization: `Bearer ${token}` };
+    }
+    return {};
+  };
+
+  const wsUrl = createWebSocketUrl(path);
+  console.log('[WebSocket] STOMP 클라이언트 생성 시작');
+  console.log('[WebSocket] URL:', wsUrl);
+  console.log('[WebSocket] 연결 헤더:', getConnectHeaders());
+
   const client = new Client({
-    brokerURL: createWebSocketUrl(path),
+    brokerURL: wsUrl,
 
     // 연결 시 인증 헤더
-    connectHeaders: {
-      Authorization: `Bearer ${getToken()}`,
-    },
+    connectHeaders: getConnectHeaders(),
 
     // 재연결 설정
     reconnectDelay,
@@ -46,27 +63,30 @@ export const createStompClient = (
 
     // 연결 성공
     onConnect: frame => {
-      console.log('[WebSocket] 연결 성공', frame.headers);
+      console.log('[WebSocket] 연결 성공!');
+      console.log('[WebSocket] 연결 프레임:', frame.headers);
       onConnect?.();
     },
 
     // STOMP 에러
     onStompError: frame => {
       const errorMsg = `STOMP 에러: ${frame.body || '알 수 없는 에러'}`;
-      console.error('[WebSocket]', errorMsg, frame.headers);
+      console.error('[WebSocket]', errorMsg);
+      console.error('[WebSocket] STOMP 에러 헤더:', frame.headers);
       onError?.(errorMsg);
     },
 
     // WebSocket 에러
     onWebSocketError: event => {
       const errorMsg = 'WebSocket 연결 에러';
-      console.error('[WebSocket]', errorMsg, event);
+      console.error('[WebSocket]', errorMsg);
+      console.error('[WebSocket] WebSocket 에러 이벤트:', event);
       onError?.(errorMsg);
     },
 
     // 연결 해제
     onDisconnect: () => {
-      console.log('[WebSocket] 연결 해제');
+      console.log('[WebSocket] 연결 해제됨');
       onDisconnect?.();
     },
   });

@@ -44,18 +44,22 @@ export const useWebSocket = (options: WebSocketOptions): UseWebSocketReturn => {
       return;
     }
 
+    console.log('[WebSocket] 연결 시도 시작');
     updateState({ isConnecting: true, connectionError: null });
 
     const client = createStompClient(options, {
       onConnect: () => {
+        console.log('[WebSocket] 연결 성공');
         updateState({ isConnected: true, isConnecting: false, connectionError: null });
       },
       onDisconnect: () => {
+        console.log('[WebSocket] 연결 해제됨');
         updateState({ isConnected: false, isConnecting: false });
         // 구독 정리
         subscriptionsRef.current.clear();
       },
       onError: (error: string) => {
+        console.error('[WebSocket] 연결 오류:', error);
         updateState({ isConnected: false, isConnecting: false, connectionError: error });
       },
     });
