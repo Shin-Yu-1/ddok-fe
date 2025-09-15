@@ -23,7 +23,7 @@ const PostLocationDisplay = ({
 }: PostLocationDisplayProps) => {
   const [isLoading, kakaoError] = useKakaoLoader({
     appkey: import.meta.env.VITE_KAKAO_API_KEY,
-    libraries: ['services', 'clusterer'],
+    libraries: ['services'],
   });
 
   const [mapInstance, setMapInstance] = useState<kakao.maps.Map | null>(null);
