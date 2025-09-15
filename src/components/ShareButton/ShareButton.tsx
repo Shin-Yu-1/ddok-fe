@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { ShareNetworkIcon, CopyIcon, CheckIcon } from '@phosphor-icons/react';
 
+import kakaoIcon from '@/assets/icons/kakaotalk_sharing_btn_medium.png';
 import Button from '@/components/Button/Button';
 import { DDtoast } from '@/features/toast';
 import { useKakaoSDK } from '@/utils/kakaoShareUtils';
@@ -98,7 +99,7 @@ const ShareButton = ({
     // 원하는 성향
     if (traits && traits.length > 0) {
       const displayTraits = traits.slice(0, 2); // 최대 2개로 줄임
-      description += `\n• 성향: ${displayTraits.join(', ')}`;
+      description += `\n- 성향: ${displayTraits.join(', ')}`;
       if (traits.length > 2) {
         description += ` 외 ${traits.length - 2}개`;
       }
@@ -210,7 +211,7 @@ const ShareButton = ({
             <button className={styles.shareOption} onClick={handleKakaoShare}>
               <div className={styles.shareOptionIcon}>
                 <img
-                  src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
+                  src={kakaoIcon}
                   alt="카카오톡 공유"
                   width={18}
                   height={18}
