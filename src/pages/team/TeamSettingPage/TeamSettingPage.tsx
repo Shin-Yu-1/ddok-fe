@@ -43,6 +43,9 @@ const TeamSettingPage = () => {
   const [selectedMember, setSelectedMember] = useState<MemberType | null>(null);
   const [selectedMemberScores, setSelectedMemberScores] = useState<EvaluationScore[]>([]); // 선택된 멤버의 평가 점수
 
+  // 참여 희망자 페이지네이션 상태 관리
+  const [currentPage, setCurrentPage] = useState(0);
+
   const teamId = id ? parseInt(id, 10) : null;
 
   // 팀 정보 가져오기
@@ -375,6 +378,8 @@ const TeamSettingPage = () => {
           teamId={teamId}
           amILeader={teamData.data.isLeader}
           teamStatus={teamData.data.teamStatus}
+          page={currentPage}
+          onPageChange={setCurrentPage}
         />
       </MainSection>
 

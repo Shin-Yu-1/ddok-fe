@@ -3,7 +3,7 @@
 
 import { forwardRef } from 'react';
 
-import { PencilSimpleIcon } from '@phosphor-icons/react';
+import { LockIcon, PencilSimpleIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 
 import type { ProfileSectionProps } from '@/types/user';
@@ -15,7 +15,7 @@ interface TraitsSectionProps extends ProfileSectionProps {
 }
 
 const TraitsSection = forwardRef<HTMLElement, TraitsSectionProps>(
-  ({ user, isEditable = false, onEdit, className }, ref) => {
+  ({ user, isEditable = false, onEdit, isPrivate = false, className }, ref) => {
     const handleEdit = () => {
       if (isEditable && onEdit) {
         onEdit('traits');
@@ -62,6 +62,14 @@ const TraitsSection = forwardRef<HTMLElement, TraitsSectionProps>(
             </div>
           )}
         </div>
+
+        {/* 비공개 메시지 */}
+        {isPrivate && (
+          <div className={styles.privateMessage}>
+            <LockIcon size={16} weight="regular" />
+            <span>프로필 비공개 중입니다. 다른 사용자에게는 보이지 않습니다.</span>
+          </div>
+        )}
       </section>
     );
   }
