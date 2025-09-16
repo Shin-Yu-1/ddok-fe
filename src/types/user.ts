@@ -190,4 +190,5 @@ export interface ProfileSectionProps {
   user: CompleteProfileInfo;
   isEditable?: boolean;
   onEdit?: (sectionType: ProfileSectionType) => void;
+  isPrivate?: boolean; // 비공개 상태 표시를 위한 prop
 }
