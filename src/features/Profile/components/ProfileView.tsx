@@ -156,29 +156,69 @@ const ProfileView = forwardRef<HTMLDivElement, ExtendedProfileViewProps>(
           </div>
         </div>
 
-        {/* 상세 정보 섹션 - 공개 상태에 따라 조건부 렌더링 */}
-        {isProfilePublic ? (
-          // 공개 프로필: 모든 정보 표시
+        {/* 상세 정보 섹션 - 본인이 아니고 비공개일 때만 숨김 */}
+        {!user.isMine && !isProfilePublic ? (
+          // 타인의 비공개 프로필: 비공개 메시지만 표시
+          <PrivateProfileMessage />
+        ) : (
+          // 본인 프로필 또는 타인의 공개 프로필: 모든 정보 표시
           <div className={styles.twoColumnLayout}>
             {/* 왼쪽 컬럼 (737px) */}
             <div className={styles.leftColumn}>
-              <LocationSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-              <TechStackSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-              <ProjectSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-              <StudySection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <LocationSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
+              <TechStackSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
+              <ProjectSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
+              <StudySection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
             </div>
 
             {/* 오른쪽 컬럼 (404px) */}
             <div className={styles.rightColumn}>
-              <PositionSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-              <TraitsSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-              <TimeSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
-              <PortfolioSection user={user} isEditable={isEditable} onEdit={handleSectionEdit} />
+              <PositionSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
+              <TraitsSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
+              <TimeSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
+              <PortfolioSection
+                user={user}
+                isEditable={isEditable}
+                onEdit={handleSectionEdit}
+                isPrivate={user.isMine && !isProfilePublic}
+              />
             </div>
           </div>
-        ) : (
-          // 비공개 프로필: 비공개 메시지만 표시
-          <PrivateProfileMessage />
         )}
       </div>
     );
