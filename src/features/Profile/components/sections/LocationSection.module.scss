@@ -102,3 +102,22 @@
     font-size: v.$fs-xxxsmall;
   }
 }
+
+.privateMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 17px 12px 0;
+  border-top: 1px solid v.$gray-4;
+  font-size: v.$fs-xxxsmall;
+  text-align: center;
+  color: v.$gray-1;
+
+  @include m.mobile {
+    margin-top: 12px;
+    padding: 13px 8px 0;
+    font-size: 11px;
+  }
+}

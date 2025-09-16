@@ -3,7 +3,7 @@
 
 import { forwardRef } from 'react';
 
-import { BookBookmarkIcon } from '@phosphor-icons/react';
+import { BookBookmarkIcon, LockIcon } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,97 +18,109 @@ interface StudySectionProps extends ProfileSectionProps {
   className?: string;
 }
 
-const StudySection = forwardRef<HTMLElement, StudySectionProps>(({ user, className }, ref) => {
-  const navigate = useNavigate();
-  const initialStudies = user.studies || [];
-  const {
-    items: studies,
-    isLoading,
-    hasMore,
-    loadMore,
-    getShowMoreText,
-  } = useInfiniteLoad(user.userId, 'studies', initialStudies, user.studiesTotalItems);
+const StudySection = forwardRef<HTMLElement, StudySectionProps>(
+  ({ user, isPrivate = false, className }, ref) => {
+    const navigate = useNavigate();
+    const initialStudies = user.studies || [];
+    const {
+      items: studies,
+      isLoading,
+      hasMore,
+      loadMore,
+      getShowMoreText,
+    } = useInfiniteLoad(user.userId, 'studies', initialStudies, user.studiesTotalItems);
 
-  const handleStudyClick = (studyId: number, teamId: number) => {
-    if (user.isMine) {
-      // 본인 프로필: 팀관리 페이지로 이동
-      navigate(`/team/${teamId}/setting`);
-    } else {
-      // 타인 프로필: 스터디 모집 공고 페이지로 이동
-      navigate(`/detail/study/${studyId}`);
-    }
-  };
+    const handleStudyClick = (studyId: number, teamId: number) => {
+      if (user.isMine) {
+        // 본인 프로필: 팀관리 페이지로 이동
+        navigate(`/team/${teamId}/setting`);
+      } else {
+        // 타인 프로필: 스터디 모집 공고 페이지로 이동
+        navigate(`/detail/study/${studyId}`);
+      }
+    };
 
-  const getAriaLabel = (title: string) => {
-    return user.isMine ? `${title} 스터디 팀 관리 페이지로 이동` : `${title} 스터디 모집 공고 보기`;
-  };
+    const getAriaLabel = (title: string) => {
+      return user.isMine
+        ? `${title} 스터디 팀 관리 페이지로 이동`
+        : `${title} 스터디 모집 공고 보기`;
+    };
 
-  return (
-    <section
-      ref={ref}
-      className={clsx(styles.studySection, className)}
-      aria-labelledby="study-title"
-    >
-      <div className={styles.header}>
-        <h2 id="study-title" className={styles.title}>
-          스터디
-        </h2>
-      </div>
+    return (
+      <section
+        ref={ref}
+        className={clsx(styles.studySection, className)}
+        aria-labelledby="study-title"
+      >
+        <div className={styles.header}>
+          <h2 id="study-title" className={styles.title}>
+            스터디
+          </h2>
+        </div>
 
-      <div>
-        {studies.length > 0 ? (
-          <>
-            <div className={styles.studyList}>
-              {studies.map(study => (
-                <button
-                  key={study.id}
-                  type="button"
-                  className={styles.studyItem}
-                  onClick={() => handleStudyClick(study.id, study.teamId)}
-                  aria-label={getAriaLabel(study.title)}
-                >
-                  <div className={styles.studyIcon}>
-                    <BookBookmarkIcon size={21} weight="regular" />
-                  </div>
+        <div>
+          {studies.length > 0 ? (
+            <>
+              <div className={styles.studyList}>
+                {studies.map(study => (
+                  <button
+                    key={study.id}
+                    type="button"
+                    className={styles.studyItem}
+                    onClick={() => handleStudyClick(study.id, study.teamId)}
+                    aria-label={getAriaLabel(study.title)}
+                  >
+                    <div className={styles.studyIcon}>
+                      <BookBookmarkIcon size={21} weight="regular" />
+                    </div>
 
-                  <div className={styles.studyInfo}>
-                    <h3 className={styles.studyTitle}>{study.title}</h3>
-                    <p className={styles.studyDate}>
-                      {formatDateRange(study.startDate, study.endDate ?? undefined)}
-                    </p>
-                  </div>
+                    <div className={styles.studyInfo}>
+                      <h3 className={styles.studyTitle}>{study.title}</h3>
+                      <p className={styles.studyDate}>
+                        {formatDateRange(study.startDate, study.endDate ?? undefined)}
+                      </p>
+                    </div>
 
-                  <div className={styles.studyStatus}>
-                    <span className={clsx(styles.statusBadge, styles[`status-${study.status}`])}>
-                      {getStatusText(study.status, 'study')}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {hasMore && (
-              <div className={styles.showMoreContainer}>
-                <button
-                  type="button"
-                  onClick={loadMore}
-                  disabled={isLoading}
-                  className={styles.showMoreButton}
-                >
-                  {getShowMoreText()}
-                </button>
+                    <div className={styles.studyStatus}>
+                      <span className={clsx(styles.statusBadge, styles[`status-${study.status}`])}>
+                        {getStatusText(study.status, 'study')}
+                      </span>
+                    </div>
+                  </button>
+                ))}
               </div>
-            )}
-          </>
-        ) : (
-          <div>
-            <p>참여한 스터디가 없습니다.</p>
+
+              {hasMore && (
+                <div className={styles.showMoreContainer}>
+                  <button
+                    type="button"
+                    onClick={loadMore}
+                    disabled={isLoading}
+                    className={styles.showMoreButton}
+                  >
+                    {getShowMoreText()}
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div>
+              <p>참여한 스터디가 없습니다.</p>
+            </div>
+          )}
+        </div>
+
+        {/* 비공개 메시지 */}
+        {isPrivate && (
+          <div className={styles.privateMessage}>
+            <LockIcon size={16} weight="regular" />
+            <span>프로필 비공개 중입니다. 다른 사용자에게는 보이지 않습니다.</span>
           </div>
         )}
-      </div>
-    </section>
-  );
-});
+      </section>
+    );
+  }
+);
 
 StudySection.displayName = 'StudySection';
 export default StudySection;
