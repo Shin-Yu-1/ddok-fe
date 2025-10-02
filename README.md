@@ -7,7 +7,7 @@
 지도 기반으로 스터디/프로젝트를 빠르게 찾고 참여하고, 팀 협업(채팅·일정·알림)까지 한 곳에서 처리하는 플랫폼입니다.   
 
 프로젝트 기간: 2025.08 ~ 2025.09 (기획 및 개발)   
-시연영상 [YouTube]()   
+시연영상 [YouTube](https://youtu.be/tJxeeBno15E?si=37zNZ9FemquKkHhN)   
 Link:   
 Code: [FE](https://github.com/DeepDirect/ddok-fe), [BE](https://github.com/DeepDirect/ddok-be)   
 
