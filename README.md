@@ -6,65 +6,56 @@
 
 지도 기반으로 스터디/프로젝트를 빠르게 찾고 참여하고, 팀 협업(채팅·일정·알림)까지 한 곳에서 처리하는 플랫폼입니다.   
 
-프로젝트 기간: 2025.08 ~ 2025.09 (기획 및 개발)   
-시연영상 [YouTube](https://youtu.be/tJxeeBno15E?si=37zNZ9FemquKkHhN)   
-Link:   
-Code: [FE](https://github.com/DeepDirect/ddok-fe), [BE](https://github.com/DeepDirect/ddok-be)   
-
----
-
-## 🫶 팀원
-| 이름      | 역할                 | GitHub 링크                                     |
-|----------|--------------------|------------------------------------------------|
-| 정원용     | 팀장, Full Stack, Infra    | [@projectmiluju](https://github.com/jihun-dev) |
-| 권혜진     | Backend            | [@sunsetkk](https://github.com/sunsetkk)       |
-| 박건      | Frontend            | [@Jammanb0](https://github.com/Jammanb0)       |
-| 박소현     | Frontend           | [@ssoogit](https://github.com/ssoogit)         |
-| 박재경     | Full Stack  | [@Shin-Yu-1](https://github.com/Shin-Yu-1) |
-| 이은지     | Frontend           | [@ebbll](https://github.com/ebbll)             |
-| 최범근     | Backend            | [@vayaconChoi](https://github.com/vayaconChoi) |
+- 프로젝트 기간: 2025.08 ~ 2025.09 (기획 및 개발)   
+- 시연영상 [YouTube](https://youtu.be/tJxeeBno15E?si=37zNZ9FemquKkHhN)   
+- 배포: ~https://www.deepdirect.site/~   
 
 <br />
 
 ---
 
-## ✨ 주요 기능
+## 내 기여
+| 카테고리 | 기여 내용 |
+| --- | --- |
+| **실시간 채팅** | - 채팅 컴포넌트 제작 ([#42](https://github.com/DeepDirect/ddok-fe/pull/42))<br>- 채팅 UI 구현 ([#127](https://github.com/DeepDirect/ddok-fe/pull/127), [#166](https://github.com/DeepDirect/ddok-fe/pull/166), [#199](https://github.com/DeepDirect/ddok-fe/pull/199))<br>- 안읽음 표시 구현 ([#158](https://github.com/DeepDirect/ddok-fe/pull/158), [#166](https://github.com/DeepDirect/ddok-fe/pull/166))<br>- 뒤로가기 기능 ([#207](https://github.com/DeepDirect/ddok-fe/pull/207)) |
+| **검색/조회 페이지** | - 프로젝트/스터디/플레이어 조회 페이지 구현 ([#53](https://github.com/DeepDirect/ddok-fe/pull/53), [#65](https://github.com/DeepDirect/ddok-fe/pull/65), [#68](https://github.com/DeepDirect/ddok-fe/pull/68), [#76](https://github.com/DeepDirect/ddok-fe/pull/76), [#77](https://github.com/DeepDirect/ddok-fe/pull/77), [#112](https://github.com/DeepDirect/ddok-fe/pull/112), [#118](https://github.com/DeepDirect/ddok-fe/pull/118), [#147](https://github.com/DeepDirect/ddok-fe/pull/147))<br>- 조회 페이지 API 연동 ([#76](https://github.com/DeepDirect/ddok-fe/pull/76), [#77](https://github.com/DeepDirect/ddok-fe/pull/77), [#80](https://github.com/DeepDirect/ddok-fe/pull/80)) |
+| **공통/환경 구성** | - 공통 컴포넌트 생성 ([#7](https://github.com/DeepDirect/ddok-fe/pull/7))<br>- axios 설정 및 공용 데이터 요청 훅 제작 ([#13](https://github.com/DeepDirect/ddok-fe/pull/13))<br>- README 작성 ([#189](https://github.com/DeepDirect/ddok-fe/pull/189)) |
 
-- 지도 기반 탐색: 카카오맵에서 주변 스터디/프로젝트/플레이어를 한눈에 확인 (상태/카테고리 필터)
-- 포지션 매칭: 역할/경험/시간대 기반 맞춤 필터와 추천
-- 원클릭 참여: 오픈톡/댓글 없이 클릭 한 번으로 신청/취소
-- 팀 협업: 팀 생성 시 자동 채팅방, 일정 조율(캘린더), 팀 ReadMe
-- 신뢰도 시스템: 온도(완주율/기여도), 배지/랭킹으로 책임감과 지속 참여 유도
 
-<br/>
+<br />
 
-## 🖼️ 스크린샷
+## 구현 기능
+- **실시간 채팅 UI**
+  - 안 읽음 상태 표시
+  - 채팅 상세 페이지 & 뒤로가기/스타일 개선
+- **검색/조회 페이지**
+  - 프로젝트/스터디/플레이어 검색
+  - 조회 페이지 API 연동 및 결과 반영
+  - 조회 카드/리스트 컴포넌트
+- **공통 컴포넌트/환경**
+  - axios 훅 기반 공통 요청 모듈
+  - 재사용 가능한 UI 컴포넌트
+- **UX 개선**
+  - 검색과 채팅 데이터 즉시 동기화
 
-<br/>
+<br />
 
-## 🛠️ 기술 스택 (Frontend)
+## 이슈 해결 사례
+1) 실시간 안 읽음 표시 버그 해결
+   - 문제: 채팅 화면 이탈(언마운트) 타이밍에 마지막 읽은 메시지 전송이 누락되어 새로운 메세지가 생겼을 때 표시되지 않거나 안 읽음 표시가 남는 현상 발생.
+   - 원인: cleanup 시점의 네트워크 취소/지연 + 캐시만 갱신하고 서버 반영이 실패하는 케이스 존재
+   - 해결:
+     - 로그인 사용자의 개인 구독 채널(/sub/users/{userId}/notifications)을 추가 구독하여 웹소켓을 통해 알림(payload: roomId, createdAt)을 수신하면 클라이언트 상태에 즉시 반영.
+     - 같은 cleanup 구간에서 직접 POST(백업 경로)를 추가해 네트워크 취소나 탭 전환에도 서버 반영을 보장
+   - 결과:
+     - 탭 전환/재접속 상황에서 안 읽음 표시가 실시간으로 안정적 반영
+     - 사용자 체감 오류 감소
 
-| 분류                | 기술명                                                                                 |
-|-------------------|--------------------------------------------------------------------------------------|
-| **프레임워크/언어**    | React, TypeScript, Vite, PNPM                                                      |
-| **라우팅**           | TanStack Router, React Router                                                       |
-| **상태 관리**         | Zustand (전역 상태), TanStack React Query (서버 상태)                              |
-| **폼/유효성 검사**     | React Hook Form, Zod, @hookform/resolvers                                          |
-| **스타일**           | SCSS Modules, SCSS, clsx                                                           |
-| **UI 라이브러리**      | Radix UI, Sonner (토스트), react-spinners (로딩)                                   |
-| **아이콘**           | Phosphor Icons                                                                      |
-| **마크다운**          | uiw/react-md-editor                                                                |
-| **네트워크 요청**      | axios                                                                              |
-| **실시간 통신**       | @stomp/stompjs (STOMP WebSocket 클라이언트)                                         |
-| **지도**             | Kakao Maps JavaScript API, react-kakao-maps-sdk                                     |
-| **날짜/시간 처리**     | dayjs, date-fns                                                                    |
-| **테이블**           | TanStack Table                                                                     |
-| **캘린더**           | react-datepicker, FullCalendar                                                     |
-| **차트/시각화**       | (선택) Recharts / Chart.js                                                         |
-| **코드 품질/자동화**    | ESLint, Prettier, Stylelint, Husky, lint-staged                                   |
-| **번들/배포**         | AWS S3, CloudFront                                                                 |
-| **기타**             | react-dnd (드래그앤드롭), Kakao OAuth                                               |
-
+2) 검색 데이터 반영 불일치
+   - 문제: 검색 결과 데이터가 채팅 페이지에 반영되지 않음
+   - 원인: 페이징 처리 초기화 누락되어 기존 페이지 값에서 1씩 더해진 상태로 요청함.
+   - 해결: 검색어 변경될 때마다 페이징 초기화 처리함.
+   - 결과: 0부터 요청되어 검색 결과 데이터가 정상적으로 반영됨
 
 <br />
 
@@ -106,3 +97,22 @@ pnpm dev
 # 빌드
 pnpm build
 ```
+
+<br/>
+
+---
+
+## Credits
+원본 저장소: [링크](https://github.com/DeepDirect/ddok-fe)   
+팀원:
+| 이름      | 역할                 | GitHub 링크                                     |
+|----------|--------------------|------------------------------------------------|
+| 정원용     | 팀장, Full Stack, Infra    | [@projectmiluju](https://github.com/jihun-dev) |
+| 권혜진     | Backend            | [@sunsetkk](https://github.com/sunsetkk)       |
+| 박건      | Frontend            | [@Jammanb0](https://github.com/Jammanb0)       |
+| 박소현     | Frontend           | [@ssoogit](https://github.com/ssoogit)         |
+| 박재경     | Full Stack  | [@Shin-Yu-1](https://github.com/Shin-Yu-1) |
+| 이은지     | Frontend           | [@ebbll](https://github.com/ebbll)             |
+| 최범근     | Backend            | [@vayaconChoi](https://github.com/vayaconChoi) |
+
+
