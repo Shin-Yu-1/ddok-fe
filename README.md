@@ -10,6 +10,7 @@
 - 시연영상 [YouTube](https://youtu.be/tJxeeBno15E?si=37zNZ9FemquKkHhN)   
 - 배포: ~https://www.deepdirect.site/~   
 
+<br />
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
